@@ -25,17 +25,15 @@
 </head>
 
 <body>
-
-    <!-- bagian form forget password mahasiswa -->
     <div class="form-container">
-
-        <!-- form input forget password -->
-        <form action="" method="POST">
+        {{-- form input email --}}
+        <form action="" method="POST" class="border border-black">
             <div>
                 <div class="form-title">
                     <h1>Atur ulang kata sandi anda!</h1>
                     <p>Tim RAIN akan mengirimkan link ke email Anda untuk membuat sandi baru.</p>
                 </div>
+
                 <div class="form-input">
                     <label for="email">Masukan email</label>
                     <div class="input-wrapper">
@@ -43,21 +41,22 @@
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
-
-                <!-- bagian text konfimasik yang akan muncul -->
-                <!-- ketika  mahasiswa sudah me-kelik tombol kirim -->
-                <!-- <div class="confirmation-text">
-                    Email sudah terkirim, silahkan cek email anda!
-                </div> -->
-
                 <button type="submit" name="daftar">Kirim</button>
+
+                {{-- <div class="confirmation-text">
+                    <div>
+                        Email sudah terkirim, silahkan cek email anda!
+                    </div>
+                    <button type="button" onclick="window.location.href='signin.php'">Kembali</button>
+                </div> --}}
+
                 <div class="form-email-ilustration">
                     <img src="{{ asset('storage/svg/mailbox.svg') }}" alt="">
                 </div>
             </div>
         </form>
 
-        <!-- gambar ilustrasi form forget password -->
+        <!-- gambar ilustrasi -->
         <div class="img-container shadow">
             <img src="{{ asset('storage/2d-logo.png') }}" class="form-ilustration"
                 alt="We will send an confirmation email before reseting your password">
@@ -67,7 +66,6 @@
             <img src="{{ asset('storage/svg/Spiral-1.svg') }}" class="bottom-right-ilustration-1" alt="">
         </div>
     </div>
-
 </body>
 
 </html>

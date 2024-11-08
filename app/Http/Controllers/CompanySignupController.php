@@ -8,7 +8,9 @@ class CompanySignupController extends Controller
 {
     // Render halaman signup untuk perusahaan
     public function index() {
-        return response()->view('company.signup');
+        return response()->view('company.signup', [
+            'title' => 'Signup Perusahaan | RAIN'
+        ]);
     }
 
     // Membuat akun untuk perusahaan

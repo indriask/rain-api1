@@ -34,7 +34,7 @@ Route::get('/forget-password', [ForgetPasswordController::class, 'index'])->name
 // Route halaman dashboard mahasiswa dan perusahaan
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard/detail/{lowongan}', [DashboardController::class, 'detailLowongan'])->name('detail-lowongan');
-Route::get('/dashboard/search/{lowongan}', [DashboardController::class, 'search'])->name('search-lowongan');
+Route::get('/dashboard/cari/{lowongan}', [DashboardController::class, 'search'])->name('search-lowongan');
 
 // Route halaman profile mahasiswa
 Route::get('/dashboard/mahasiswa/profile', [StudentController::class, 'index'])->name('student-profile');
@@ -43,4 +43,4 @@ Route::get('/dashboard/mahasiswa/profile', [StudentController::class, 'index'])-
 Route::get('/dashboard/perusahaan/profile', [CompanyController::class, 'index'])->name('company-profile');
 
 // Route halaman pasang lowongan untuk perusahaan
-Route::get('/dashboard/mahasiswa/pasang-lowongan', [DashboardController::class, 'pasangLowongan'])->name('pasang-lowongan');
+Route::get('/dashboard/perusahaan/pasang-lowongan', [DashboardController::class, 'pasangLowongan'])->name('pasang-lowongan');

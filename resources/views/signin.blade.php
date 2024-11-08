@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="form-option">
-                    <p>Tidak punya akun? <a href="{{ route('signup') }}">Daftar</a></p>
+                    <p>Tidak punya akun? <a href="{{ route('student-signup') }}">Daftar</a></p>
                     <a href="{{ route('forget-password') }}">Lupa password?</a>
                 </div>
                 @csrf

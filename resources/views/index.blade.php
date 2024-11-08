@@ -103,7 +103,7 @@
                     perusahaan dalam mencari talenta berkualitas di antara Mahasiswa Polibatam.</p>
             </div>
         </div>
-        <div class="container d-flex justify-content-center flex-wrap gap-5 my-5 position-relative">
+        <div class="container d-flex justify-content-center flex-wrap gap-5 position-relative" style="margin-top: 4.5rem;">
             <div class="feature-card position-relative bg-white">
                 <div class="feature-heading position-absolute rounded-pill text-center text-white start-0 end-0">
                     Pencarian Lowongan</div>

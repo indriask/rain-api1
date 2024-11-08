@@ -24,9 +24,9 @@
 </head>
 
 <body>
-    <!-- wrapper form dan gambar ilustrasi signup -->
+    <!-- wrapper form dan gambar ilustrasi signup mahasiswa -->
     <div class="form-container">
-        {{-- form halaman signup --}}
+        {{-- form halaman signup mahasisswa --}}
         <form action="{{ route('do-student-signup') }}" method="POST">
             <div>
                 <h1>Daftarkan diri anda!</h1>
@@ -65,7 +65,7 @@
             </div>
         </form>
 
-        <!-- gambar ilustrasi halaman signuo -->
+        <!-- gambar ilustrasi halaman signuo mahasiswa -->
         <div class="img-container shadow-lg">
             <img src="{{ asset('storage/2d-logo.png') }}" class="form-ilustration" alt="Register to RAIN">
             <img src="{{ asset('storage/svg/Scribble-6.svg') }}" class="left-top-ilustration-1" alt="">
