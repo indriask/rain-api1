@@ -1,0 +1,250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+
+    --fw-500: 500;
+    --fw-600: 600;
+    --fw-700: 700;
+
+    --primary: #0A3362;
+    --secondary: #E3CDB0;
+    --whiteClr: #fdfdfd;
+    --whiteBgClr: #f8f8f8;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.d-none {
+    display: none;
+}
+
+.form-container {
+    min-height: 100vh;
+    display: flex;
+    background-color: var(--whiteBgClr);
+}
+
+.form-container .img-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: var(--primary); */
+    border-top-right-radius: 75px;
+    border-bottom-right-radius: 75px;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-container .rounded-right {
+    border-radius: 0;
+    border-top-left-radius: 75px !important;
+    border-bottom-left-radius: 75px !important;
+}
+
+.form-container .img-container .form-ilustration {
+    width: 500px;
+    aspect-ratio: 1/1;
+    object-fit: contain;
+    object-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.form-container .img-container .top-ilustration-1,
+.form-container .img-container .top-ilustration-2,
+.form-container .img-container .left-ilustration-1,
+.form-container .img-container .right-ilustration-1,
+.form-container .img-container .right-bottom-ilustration-1 {
+    position: absolute;
+    aspect-ratio: 1/1;
+}
+
+.form-container .img-container .top-ilustration-1 {
+    top: -2rem;
+    left: -4.5rem;
+    width: 250px;
+    transform: rotate(3deg);
+}
+
+.form-container .img-container .top-ilustration-2 {
+    top: 2rem;
+    left: -7rem;
+    width: 250px;
+    transform: rotate(-5deg);
+}
+
+.form-container .img-container .left-ilustration-1 {
+    top: -3.5rem;
+    right: 0.3rem;
+    width: 300px;
+    transform: rotate(180deg);
+}
+
+.form-container .img-container .right-ilustration-1 {
+    bottom: -4rem;
+    left: 0.3rem;
+    width: 300px;
+}
+
+.form-container .img-container .right-bottom-ilustration-1 {
+    bottom: -5rem;
+    right: -2rem;
+    width: 200px;
+}
+
+.form-container form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container form>div {
+    padding-inline: 1rem;
+    width: clamp(50px, 75%, 500px);
+}
+
+.form-container form>div h1 {
+    font-weight: var(--fw-700);
+    color: var(--primary);
+    font-size: 1.8rem;
+    margin-bottom: 2.5rem;
+    text-transform: capitalize;
+}
+
+.form-container form>div div:not(.form-option) {
+    margin-bottom: .7rem;
+}
+
+.form-container form>div label {
+    display: block;
+    color: var(--primary);
+    font-weight: var(--fw-600);
+    font-size: .85rem;
+    margin-bottom: .5rem;
+}
+
+.form-container form>div input {
+    width: 100%;
+    padding: .6rem;
+    border: 1px solid transparent;
+    background-color: var(--whiteClr);
+    border-radius: 6px;
+    font-size: .95rem;
+    transition: all 200ms;
+    border: 1px solid #ddd;
+    outline: none;
+    padding-right: 2rem;
+}
+
+.form-container form>div .input-wrapper {
+    position: relative;
+}
+
+.form-container form>div .input-wrapper>i {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.15rem;
+    transition: all 200ms;
+}
+
+.form-container form>div .show-password {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.15rem;
+    display: inline-block;
+    transition: all 200ms;
+    cursor: pointer;
+}
+
+.form-container form>div input:focus {
+    transform: translateY(-5px);
+    border: 1px solid transparent;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.26);
+    -webkit-box-shadow: 0px 5x 5px 0px rgba(0, 0, 0, 0.26);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.26);
+}
+
+.form-container form>div input:focus~i,
+.form-container form>div input:focus~.show-password {
+    top: 3px;
+}
+
+.form-container form>div .form-option {
+    display: flex;
+    font-size: .8rem;
+    justify-content: space-between;
+}
+
+.form-container form>div .form-option a {
+    color: var(--primary);
+}
+
+.form-container form>div>button {
+    display: block;
+    margin-inline: auto;
+    font-size: .9rem;
+    color: var(--whiteClr);
+    background-color: var(--primary);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: .6rem;
+    margin-block: 2rem 1.2rem;
+    width: 100px;
+}
+
+.form-container form>div .other-option .border {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.form-container form>div .other-option .border .text {
+    font-size: .8rem;
+    position: relative;
+    opacity: .8;
+}
+
+.form-container form>div .other-option .border .line {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(8, 8, 56, 0.747);
+}
+
+.form-container form>div .other-option img {
+    width: inherit;
+    aspect-ratio: 1/1;
+}
+
+.form-container form>div .other-option .social-button-wrapper {
+    width: fit-content;
+    margin: 1rem auto;
+}
+
+.form-container form>div .other-option .social-button {
+    border: 1px solid transparent;
+    width: 30px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+    margin-inline: .3rem;
+    background-color: var(--whiteClr);
+}
+
+button:active {
+    transform: scale(.97);
+}

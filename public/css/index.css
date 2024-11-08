@@ -1,0 +1,236 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-optical-sizing: auto;
+
+    --fw-500: 500;
+    --fw-600: 600;
+    --fw-700: 700;
+
+    --primary: #0A3362;
+    --secondary: #E3CDB0;
+    --whiteClr: #fdfdfd;
+    --whiteBgClr: #f8f8f8;
+}
+
+:root {
+    scroll-behavior: smooth;
+}
+
+.navbar {
+    height: 70px;
+}
+
+.rain-logo {
+    width: 60px;
+    transform: scale(1.2);
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1/1;
+}
+
+.logo-title {
+    font-weight: var(--fw-700);
+    color: var(--primary);
+    font-size: 1.15rem;
+}
+
+.custom-container {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-nav-list>* {
+    margin-inline: .5rem;
+    font-weight: var(--fw-500);
+    font-size: .95rem;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.login-button {
+    width: 100px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: .95rem;
+    transition: all 200ms;
+    background-color: transparent;
+}
+
+.login-button:hover {
+    background-color: var(--primary);
+    color: var(--whiteClr);
+    border: 1px solid transparent;
+}
+
+.landing-page-logo-title {
+    color: var(--primary);
+    font-weight: var(--fw-700);
+    font-size: .8rem;
+}
+
+.hero-heading {
+    font-weight: var(--fw-700);
+    font-size: 3rem;
+}
+
+.landing-page-img {
+    width: 650px;
+    aspect-ratio: 1/1;
+}
+
+.custom-container-landing-page p {
+    width: 450px;
+}
+
+.landing-page-button {
+    width: 200px;
+    padding: .7rem;
+    font-size: .9rem;
+    color: var(--primary);
+    font-weight: var(--fw-700);
+    border: none;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.arrow-up-ilustration {
+    aspect-ratio: 1/1;
+    width: 300px;
+    position: absolute;
+}
+
+.website-feature-heading {
+    font-weight: var(--fw-700);
+}
+
+.feature-card {
+    border-radius: 40px;
+    width: 242px;
+    height: 217px;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+.feature-heading {
+    background-color: var(--primary);
+    font-weight: var(--fw-700);
+    padding: .8rem;
+    top: -10px;
+}
+
+.feature-icon {
+    display: block;
+    margin-top: 3rem;
+    margin-bottom: .2rem;
+    font-size: 3rem;
+}
+
+.feature-card p {
+    font-size: .9rem;
+    width: 200px;
+}
+
+.col>div {
+    width: 100px !important;
+    /* max-width: 100px; */
+}
+
+.profile-card {
+    max-width: 290px;
+    border-radius: 40px;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+.profile {
+    width: 100px;
+    top: -2rem;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1/1;
+    box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+    -moz-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
+}
+
+.profile-name {
+    margin-top: 5rem;
+    font-weight: var(--fw-700);
+    font-size: 1rem;
+}
+
+.profile-role {
+    font-size: .8rem;
+}
+
+.profile-icon {
+    font-size: 1.15rem;
+    margin-inline: 1rem;
+    cursor: pointer;
+}
+
+.contact-container>* {
+    width: 50%;
+}
+
+.form-contact {
+    width: 400px;
+    height: 350px;
+    background-color: var(--primary);
+    border-radius: 50px;
+}
+
+.form-contact>* {
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 90%;
+}
+
+.form-contact>input {
+    margin-top: 0;
+    padding: .3rem;
+    padding-inline: 1.5rem;
+    outline: none;
+}
+
+.form-contact>textarea {
+    height: 190px;
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.form-contact>button {
+    padding: .35rem;
+    width: 180px;
+}
+
+footer.container-fluid img {
+    width: 100px;
+    transform: scale(1.6);
+    aspect-ratio: 1/1;
+}
+
+footer.container-fluid h1 {
+    color: var(--primary);
+    font-weight: var(--fw-700);
+    font-size: 2.1rem;
+}
+
+footer.container-fluid p {
+    font-size: .95rem;
+}
+
+footer.container-fluid a {
+    color: black;
+    font-size: 1.15rem;
+    text-decoration: none;
+    margin-inline: 1.3rem;
+}

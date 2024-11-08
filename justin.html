@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with CSS Grid</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            grid-gap: 20px 15px;
+            align-items: center;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gaji-inputs {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            grid-gap: 10px;
+            align-items: center;
+        }
+        
+        .gaji-inputs input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .time-type {
+            display: flex;
+            gap: 20px;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <form class="form-grid">
+        <label for="gaji">Gaji</label>
+        <div class="gaji-inputs">
+            <input type="text" id="gaji" name="gaji" /> /
+            <input type="text" id="gaji-max" name="gaji-max" />
+        </div>
+
+        <label for="judul">Judul</label>
+        <input type="text" id="judul" name="judul" />
+
+        <label for="jurusan">Jurusan</label>
+        <input type="text" id="jurusan" name="jurusan" />
+
+        <label for="lokasi">Lokasi</label>
+        <input type="text" id="lokasi" name="lokasi" />
+
+        <label for="tanggal">Tanggal</label>
+        <input type="date" id="tanggal" name="tanggal" />
+
+        <label for="kuota">Kuota</label>
+        <input type="number" id="kuota" name="kuota" />
+
+        <label>Tipe waktu</label>
+        <div class="time-type">
+            <label><input type="checkbox" name="penuh_waktu" /> Penuh waktu</label>
+            <label><input type="checkbox" name="paruh_waktu" /> Paruh waktu</label>
+        </div>
+
+        <label for="jenis">Jenis</label>
+        <input type="text" id="jenis" name="jenis" />
+
+        <label for="durasi">Durasi</label>
+        <input type="text" id="durasi" name="durasi" />
+    </form>
+</body>
+</html>
