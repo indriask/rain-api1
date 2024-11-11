@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    font-optical-sizing: auto;
+
+    --fw-500: 500;
+    --fw-600: 600;
+    --fw-700: 700;
+
+    --blue: #0A3362;
+    --white: #FFFFFF;
+    --black: #000000;
+}
+
+body {
+    background-color: #e5e5e5;
+}

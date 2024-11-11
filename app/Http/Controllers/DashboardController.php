@@ -10,6 +10,10 @@ class DashboardController extends Controller
         return response()->view('dashboard');
     }
 
+    public function indexNew() {
+        return response()->view('dashboard-new');
+    }
+
     public function detailLowongan(string $lowongan) {
         return response()->view('detail-lowongan', [
             'lowongan' => $lowongan

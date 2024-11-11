@@ -44,3 +44,6 @@ Route::get('/dashboard/perusahaan/profile', [CompanyController::class, 'index'])
 
 // Route halaman pasang lowongan untuk perusahaan
 Route::get('/dashboard/perusahaan/pasang-lowongan', [DashboardController::class, 'pasangLowongan'])->name('pasang-lowongan');
+
+// Route halaman dashboard baru mahasiswa dan perusahaan
+Route::get('/dashboard-new', [DashboardController::class, 'indexNew']);
