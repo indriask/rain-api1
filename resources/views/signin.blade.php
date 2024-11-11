@@ -40,11 +40,11 @@
         <!-- bagian form input mahasiswa -->
         <form action="{{ route('validate-credentials') }}" method="POST">
             <div>
-                <h1>Dapatkan lowongan magang yang sesuai!</h1>
+                <h1>Dapatkan lowongan dan kandidat magang yang sesuai!</h1>
                 <div>
-                    <label for="email-or-phone">Masukan Email/No. Handphone</label>
+                    <label for="email-or-phone">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email-or-phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>

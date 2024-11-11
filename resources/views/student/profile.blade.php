@@ -153,7 +153,7 @@
                                     <h6 class="edit-profile-heading mt-4">Kontak Mahasiswa</h6>
                                     <div class="mb-3">
                                         <label for="nomor-telepon" class="form-label">Nomor telepon</label>
-                                        <input type="number" class="form-control" name="nomoro-telepon" id="nomor-telepon"
+                                        <input type="number" class="form-control" name="nomor-telepon" id="nomor-telepon"
                                             placeholder="Nomor telepon" value="08123456789">
                                     </div>
                                     <button class="btn btn-dark my-3">Edit profile</button>

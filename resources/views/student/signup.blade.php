@@ -31,10 +31,17 @@
             <div>
                 <h1>Daftarkan diri anda!</h1>
                 <div>
-                    <label for="email-or-phone">Masukan Email/No. Handphone</label>
+                    <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
                         <input type="text" name="email-or-phone" id="email-or-phone" required>
                         <i class="bi bi-envelope"></i>
+                    </div>
+                </div>
+                <div>
+                    <label for="nim">Masukan NIM</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="nim" id="nim" required>
+                        <i class="bi bi-postcard"></i>
                     </div>
                 </div>
                 <div>

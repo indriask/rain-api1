@@ -31,10 +31,17 @@
             <div>
                 <h1>Daftarkan perusahaan anda!</h1>
                 <div>
-                    <label for="email-or-phone">Masukan Email/No. Handphone</label>
+                    <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email-or-phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
+                    </div>
+                </div>
+                <div>
+                    <label for="email-or-phone">Masukan NIM</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="nib" id="email-or-phone" required>
+                        <i class="bi bi-postcard"></i>
                     </div>
                 </div>
                 <div>
@@ -60,6 +67,16 @@
                         </div>
                         <!-- new code end -->
                     </div>
+                </div>
+                <div class="input-wrapper">
+                    <label for="surat-kerjasama">
+                        <p>Mauskan Bukti Surat Kerjasama Dengan Polibatam</p>
+                        <div class="box-surat d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-plus-square-fill"></i>
+                            Tambahkan PDF atau DOCS
+                        </div>
+                    </label>
+                    <input class="form-control input-surat" type="file" name="profile-mahasiswa" id="surat-kerjasama">
                 </div>
                 <button type="submit" name="daftar">Daftar</button>
             </div>

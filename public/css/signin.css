@@ -9,10 +9,13 @@
     --fw-600: 600;
     --fw-700: 700;
 
-    --primary: #0A3362;
-    --secondary: #E3CDB0;
-    --whiteClr: #fdfdfd;
-    --whiteBgClr: #f8f8f8;
+    --blue: #0A3362;
+    --white: #FFFFFF;
+    --black: #000000;
+}
+
+body {
+    background-color: #e5e5e5;
 }
 
 button,
@@ -33,15 +36,15 @@ button {
 .form-container {
     min-height: 100vh;
     display: flex;
-    background-color: var(--whiteBgClr);
 }
 
 .form-container .img-container {
+    background-color: var(--white);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: var(--primary); */
+    /* background-color: var(--blue); */
     border-top-right-radius: 75px;
     border-bottom-right-radius: 75px;
     position: relative;
@@ -119,7 +122,7 @@ button {
 
 .form-container form>div h1 {
     font-weight: var(--fw-700);
-    color: var(--primary);
+    color: var(--blue);
     font-size: 1.8rem;
     margin-bottom: 2.5rem;
     text-transform: capitalize;
@@ -131,7 +134,7 @@ button {
 
 .form-container form>div label {
     display: block;
-    color: var(--primary);
+    color: var(--blue);
     font-weight: var(--fw-600);
     font-size: .85rem;
     margin-bottom: .5rem;
@@ -141,7 +144,7 @@ button {
     width: 100%;
     padding: .6rem;
     border: 1px solid transparent;
-    background-color: var(--whiteClr);
+    background-color: var(--white);
     border-radius: 6px;
     font-size: .95rem;
     transition: all 200ms;
@@ -192,15 +195,15 @@ button {
 }
 
 .form-container form>div .form-option a {
-    color: var(--primary);
+    color: var(--blue);
 }
 
 .form-container form>div>button {
     display: block;
     margin-inline: auto;
     font-size: .9rem;
-    color: var(--whiteClr);
-    background-color: var(--primary);
+    color: var(--white);
+    background-color: var(--blue);
     border: 1px solid transparent;
     border-radius: 6px;
     padding: .6rem;
@@ -242,7 +245,7 @@ button {
     overflow: hidden;
     aspect-ratio: 1/1;
     margin-inline: .3rem;
-    background-color: var(--whiteClr);
+    background-color: var(--white);
 }
 
 button:active {

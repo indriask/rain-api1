@@ -27,7 +27,7 @@
 <body>
     <div class="form-container">
         {{-- form input email --}}
-        <form action="" method="POST" class="border border-black">
+        <form action="" method="POST">
             <div>
                 <div class="form-title">
                     <h1>Atur ulang kata sandi anda!</h1>

@@ -9,14 +9,17 @@
     --fw-600: 600;
     --fw-700: 700;
 
-    --primary: #0A3362;
-    --secondary: #E3CDB0;
-    --whiteClr: #fdfdfd;
-    --whiteBgClr: #f8f8f8;
+    --blue: #0A3362;
+    --white: #FFFFFF;
+    --black: #000000;
 }
 
 :root {
     scroll-behavior: smooth;
+}
+
+body {
+    background-color: #e5e5e5;
 }
 
 .navbar {
@@ -33,7 +36,7 @@
 
 .logo-title {
     font-weight: var(--fw-700);
-    color: var(--primary);
+    color: var(--blue);
     font-size: 1.15rem;
 }
 
@@ -47,27 +50,27 @@
     margin-inline: .5rem;
     font-weight: var(--fw-500);
     font-size: .95rem;
-    color: var(--primary);
+    color: var(--blue);
     text-decoration: none;
 }
 
 .login-button {
     width: 100px;
-    border: 1px solid var(--primary);
-    color: var(--primary);
+    border: 1px solid var(--blue);
+    color: var(--blue);
     font-size: .95rem;
     transition: all 200ms;
     background-color: transparent;
 }
 
 .login-button:hover {
-    background-color: var(--primary);
-    color: var(--whiteClr);
+    background-color: var(--blue);
+    color: var(--);
     border: 1px solid transparent;
 }
 
 .landing-page-logo-title {
-    color: var(--primary);
+    color: var(--blue);
     font-weight: var(--fw-700);
     font-size: .8rem;
 }
@@ -90,7 +93,7 @@
     width: 200px;
     padding: .7rem;
     font-size: .9rem;
-    color: var(--primary);
+    color: var(--blue);
     font-weight: var(--fw-700);
     border: none;
     box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.3);
@@ -118,7 +121,7 @@
 }
 
 .feature-heading {
-    background-color: var(--primary);
+    background-color: var(--blue);
     font-weight: var(--fw-700);
     padding: .8rem;
     top: -10px;
@@ -142,7 +145,8 @@
 }
 
 .profile-card {
-    max-width: 290px;
+    background-color: var(--white);
+    max-width: 260px;
     border-radius: 40px;
     box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
     -webkit-box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.35);
@@ -183,7 +187,7 @@
 .form-contact {
     width: 400px;
     height: 350px;
-    background-color: var(--primary);
+    background-color: var(--blue);
     border-radius: 50px;
 }
 
@@ -219,7 +223,7 @@ footer.container-fluid img {
 }
 
 footer.container-fluid h1 {
-    color: var(--primary);
+    color: var(--blue);
     font-weight: var(--fw-700);
     font-size: 2.1rem;
 }
