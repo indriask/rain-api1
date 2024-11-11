@@ -17,3 +17,43 @@
 body {
     background-color: #e5e5e5;
 }
+
+/* style navbar style */
+
+.aside-nav {
+    width: 300px;
+}
+
+.logo-img {
+    width: 100px;
+    aspect-ratio: 1/1;
+}
+
+.logo-title {
+    color: var(--blue);
+    font-weight: var(--fw-700);
+    font-size: 1.5rem;
+}
+
+.aside-list {
+    /* height: fit-content !important; */
+}
+
+.aside-list-item {
+    background-color: var(--blue);
+    font-size: .85rem;
+    font-weight: var(--fw-600);
+    border-radius: 7px;
+}
+
+.aside-subheading {
+    color: var(--black);
+    font-weight: var(--fw-700);
+    font-size: .9rem;
+}
+
+/* style navbar end */
+
+.dashboard-main {
+    width: 100%;
+}
