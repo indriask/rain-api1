@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Utils\ResponseController as Response;
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+class AccountController extends Controller
+{
+    public static function signin (Request $request){
+        try {
+            //Memvalidasi request apakah email dan password sudah diisi
+            $validated = $request->validate(
+                [
+                    'email' => 'required|string',
+                    'password' => 'required',
+                ]
+            );
+
+            //Mencari data dalam database sesuai request apakah ada atau tidak
+            if(Auth::attempt(['email' => $request->email , 'password' => $request->password])){
+                $user = User::where('email' , $request->email)->first();
+                Auth::login($user);
+                $data = [
+                    'email' => $user->email
+                ];
+                Response::send($data);
+            } else{
+                Response::badRequest('Login gagal harap check email atau password anda');
+            }
+
+        } catch (\Throwable $error) {
+            //throw $error;
+            Response::badRequest($error->getMessage());
+        }
+    }
+        
+
+    public static function signup (Request $request){
+        Response::badRequest("Email is Invalid");
+    }
+
+    public static function signout (Request $request){
+        return "Signout";
+    }
+}
