@@ -3,8 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -34,6 +35,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'id'
     ];
 
     /**
@@ -45,7 +47,14 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s'
             // 'password' => 'hashed',
         ];
     }
+
+    public function role (): BelongsTo {
+        return $this->belongsTo(UserRole::class, 'roles_id');
+    }
+
 }

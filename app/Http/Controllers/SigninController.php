@@ -25,14 +25,10 @@ class SigninController extends Controller
                 ]
             );
 
-            //Mencari data dalam database sesuai request apakah ada atau tidak
-            if(Auth::attempt(['email' => $request->email_or_phone , 'password' => $request->password])){
-                $user = User::where('email' , $request->email_or_phone)->first();
-                Auth::login($user);
-                return redirect()->route('dashboard');
-            }else{
-                return redirect()->back()->withErrors('Login gagal harap check email atau password anda');
-            }
+            // Tambah codingan disini untuk Panggil API pskr Http request
+            
+
+            return redirect()->route('dashboard');
 
         } catch (\Throwable $error) {
             //throw $error;

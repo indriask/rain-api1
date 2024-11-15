@@ -8,6 +8,7 @@ use App\Http\Controllers\Utils\ResponseController as Response;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UserRole;
 
 class AccountController extends Controller
 {
@@ -23,6 +24,7 @@ class AccountController extends Controller
 
             //Mencari data dalam database sesuai request apakah ada atau tidak
             if(Auth::attempt(['email' => $request->email , 'password' => $request->password])){
+                // Check if  Role ID is correct too
                 $user = User::where('email' , $request->email)->first();
                 Auth::login($user);
                 $data = [
@@ -41,7 +43,8 @@ class AccountController extends Controller
         
 
     public static function signup (Request $request){
-        Response::badRequest("Email is Invalid");
+        // $user = User::find(1);
+        Response::send(UserRole::find(2)->users);
     }
 
     public static function signout (Request $request){
