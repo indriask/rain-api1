@@ -36,7 +36,7 @@
         <aside class="aside-nav border-end border-black px-2">
             <div class="d-flex align-items-center border-bottom border-black">
                 <img class="logo-img" src="{{ asset('storage/2d-logo.png') }}" alt="RAIN Team">
-                <h2 class="logo-title">RAIN</h2>
+                <h2 class="logo-title position-relative"  style="right: 10px;">RAIN</h2>
             </div>
             <div class="aside-list py-4">
                 <div class="border-bottom border-black" style="height: 300px;">
