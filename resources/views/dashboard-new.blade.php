@@ -121,7 +121,7 @@
             </div>
 
             {{-- vacancy card list --}}
-            <div id="vacancy-card-list-container" class="overflow-hidden position-relative h-100">
+            <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                 <div class="vacancy-card-list px-3 gap-3 mt-4">
                     {{-- vacancy card --}}
                     @for ($i = 0; $i < 10; $i++)
@@ -148,7 +148,7 @@
                                     <li class="bg-white rounded-pill text-center">6 Bulan</li>
                                 </ul>
 
-                                <button
+                                <button onclick="showVacancyDetail('1')"
                                     class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
                             </div>
                         </div>
@@ -156,8 +156,9 @@
                 </div>
 
                 {{-- apply form card --}}
-                <div class="position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex align-items-center justify-content-center">
-                    <form method="POST" action="" class="apply-form bg-white p-4 overflow-auto p-2 d-flex">
+                <div id="vacancy-detail-card"
+                    class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
+                    <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                         <div class="" style="width: 50%;">
                             <h1 class="apply-form-title">Frontend Developer</h1>
                             <div class="d-flex mt-3">
@@ -184,7 +185,7 @@
                                     <span class="mx-3">/</span>
                                     <div class="box" style="width: 30px;"></div>
                                 </div>
-                                
+
                                 <label class="fw-500">Jurusan</label>
                                 <div class="box"></div>
 
@@ -204,14 +205,28 @@
                                 <label class="fw-500">Pendaftar</label>
                                 <div class="box"></div>
                             </div>
-                            <button class="close-apply-form position-relative">Kembali</button>
+                            <button onclick="closeVacancyDetail()" type="button"
+                                class="close-apply-form text-white fw-700 border border-0 position-relative">Kembali</button>
                         </div>
-                        <div class="border border-danger"></div>
+                        <div style="width: 50%">
+                            <div class="d-flex">
+                                <button
+                                    class="apply-vacancy-button border border-0 text-white fw-700 ms-auto">Daftar</button>
+                            </div>
+                            <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
+                            <div class="apply-vacancy-detail overflow-auto">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
+                                inventore consectetur obcaecati quas atque a deserunt laudantium! Pariatur ratione eaque
+                                enim tenetur est esse quam dignissimos minus eveniet!
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </main>
     </div>
+
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
 
 </body>
 

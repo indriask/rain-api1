@@ -255,6 +255,10 @@ option {
     font-weight: var(--fw-700);
 }
 
+.apply-company-title  > *{
+    font-size: .95rem;
+}
+
 .apply-vacancy-img {
     aspect-ratio: 1/1;
     width: 50px;
@@ -305,5 +309,32 @@ option {
 }
 
 .close-apply-form {
-    
+    padding: 5px;
+    border-radius: 8px;
+    width: 120px;
+    background-color: var(--blue);
+    top: 1.5rem;
+    font-size: .9rem;
+}
+
+.apply-vacancy-button {
+    background-color: var(--blue);
+    font-size: .9rem;
+    width: 115px;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.apply-vacancy-detail-lowongan {
+    font-size: .95rem;
+}
+
+.apply-vacancy-detail {
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    height: 330px;
+    padding: 20px;
+    font-size: .9rem;
+    border-radius: 7px;
 }
