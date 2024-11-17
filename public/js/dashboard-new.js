@@ -1,6 +1,8 @@
 const vacancyCardListContainer = document.querySelector("#vacancy-card-list-container");
 const vacancyDetailCard = document.querySelector("#vacancy-detail-card");
 const vacancyApplyFormContainer = document.querySelector("#vacancy-apply-form-container")
+const applyFormNotifcation = document.querySelector("#apply-form-notification");
+const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
 
 
 // sekalian ngejalanin request data ke api laravel
@@ -18,16 +20,37 @@ function closeVacancyDetail() {
     return 1;
 }
 
-function showApplyVacancyForm(id) {
+function showApplyVacancyFormContainer(id) {
     vacancyApplyFormContainer.classList.remove("d-none", "pe-none");
     vacancyApplyFormContainer.classList.add("d-block");
 
     return 1;
 }
 
-function closeApplyVacancyForm() {
+function closeApplyVacancyFormContainer() {
     vacancyApplyFormContainer.classList.remove("d-block");
     vacancyApplyFormContainer.classList.add("d-none", "pe-none");
+
+    return 1;
+}
+
+function showNotification() {
+    applyFormNotifcation.classList.remove("d-none", "pe-none");
+    applyFormNotifcation.classList.add("d-block");
+
+    vacancyApplyForm.classList.add("d-none", "pe-none");
+
+    return 1;
+}
+
+function closeAllFormCard() {
+    applyFormNotifcation.classList.remove("d-block");
+    applyFormNotifcation.classList.add("d-none", "pe-none");
+
+    vacancyApplyForm.classList.remove("d-none", "pe-none");
+
+    closeApplyVacancyFormContainer();
+    closeVacancyDetail();
 
     return 1;
 }

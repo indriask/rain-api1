@@ -212,7 +212,8 @@
                     <div class="w-50">
                         <div class="d-flex">
                             <button type="button"
-                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto" onclick="showApplyVacancyForm(1)">Daftar</button>
+                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
+                                onclick="showApplyVacancyFormContainer(1)">Daftar</button>
                         </div>
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
                         <div class="apply-vacancy-detail overflow-auto">
@@ -226,12 +227,12 @@
 
             {{-- vacancy apply form --}}
             <div id="vacancy-apply-form-container"
-                class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center py-4">
-                <form action="" method="POST" class="vacancy-apply-form-card bg-white p-4">
+                class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
+                <form id="vacancy-apply-form" action="" method="POST" class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                        <button type="button" class="border border-0 bg-transparent" onclick="closeApplyVacancyForm()"><i
-                                class="bi bi-x-circle"></i></button>
+                        <button type="button" class="border border-0 bg-transparent"
+                            onclick="closeApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                     </div>
                     <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
                         ketentuan berikut</span>
@@ -263,10 +264,26 @@
                     </div>
                     <label for="upload-file" class="apply-form-upload-file text-white fw-700 text-center w-100">
                         <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
-                    
+
                     {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
-                    <button type="button" class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
+                    <button type="button" onclick="showNotification()"
+                        class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
+
+                {{-- apply form notification --}}
+                <div id="apply-form-notification" class="d-none pe-none vacancy-apply-form-card bg-white p-5 rounded">
+                    <div class="d-flex align-items-center justify-content-center flex-column">
+                        {{-- success message --}}
+                        <img class="apply-form-icon ratio-1x1" src="{{ asset("storage/svg/success-checkmark.svg") }}" alt="Success checkmar">
+                        <span>Lamaran berhasil di kirim!</span>
+
+                        {{-- failed message --}}
+                        {{-- <img src="{{ asset("storage/svg/failed-x.svg") }}" class="apply-form-icon ratio-1x1" alt="Failed Icon">
+                        <span>Lamaran gagal di kirim {{ ":(" }}</span> --}}
+
+                        <button onclick="closeAllFormCard()" class="bni-blue border border-0 text-white mt-5 rounded" style="width: 100px; padding: 5px;">Kembali</button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>

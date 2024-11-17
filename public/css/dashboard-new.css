@@ -28,6 +28,10 @@ body {
     object-position: center;
 }
 
+.bni-blue {
+    background-color: var(--blue);
+}
+
 .fw-600 {
     font-weight: var(--fw-600);
 }
@@ -397,4 +401,8 @@ button {
     width: 110px;
     padding: 5px;
     border-radius: 7px;
+}
+
+.apply-form-icon {
+    width: 70px;
 }
