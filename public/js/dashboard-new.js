@@ -1,16 +1,17 @@
 const vacancyCardListContainer = document.querySelector("#vacancy-card-list-container");
 const vacancyDetailCard = document.querySelector("#vacancy-detail-card");
 
-function showVacancyDetail(id) {
+// sekalian ngejalanin request data ke api laravel
+function showVacancyDetail(id = 0) {
     vacancyDetailCard.classList.remove("d-none", "pe-none");
-    vacancyCardListContainer.classList.add("overflow-hidden");
+    vacancyDetailCard.classList.add("d-block");
 
     return 1;
 }
 
 function closeVacancyDetail() {
+    vacancyDetailCard.classList.remove("d-block");
     vacancyDetailCard.classList.add("d-none", "pe-none");
-    vacancyCardListContainer.classList.remove("overflow-auto");
-
+    
     return 1;
 }

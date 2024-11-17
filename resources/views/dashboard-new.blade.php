@@ -66,7 +66,7 @@
         </aside>
 
         {{-- content dashboard utama --}}
-        <main class="dashboard-main">
+        <main class="dashboard-main position-relative">
             {{-- user profile and filter input --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
@@ -124,7 +124,7 @@
             <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                 <div class="vacancy-card-list px-3 gap-3 mt-4">
                     {{-- vacancy card --}}
-                    @for ($i = 0; $i < 10; $i++)
+                    @for ($i = 0; $i < 6; $i++)
                         <div class="vacancy-card bg-white py-3 px-4">
                             <div class="d-flex justify-content-between">
                                 <h5 class="salary-text">Rp. ***/bulan</h5>
@@ -154,74 +154,101 @@
                         </div>
                     @endfor
                 </div>
+            </div>
 
-                {{-- apply form card --}}
-                <div id="vacancy-detail-card"
-                    class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                    <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
-                        <div class="" style="width: 50%;">
-                            <h1 class="apply-form-title">Frontend Developer</h1>
-                            <div class="d-flex mt-3">
-                                <img class="apply-vacancy-img object-fit-cover object-position-center me-2"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK3CAhjRZ4esxRs2HBnf9qKoF6PAy4063vvA&s"
-                                    alt="">
-                                <div style="width: 250px">
-                                    <div class="apply-company-title d-flex justify-content-between">
-                                        <span>Perusahaan</span>
-                                        <span>Batam, Indonesia</span>
-                                    </div>
-                                    <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
-                                        <span class="bg-white rounded-pill p-1">Penuh Waktu</span>
-                                        <span class="bg-white rounded-pill p-1">Offline</span>
-                                        <span class="bg-white rounded-pill p-1">6 Bulan</span>
-                                    </div>
+            {{-- vacancy detail card --}}
+            <div id="vacancy-detail-card"
+                class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
+                <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+                    <div class="position-relative w-50">
+                        <h1 class="apply-form-title">Frontend Developer</h1>
+                        <div class="d-flex mt-3">
+                            <img class="apply-vacancy-img object-fit-cover object-fit-position me-2"
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK3CAhjRZ4esxRs2HBnf9qKoF6PAy4063vvA&s"
+                                alt="">
+                            <div style="width: 250px">
+                                <div class="apply-company-title d-flex justify-content-between">
+                                    <span class="fw-500" style="width: 100px;">Perusahaan</span>
+                                    <span class="fw-500">Batam, Indonesia</span>
                                 </div>
-                            </div>
-
-                            <div class="form-input-container mt-4">
-                                <label class="fw-500">Gaji</label>
-                                <div class="input-group">
-                                    <div class="box" style="width: 50px;"></div>
-                                    <span class="mx-3">/</span>
-                                    <div class="box" style="width: 30px;"></div>
+                                <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
+                                    <span class="bg-white rounded-pill p-1">Penuh Waktu</span>
+                                    <span class="bg-white rounded-pill p-1">Offline</span>
+                                    <span class="bg-white rounded-pill p-1">6 Bulan</span>
                                 </div>
-
-                                <label class="fw-500">Jurusan</label>
-                                <div class="box"></div>
-
-                                <label class="fw-500">Dibuka</label>
-                                <div class="input-group">
-                                    <div class="box"></div>
-                                    <span class="mx-3">-</span>
-                                    <div class="box"></div>
-                                </div>
-
-                                <label class="fw-500">Kuota</label>
-                                <div class="box"></div>
-
-                                <label class="fw-500">Status</label>
-                                <div class="box"></div>
-
-                                <label class="fw-500">Pendaftar</label>
-                                <div class="box"></div>
-                            </div>
-                            <button onclick="closeVacancyDetail()" type="button"
-                                class="close-apply-form text-white fw-700 border border-0 position-relative">Kembali</button>
-                        </div>
-                        <div style="width: 50%">
-                            <div class="d-flex">
-                                <button
-                                    class="apply-vacancy-button border border-0 text-white fw-700 ms-auto">Daftar</button>
-                            </div>
-                            <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                            <div class="apply-vacancy-detail overflow-auto">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
-                                inventore consectetur obcaecati quas atque a deserunt laudantium! Pariatur ratione eaque
-                                enim tenetur est esse quam dignissimos minus eveniet!
                             </div>
                         </div>
-                    </form>
-                </div>
+
+                        <div class="form-input-container mt-4">
+                            <label class="fw-500">Gaji</label>
+                            <div class="input-group">
+                                <div class="box" style="width: 50px;"></div>
+                                <span class="mx-3">/</span>
+                                <div class="box" style="width: 30px;"></div>
+                            </div>
+
+                            <label class="fw-500">Jurusan</label>
+                            <div class="box"></div>
+
+                            <label class="fw-500">Dibuka</label>
+                            <div class="input-group">
+                                <div class="box"></div>
+                                <span class="mx-3">-</span>
+                                <div class="box"></div>
+                            </div>
+
+                            <label class="fw-500">Kuota</label>
+                            <div class="box"></div>
+
+                            <label class="fw-500">Status</label>
+                            <div class="box"></div>
+
+                            <label class="fw-500">Pendaftar</label>
+                            <div class="box"></div>
+                        </div>
+                        <button onclick="closeVacancyDetail()" type="button"
+                            class="close-apply-form text-white fw-700 border border-0 position-absolute">Kembali</button>
+                    </div>
+                    <div class="w-50">
+                        <div class="d-flex">
+                            <button
+                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto">Daftar</button>
+                        </div>
+                        <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
+                        <div class="apply-vacancy-detail overflow-auto">
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
+                            inventore consectetur obcaecati quas atque a deserunt laudantium! Pariatur ratione eaque
+                            enim tenetur est esse quam dignissimos minus eveniet!
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            {{-- vacancy apply form --}}
+            <div id="vacancy-apply-form-container" class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center py-4">
+                <form action="" method="POST" class="vacancy-apply-form-card bg-white p-4">
+                    <div class="d-flex justify-content-between">
+                        <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
+                        <button type="button" class="border border-0 bg-transparent" onclick=""><i class="bi bi-x-circle"></i></button>
+                    </div>
+                    <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan ketentuan berikut</span>
+
+                    <div class="apply-form-common-info mt-4">
+                        <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
+                        <input type="text" class="w-100 border focus-ring" placeholder="Nama Lengkap" name="">
+                        <input type="text" class="w-100 border focus-ring" placeholder="NIM" name="">
+                        <select name="" id="">
+                            <option selected>Jurusan</option>
+                            <option value="">Teknik Informatika</option>
+                            <option value="">Manajemen Bisnis</option>
+                            <option value="">Teknik Elektro</option>
+                            <option value="">Teknik Mesin</option>
+                        </select>
+                        <input type="text" class="w-100 border focus-ring" placeholder="Program Studi" name="">
+                        <input type="text" class="w-100 border focus-ring" placeholder="Email" name="">
+                        <input type="text" class="w-100 border focus-ring" placeholder="Nomor Telepon" name="">
+                    </div>
+                </form>
             </div>
         </main>
     </div>

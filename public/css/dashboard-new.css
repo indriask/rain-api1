@@ -40,6 +40,10 @@ body {
     font-weight: var(--fw-500);
 }
 
+.text-elip {
+    text-overflow: ellipsis;
+}
+
 button,
 input,
 textarea,
@@ -260,7 +264,7 @@ option {
 }
 
 .apply-vacancy-img {
-    aspect-ratio: 1/1;
+    height: 50px;
     width: 50px;
     border-radius: 6px;
 }
@@ -313,7 +317,8 @@ option {
     border-radius: 8px;
     width: 120px;
     background-color: var(--blue);
-    top: 1.5rem;
+    bottom: 0;
+    left: 0;
     font-size: .9rem;
 }
 
@@ -333,8 +338,43 @@ option {
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-    height: 330px;
+    height: calc(100% - 3rem);
     padding: 20px;
     font-size: .9rem;
     border-radius: 7px;
+}
+
+.vacancy-apply-form-container {
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.vacancy-apply-form-card {
+    border-radius: 20px;
+    width: 500px;
+}
+
+.vacancy-apply-form-card-title {
+    font-size: 1.5rem;
+}
+
+.vacancy-apply-form-card-small-info {
+    font-size: .9rem;
+}
+
+.apply-form-common-info-heading {
+    font-size: 1rem;
+}
+
+.apply-form-common-info > input {
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.3);
+    font-size: .9rem;
+}
+
+.apply-form-common-info > input::placeholder {
+    color: black;
+    font-size: .9rem;
 }
