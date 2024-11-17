@@ -19,4 +19,8 @@ class DashboardController extends Controller
     public function pasangLowongan() {
         return response()->view('company.pasang-lowongan');
     }
+
+    public function showDaftarLamaran() {
+        return response()->view('student.daftar-lamaran');
+    }
 }

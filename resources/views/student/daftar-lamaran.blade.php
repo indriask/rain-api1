@@ -41,16 +41,14 @@
             <div class="aside-list py-4">
                 <div class="border-bottom border-black" style="height: 300px;">
                     <p class="aside-subheading">MENU UTAMA</p>
-                    <a href="{{ route('dashboard') }}" class="text-underline">
+                    <a href="{{ route('dashboard') }}" class="underline-none">
                         <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                                 class="bi bi-house-door me-1"></i> Beranda</div>
                     </a>
-                    <a href="{{ route('student-daftar-lamaran') }}" class="text-underline">
-                        <div class="aside-list-item py-2 px-2 text-white mb-2">
-                            <i class="bi bi-card-list me-1"></i>Daftar Lamaran
-                        </div>
+                    <a href="{{ route('student-daftar-lamaran') }}" class="underline-none">
+                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
+                                class="bi bi-card-list me-1"></i> Daftar Lamaran</div>
                     </a>
-
                     @if (false)
                         <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                                 class="bi bi-plus-circle me-1"></i> Tambah Lowongan</div>
@@ -126,45 +124,43 @@
                 </div>
             </div>
 
-            {{-- vacancy card list --}}
-            <div id="card-container" class="overflow-auto">
-                <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
-                    <div class="vacancy-card-list px-3 gap-3 mt-4">
-                        {{-- vacancy card --}}
-                        @for ($i = 0; $i < 6; $i++)
-                            <div class="vacancy-card bg-white py-3 px-4">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="salary-text">Rp. ***/bulan</h5>
-                                    <img class="company-photo rounded"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
-                                        alt="Company photo">
-                                </div>
-                                <div>
-                                    <h6 class="vacancy-role m-0">Frontend Developer</h6>
-                                    <span class="vacancy-major-choice">Teknik Informatika</span>
-
-                                    <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>Nongsa, Batam</li>
-                                        <li><i class="bi bi-calendar3 me-3"></i>20 September 2024</li>
-                                        <li><i class="bi bi-bar-chart-line me-3"></i>30 Kuota</li>
-                                    </ul>
-
-                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">Full-time</li>
-                                        <li class="bg-white rounded-pill text-center">Offline</li>
-                                        <li class="bg-white rounded-pill text-center">6 Bulan</li>
-                                    </ul>
-
-                                    <button onclick="showVacancyDetail('1')"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                                </div>
+            {{-- student applied vacancy list --}}
+            <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
+                <div class="vacancy-card-list px-3 gap-3 mt-4">
+                    {{-- vacancy card --}}
+                    @for ($i = 0; $i < 3; $i++)
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">Rp. ***/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                    alt="Company photo">
                             </div>
-                        @endfor
-                    </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">Frontend Developer</h6>
+                                <span class="vacancy-major-choice">Teknik Informatika</span>
+
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>Nongsa, Batam</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>20 September 2024</li>
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>30 Kuota</li>
+                                </ul>
+
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">Full-time</li>
+                                    <li class="bg-white rounded-pill text-center">Offline</li>
+                                    <li class="bg-white rounded-pill text-center">6 Bulan</li>
+                                </ul>
+
+                                <button onclick="showVacancyDetail('1')"
+                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Lihat</button>
+                            </div>
+                        </div>
+                    @endfor
                 </div>
             </div>
 
-            {{-- vacancy detail card --}}
+            {{-- student applied vacandy detail card --}}
             <div id="vacancy-detail-card"
                 class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
                 <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
@@ -218,11 +214,11 @@
                             class="close-apply-form text-white fw-700 border border-0 position-absolute">Kembali</button>
                     </div>
                     <div class="w-50">
-                        <div class="d-flex">
+                        {{-- <div class="d-flex">
                             <button type="button"
                                 class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
                                 onclick="showApplyVacancyFormContainer(1)">Daftar</button>
-                        </div>
+                        </div> --}}
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
                         <div class="apply-vacancy-detail overflow-auto">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
@@ -298,8 +294,6 @@
                     </div>
                 </div>
             </div>
-
-            {{--  --}}
         </main>
     </div>
 

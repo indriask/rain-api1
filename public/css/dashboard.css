@@ -48,6 +48,10 @@ body {
     text-overflow: ellipsis;
 }
 
+.underline-none {
+    text-decoration: underline;
+}
+
 button,
 input,
 textarea,
