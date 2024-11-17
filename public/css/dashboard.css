@@ -410,3 +410,19 @@ button {
 .apply-form-icon {
     width: 70px;
 }
+
+.applied-vacancy-status {
+    background-color: rgba(0, 0, 0, .4);
+}
+
+.status-btn-container {
+    border-radius: 15px;
+    width: 450px;
+}
+
+.status-btn-container > button {
+    width: 150px;
+    font-size: .9rem;
+    padding: 10px;
+    border-radius: 7px;
+}

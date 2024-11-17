@@ -3,7 +3,6 @@ const vacancyDetailCard = document.querySelector("#vacancy-detail-card");
 const vacancyApplyFormContainer = document.querySelector("#vacancy-apply-form-container")
 const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
-const cardContainer = document.querySelector("#card-container");
 
 // sekalian ngejalanin request data ke api laravel
 function showVacancyDetail(id = 0) {
@@ -52,11 +51,5 @@ function closeAllFormCard() {
     closeApplyVacancyFormContainer();
     closeVacancyDetail();
 
-    return 1;
-}
-
-
-function showDaftarLamaran(id = null) {
-    
     return 1;
 }
