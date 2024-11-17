@@ -138,7 +138,7 @@ button {
     border-radius: var(--select-border-radius);
 }
 
-select {
+.select-container select {
     --select-w: 200px;
 
     background-color: transparent;
@@ -159,7 +159,7 @@ select {
     font-size: .8rem;
 }
 
-option {
+.select-container option {
     color: var(--black);
     font-weight: normal;
     text-transform: capitalize;
@@ -365,7 +365,8 @@ option {
     font-size: 1rem;
 }
 
-.apply-form-common-info > input {
+.apply-form-common-info > input,
+.apply-form-common-info > select {
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.3);
@@ -377,4 +378,23 @@ option {
 .apply-form-common-info > input::placeholder {
     color: black;
     font-size: .9rem;
+}
+
+.apply-form-upload-file-info > span {
+    font-size: .8rem;
+}
+
+.apply-form-upload-file {
+    background-color: var(--blue);
+    padding: 5px;
+    font-size: .9rem;
+    border-radius: 6px;
+}
+
+.apply-form-common-info-btn {
+    background-color: var(--blue);
+    font-size: .9rem;
+    width: 110px;
+    padding: 5px;
+    border-radius: 7px;
 }

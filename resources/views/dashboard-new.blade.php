@@ -81,7 +81,7 @@
                         <i class="bi bi-search search-icon"></i>
                     </div>
                 </div>
-                <div class="w-100 mt-2 d-flex gap-3">
+                <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="" id="">
                             <option>Pilih jurusan</option>
@@ -211,8 +211,8 @@
                     </div>
                     <div class="w-50">
                         <div class="d-flex">
-                            <button
-                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto">Daftar</button>
+                            <button type="button"
+                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto" onclick="showApplyVacancyForm(1)">Daftar</button>
                         </div>
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
                         <div class="apply-vacancy-detail overflow-auto">
@@ -225,29 +225,47 @@
             </div>
 
             {{-- vacancy apply form --}}
-            <div id="vacancy-apply-form-container" class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center py-4">
+            <div id="vacancy-apply-form-container"
+                class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center py-4">
                 <form action="" method="POST" class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                        <button type="button" class="border border-0 bg-transparent" onclick=""><i class="bi bi-x-circle"></i></button>
+                        <button type="button" class="border border-0 bg-transparent" onclick="closeApplyVacancyForm()"><i
+                                class="bi bi-x-circle"></i></button>
                     </div>
-                    <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan ketentuan berikut</span>
+                    <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
+                        ketentuan berikut</span>
 
                     <div class="apply-form-common-info mt-4">
                         <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
-                        <input type="text" class="w-100 border focus-ring" placeholder="Nama Lengkap" name="">
-                        <input type="text" class="w-100 border focus-ring" placeholder="NIM" name="">
-                        <select name="" id="">
+                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nama Lengkap"
+                            name="">
+                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" name="">
+                        <select name="" id="" class="w-100 border focus-ring mb-3">
                             <option selected>Jurusan</option>
                             <option value="">Teknik Informatika</option>
                             <option value="">Manajemen Bisnis</option>
                             <option value="">Teknik Elektro</option>
                             <option value="">Teknik Mesin</option>
                         </select>
-                        <input type="text" class="w-100 border focus-ring" placeholder="Program Studi" name="">
-                        <input type="text" class="w-100 border focus-ring" placeholder="Email" name="">
-                        <input type="text" class="w-100 border focus-ring" placeholder="Nomor Telepon" name="">
+                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Program Studi"
+                            name="">
+                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email"
+                            name="">
+                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon"
+                            name="">
                     </div>
+
+                    <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
+                    <div class="apply-form-upload-file-info d-flex justify-content-between">
+                        <span>Dapat berupa CV atau dokumen lainnya</span>
+                        <span>Maks. 6 Dokumen</span>
+                    </div>
+                    <label for="upload-file" class="apply-form-upload-file text-white fw-700 text-center w-100">
+                        <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
+                    
+                    {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
+                    <button type="button" class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
             </div>
         </main>
