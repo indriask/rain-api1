@@ -32,7 +32,7 @@ class AccountController extends Controller
                 ];
                 Response::send($data);
             } else{
-                Response::badRequest('Login gagal harap check email atau password anda');
+                Response::badRequest('Login gagal harap check Email atau Password Anda');
             }
 
         } catch (\Throwable $error) {
