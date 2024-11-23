@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class WelcomeController extends Controller
 {
     public function welcome()
     {
-        return response()->view('index');
+        return response()->view('index', [
+            'title' => 'RAIN, Your beloved vacancy website provider'
+        ]);
     }
 }

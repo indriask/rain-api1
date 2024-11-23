@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAIN</title>
+    <title>{{ $title }}</title>
 
     <!-- google fonts plus jakarta sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,22 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
 
-    <!-- box icons cdn link -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    {{-- bootstrap icon web font link --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <!-- bootstrap link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- index css link -->
+    <!-- bootstrap icon web font link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- css link -->
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
 </head>
 
 <body>
-
 
 
     {{-- navbar section start --}}
@@ -40,13 +36,14 @@
                 <span class="logo-title">RAIN</span>
             </div>
             <div class="custom-nav-list">
-                <a href="">Beranda</a>
-                <a href="">Fitur</a>
-                <a href="">Tim</a>
-                <a href="">Kontak</a>
-                <a href="">Tentang</a>
+                <a href="#beranda">Beranda</a>
+                <a href="#fitur">Fitur</a>
+                <a href="#tim">Tim</a>
+                <a href="#kontak">Kontak</a>
+                <a href="#tentang">Tentang</a>
             </div>
-            <button class="login-button p-1 rounded-pill" onclick="window.location.href='{{ route('signin') }}'">Masuk</button>
+            <button class="login-button p-1 rounded-pill"
+                onclick="window.location.href='{{ route('signin') }}'">Masuk</button>
         </div>
     </nav>
     {{-- navbar section end --}}
@@ -54,7 +51,7 @@
 
 
     {{-- hero image section start --}}
-    <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 18rem;">
+    <div id="beranda" class="container-fluid" style="margin-top: 3rem; margin-bottom: 18rem;">
         <div class="container px-0 d-flex align-items-center gap-1">
             <div class="custom-container-landing-page d-flex flex-column gap-3">
                 <h5 class="landing-page-logo-title">READY FOR INTERNSHIP</h5>
@@ -64,7 +61,22 @@
                     RAIN adalah aplikasi lowongan magang berbasis web yang dibuat khusus untuk mempermudah proses
                     perekrutran permagangan.
                 </p>
-                <button class="landing-page-button rounded-pill bg-white">Mulai Sekarang!</button>
+                <div>
+                    <button class="landing-page-button rounded-pill bg-white" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Mulai Sekarang!
+                    </button>
+                    <ul class="dropdown-menu mt-2" style="width: 200px;">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('student-signup') }}">
+                                <i class="bi bi-backpack3 me-1"></i>Mahasiswa</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('company-signup') }}">
+                                <i class="bi bi-building me-1"></i>Perusahaan</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="position-relative">
                 <img src="{{ asset('storage/svg/lading-page-img.svg') }}" class="landing-page-img" alt="">
@@ -78,7 +90,7 @@
 
 
     {{-- website feature section start --}}
-    <div class="container-fluid" style="margin-bottom: 21rem">
+    <div id="fitur" class="container-fluid" style="margin-bottom: 21rem">
         <div class="container">
             <div class="position-relative">
                 <h1 class="website-feature-heading">
@@ -91,7 +103,7 @@
                     perusahaan dalam mencari talenta berkualitas di antara Mahasiswa Polibatam.</p>
             </div>
         </div>
-        <div class="container d-flex justify-content-center flex-wrap gap-5 my-5 position-relative">
+        <div class="container d-flex justify-content-center flex-wrap gap-5 position-relative" style="margin-top: 4.5rem;">
             <div class="feature-card position-relative bg-white">
                 <div class="feature-heading position-absolute rounded-pill text-center text-white start-0 end-0">
                     Pencarian Lowongan</div>
@@ -133,7 +145,7 @@
 
 
     {{-- Website development team sectiont start --}}
-    <div class="container-fluid" style="margin-bottom: 14rem;">
+    <div id="tim" class="container-fluid" style="margin-bottom: 14rem;">
         <div class="container">
             <div class="position-relative">
                 <h1 class="website-feature-heading">
@@ -235,7 +247,7 @@
 
 
     {{-- contact rain section start --}}
-    <div class="container-fluid" style="margin-bottom: 15rem;">
+    <div id="kontak" class="container-fluid" style="margin-bottom: 15rem;">
         <div class="container">
             <div class="position-relative">
                 <h1 class="website-feature-heading">
@@ -250,7 +262,8 @@
                 <img src="{{ asset('storage/svg/contact-ilustration.svg') }}" alt="Contact us ilustration">
                 <div>
                     <form action="" method="POST" class="form-contact mx-auto p-4">
-                        <input type="email" name="email" class="rounded-pill" id="email" placeholder="email">
+                        <input type="email" name="email" class="rounded-pill" id="email"
+                            placeholder="email">
                         <textarea name="pesan" id="pesan" class="input-pesan" placeholder="Kirim pesan anda disini"></textarea>
                         <button type="submit" class="rounded-pill" name="kirim-pesan">Kirim Pesan</button>
                     </form>
@@ -263,12 +276,13 @@
 
 
     {{-- footer section start --}}
-    <footer class="container-fluid d-flex flex-column align-items-center justify-content-center p-5">
+    <footer id="tentang" class="container-fluid d-flex flex-column align-items-center justify-content-center p-5">
         <div class="d-flex align-items-center justify-content-center" style="margin-bottom: .5rem;">
             <img src="{{ asset('storage/2d-logo.png') }}" alt="RAIN 2D Logo">
             <h1>RAIN</h1>
         </div>
-        <p class="mb-4">RAIN adalah aplikasi lowongan magang berbasis web yang dibuat khusus untuk Mahasiswa Polibatam.</p>
+        <p class="mb-4">RAIN adalah aplikasi lowongan magang berbasis web yang dibuat khusus untuk Mahasiswa
+            Polibatam.</p>
         <div>
             <a href="" class="bi bi-instagram"></a>
             <a href="" class="bi bi-telephone-fill"></a>

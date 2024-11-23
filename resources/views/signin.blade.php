@@ -38,38 +38,20 @@
         </div>
 
         <!-- bagian form input mahasiswa -->
-        <form action="{{ route('signin-next') }}" method="POST">
-            @csrf
+        <form action="{{ route('validate-credentials') }}" method="POST">
             <div>
-                <h1>Dapatkan lowongan magang yang sesuai!</h1>
-                @if (session('success'))
-                    <div
-                        style="background-color: rgb(133, 255, 133); color:#333; padding: 10px 20px; border-radius: 10px">
-                        <p>{{ session('success') }}</p>
-                    </div>
-                @else
-                @endif
-
-                @if ($errors->any())
-                    <div
-                        style="background-color: rgb(255, 133, 133); color:#333; padding: 10px 20px; border-radius: 10px">
-                        <p>{{ $errors->first() }}</p>
-                    </div>
-                @endif
-
-
-
+                <h1>Dapatkan lowongan dan kandidat magang yang sesuai!</h1>
                 <div>
-                    <label for="email-or-phone">Masukan Email/No. Handphone</label>
+                    <label for="email-or-phone">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email_or_phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
                 <div>
                     <label for="kata-sandi">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="password" id="kata-sandi" required>
+                        <input type="password" name="kata-sandi" id="kata-sandi" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -79,7 +61,7 @@
                     </div>
                 </div>
                 <div class="form-option">
-                    <p>Tidak punya akun? <a href="{{ route('signup') }}">Daftar</a></p>
+                    <p>Tidak punya akun? <a href="{{ route('student-signup') }}">Daftar</a></p>
                     <a href="{{ route('forget-password') }}">Lupa password?</a>
                 </div>
                 @csrf
