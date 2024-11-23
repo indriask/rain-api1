@@ -30,7 +30,8 @@
     <div class="form-container">
 
         <!-- form input forget password -->
-        <form action="" method="POST">
+        <form action="{{route('forget-password-post')}}" method="POST">
+            @csrf
             <div>
                 <div class="form-title">
                     <h1>Atur ulang kata sandi anda!</h1>

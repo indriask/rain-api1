@@ -21,6 +21,11 @@ Route::get('/signup', [SignupController::class, 'index'])->name('signup');
 Route::post('/signup', [SignupController::class, 'register'])->name('signup-post');
 
 Route::get('/forget-password', [ForgetPasswordController::class, 'index'])->name('forget-password');
+Route::post('/forget-password', [ForgetPasswordController::class, 'sendEmail'])->name('forget-password-post');
+
+Route::post("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "updatePassword"])->name('password.reset.post');
+
+Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "formResetPassword"])->name('password.reset');
 
 // Route halaman dashboard mahasiswa dan perusahaan
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Http;
 
 class SigninController extends Controller
 {
@@ -25,7 +25,23 @@ class SigninController extends Controller
                 ]
             );
 
-            // Tambah codingan disini untuk Panggil API pskr Http request
+$data =[
+    'email' => $request->email_or_phone,
+    'password' => $request->password
+];
+            $response = Http::asForm()->post('http://localhost/RAIN/public/api/signin', $data);
+            
+            if ($response->successful()) {
+                // Anda bisa menangani token atau data respons API di sini, misalnya menyimpan token session
+                // Misalnya jika API mengembalikan token JWT, Anda bisa menyimpannya di session
+                session(['api_token' => $response->json('token')]); // Contoh menyimpan token
+    
+                // Redirect ke dashboard setelah login berhasil
+                return redirect()->route('dashboard');
+            } else {
+                // Menangani kesalahan jika login gagal
+                return redirect()->back()->withErrors('Login gagal. Periksa email/telepon atau password.');
+            }
             
 
             return redirect()->route('dashboard');
