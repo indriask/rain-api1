@@ -181,7 +181,8 @@
                     </div>
                     <div class="position-absolute" style="bottom: 10px;">
                         <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                            style="font-size: .9rem; width: 100px;" onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
+                            style="font-size: .9rem; width: 100px;"
+                            onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
                         <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;">Hapus akun</button>
                     </div>
@@ -206,6 +207,17 @@
                             Repellat assumenda voluptate unde. Ipsa nihil eligendi maiores!
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {{-- notifikasi berhasil edit profile --}}
+            <div class="position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="profile__profile-edit-notification bg-white p-5 d-flex justify-content-center align-items-center">
+                   <div>
+                        <h5 class="fw-700 text-center">Profile berhasil diperbaharui!</h5>
+                        <button class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
+                   </div>
                 </div>
             </div>
 

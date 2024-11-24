@@ -145,5 +145,6 @@ function closeStatusInfo() {
     studentAppliedVacancyStatusInfo.innerHTML = '';
 }
 
-function getProfile(id) {
+function closePopUp(event) {
+    
 }

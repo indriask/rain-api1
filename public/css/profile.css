@@ -28,3 +28,16 @@
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     font-size: .9rem;
 }
+
+.profile__profile-edit-notification {
+    border-radius: 20px;
+    width: 450px;
+    height: 170px;
+}
+
+.profile__profile-edit-notification-btn {
+    font-size: .9rem;
+    width: 110px;
+    padding: 7px;
+    border-radius: 8px;
+}
