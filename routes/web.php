@@ -46,3 +46,8 @@ Route::get('/dashboard/mahasiswa/daftar-lamanaran/wawancara', [DashboardControll
 
 // Route halaman pasang lowongan untuk perusahaan
 // Route::get('/dashboard/perusahaan/pasang-lowongan', [DashboardController::class, 'pasangLowongan'])->name('pasang-lowongan');
+Route::post('/forget-password', [ForgetPasswordController::class, 'sendEmail'])->name('forget-password-post');
+
+Route::post("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "updatePassword"])->name('password.reset.post');
+
+Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "formResetPassword"])->name('password.reset');
