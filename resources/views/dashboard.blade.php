@@ -62,9 +62,9 @@
                 </div>
                 <div class="">
                     <p class="aside-subheading">Lainnya</p>
-                    <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                            class="bi bi-gear me-1"></i>
-                        Pengaturan</div>
+                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="">
+                        <i class="bi bi-gear me-1"></i>Pengaturan
+                    </div>
                     <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                             class="bi bi-box-arrow-left me-1"></i> Keluar</div>
                 </div>
@@ -190,32 +190,34 @@
                         <div class="form-input-container mt-4">
                             <label class="fw-500">Gaji</label>
                             <div class="input-group">
-                                <div class="box" style="width: 50px;"></div>
+                                <div class="box" style="width: 50px;">2.500.000</div>
                                 <span class="mx-3">/</span>
-                                <div class="box" style="width: 30px;"></div>
+                                <div class="box" style="width: 30px;">hari</div>
                             </div>
 
                             <label class="fw-500">Jurusan</label>
-                            <div class="box"></div>
+                            <div class="box">Manajemen Bisnis</div>
 
                             <label class="fw-500">Dibuka</label>
                             <div class="input-group">
-                                <div class="box"></div>
+                                <div class="box">30 Okt 2023</div>
                                 <span class="mx-3">-</span>
-                                <div class="box"></div>
+                                <div class="box">10 Okt 2025</div>
                             </div>
 
                             <label class="fw-500">Kuota</label>
-                            <div class="box"></div>
+                            <div class="box">5</div>
 
                             <label class="fw-500">Status</label>
-                            <div class="box"></div>
+                            <div class="box">Buka</div>
 
                             <label class="fw-500">Pendaftar</label>
-                            <div class="box"></div>
+                            <div class="box">2</div>
                         </div>
-                        <button onclick="closeVacancyDetail()" type="button"
-                            class="close-apply-form text-white fw-700 border border-0 position-absolute">Kembali</button>
+                        <div class="position-absolute bottom-0">
+                            <button onclick="closeVacancyDetail()" type="button"
+                                class="close-apply-form text-white fw-700 border border-0">Kembali</button>
+                        </div>
                     </div>
                     <div class="w-50">
                         <div class="d-flex">

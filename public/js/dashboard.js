@@ -144,3 +144,6 @@ function getInterviewStatusInfo(id) {
 function closeStatusInfo() {
     studentAppliedVacancyStatusInfo.innerHTML = '';
 }
+
+function getProfile(id) {
+}

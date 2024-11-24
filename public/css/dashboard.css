@@ -52,6 +52,10 @@ body {
     text-decoration: underline;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 button,
 input,
 textarea,
