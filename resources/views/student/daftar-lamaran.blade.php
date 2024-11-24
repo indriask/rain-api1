@@ -26,12 +26,14 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
     <title>Dashborad | RAIN</title>
+    <script>
+        window.laravel = {csrf_token: "{{ csrf_token() }}"};
+    </script>
 </head>
 
 <body>
 
     <div class="dashboard-layout">
-
         {{-- dashboard aside navigation --}}
         <aside class="aside-nav border-end border-black px-2">
             <div class="d-flex align-items-center border-bottom border-black">
@@ -70,7 +72,7 @@
         </aside>
 
         {{-- content dashboard utama --}}
-        <main class="dashboard-main position-relative">
+        <main class="dashboard-main position-relative" id="dashboard-main">
             {{-- user profile and filter input --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
@@ -162,8 +164,8 @@
 
             {{-- student applied vacandy detail card --}}
             <div id="vacancy-detail-card"
-                class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+                class="position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
+                <div method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
                         <h1 class="apply-form-title">Frontend Developer</h1>
                         <div class="d-flex mt-3">
@@ -186,32 +188,36 @@
                         <div class="form-input-container mt-4">
                             <label class="fw-500">Gaji</label>
                             <div class="input-group">
-                                <div class="box" style="width: 50px;"></div>
+                                <div class="box" style="width: 50px;">2.500.000</div>
                                 <span class="mx-3">/</span>
                                 <div class="box" style="width: 30px;"></div>
                             </div>
 
                             <label class="fw-500">Jurusan</label>
-                            <div class="box"></div>
+                            <div class="box">Teknik Jaringan komunikasi</div>
 
                             <label class="fw-500">Dibuka</label>
                             <div class="input-group">
-                                <div class="box"></div>
+                                <div class="box">23 Sep 2024</div>
                                 <span class="mx-3">-</span>
-                                <div class="box"></div>
+                                <div class="box">23 Sep 2024</div>
                             </div>
 
                             <label class="fw-500">Kuota</label>
-                            <div class="box"></div>
+                            <div class="box">30</div>
 
                             <label class="fw-500">Status</label>
-                            <div class="box"></div>
+                            <div class="box">Dibuka</div>
 
-                            <label class="fw-500">Pendaftar</label>
-                            <div class="box"></div>
+                            <label class="fw-500">Pelamar</label>
+                            <div class="box">18</div>
                         </div>
-                        <button onclick="closeVacancyDetail()" type="button"
-                            class="close-apply-form text-white fw-700 border border-0 position-absolute">Kembali</button>
+                        <div class="position-absolute bottom-0">
+                            <button onclick="closeVacancyDetail()" type="button"
+                                class="close-apply-form text-white fw-700 border border-0 me-2">Kembali</button>
+                            <button class="close-apply-form border border-0 text-white bni-blue fw-700" type="button"
+                                onclick="showStudentVacancyStatus(1)">Cek Status</button>
+                        </div>
                     </div>
                     <div class="w-50">
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
@@ -221,21 +227,18 @@
                             enim tenetur est esse quam dignissimos minus eveniet!
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
 
-            {{-- student applied vacancy status --}}
-            <div id="applied-vacancy-status" class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
-                <div class="status-btn-container bg-white p-5 d-flex justify-content-between">
-                    <button onclick="" class="border border-0 text-white fw-500 bni-blue">LAMARAN</button>
-                    <button onclick="" class="border border-0 text-white fw-500 bni-blue">WAWANCARA</button>
-                </div>
+            <div id="applied-vacancy-status">
+            </div>
+
+            <div id="apply-status-info">
             </div>
         </main>
     </div>
 
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
-    <script defer src="{{ asset('js/daftar-lamar.js') }}"></script>
 
 </body>
 

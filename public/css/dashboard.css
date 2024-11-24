@@ -290,7 +290,7 @@ button {
 .form-input-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 15px;
 }
 
 .form-input-container label {
@@ -302,16 +302,18 @@ button {
 .form-input-container .input-group {
     grid-column: 2 / span 2;
     display: flex;
-    gap: 5px;
+    gap: 10px;
 }
 
 .box {
+    font-size: .8rem;
     flex: 1;
+    width: 200px;
     border-radius: 5px;
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
-    padding: 13px;
+    padding: 5px;
 }
 
 .form-input-container span {
@@ -325,8 +327,6 @@ button {
     border-radius: 8px;
     width: 120px;
     background-color: var(--blue);
-    bottom: 0;
-    left: 0;
     font-size: .9rem;
 }
 
@@ -420,7 +420,7 @@ button {
     width: 450px;
 }
 
-.status-btn-container > button {
+.status-btn-container .mk button {
     width: 150px;
     font-size: .9rem;
     padding: 10px;
