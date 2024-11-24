@@ -9,7 +9,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return response()->view('dashboard');
+        return response()->view('dashboard', [
+            'role' => 'student'
+        ]);
     }
 
     public function detailLowongan(string $lowongan)

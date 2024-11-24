@@ -62,9 +62,11 @@
                 </div>
                 <div class="">
                     <p class="aside-subheading">Lainnya</p>
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="">
-                        <i class="bi bi-gear me-1"></i>Pengaturan
-                    </div>
+                    <a href="{{ route($role === 'student' ? 'student-profile' : 'company-profile') }}" class="text-underline">
+                        <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="">
+                            <i class="bi bi-gear me-1"></i>Pengaturan
+                        </div>
+                    </a>
                     <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                             class="bi bi-box-arrow-left me-1"></i> Keluar</div>
                 </div>
@@ -301,7 +303,6 @@
                 </div>
             </div>
 
-            {{--  --}}
         </main>
     </div>
 

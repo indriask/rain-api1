@@ -46,7 +46,6 @@ Route::post('/forget-password', [ForgetPasswordController::class, 'sendEmail'])-
 Route::post("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "updatePassword"])->name('password.reset.post');
 Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "formResetPassword"])->name('password.reset');
 
-
 /**
  * Ini route dibuat untuk testing fitur atau halaman view.
  * mohon jangan di hapus
