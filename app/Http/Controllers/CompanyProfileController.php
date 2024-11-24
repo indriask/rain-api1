@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller
+class CompanyProfileController extends Controller
 {
-    // Render profile page for company
+    /**
+     * Render halaman profile perusahaan
+     */
     public function index() {
         return response()->view('company.profile');
     }

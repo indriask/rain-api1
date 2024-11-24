@@ -38,9 +38,9 @@
                     </div>
                 </div>
                 <div>
-                    <label for="email-or-phone">Masukan NIM</label>
+                    <label for="nib">Masukan NIB</label>
                     <div class="input-wrapper">
-                        <input type="text" name="nib" id="email-or-phone" required>
+                        <input type="text" name="nib" id="nib" required>
                         <i class="bi bi-postcard"></i>
                     </div>
                 </div>

@@ -1,2 +1,1 @@
-Guys, buat info saja ini repository jangan di sentuh atau diotak-atik dulu ya. Ini repository isinya tampilan website nya semua dan belum sepenuhnya jadi.
-Kalau udah jadi ini bakal aku merge ke main branch dan aku infoin ke grup RAIN nanti :D
+Repository ini lagi sedang dalam progress, mohon jangan di pull, push dan di merge. kalau mau nyoba nyoba ngejalanin file yang ada disini silahkan di download repository nya.
