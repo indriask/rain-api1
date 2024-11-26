@@ -48,3 +48,14 @@
     opacity: .4;
     top: 25px;
 }
+
+.profile__profile-delete-account {
+    border-radius: 20px;
+    width: 450px;
+}
+
+.profile__profile-close-btn {
+    border-bottom-left-radius: 20px;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+}

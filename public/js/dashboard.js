@@ -12,17 +12,18 @@ const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
  */
 const studentAppliedVacancyStatus = document.querySelector("#applied-vacancy-status");
 const studentAppliedVacancyStatusInfo = document.querySelector("#apply-status-info");
-
+    
 /**
  * Variable for student 
  */
-const notificationPopup = document.querySelector("#notification-popup");
 const editProfileForm = document.querySelector("#edit-profile-form");
 const editProfileBtn = document.querySelector("#edit-profile-btn");
 
 const editProfileNotification = document.querySelector("#edit-profile-notification");
 const profileEditNotificationTitle = document.querySelector("#profile-edit-notification-title");
 const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
+
+const deleteAccountNotification = document.querySelector("#delete-account-notification");
 
 /**
  * function for dashboard home page
@@ -186,4 +187,11 @@ function setProfileData() {
     // })
     // .then(response => response.json())
     // .then(data => console.log(data))
+}
+
+function showDeleteAccountCard() {
+}
+
+function processDeleteAccountRequest() {
+    // kode yang isi request untuk menghapus akun
 }

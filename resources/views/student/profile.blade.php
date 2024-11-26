@@ -216,22 +216,45 @@
                 </div>
             </div>
 
-            {{-- notifikasi berhasil edit profile --}}
-            <div id="notification-popup">
-                <div id="edit-profile-notification" class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
-                    style="background-color: rgba(0, 0, 0, .4)">
-                    <div
-                        class="profile__profile-edit-notification bg-white p-5 d-flex justify-content-center align-items-center position-relative">
-                        <div>
-                            <h5 id="profile-edit-notification-title" class="fw-700 text-center">Profile berhasil diperbaharui!</h5>
-                            <button onclick="showEditProfileNotification()"
-                                class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
-                        </div>
-                        <img id="profile-edit-notification-img" src="" alt=""
-                            class="profile__profile-success-edit-icon position-absolute">
+            {{-- pop up pesan notifikasi berhasil atau gagal edit --}}
+            <div id="edit-profile-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div
+                    class="profile__profile-edit-notification bg-white p-5 d-flex justify-content-center align-items-center position-relative">
+                    <div>
+                        <h5 id="profile-edit-notification-title" class="fw-700 text-center">Profile berhasil
+                            diperbaharui!</h5>
+                        <button onclick="showEditProfileNotification()"
+                            class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
                     </div>
+                    <img id="profile-edit-notification-img" src="" alt=""
+                        class="profile__profile-success-edit-icon position-absolute">
                 </div>
             </div>
+
+            {{-- pop up pesan notifikasi ingin menghapus akun --}}
+            <div id="delete-account-notification"
+                class="d-none position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="profile__profile-delete-account bg-white">
+                    <div class="d-flex">
+                        <button onclick=""
+                            class="profile__profile-close-btn ms-auto bni-blue text-white border border-0">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                    <div class="py-3 px-5">
+                        <span class="fw-600">Apakah anda yakin ingin menghapus akun ini?</span>
+                        <button onclick="" class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <x-logout-card/>
+            
 
         </main>
     </div>
