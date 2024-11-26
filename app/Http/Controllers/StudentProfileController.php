@@ -11,7 +11,7 @@ class StudentProfileController extends Controller
      */
     public function index() {
         return response()->view('student.profile', [
-            'role' => 'student'
+            'role' => 'student',
         ]);
     }
 }

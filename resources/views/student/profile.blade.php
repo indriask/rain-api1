@@ -27,6 +27,11 @@
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
     <title>Wasyn Sulaiman Siregar Profile | RAIN</title>
+    <script>
+        window.laravel = {
+            csrf_token: "{{ csrf_token() }}"
+        };
+    </script>
 </head>
 
 <body>
@@ -142,43 +147,43 @@
                             <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
                         </div>
                     </div>
-                    <div method="POST" action="" class="profile__profile-more-info mt-4">
-                        <label for="" style="font-size: .95rem">Asal institusi</label>
+                    <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-4">
+                        <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
                         <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
                             value="Politeknik Negeri Batam">
 
-                        <label for="" style="font-size: .95rem">Jurusan</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="jurusan" style="font-size: .95rem">Jurusan</label>
+                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2"
                             value="Teknik Informatika">
 
-                        <label for="" style="font-size: .95rem">Program studi</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="program-studi" style="font-size: .95rem">Program studi</label>
+                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2"
                             value="Teknologi Rekayasa Perangkat Lunak">
 
-                        <label for="" style="font-size: .95rem">Keahlian</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="keahlian" style="font-size: .95rem">Keahlian</label>
+                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2"
                             value="Hack website NASA">
 
-                        <label for="" style="font-size: .95rem">Alamat</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="alamat" style="font-size: .95rem">Alamat</label>
+                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2"
                             value="Batam, Nogsa">
 
-                        <label for="" style="font-size: .95rem">Kota</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="kota" style="font-size: .95rem">Kota</label>
+                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2"
                             value="Kota Batam">
 
-                        <label for="" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
+                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2"
                             value="12345">
 
-                        <label for="" style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
+                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2"
                             value="081234567890">
 
-                        <label for="" style="font-size: .95rem">Email</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <label for="email" style="font-size: .95rem">Email</label>
+                        <input type="text" name="email" class="border border-0 rounded p-1 px-2"
                             value="eric@laravel.com">
-                    </div>
+                    </form>
                     <div class="position-absolute" style="bottom: 10px;">
                         <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
@@ -190,7 +195,8 @@
                 <div class="profile__profile-description w-50">
                     <div class="d-flex">
                         <button class="border border-0 bni-blue text-white fw-700 rounded p-2 ms-auto"
-                            style="font-size: .8rem; width: 100px;">Edit Profil</button>
+                            style="font-size: .8rem; width: 100px;" id="edit-profile-btn"
+                            onclick="setProfileData()">Edit Profil</button>
                     </div>
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
@@ -211,13 +217,19 @@
             </div>
 
             {{-- notifikasi berhasil edit profile --}}
-            <div class="position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
-                style="background-color: rgba(0, 0, 0, .4)">
-                <div class="profile__profile-edit-notification bg-white p-5 d-flex justify-content-center align-items-center">
-                   <div>
-                        <h5 class="fw-700 text-center">Profile berhasil diperbaharui!</h5>
-                        <button class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
-                   </div>
+            <div id="notification-popup">
+                <div id="edit-profile-notification" class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                    style="background-color: rgba(0, 0, 0, .4)">
+                    <div
+                        class="profile__profile-edit-notification bg-white p-5 d-flex justify-content-center align-items-center position-relative">
+                        <div>
+                            <h5 id="profile-edit-notification-title" class="fw-700 text-center">Profile berhasil diperbaharui!</h5>
+                            <button onclick="showEditProfileNotification()"
+                                class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
+                        </div>
+                        <img id="profile-edit-notification-img" src="" alt=""
+                            class="profile__profile-success-edit-icon position-absolute">
+                    </div>
                 </div>
             </div>
 

@@ -14,6 +14,17 @@ const studentAppliedVacancyStatus = document.querySelector("#applied-vacancy-sta
 const studentAppliedVacancyStatusInfo = document.querySelector("#apply-status-info");
 
 /**
+ * Variable for student 
+ */
+const notificationPopup = document.querySelector("#notification-popup");
+const editProfileForm = document.querySelector("#edit-profile-form");
+const editProfileBtn = document.querySelector("#edit-profile-btn");
+
+const editProfileNotification = document.querySelector("#edit-profile-notification");
+const profileEditNotificationTitle = document.querySelector("#profile-edit-notification-title");
+const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
+
+/**
  * function for dashboard home page
  */
 function showVacancyDetail(id = 0) {
@@ -145,6 +156,34 @@ function closeStatusInfo() {
     studentAppliedVacancyStatusInfo.innerHTML = '';
 }
 
-function closePopUp(event) {
-    
+function showEditProfileNotification() {
+    if(editProfileNotification.classList.contains("d-block")) {
+        editProfileNotification.classList.remove("d-block");
+        editProfileNotification.classList.add("d-none");
+
+        return;
+    }
+
+    editProfileNotification.classList.remove("d-none");
+    editProfileNotification.classList.add("d-block");
+}
+
+function setProfileData() {
+    let form = new FormData(editProfileForm);
+
+    // the value of this variabel come from fetch result
+    profileEditNotificationTitle.textContent = "Profil berhasil diperbarui!";
+    profileEditNotificationImg.src = "http://localhost:8000/storage/svg/success-checkmark.svg";
+
+    showEditProfileNotification();
+
+    // fetch('/test', {
+    //     method: "POST",
+    //     headers: {
+    //         "X-CSRF-TOKEN": window.laravel.csrf_token
+    //     },
+    //     body: form
+    // })
+    // .then(response => response.json())
+    // .then(data => console.log(data))
 }

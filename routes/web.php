@@ -8,6 +8,7 @@ use App\Http\Controllers\SigninController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\StudentSignupController;
 use App\Http\Controllers\WelcomeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Route redirect ke halaman home RAIN
@@ -50,6 +51,8 @@ Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class 
  * Ini route dibuat untuk testing fitur atau halaman view.
  * mohon jangan di hapus
  */
-Route::get('/test', function () {
-    // return response()->view('reset');
+Route::get('/test', function (Request $request) {
+    // $email = $request->input('email');
+    // return response()->json(['email' => explode('@', $email)[0]]);
+    dd(asset('storage/makanbang'));
 });
