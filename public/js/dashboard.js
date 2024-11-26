@@ -208,7 +208,6 @@ function processDeleteAccountRequest() {
 }
 
 function showLogoutCard() {
-    // alert("Hello World");
     if(logoutNotification.classList.contains("d-block")) {
         logoutNotification.classList.remove("d-block");
         logoutNotification.classList.add("d-none");

@@ -7,28 +7,29 @@
         <div class="border-bottom border-black" style="height: 300px;">
             <p class="aside-subheading">MENU UTAMA</p>
             <a href="{{ route('dashboard') }}" class="underline-none">
-                <div class="aside-list-item py-2 px-2 text-white mb-2"><i
-                        class="bi bi-house-door me-1"></i> Beranda</div>
-            </a>
-            <a href="{{ route('student-daftar-lamaran') }}" class="underline-none">
-                <div class="aside-list-item py-2 px-2 text-white mb-2">
-                    <i class="bi bi-card-list me-1"></i> Daftar Lamaran
+                <div class="aside-list-item py-2 px-2 text-white mb-2"><i class="bi bi-house-door me-1"></i> Beranda
                 </div>
             </a>
+            @if ($role === 'student')
+                <a href="{{ route('student-daftar-lamaran') }}" class="underline-none">
+                    <div class="aside-list-item py-2 px-2 text-white mb-2">
+                        <i class="bi bi-card-list me-1"></i> Daftar Lamaran
+                    </div>
+                </a>
+            @endif
 
-            @if (false)
+            @if ($role === 'company')
                 <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                         class="bi bi-plus-circle me-1"></i> Tambah Lowongan</div>
-                <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                        class="bi bi-window me-1"></i> Kelola Lowongan</div>
+                <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i class="bi bi-window me-1"></i>
+                    Kelola Lowongan</div>
                 <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
                         class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
             @endif
         </div>
         <div class="">
             <p class="aside-subheading">Lainnya</p>
-            <a href="{{ route($role === 'student' ? 'student-profile' : 'company-profile') }}"
-                class="underline-none">
+            <a href="{{ route($role === 'student' ? 'student-profile' : 'company-profile') }}" class="underline-none">
                 <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer">
                     <i class="bi bi-gear me-1"></i>Pengaturan
                 </div>

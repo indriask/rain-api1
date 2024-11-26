@@ -48,6 +48,17 @@ Route::post("/password/reset/{token}/{email}" , [ForgetPasswordController::class
 Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "formResetPassword"])->name('password.reset');
 
 /**
+ * Route tambah lowongan untuk perusahaan
+ */
+Route::post('/dashboard/perusahaan/tambah-lowongan', [DashboardController::class, 'tambahLowongan']);
+
+/**
+ * Route kelola lowongan untuk perusahan
+ */
+Route::get('/dashboard/perusahaan/tambah-lowongan', [DashboardController::class, 'kelolaLowongan']);
+
+
+/**
  * Ini route dibuat untuk testing fitur atau halaman view.
  * mohon jangan di hapus
  */
