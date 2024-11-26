@@ -31,7 +31,7 @@ Route::post('/perusahaan/signup', [CompanySignupController::class, 'doSignup'])-
 
 // Route halaman dashboard mahasiswa dan perusahaan
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard/mahasiswa/daftar-lamaran', [DashboardController::class, 'showDaftarLamaran'])->name('student-daftar-lamaran');
+Route::get('/dashboard/mahasiswa/daftar-lamaran', [DashboardController::class, 'daftarLamaran'])->name('student-daftar-lamaran');
 
 // Route untuk melihat status lamaran dan wawancara mahasiswa
 Route::get('/dashboard/mahasiswa/daftar-lamaran/lamaran', [DashboardController::class, 'getLamaranStatus']);

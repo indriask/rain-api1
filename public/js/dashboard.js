@@ -24,6 +24,8 @@ const profileEditNotificationTitle = document.querySelector("#profile-edit-notif
 const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
 
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
+const logoutNotification = document.querySelector("#logout-notification");
+
 
 /**
  * function for dashboard home page
@@ -203,4 +205,22 @@ function showDeleteAccountCard() {
 
 function processDeleteAccountRequest() {
     // kode yang isi request untuk menghapus akun
+}
+
+function showLogoutCard() {
+    // alert("Hello World");
+    if(logoutNotification.classList.contains("d-block")) {
+        logoutNotification.classList.remove("d-block");
+        logoutNotification.classList.add("d-none");
+
+        return;
+    }
+
+    logoutNotification.classList.remove("d-none");
+    logoutNotification.classList.add("d-block");
+}
+
+// do logout logic
+function processLogoutRequest() {
+
 }

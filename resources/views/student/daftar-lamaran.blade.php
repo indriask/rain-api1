@@ -35,42 +35,8 @@
 
     <div class="dashboard-layout">
         {{-- dashboard aside navigation --}}
-        <aside class="aside-nav border-end border-black px-2">
-            <div class="d-flex align-items-center border-bottom border-black">
-                <img class="logo-img" src="{{ asset('storage/2d-logo.png') }}" alt="RAIN Team">
-                <h2 class="logo-title position-relative" style="right: 10px;">RAIN</h2>
-            </div>
-            <div class="aside-list py-4">
-                <div class="border-bottom border-black" style="height: 300px;">
-                    <p class="aside-subheading">MENU UTAMA</p>
-                    <a href="{{ route('dashboard') }}" class="underline-none">
-                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                                class="bi bi-house-door me-1"></i> Beranda</div>
-                    </a>
-                    <a href="{{ route('student-daftar-lamaran') }}" class="underline-none">
-                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                                class="bi bi-card-list me-1"></i> Daftar Lamaran</div>
-                    </a>
-                    @if (false)
-                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                                class="bi bi-plus-circle me-1"></i> Tambah Lowongan</div>
-                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                                class="bi bi-window me-1"></i> Kelola Lowongan</div>
-                        <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                                class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
-                    @endif
-                </div>
-                <div class="">
-                    <p class="aside-subheading">Lainnya</p>
-                    <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                            class="bi bi-gear me-1"></i>
-                        Pengaturan</div>
-                    <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
-                            class="bi bi-box-arrow-left me-1"></i> Keluar</div>
-                </div>
-            </div>
-        </aside>
-
+        <x-dashboard-navbar :role="$role"/>
+        
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative" id="dashboard-main">
             {{-- user profile and filter input --}}
@@ -235,6 +201,10 @@
 
             <div id="apply-status-info">
             </div>
+
+            {{-- pop up notifikasi ingin logout --}}
+            <x-logout-card/>
+            
         </main>
     </div>
 

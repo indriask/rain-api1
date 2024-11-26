@@ -14,21 +14,11 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function detailLowongan(string $lowongan)
+    public function daftarLamaran()
     {
-        return response()->view('detail-lowongan', [
-            'lowongan' => $lowongan
+        return response()->view('student.daftar-lamaran', [
+            'role' => 'student'
         ]);
-    }
-
-    public function pasangLowongan()
-    {
-        return response()->view('company.pasang-lowongan');
-    }
-
-    public function showDaftarLamaran()
-    {
-        return response()->view('student.daftar-lamaran');
     }
 
     public function getLamaranStatus(Request $request)

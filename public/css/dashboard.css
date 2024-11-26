@@ -49,7 +49,7 @@ body {
 }
 
 .underline-none {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .cursor-pointer {
@@ -193,7 +193,7 @@ button {
     overflow: auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
-    justify-content: center; 
+    justify-content: center;
 }
 
 .vacancy-card {
@@ -271,7 +271,7 @@ button {
     font-weight: var(--fw-700);
 }
 
-.apply-company-title  > *{
+.apply-company-title>* {
     font-size: .95rem;
 }
 
@@ -285,7 +285,7 @@ button {
     font-size: .85rem;
 }
 
-.apply-vacancy-small-detail > * {
+.apply-vacancy-small-detail>* {
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
@@ -377,8 +377,8 @@ button {
     font-size: 1rem;
 }
 
-.apply-form-common-info > input,
-.apply-form-common-info > select {
+.apply-form-common-info>input,
+.apply-form-common-info>select {
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.3);
@@ -387,12 +387,12 @@ button {
     font-size: .9rem;
 }
 
-.apply-form-common-info > input::placeholder {
+.apply-form-common-info>input::placeholder {
     color: black;
     font-size: .9rem;
 }
 
-.apply-form-upload-file-info > span {
+.apply-form-upload-file-info>span {
     font-size: .8rem;
 }
 
@@ -429,4 +429,15 @@ button {
     font-size: .9rem;
     padding: 10px;
     border-radius: 7px;
+}
+
+.dashboard__logout {
+    border-radius: 20px;
+    width: 450px;
+}
+
+.dashboard__close-btn {
+    border-bottom-left-radius: 20px;
+    font-size: 1.1rem;
+    padding: 10px 15px;
 }
