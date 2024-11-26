@@ -188,7 +188,7 @@
                         <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
                             onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
-                        <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                        <button onclick="showDeleteAccountCard()" class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;">Hapus akun</button>
                     </div>
                 </div>
@@ -239,14 +239,14 @@
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="profile__profile-delete-account bg-white">
                     <div class="d-flex">
-                        <button onclick=""
+                        <button onclick="showDeleteAccountCard()"
                             class="profile__profile-close-btn ms-auto bni-blue text-white border border-0">
                             <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
                     <div class="py-3 px-5">
                         <span class="fw-600">Apakah anda yakin ingin menghapus akun ini?</span>
-                        <button onclick="" class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                        <button onclick="processDeleteAccountRequest()" class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                     </div>
                 </div>

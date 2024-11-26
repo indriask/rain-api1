@@ -190,6 +190,15 @@ function setProfileData() {
 }
 
 function showDeleteAccountCard() {
+    if(deleteAccountNotification.classList.contains("d-block")) {
+        deleteAccountNotification.classList.remove("d-block");
+        deleteAccountNotification.classList.add("d-none");
+
+        return;
+    }
+
+    deleteAccountNotification.classList.remove("d-none");
+    deleteAccountNotification.classList.add("d-block");
 }
 
 function processDeleteAccountRequest() {
