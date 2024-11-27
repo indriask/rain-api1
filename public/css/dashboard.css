@@ -447,3 +447,69 @@ button {
     height: calc(100% - 30px);
     border-radius: 20px;
 }
+
+.dashboard__add-vacancy-form {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 15px 2rem;
+}
+
+.dashboard__add-vacancy-company label {
+    font-size: .9rem;
+}
+
+.dashboard__add-vacancy-company input {
+    font-size: .9rem;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    padding: 3px 5px;
+}
+
+.dashboard__add-vacancy-form select {
+    font-size: .9rem;
+    border-radius: 7px;
+    padding: 5px;
+    border-radius: 7px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard__add-vacancy-textarea {
+    width: 100%;
+    height: 450px;
+    resize: none;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    font-size: .9rem;
+    text-align: justify;
+}
+
+.dashboard__add-vacancy-company button {
+    padding: 3px;
+    font-size: .9rem;
+    border-radius: 10px;
+    width: 100px;
+}
+
+.dashboard__add-vacancy-logo {
+    border: 1px solid blue;
+    width: 500px;
+    aspect-ratio: 1/1;
+    border-radius: 15px;
+}
+
+.dashboard__add-vacancy-logo div {
+    font-size: 1.1rem;
+}
+
+.dashboard__add-vacancy-logo i {
+    font-size: 2.3rem;
+    margin-top: .5rem;
+    color: rgb(82, 82, 252);
+}

@@ -50,12 +50,12 @@ Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class 
 /**
  * Route tambah lowongan untuk perusahaan
  */
-Route::post('/dashboard/perusahaan/tambah-lowongan', [DashboardController::class, 'tambahLowongan']);
+Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardController::class, 'tambahLowongan']);
 
 /**
  * Route kelola lowongan untuk perusahan
  */
-Route::get('/dashboard/perusahaan/tambah-lowongan', [DashboardController::class, 'kelolaLowongan']);
+Route::get('/dashboard/perusahaan/lowongan', [DashboardController::class, 'kelolaLowongan']);
 
 
 /**

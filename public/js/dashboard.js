@@ -26,11 +26,15 @@ const profileEditNotificationImg = document.querySelector("#profile-edit-notific
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
 const logoutNotification = document.querySelector("#logout-notification");
 
-
 /**
  * Variable for company add vacancy
  */
 const addVacancy = document.querySelector("#add-vacancy");
+const addVacancyInput = document.querySelector("#add-vacancy-input");
+const addVacancyDetail = document.querySelector("#add-vacancy-detail");
+const addVacancyLogo = document.querySelector("#add-vacancy-logo");
+const addVacancySubmitBtn = document.querySelector("#add-vacancy-submit");
+const addVacancyNextForm = document.querySelector("#add-vacancy-next-form");
 
 /**
  * function for dashboard home page
@@ -164,6 +168,10 @@ function closeStatusInfo() {
     studentAppliedVacancyStatusInfo.innerHTML = '';
 }
 
+/**
+ * Function for student profile
+ */
+
 function showEditProfileNotification() {
     if(editProfileNotification.classList.contains("d-block")) {
         editProfileNotification.classList.remove("d-block");
@@ -229,6 +237,9 @@ function processLogoutRequest() {
 
 }
 
+/**
+ * Function for company add vacancy
+ */
 function showAddVacancyCard() {
     if(addVacancy.classList.contains("d-block")) {
         addVacancy.classList.remove("d-block");
@@ -239,4 +250,74 @@ function showAddVacancyCard() {
 
     addVacancy.classList.remove("d-none");
     addVacancy.classList.add("d-block");
+}
+
+function showAddVacancyInput() {
+    if(addVacancyInput.classList.contains("d-block")) {
+        addVacancyInput.classList.remove("d-block");
+        addVacancyInput.classList.add("d-none");
+
+        return;
+    }
+
+    addVacancyInput.classList.remove("d-none");
+    addVacancyInput.classList.add("d-block");
+}
+
+function showAddVacancyDetail() {
+    if(addVacancyDetail.classList.contains("d-block")) {
+        addVacancyDetail.classList.remove("d-block");
+        addVacancyDetail.classList.add("d-none");
+        
+        return;
+    }
+
+    addVacancyDetail.classList.remove("d-none");
+    addVacancyDetail.classList.add("d-block");
+}
+
+function backAddVacancyForm() {
+    if( addVacancyInput.classList.contains("d-none") && addVacancyDetail.classList.contains("d-none")) {
+        addVacancyLogo.classList.remove("d-block");
+        addVacancyLogo.classList.add("d-none");
+
+        addVacancyInput.classList.remove("d-none");
+        addVacancyInput.classList.add("d-block");
+
+        addVacancyDetail.classList.remove("d-none");
+        addVacancyDetail.classList.add("d-block");
+
+        addVacancyNextForm.classList.remove("d-none");
+        addVacancyNextForm.classList.add("d-block");
+
+        addVacancySubmitBtn.classList.remove("d-block");
+        addVacancySubmitBtn.classList.add("d-none");
+
+        return;
+    }
+}
+
+function nextVacancyForm() {
+    if(addVacancyInput.classList.contains("d-block") && addVacancyDetail.classList.contains("d-block")) {
+        addVacancyLogo.classList.remove("d-none");
+        addVacancyLogo.classList.add("d-block");
+
+        addVacancyInput.classList.remove("d-block");
+        addVacancyInput.classList.add("d-none");
+
+        addVacancyDetail.classList.remove("d-block");
+        addVacancyDetail.classList.add("d-none");
+        
+        addVacancyNextForm.classList.remove("d-block");
+        addVacancyNextForm.classList.add("d-none");
+
+        addVacancySubmitBtn.classList.remove("d-none");
+        addVacancySubmitBtn.classList.add("d-block");
+
+        return;
+    }
+}
+
+function processAddVacancy() {
+    
 }
