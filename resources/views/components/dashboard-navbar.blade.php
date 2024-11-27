@@ -19,11 +19,11 @@
             @endif
 
             @if ($role === 'company')
-                <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
+                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="showAddVacancyCard()"><i
                         class="bi bi-plus-circle me-1"></i> Tambah Lowongan</div>
-                <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i class="bi bi-window me-1"></i>
+                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick=""><i class="bi bi-window me-1"></i>
                     Kelola Lowongan</div>
-                <div class="aside-list-item py-2 px-2 text-white mb-2" onclick=""><i
+                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick=""><i
                         class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
             @endif
         </div>

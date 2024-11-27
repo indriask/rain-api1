@@ -441,3 +441,9 @@ button {
     font-size: 1.1rem;
     padding: 10px 15px;
 }
+
+.dashboard__add-vacancy-company {
+    width: 80%;
+    height: calc(100% - 30px);
+    border-radius: 20px;
+}

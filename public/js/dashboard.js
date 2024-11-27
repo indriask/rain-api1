@@ -14,7 +14,7 @@ const studentAppliedVacancyStatus = document.querySelector("#applied-vacancy-sta
 const studentAppliedVacancyStatusInfo = document.querySelector("#apply-status-info");
     
 /**
- * Variable for student 
+ * Variable for student profile
  */
 const editProfileForm = document.querySelector("#edit-profile-form");
 const editProfileBtn = document.querySelector("#edit-profile-btn");
@@ -26,6 +26,11 @@ const profileEditNotificationImg = document.querySelector("#profile-edit-notific
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
 const logoutNotification = document.querySelector("#logout-notification");
 
+
+/**
+ * Variable for company add vacancy
+ */
+const addVacancy = document.querySelector("#add-vacancy");
 
 /**
  * function for dashboard home page
@@ -222,4 +227,16 @@ function showLogoutCard() {
 // do logout logic
 function processLogoutRequest() {
 
+}
+
+function showAddVacancyCard() {
+    if(addVacancy.classList.contains("d-block")) {
+        addVacancy.classList.remove("d-block");
+        addVacancy.classList.add("d-none");
+
+        return;
+    }
+
+    addVacancy.classList.remove("d-none");
+    addVacancy.classList.add("d-block");
 }

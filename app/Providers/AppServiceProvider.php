@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Components\AddVacancy;
 use App\View\Components\DashboardNavbar;
 use App\View\Components\Head;
 use App\View\Components\LogoutCard;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::component('logout-card', LogoutCard::class);
-        Blade::component('dashboard-navbar', DashboardNavbar::class);   
+        Blade::component('dashboard-navbar', DashboardNavbar::class); 
+        Blade::component('add-vacancy', AddVacancy::class);  
     }
 }

@@ -268,6 +268,10 @@
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card/>
 
+            {{-- tambah lowongan untuk perusahaan --}}
+            <x-add-vacancy/>
+                        
+
         </main>
     </div>
 
