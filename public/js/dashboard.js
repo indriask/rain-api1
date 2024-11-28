@@ -35,6 +35,8 @@ const addVacancyDetail = document.querySelector("#add-vacancy-detail");
 const addVacancyLogo = document.querySelector("#add-vacancy-logo");
 const addVacancySubmitBtn = document.querySelector("#add-vacancy-submit");
 const addVacancyNextForm = document.querySelector("#add-vacancy-next-form");
+const addVacancyForm = document.querySelector("#add-vacancy-form");
+const addVacancyNotification = document.querySelector("#add-vacancy-notification");
 
 /**
  * function for dashboard home page
@@ -319,5 +321,54 @@ function nextVacancyForm() {
 }
 
 function processAddVacancy() {
+    const form = new FormData(addVacancyForm);
     
+    fetch('/test', {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": window.laravel.csrf_token
+        },
+        body: form
+    })
+    .then(response => response.json())
+    .then(data => {
+        showAddVacancyNotification("Lowongan anda berhasil di ekspos!", "http://localhost:8000/storage/svg/success-checkmark.svg");
+    });
+    
+}
+
+function showAddVacancyNotification(message, icon) {
+    const notificationTitle = document.querySelector("#add-vacancy-notification-title");
+    const notificationIcon = document.querySelector("#add-vacancy-notification-icon");
+    
+    notificationTitle.textContent = message;
+    notificationIcon.src = icon;
+
+    addVacancyNotification.classList.remove("d-none");
+    addVacancyNotification.classList.add("d-block");
+}
+
+function closeAddVacancyForm() {
+    addVacancyNotification.classList.remove("d-block");
+    addVacancyNotification.classList.add("d-none");
+
+    addVacancyLogo.classList.remove("d-block");
+    addVacancyLogo.classList.add("d-none");
+
+    addVacancyDetail.classList.remove("d-none");
+    addVacancyDetail.classList.add("d-block");
+
+    addVacancyInput.classList.remove("d-none");
+    addVacancyInput.classList.add("d-block");
+
+    addVacancySubmitBtn.classList.remove("d-block");
+    addVacancySubmitBtn.classList.add("d-none");
+
+    addVacancyNextForm.classList.remove("d-none");
+    addVacancyNextForm.classList.add("d-block");
+
+    addVacancy.classList.remove("d-block");
+    addVacancy.classList.add("d-none");
+
+    addVacancyForm.reset();
 }

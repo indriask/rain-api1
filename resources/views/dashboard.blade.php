@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
     <title>Dashborad | RAIN</title>
+    <script>
+        window.laravel = {csrf_token: "{{ csrf_token() }}"};
+    </script>
 </head>
 
 <body>

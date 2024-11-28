@@ -513,3 +513,21 @@ button {
     margin-top: .5rem;
     color: rgb(82, 82, 252);
 }
+
+.dashboard__add-vacancy-notification {
+    width: 80%;
+    height: calc(100% - 30px);
+    border-radius: 20px;
+}
+
+.dashboard__add-vacancy-notification img {
+    aspect-ratio: 1/1;
+    width: 70px;
+}
+
+.dashboard__add-vacancy-notification button {
+    padding: 5px;
+    width: 100px;
+    border-radius: 7px;
+    top: 4rem;
+}

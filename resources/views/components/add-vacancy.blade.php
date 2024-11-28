@@ -1,7 +1,8 @@
-<div id="add-vacancy" class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center"
+<div id="add-vacancy"
+    class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center position-relative"
     style="background-color: rgba(0, 0, 0, .4)">
 
-    <form method="POST"
+    <form method="POST" id="add-vacancy-form" enctype="multipart/form-data"
         class="dashboard__add-vacancy-company bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
         <div id="add-vacancy-input" class="w-50 d-block">
             <div class="dashboard__add-vacancy-form">
@@ -9,7 +10,7 @@
                 <div>
                     <input type="text" style="width: 120px" class="focus-ring" name="jumlah">
                     <span class="mx-2">/</span>
-                    <input type="text" style="width: 120px;" class="focus-ring" name="makan?">
+                    <input type="text" style="width: 120px;" class="focus-ring" name="bulan">
                 </div>
 
                 <label for="judul" class="fw-600">Judul</label>
@@ -83,4 +84,10 @@
         </div>
     </form>
 
+    <div id="add-vacancy-notification"
+        class="dashboard__add-vacancy-notification d-none position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
+        <h5 id="add-vacancy-notification-title" class="fw-700"></h5>
+        <img id="add-vacancy-notification-icon" src="" alt="">
+        <button class="border border-0 bni-blue text-white fw-700 position-relative" onclick="closeAddVacancyForm()">Kembali</button>
+    </div>
 </div>

@@ -62,8 +62,8 @@ Route::get('/dashboard/perusahaan/lowongan', [DashboardController::class, 'kelol
  * Ini route dibuat untuk testing fitur atau halaman view.
  * mohon jangan di hapus
  */
-Route::get('/test', function (Request $request) {
+Route::post('/test', function (Request $request) {
     // $email = $request->input('email');
     // return response()->json(['email' => explode('@', $email)[0]]);
-    dd(asset('storage/makanbang'));
+    return response()->json(['data' => $request->file()]);
 });
