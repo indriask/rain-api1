@@ -41,6 +41,15 @@ const addVacancyNotification = document.querySelector("#add-vacancy-notification
 /**
  * Variabel for manage vacancy 
  */
+const manageVacancyContainer = document.querySelector("#manage-vacancy-container");
+const manageVacancyForm = document.querySelector("#manage-vacancy-form");
+const manageVacancyInput = document.querySelector("#manage-vacancy-input");
+const manageVacancyDetail = document.querySelector("#manage-vacancy-detail");
+const manageVacancyLogo = document.querySelector("#manage-vacancy-logo");
+const manageVacancyBackForm = document.querySelector("#manage-vacancy-back-form");
+const manageVacancyNextForm = document.querySelector("#manage-vacancy-next-form");
+const manageVacancySubmitBtn = document.querySelector("#manage-vacancy-submit");
+const manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
 
 /**
  * function for dashboard home page
@@ -375,18 +384,118 @@ function closeAddVacancyForm() {
     addVacancy.classList.add("d-none");
 
     addVacancyForm.reset();
+
+    return;
 }
 
 /**
  * function for manage vacancy
  */
 function showManageVacancyCard(id = 0) {
-    vacancyDetailCard.classList.remove("d-none", "pe-none");
-    vacancyDetailCard.classList.add("d-block");
+    if(manageVacancyContainer.classList.contains("d-block")) {
+        manageVacancyContainer.classList.remove("d-block");
+        manageVacancyContainer.classList.add("d-none");
+        
+        return;
+    }
+
+    manageVacancyContainer.classList.remove("d-none");
+    manageVacancyContainer.classList.add("d-block");
 
     return 1;
 }
 
-function editManageVacancyCard(id = 0) {
+function nextManageVacancyForm() {
+    if(manageVacancyInput.classList.contains("d-block") && manageVacancyDetail.classList.contains("d-block")) {
+        manageVacancyLogo.classList.remove("d-none");
+        manageVacancyLogo.classList.add("d-block");
+
+        manageVacancyInput.classList.remove("d-block");
+        manageVacancyInput.classList.add("d-none");
+
+        manageVacancyDetail.classList.remove("d-block");
+        manageVacancyDetail.classList.add("d-none");
+
+        manageVacancyNextForm.classList.remove("d-block");
+        manageVacancyNextForm.classList.add("d-none");
+
+        manageVacancySubmitBtn.classList.remove("d-none");
+        manageVacancySubmitBtn.classList.add("d-block");
+
+        return;
+    }
+}
+
+function backManageVacancyForm() {
+
+    if(manageVacancyLogo.classList.contains("d-none")) {
+        manageVacancyContainer.classList.remove("d-block");
+        manageVacancyContainer.classList.add("d-none");
+
+        return;
+    }
+
+    if(manageVacancyLogo.classList.contains("d-block")) {
+        manageVacancyLogo.classList.remove("d-block");
+        manageVacancyLogo.classList.add("d-none");
+
+        manageVacancyInput.classList.remove("d-none");
+        manageVacancyInput.classList.add("d-block");
+
+        manageVacancyDetail.classList.remove("d-none");
+        manageVacancyDetail.classList.add("d-block");
+
+        manageVacancyNextForm.classList.remove("d-none");
+        manageVacancyNextForm.classList.remove("d-block");
+
+        manageVacancySubmitBtn.classList.remove("d-block");
+        manageVacancySubmitBtn.classList.add("d-none");
+
+        return;
+    }
+}
+
+function closeManageVacancyForm() {
+    manageVacancyNotification.classList.remove("d-block");
+    manageVacancyNotification.classList.add("d-none");
+
+    manageVacancyLogo.classList.remove("d-block");
+    manageVacancyLogo.classList.add("d-none");
+    
+    manageVacancyDetail.classList.remove("d-none");
+    manageVacancyDetail.classList.add("d-block");
+
+    manageVacancyInput.classList.remove("d-none");
+    manageVacancyInput.classList.add("d-block");
+
+    manageVacancySubmitBtn.classList.remove("d-block");
+    manageVacancySubmitBtn.classList.add("d-none");
+
+    manageVacancyNextForm.classList.remove("d-none");
+    manageVacancyNextForm.classList.add("d-block");
+
+    manageVacancyContainer.classList.remove("d-block");
+    manageVacancyContainer.classList.add("d-none");
+
+    manageVacancyForm.reset();
+
+    return;
+}
+
+function showManageVacancyCardNotification(message, icon) {
+    const notificationTitle = document.querySelector("#manage-vacancy-notification-title");
+    const notificationIcon = document.querySelector("#manage-vacancy-notification-icon");
+
+    notificationTitle.textContent = message;
+    notificationIcon.src = icon;
+
+    manageVacancyNotification.classList.remove("d-none");
+    manageVacancyNotification.classList.add("d-block");
+
+    return;
+}
+
+function editManageVacancy(id = 0) {
     // edit vacancy card
+    showManageVacancyCardNotification("Perubahan gagal di simpan", "http://localhost:8000/storage/svg/failed-x.svg");
 }

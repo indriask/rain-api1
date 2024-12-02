@@ -134,10 +134,105 @@
             </div>
 
             {{-- manage vacancy detail card --}}
-            <div id="managa-vacancy-container">
-                <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center" style="background-color: rgba(0, 0, 0, .4)">
-                    <form action="" method="POST" enctype="multipart/form-data" class="bg-white"></form>
+            <div id="manage-vacancy-container"
+                class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <form id="manage-vacancy-form" method="POST" enctype="multipart/form-data"
+                    class="dashboard__manage-vacancy-form bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
+                    <div id="manage-vacancy-input" class="w-50 d-block">
+                        <div class="dashboard__manage-vacancy-input">
+                            <label for="gaji">Gaji</label>
+                            <div>
+                                <input type="text" style="width: 120px" class="focus-ring" name="jumlah"
+                                    value="2.500.000">
+                                <span class="mx-2">/</span>
+                                <input type="text" style="width: 120px;" class="focus-ring" name="bulan"
+                                    value="bulan">
+                            </div>
+
+                            <label for="judul" class="fw-600">Judul</label>
+                            <input type="text" name="judul" class="focus-ring" value="Backend Developer">
+
+                            <label for="jurusan" class="fw-600">Jurusan</label>
+                            <select name="jurusan" id="jurusan"
+                                class="bg-white border border-0 cursor-pointer focus-ring">
+                                <option value="teknik informatika" selected>Teknik Informatika</option>
+                                <option value="manajemen bisnis">Manajemen Bisnis</option>
+                            </select>
+
+                            <label for="lokasi" class="fw-600">Lokasi</label>
+                            <input type="text" name="lokasi" class="focus-ring" value="Batam, Indonesia">
+
+                            <label for="dibuka" class="fw-600">Dibuka</label>
+                            <div>
+                                <input type="date" style="width: 120px" class="focus-ring" name="dibuka">
+                                <span class="mx-2">-</span>
+                                <input type="date" style="width: 120px;" class="focus-ring" name="ditutup">
+                            </div>
+
+                            <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
+                            <div>
+                                <div>
+                                    <input type="radio" name="tipe-waktu" id="full-time" value="full-time">
+                                    <label for="full-time">Full time</label>
+                                </div>
+                                <div>
+                                    <input type="radio" checked name="tipe-waktu" value="part-time" id="part-time">
+                                    <label for="part-time">Part time</label>
+                                </div>
+                            </div>
+
+                            <label for="jenis" class="fw-600">Jenis</label>
+                            <select name="jenis" id=""
+                                class="focus-ring bg-white border border-0 cursor-pointer">
+                                <option value="online">Online</option>
+                                <option value="offline" selected>Offline</option>
+                            </select>
+
+                            <label for="durasi" class="fw-600">Durasi</label>
+                            <input type="text" name="durasi" class="focus-ring" value="3 Bulan">
+
+                            <label for="status" class="fw-600">Status</label>
+                            <div class="dashboard__manage-vacancy-status bg-white">Verified</div>
+
+                            <label for="pendaftar" class="fw-600">Pendaftar</label>
+                            <input type="text" name="pendaftar" id="" value="30 Pelamar" class="focus-ring">
+                        </div>
+                    </div>
+                    <div id="manage-vacancy-detail" class="w-50 d-block">
+                        <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
+                        <textarea name="detail-lowongan" id="" class="dashboard__manage-vacancy-textarea border border-0 p-3"></textarea>
+                    </div>
+                    <div id="manage-vacancy-logo" class="d-none">
+                        <h6 class="fw-700 text-center">Logo Perusahaan</h6>
+                        <label for="company-logo"
+                            class="dashboard__manage-vacancy-logo cursor-pointer d-flex align-items-center justify-content-center flex-column">
+                            <div>Format gambar JPG, PNG, JPEG.</div>
+                            <i class="bi bi-plus-square"></i>
+                        </label>
+                        <input type="file" name="company-logo" id="company-logo" hidden>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
+                        <button id="manage-vacancy-back-form" class="border border-0 bni-blue text-white fw-700"
+                            onclick="backManageVacancyForm()" type="button">Kembali</button>
+                        <div class="d-flex gap-2">
+                            <button id="manage-vacancy-next-form"
+                                class="d-block border border-0 bni-blue text-white fw-700"
+                                onclick="nextManageVacancyForm()" type="button">Berikutnya</button>
+                            <button id="manage-vacancy-submit"
+                                class="d-none border border-0 bni-blue text-white fw-700"
+                                onclick="editManageVacancy(1)" type="button">Edit</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="manage-vacancy-notification"
+                    class="d-none dashboard__manage-vacancy-notification position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
+                    <h5 id="manage-vacancy-notification-title" class="fw-700">Perubahan berhasil di simpan!</h5>
+                    <img src="" alt="" id="manage-vacancy-notification-icon" class="fw-700">
+                    <button class="border border-0 bni-blue text-white fw-700 position-relative" onclick="closeManageVacancyForm()">Kembali</button>
                 </div>
+
             </div>
 
             {{-- pop up notifikasi ingin logout --}}

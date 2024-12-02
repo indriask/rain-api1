@@ -24,9 +24,9 @@
 
                 <label for="dibuka" class="fw-600">Dibuka</label>
                 <div>
-                    <input type="text" style="width: 120px" class="focus-ring" name="dibuka">
+                    <input type="date" style="width: 120px" class="focus-ring" name="dibuka">
                     <span class="mx-2">-</span>
-                    <input type="text" style="width: 120px;" class="focus-ring" name="ditutup">
+                    <input type="date" style="width: 120px;" class="focus-ring" name="ditutup">
                 </div>
 
                 <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
@@ -51,10 +51,7 @@
                 <input type="text" name="durasi" class="focus-ring">
 
                 <label for="status" class="fw-600">Status</label>
-                <select name="status" id="" class="focus-ring bg-white border border-0">
-                    <option value="buka">Buka</option>
-                    <option value="tutup">Tutup</option>
-                </select>
+                <div class="dashboard__add-vacancy-status bg-white">Verified</div>
 
                 <label for="pendaftar" class="fw-600">Pendaftar</label>
                 <input type="text" name="pendaftar" id="" class="focus-ring">
