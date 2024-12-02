@@ -55,7 +55,7 @@ Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardController::class
 /**
  * Route kelola lowongan untuk perusahan
  */
-Route::get('/dashboard/perusahaan/lowongan', [DashboardController::class, 'kelolaLowongan']);
+Route::get('/dashboard/perusahaan/kelola/lowongan', [DashboardController::class, 'kelolaLowongan'])->name('company-manage-vacancy');
 
 
 /**

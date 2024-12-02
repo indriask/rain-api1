@@ -39,6 +39,10 @@ const addVacancyForm = document.querySelector("#add-vacancy-form");
 const addVacancyNotification = document.querySelector("#add-vacancy-notification");
 
 /**
+ * Variabel for manage vacancy 
+ */
+
+/**
  * function for dashboard home page
  */
 function showVacancyDetail(id = 0) {
@@ -371,4 +375,18 @@ function closeAddVacancyForm() {
     addVacancy.classList.add("d-none");
 
     addVacancyForm.reset();
+}
+
+/**
+ * function for manage vacancy
+ */
+function showManageVacancyCard(id = 0) {
+    vacancyDetailCard.classList.remove("d-none", "pe-none");
+    vacancyDetailCard.classList.add("d-block");
+
+    return 1;
+}
+
+function editManageVacancyCard(id = 0) {
+    // edit vacancy card
 }

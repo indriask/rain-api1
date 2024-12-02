@@ -40,4 +40,10 @@ class DashboardController extends Controller
     public function getWawancaraStatus(Request $request) {
         return response()->json(['data' => 'Wawancara mu sedang di proses!']);
     }
+
+    public function kelolaLowongan() {
+        return response()->view('company.kelola-lowongan', [
+            'role' => 'company'
+        ]);
+    }
 }

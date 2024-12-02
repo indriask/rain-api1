@@ -531,3 +531,14 @@ button {
     border-radius: 7px;
     top: 4rem;
 }
+
+.dashboard__manage-vacancy-detail {
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    height: calc(100% - 3rem);
+    padding: 20px;
+    font-size: .9rem;
+    border-radius: 7px;
+    resize: none;
+}
