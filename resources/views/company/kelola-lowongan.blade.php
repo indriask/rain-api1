@@ -225,14 +225,12 @@
                         </div>
                     </div>
                 </form>
-
                 <div id="manage-vacancy-notification"
                     class="d-none dashboard__manage-vacancy-notification position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
                     <h5 id="manage-vacancy-notification-title" class="fw-700">Perubahan berhasil di simpan!</h5>
                     <img src="" alt="" id="manage-vacancy-notification-icon" class="fw-700">
                     <button class="border border-0 bni-blue text-white fw-700 position-relative" onclick="closeManageVacancyForm()">Kembali</button>
                 </div>
-
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
