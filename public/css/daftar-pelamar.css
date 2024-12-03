@@ -1,0 +1,33 @@
+.daftar-pelamar__proposal-card-list {
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 330px);
+    justify-content: center;
+}
+
+.daftar-pelamar__proposal-card {
+    border-radius: 10px;
+}
+
+.daftar-pelamar__proposal-card-profile {
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1/1;
+    width: 55px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.daftar-pelamar__proposal-card-delete {
+    aspect-ratio: 1/1;
+    width: 40px;
+    border-end-start-radius: 15px;
+}
+
+.daftar-pelamar__proposal-card-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 180px;
+}

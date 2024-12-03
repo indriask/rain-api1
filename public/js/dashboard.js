@@ -52,6 +52,10 @@ const manageVacancySubmitBtn = document.querySelector("#manage-vacancy-submit");
 const manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
 
 /**
+ * Variable for proposal card list
+ */
+
+/**
  * function for dashboard home page
  */
 function showVacancyDetail(id = 0) {
@@ -499,3 +503,7 @@ function editManageVacancy(id = 0) {
     // edit vacancy card
     showManageVacancyCardNotification("Perubahan gagal di simpan", "http://localhost:8000/storage/svg/failed-x.svg");
 }
+
+/**
+ * Function for proposal card list
+ */

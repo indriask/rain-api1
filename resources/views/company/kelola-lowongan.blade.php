@@ -99,7 +99,6 @@
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div class="vacancy-card-list px-3 gap-3 mt-4">
-                        {{-- manage vacancy card --}}
                         @for ($i = 0; $i < 4; $i++)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">

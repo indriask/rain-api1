@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanySignupController;
+use App\Http\Controllers\DaftarPelamarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\SigninController;
@@ -57,6 +58,10 @@ Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardController::class
  */
 Route::get('/dashboard/perusahaan/kelola/lowongan', [DashboardController::class, 'kelolaLowongan'])->name('company-manage-vacancy');
 
+/**
+ * Route untuk kelola daftar pelamar
+ */
+Route::get('/dashboard/perusahaan/daftar/pelamar', [DaftarPelamarController::class, 'index'])->name('company-proposal-list');
 
 /**
  * Ini route dibuat untuk testing fitur atau halaman view.

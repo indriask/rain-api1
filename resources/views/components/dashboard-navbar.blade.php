@@ -26,8 +26,10 @@
                             class="bi bi-window me-1"></i>
                         Kelola Lowongan</div>
                 </a>
-                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick=""><i
-                        class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
+                <a href="{{ route('company-proposal-list') }}" class="underline-none">
+                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
+                            class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
+                </a>
             @endif
         </div>
         <div class="">
