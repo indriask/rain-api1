@@ -31,3 +31,9 @@
     overflow: hidden;
     width: 180px;
 }
+
+.daftar-pelamar__student-profile {
+    width: 80%;
+    height: calc(100% - 30px);
+    border-radius: 20px;
+}

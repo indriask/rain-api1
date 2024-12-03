@@ -12,7 +12,7 @@ const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
  */
 const studentAppliedVacancyStatus = document.querySelector("#applied-vacancy-status");
 const studentAppliedVacancyStatusInfo = document.querySelector("#apply-status-info");
-    
+
 /**
  * Variable for student profile
  */
@@ -54,6 +54,7 @@ const manageVacancyNotification = document.querySelector("#manage-vacancy-notifi
 /**
  * Variable for proposal card list
  */
+const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
 
 /**
  * function for dashboard home page
@@ -145,9 +146,9 @@ function getApplyStatusInfo(id) {
             "X-CSRF-TOKEN": window.laravel.csrf_token
         },
     })
-    .then(response => response.json())
-    .then(data => {
-        studentAppliedVacancyStatusInfo.innerHTML = `
+        .then(response => response.json())
+        .then(data => {
+            studentAppliedVacancyStatusInfo.innerHTML = `
          <div class="position-absolute top-0 start-0 bottom-0 end-0 d-flex align-items-center justify-content-center"
                          style="background-color: rgba(0, 0, 0, .4)">
                          <div class="bg-white rounded d-flex align-items-center justify-content-center flex-column p-5"
@@ -161,7 +162,7 @@ function getApplyStatusInfo(id) {
                          </div>
                      </div>
      `;
-    });
+        });
 }
 
 function getInterviewStatusInfo(id) {
@@ -192,7 +193,7 @@ function closeStatusInfo() {
  */
 
 function showEditProfileNotification() {
-    if(editProfileNotification.classList.contains("d-block")) {
+    if (editProfileNotification.classList.contains("d-block")) {
         editProfileNotification.classList.remove("d-block");
         editProfileNotification.classList.add("d-none");
 
@@ -224,7 +225,7 @@ function setProfileData() {
 }
 
 function showDeleteAccountCard() {
-    if(deleteAccountNotification.classList.contains("d-block")) {
+    if (deleteAccountNotification.classList.contains("d-block")) {
         deleteAccountNotification.classList.remove("d-block");
         deleteAccountNotification.classList.add("d-none");
 
@@ -240,7 +241,7 @@ function processDeleteAccountRequest() {
 }
 
 function showLogoutCard() {
-    if(logoutNotification.classList.contains("d-block")) {
+    if (logoutNotification.classList.contains("d-block")) {
         logoutNotification.classList.remove("d-block");
         logoutNotification.classList.add("d-none");
 
@@ -260,7 +261,7 @@ function processLogoutRequest() {
  * Function for company add vacancy
  */
 function showAddVacancyCard() {
-    if(addVacancy.classList.contains("d-block")) {
+    if (addVacancy.classList.contains("d-block")) {
         addVacancy.classList.remove("d-block");
         addVacancy.classList.add("d-none");
 
@@ -272,7 +273,7 @@ function showAddVacancyCard() {
 }
 
 function showAddVacancyInput() {
-    if(addVacancyInput.classList.contains("d-block")) {
+    if (addVacancyInput.classList.contains("d-block")) {
         addVacancyInput.classList.remove("d-block");
         addVacancyInput.classList.add("d-none");
 
@@ -284,10 +285,10 @@ function showAddVacancyInput() {
 }
 
 function showAddVacancyDetail() {
-    if(addVacancyDetail.classList.contains("d-block")) {
+    if (addVacancyDetail.classList.contains("d-block")) {
         addVacancyDetail.classList.remove("d-block");
         addVacancyDetail.classList.add("d-none");
-        
+
         return;
     }
 
@@ -296,7 +297,7 @@ function showAddVacancyDetail() {
 }
 
 function backAddVacancyForm() {
-    if( addVacancyInput.classList.contains("d-none") && addVacancyDetail.classList.contains("d-none")) {
+    if (addVacancyInput.classList.contains("d-none") && addVacancyDetail.classList.contains("d-none")) {
         addVacancyLogo.classList.remove("d-block");
         addVacancyLogo.classList.add("d-none");
 
@@ -317,7 +318,7 @@ function backAddVacancyForm() {
 }
 
 function nextVacancyForm() {
-    if(addVacancyInput.classList.contains("d-block") && addVacancyDetail.classList.contains("d-block")) {
+    if (addVacancyInput.classList.contains("d-block") && addVacancyDetail.classList.contains("d-block")) {
         addVacancyLogo.classList.remove("d-none");
         addVacancyLogo.classList.add("d-block");
 
@@ -326,7 +327,7 @@ function nextVacancyForm() {
 
         addVacancyDetail.classList.remove("d-block");
         addVacancyDetail.classList.add("d-none");
-        
+
         addVacancyNextForm.classList.remove("d-block");
         addVacancyNextForm.classList.add("d-none");
 
@@ -339,7 +340,7 @@ function nextVacancyForm() {
 
 function processAddVacancy() {
     const form = new FormData(addVacancyForm);
-    
+
     fetch('/test', {
         method: "POST",
         headers: {
@@ -347,17 +348,17 @@ function processAddVacancy() {
         },
         body: form
     })
-    .then(response => response.json())
-    .then(data => {
-        showAddVacancyNotification("Lowongan anda berhasil di ekspos!", "http://localhost:8000/storage/svg/success-checkmark.svg");
-    });
-    
+        .then(response => response.json())
+        .then(data => {
+            showAddVacancyNotification("Lowongan anda berhasil di ekspos!", "http://localhost:8000/storage/svg/success-checkmark.svg");
+        });
+
 }
 
 function showAddVacancyNotification(message, icon) {
     const notificationTitle = document.querySelector("#add-vacancy-notification-title");
     const notificationIcon = document.querySelector("#add-vacancy-notification-icon");
-    
+
     notificationTitle.textContent = message;
     notificationIcon.src = icon;
 
@@ -396,10 +397,10 @@ function closeAddVacancyForm() {
  * function for manage vacancy
  */
 function showManageVacancyCard(id = 0) {
-    if(manageVacancyContainer.classList.contains("d-block")) {
+    if (manageVacancyContainer.classList.contains("d-block")) {
         manageVacancyContainer.classList.remove("d-block");
         manageVacancyContainer.classList.add("d-none");
-        
+
         return;
     }
 
@@ -410,7 +411,7 @@ function showManageVacancyCard(id = 0) {
 }
 
 function nextManageVacancyForm() {
-    if(manageVacancyInput.classList.contains("d-block") && manageVacancyDetail.classList.contains("d-block")) {
+    if (manageVacancyInput.classList.contains("d-block") && manageVacancyDetail.classList.contains("d-block")) {
         manageVacancyLogo.classList.remove("d-none");
         manageVacancyLogo.classList.add("d-block");
 
@@ -432,14 +433,14 @@ function nextManageVacancyForm() {
 
 function backManageVacancyForm() {
 
-    if(manageVacancyLogo.classList.contains("d-none")) {
+    if (manageVacancyLogo.classList.contains("d-none")) {
         manageVacancyContainer.classList.remove("d-block");
         manageVacancyContainer.classList.add("d-none");
 
         return;
     }
 
-    if(manageVacancyLogo.classList.contains("d-block")) {
+    if (manageVacancyLogo.classList.contains("d-block")) {
         manageVacancyLogo.classList.remove("d-block");
         manageVacancyLogo.classList.add("d-none");
 
@@ -465,7 +466,7 @@ function closeManageVacancyForm() {
 
     manageVacancyLogo.classList.remove("d-block");
     manageVacancyLogo.classList.add("d-none");
-    
+
     manageVacancyDetail.classList.remove("d-none");
     manageVacancyDetail.classList.add("d-block");
 
@@ -507,3 +508,26 @@ function editManageVacancy(id = 0) {
 /**
  * Function for proposal card list
  */
+function showStudentProfile(id) {
+    console.log("You pressed show student card");
+}
+
+function deleteStudentProposal() {
+    console.log("You pressed delete student proposal button");
+}
+
+function closeStudentProfile() {
+    if (daftarPelamarStudentProfile.classList.contains("d-block")) {
+        daftarPelamarStudentProfile.classList.remove("d-block");
+        daftarPelamarStudentProfile.classList.add("d-none");
+
+        return;
+    }
+
+    daftarPelamarStudentProfile.classList.remove("d-none");
+    daftarPelamarStudentProfile.classList.add("d-block");
+}
+
+function showStudentProposal(id) {
+    
+}

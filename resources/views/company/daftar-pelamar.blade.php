@@ -25,6 +25,7 @@
     {{-- css link --}}
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/daftar-pelamar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
     <title>Kelola Lowongan | RAIN</title>
     <script>
@@ -101,23 +102,25 @@
                 <div id="proposal-list-container" class="overflow-auto position-relative h-100">
                     <div class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
                         @for ($i = 1; $i <= 7; $i++)
-                            <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative" onclick="showProposalProfile({{ $i }})">
-                                <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
-                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHr74Pjdj__bQPnZK-BFujbwgnP1t5PIqkig&s"
-                                        class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
-                                    <div class="d-flex flex-column">
-                                        <span class="daftar-pelamar__proposal-card-name fw-700"
-                                            style="font-size: .95rem" title="">Wasyn Sulaiman Siregar</span>
-                                        <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
-                                            title="">wasynsulaiman@laravel.com</span>
+                            <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
+                                <div onclick="showStudentProfile({{ $i }})" class="cursor-pointer">
+                                    <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
+                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHr74Pjdj__bQPnZK-BFujbwgnP1t5PIqkig&s"
+                                            class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
+                                        <div class="d-flex flex-column">
+                                            <span class="daftar-pelamar__proposal-card-name fw-700"
+                                                style="font-size: .95rem" title="">Wasyn Sulaiman Siregar</span>
+                                            <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
+                                                title="">wasynsulaiman@laravel.com</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-3">
+                                        <span class="daftar-pelamar__proposal-card-name fw-600"
+                                            style="font-size: .95rem">Frontend Developer</span>
+                                        <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> 4</span>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between mt-3">
-                                    <span class="daftar-pelamar__proposal-card-name fw-600"
-                                        style="font-size: .95rem">Frontend Developer</span>
-                                    <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> 4</span>
-                                </div>
-                                <button
+                                <button type="button" onclick="deleteStudentProposal()"
                                     class="daftar-pelamar__proposal-card-delete border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -126,6 +129,93 @@
                     </div>
                 </div>
             </div>
+
+            {{-- profile pelamar mahasiswa --}}
+            <div id="daftar-pelamar-student-profile"
+                class="d-block position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="daftar-pelamar__student-profile bg-white p-4 d-flex gap-5 mt-3">
+                    <div class="profile-info w-50 position-relative">
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
+                                alt="Someone profile" class="profile__profile-img rounded">
+                            <div class="w-100">
+                                <div class="profile__profile-nama-lengkap bg-white rounded p-2">Wasyn Sulaiman Siregar
+                                </div>
+                                <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
+                            </div>
+                        </div>
+                        <div class="profile__profile-more-info mt-4">
+                            <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Politeknik
+                                Negeri Batam</div>
+
+                            <label for="jurusan" style="font-size: .95rem">Jurusan</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknik Informatika
+                            </div>
+
+                            <label for="program-studi" style="font-size: .95rem">Program studi</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknologi Rekayasa Perangkat Lunak
+                            </div>
+
+                            <label for="keahlian" style="font-size: .95rem">Keahlian</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Hack Webiste NASA</div>
+
+                            <label for="alamat" style="font-size: .95rem">Alamat</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Batam, Nongsa
+                            </div>
+
+                            <label for="kota" style="font-size: .95rem">Kota</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Kota Batam
+                            </div>
+
+                            <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">12345
+                            </div>
+
+                            <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">081234567890
+                            </div>
+
+                            <label for="email" style="font-size: .95rem">Email</label>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">eric@laravel.com
+                            </div>
+                        </div>
+                        <div class="position-absolute" style="bottom: 10px;">
+                            <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
+                                style="font-size: .9rem; width: 100px;" onclick="closeStudentProfile()">Tutup</button>
+                            <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                style="font-size: .9rem; width: 130px;" onclick="">Lihat Lamaran</button>
+                        </div>
+                    </div>
+                    <div class="profile__profile-description w-50">
+                        <div class="h-100">
+                            <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil
+                                Mahasiswa</span>
+                            <div class="bg-white shadow overflow-auto px-3 py-2"
+                                style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi perferendis in soluta
+                                illum
+                                delectus eos possimus aspernatur, ea placeat ad voluptates inventore non temporibus
+                                expedita
+                                ratione quae consequuntur quod obcaecati? Quo, asperiores inventore! Error
+                                exercitationem
+                                delectus eaque iure ipsum numquam repudiandae placeat rem aliquam, quisquam, porro at!
+                                Ad
+                                quaerat ducimus tempora earum porro similique velit illum hic esse, consectetur aliquid
+                                provident voluptate eligendi harum, odio eveniet, rerum consequuntur. Facere,
+                                perspiciatis
+                                pariatur? Dolore debitis aliquid eius nobis deserunt sint accusantium fugit illo
+                                impedit,
+                                optio sit consequuntur laboriosam inventore dolores quo sequi dolorem necessitatibus?
+                                Repellat assumenda voluptate unde. Ipsa nihil eligendi maiores!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- proposal pelamar --}}
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />

@@ -52,49 +52,7 @@
                             alt="" class="profile-img rounded-circle shadow">
                         <span class="profile-name">Nama Mahasiswa</span>
                     </div>
-                    {{-- <div class="position-relative">
-                        <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
-                            name="cari-perusahaan" placeholder="Cari perusahaan">
-                        <i class="bi bi-search search-icon"></i>
-                    </div> --}}
                 </div>
-                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
-                    <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih jurusan</option>
-                            <option>teknik informatika</option>
-                            <option>teknik elektro</option>
-                            <option>teknik mesin</option>
-                            <option>teknologi rekayasa elektronik</option>
-                            <option>teknologi rekayasa rekontruksi perkapalan</option>
-                            <option>teknologi rekayasa pengelasan dan fabrikasi</option>
-                            <option>tekn</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class= "select-container">
-                        <select name="" id="">
-                            <option>Pilih lowongan</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih lokasi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <button class="hapus-filter ms-auto">
-                        <i class="bi bi-x-square me-1"></i>
-                        Hapus filter
-                    </button>
-                </div> --}}
             </div>
 
             {{-- profile section mahasiswa --}}
