@@ -59,6 +59,7 @@ const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelam
 const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
 const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
 const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
+const daftarPelamarHapusPelamar = document.querySelector("#daftar-pelamar-hapus-pelamar");
 
 /**
  * function for dashboard home page
@@ -512,10 +513,6 @@ function editManageVacancy(id = 0) {
 /**
  * Function for proposal card list
  */
-function deleteStudentProposal() {
-    console.log("You pressed delete student proposal button");
-}
-
 function showStudentProfile() {
     if (daftarPelamarStudentProfile.classList.contains("d-block")) {
         daftarPelamarStudentProfile.classList.remove("d-block");
@@ -624,4 +621,37 @@ function updateProposalStatusNotification(title, message, image) {
                 </div>
     
     `;
+}
+
+function showDeleteApplicant(id) {
+    console.log("Hello wORLD");
+    if(daftarPelamarHapusPelamar.textContent.trim() !== "") {
+        daftarPelamarHapusPelamar.textContent = "";
+        return;
+    }
+
+    daftarPelamarHapusPelamar.innerHTML = `
+        <div id="logout-notification"
+                    class="d-block position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+                    style="background-color: rgba(0, 0, 0, .4)">
+                    <div class="dashboard__logout bg-white" style="width: 500px;">
+                        <div class="d-flex">
+                            <button onclick="showDeleteApplicant()"
+                                class="dashboard__close-btn ms-auto bni-blue text-white border border-0">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                        <div class="py-3 px-5">
+                            <span class="fw-700 text-center d-block" style="font-size: .9rem;">Apakah anda yakin ingin menghapus kandidat tidak berguna ini?</span>
+                            <button onclick="processDeleteApplicant(${id})"
+                                class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                                style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
+                        </div>
+                    </div>
+                </div>
+    `;
+}
+
+function processDeleteApplicant(id) {
+    alert("Processing delete applicant");
 }

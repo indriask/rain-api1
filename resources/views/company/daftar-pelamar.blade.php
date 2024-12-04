@@ -120,7 +120,7 @@
                                         <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> 4</span>
                                     </div>
                                 </div>
-                                <button type="button" onclick="deleteStudentProposal()"
+                                <button type="button" onclick="showDeleteApplicant({{ $i }})"
                                     class="daftar-pelamar__proposal-card-delete border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -274,6 +274,10 @@
 
             {{-- pop up notifikasi update status proposal --}}
             <div id="daftar-pelamar-update-proposal-status-notification">
+            </div>
+
+            {{-- pop up pesan konfirmasi penghapusan pelamar --}}
+            <div id="daftar-pelamar-hapus-pelamar"> 
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
