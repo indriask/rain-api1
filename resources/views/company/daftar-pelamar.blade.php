@@ -265,12 +265,14 @@
                 </div>
             </div>
 
-            {{-- section perbarui status lamaran mahasiswa --}}
+            {{-- pop up perbarui status lamaran mahasiswa --}}
             <div id="daftar-pelamar-update-proposal-status"></div>
 
-            {{-- section opsi perbarui status lamaran mahasiswa --}}
+            {{-- pop up opsi perbarui status lamaran mahasiswa --}}
             <div id="daftar-pelamar-update-option-proposal-status">
             </div>
+
+            {{-- pop up notifikasi update status proposal --}}
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
