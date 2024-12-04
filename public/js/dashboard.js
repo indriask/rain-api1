@@ -58,6 +58,7 @@ const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-stud
 const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelamar-proposal-info-container");
 const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
 const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
+const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
 
 /**
  * function for dashboard home page
@@ -528,7 +529,7 @@ function showStudentProfile() {
 }
 
 function showStudentProposal(id) {
-    if(daftarPelamarProposalInfoContainer.classList.contains("d-block")) {
+    if (daftarPelamarProposalInfoContainer.classList.contains("d-block")) {
         daftarPelamarProposalInfoContainer.classList.remove("d-block");
         daftarPelamarProposalInfoContainer.classList.add("d-none");
 
@@ -546,7 +547,7 @@ function installProposalFiles(id) {
 }
 
 function showUpdateStatusProposal(id) {
-    if(daftarPelamarUpdateProposalStatus.textContent.trim() !== '') {
+    if (daftarPelamarUpdateProposalStatus.textContent.trim() !== '') {
         daftarPelamarUpdateProposalStatus.textContent = '';
 
         return;
@@ -564,14 +565,14 @@ function showUpdateStatusProposal(id) {
                         </div>
                         <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
-                            onclick="showUpdateStatusProposal(${id})">Kembali</button>
+                            onclick="showUpdateStatusProposal(${id})">Tutup</button>
                     </div>
                 </div>
     `;
 }
 
 function showUpdateOptionStatusProposal(id, type) {
-    if(daftarPelamarUpdateOptionProposalStatus.textContent.trim() !== "") {
+    if (daftarPelamarUpdateOptionProposalStatus.textContent.trim() !== "") {
         daftarPelamarUpdateOptionProposalStatus.textContent = "";
 
         return;
@@ -590,7 +591,7 @@ function showUpdateOptionStatusProposal(id, type) {
                         </div>
                         <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
-                            onclick="showUpdateOptionStatusProposal()">Kembali</button>
+                            onclick="showUpdateOptionStatusProposal()">Tutup</button>
                     </div>
                 </div>
     `;
@@ -598,4 +599,29 @@ function showUpdateOptionStatusProposal(id, type) {
 
 function updateStatusProposal(status, id, type) {
     console.log(status, id, type);
+    updateProposalStatusNotification('Status gagal diperbarui!', 'Terjadi kesalahan saat melakukan update data, silahkan coba lagi!', 'http://localhost:8000/storage/svg/failed-x.svg');
+}
+
+function updateProposalStatusNotification(title, message, image) {
+    if (daftarPelamarUpdateProposalStatusNotification.textContent.trim() !== "") {
+        daftarPelamarUpdateProposalStatusNotification.textContent = "";
+        return;
+    }
+
+    daftarPelamarUpdateProposalStatusNotification.innerHTML = `
+    <div class="d-block position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+                    style="background-color: rgba(0, 0, 0, .4)">
+                    <div class="dashboard__logout bg-white p-5" style="width: 500px;">
+                        <div class="d-flex flex-column align-items-center justify-content-center position-relative">
+                            <span class="fw-700 d-block">${title}</span>
+                            <div class="text-center" style="font-size: .85rem;">${message}</div>
+                            <img src="${image}" alt="" class="daftar-pelamar__update-proposal-notification-img position-absolute">
+                            <button onclick="updateProposalStatusNotification()"
+                                class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                                style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
+                        </div>
+                    </div>
+                </div>
+    
+    `;
 }

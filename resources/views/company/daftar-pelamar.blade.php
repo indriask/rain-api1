@@ -273,6 +273,8 @@
             </div>
 
             {{-- pop up notifikasi update status proposal --}}
+            <div id="daftar-pelamar-update-proposal-status-notification">
+            </div>
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
