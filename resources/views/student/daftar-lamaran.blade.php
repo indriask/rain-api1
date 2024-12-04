@@ -196,6 +196,7 @@
                 </div>
             </div>
 
+            {{-- check status lamaran mahasiswa --}}
             <div id="applied-vacancy-status">
             </div>
 

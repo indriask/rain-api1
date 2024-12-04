@@ -27,7 +27,9 @@
 
     <title>Dashborad | RAIN</title>
     <script>
-        window.laravel = {csrf_token: "{{ csrf_token() }}"};
+        window.laravel = {
+            csrf_token: "{{ csrf_token() }}"
+        };
     </script>
 </head>
 
@@ -36,7 +38,7 @@
     <div class="dashboard-layout">
 
         {{-- dashboard aside navigation --}}
-        <x-dashboard-navbar :role="$role"/>
+        <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
@@ -187,11 +189,13 @@
                         </div>
                     </div>
                     <div class="w-50">
-                        <div class="d-flex">
-                            <button type="button"
-                                class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
-                                onclick="showApplyVacancyFormContainer(1)">Daftar</button>
-                        </div>
+                        @if ($role === 'student')
+                            <div class="d-flex">
+                                <button type="button"
+                                    class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
+                                    onclick="showApplyVacancyFormContainer(1)">Daftar</button>
+                            </div>
+                        @endif
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
                         <div class="apply-vacancy-detail overflow-auto">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
@@ -269,11 +273,11 @@
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
-            <x-logout-card/>
-            
+            <x-logout-card />
+
             {{-- tambah lowongan untuk perusahaan --}}
-            <x-add-vacancy/>
-            
+            <x-add-vacancy />
+
         </main>
     </div>
 

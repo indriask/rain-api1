@@ -191,7 +191,8 @@
                             <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
                                 style="font-size: .9rem; width: 100px;" onclick="showStudentProfile()">Tutup</button>
                             <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                                style="font-size: .9rem; width: 130px;" onclick="showStudentProposal('1')">Lihat Lamaran</button>
+                                style="font-size: .9rem; width: 130px;" onclick="showStudentProposal('1')">Lihat
+                                Lamaran</button>
                         </div>
                     </div>
                     <div class="profile__profile-description w-50">
@@ -226,8 +227,8 @@
                     <div id="daftar-pelamar-proposal-info-box"
                         class="vacancy-apply-form-card bg-white p-4 position-relative">
                         <div class="position-absolute top-0 end-0">
-                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue" onclick="showStudentProposal()"><i
-                                    class="bi bi-x-circle"></i></button>
+                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue"
+                                onclick="showStudentProposal()"><i class="bi bi-x-circle"></i></button>
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -251,15 +252,24 @@
                             <span>Dapat berupa CV atau dokumen lainnya</span>
                             <span>Maks. 6 Dokumen</span>
                         </div>
-                        <button for="upload-file" class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
-                            <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Dokumen</button>
+                        <button for="upload-file"
+                            class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
+                            <i class="bi bi-file-earmark-arrow-down me-1" onclick="installProposalFiles(1)"></i> Unduh
+                            Dokumen</button>
 
                         {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
-                        <button type="button" onclick="updateProposalStatus()"
+                        <button type="button" onclick="showUpdateStatusProposal(1)"
                             class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center px-2"
-                            style="width: fit-content;">Perbarui Daftar Pelamar</button>
+                            style="width: fit-content;">Perbarui Status Pelamar</button>
                     </div>
                 </div>
+            </div>
+
+            {{-- section perbarui status lamaran mahasiswa --}}
+            <div id="daftar-pelamar-update-proposal-status"></div>
+
+            {{-- section opsi perbarui status lamaran mahasiswa --}}
+            <div id="daftar-pelamar-update-option-proposal-status">
             </div>
 
             {{-- pop up notifikasi ingin logout --}}

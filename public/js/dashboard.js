@@ -56,6 +56,8 @@ const manageVacancyNotification = document.querySelector("#manage-vacancy-notifi
  */
 const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
 const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelamar-proposal-info-container");
+const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
+const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
 
 /**
  * function for dashboard home page
@@ -509,10 +511,6 @@ function editManageVacancy(id = 0) {
 /**
  * Function for proposal card list
  */
-function showStudentProfile(id) {
-    console.log("You pressed show student card");
-}
-
 function deleteStudentProposal() {
     console.log("You pressed delete student proposal button");
 }
@@ -541,4 +539,63 @@ function showStudentProposal(id) {
     daftarPelamarProposalInfoContainer.classList.add("d-block");
 
     // fetch data to backend
+}
+
+function installProposalFiles(id) {
+    // do installation on student proposal files
+}
+
+function showUpdateStatusProposal(id) {
+    if(daftarPelamarUpdateProposalStatus.textContent.trim() !== '') {
+        daftarPelamarUpdateProposalStatus.textContent = '';
+
+        return;
+    }
+
+    daftarPelamarUpdateProposalStatus.innerHTML = `
+                <div
+                    class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
+                    <div class="status-btn-container bg-white p-5">
+                        <div class="d-flex justify-content-between mk">
+                            <button onclick="showUpdateOptionStatusProposal(${id}, 'lamaran')"
+                                class="border border-0 text-white fw-500 bni-blue">LAMARAN</button>
+                            <button onclick="showUpdateOptionStatusProposal(${id}, 'wawancara')"
+                                class="border border-0 text-white fw-500 bni-blue">WAWANCARA</button>
+                        </div>
+                        <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                            style="width: 100px; font-size: .9rem; padding: 5px;"
+                            onclick="showUpdateStatusProposal(${id})">Kembali</button>
+                    </div>
+                </div>
+    `;
+}
+
+function showUpdateOptionStatusProposal(id, type) {
+    if(daftarPelamarUpdateOptionProposalStatus.textContent.trim() !== "") {
+        daftarPelamarUpdateOptionProposalStatus.textContent = "";
+
+        return;
+    }
+
+    daftarPelamarUpdateOptionProposalStatus.innerHTML = `
+            <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center"
+                    style="background-color: rgba(0, 0, 0, .4)">
+                    <div class="status-btn-container bg-white p-5" style="width: 500px;">
+                        <div class="d-flex justify-content-between mk d-flex gap-3">
+                            <button onclick="updateStatusProposal('review', ${id}, '${type}')"
+                                class="border border-0 bg-primary text-white fw-500">TINJAU</button>
+                            <button onclick="updateStatusProposal('approved', ${id}, '${type}')"
+                                class="border border-0 text-white bg-success fw-500">TERIMA</button>
+                            <button onclick="updateStatusProposal('rejected', ${id}, '${type}')" class="border border-0 text-white bg-danger fw-500">TOLAK</button>
+                        </div>
+                        <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                            style="width: 100px; font-size: .9rem; padding: 5px;"
+                            onclick="showUpdateOptionStatusProposal()">Kembali</button>
+                    </div>
+                </div>
+    `;
+}
+
+function updateStatusProposal(status, id, type) {
+    console.log(status, id, type);
 }
