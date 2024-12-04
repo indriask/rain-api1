@@ -132,7 +132,7 @@
 
             {{-- profile pelamar mahasiswa --}}
             <div id="daftar-pelamar-student-profile"
-                class="d-block position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="daftar-pelamar__student-profile bg-white p-4 d-flex gap-5 mt-3">
                     <div class="profile-info w-50 position-relative">
@@ -151,18 +151,22 @@
                                 Negeri Batam</div>
 
                             <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknik Informatika
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknik
+                                Informatika
                             </div>
 
                             <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknologi Rekayasa Perangkat Lunak
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknologi
+                                Rekayasa Perangkat Lunak
                             </div>
 
                             <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Hack Webiste NASA</div>
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Hack
+                                Webiste NASA</div>
 
                             <label for="alamat" style="font-size: .95rem">Alamat</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Batam, Nongsa
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Batam,
+                                Nongsa
                             </div>
 
                             <label for="kota" style="font-size: .95rem">Kota</label>
@@ -174,18 +178,20 @@
                             </div>
 
                             <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">081234567890
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">
+                                081234567890
                             </div>
 
                             <label for="email" style="font-size: .95rem">Email</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">eric@laravel.com
+                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">
+                                eric@laravel.com
                             </div>
                         </div>
                         <div class="position-absolute" style="bottom: 10px;">
                             <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
-                                style="font-size: .9rem; width: 100px;" onclick="closeStudentProfile()">Tutup</button>
+                                style="font-size: .9rem; width: 100px;" onclick="showStudentProfile()">Tutup</button>
                             <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                                style="font-size: .9rem; width: 130px;" onclick="">Lihat Lamaran</button>
+                                style="font-size: .9rem; width: 130px;" onclick="showStudentProposal('1')">Lihat Lamaran</button>
                         </div>
                     </div>
                     <div class="profile__profile-description w-50">
@@ -213,9 +219,48 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {{-- proposal pelamar --}}
+                {{-- informasi proposal pelamar --}}
+                <div id="daftar-pelamar-proposal-info-container"
+                    class="d-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
+                    <div id="daftar-pelamar-proposal-info-box"
+                        class="vacancy-apply-form-card bg-white p-4 position-relative">
+                        <div class="position-absolute top-0 end-0">
+                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue" onclick="showStudentProposal()"><i
+                                    class="bi bi-x-circle"></i></button>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Informasi Lamaran</h1>
+                        </div>
+
+                        <div class="apply-form-common-info mt-4">
+                            <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
+
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Wasyn Sulaiman Siregar
+                            </div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">4342401034</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Teknik Informatika</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Program Studi</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">wasyn@domain.com</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">0812345678910</div>
+                        </div>
+
+                        <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
+                        <div class="apply-form-upload-file-info d-flex justify-content-between">
+                            <span>Dapat berupa CV atau dokumen lainnya</span>
+                            <span>Maks. 6 Dokumen</span>
+                        </div>
+                        <button for="upload-file" class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
+                            <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Dokumen</button>
+
+                        {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
+                        <button type="button" onclick="updateProposalStatus()"
+                            class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center px-2"
+                            style="width: fit-content;">Perbarui Daftar Pelamar</button>
+                    </div>
+                </div>
+            </div>
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />

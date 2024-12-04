@@ -55,6 +55,7 @@ const manageVacancyNotification = document.querySelector("#manage-vacancy-notifi
  * Variable for proposal card list
  */
 const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
+const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelamar-proposal-info-container");
 
 /**
  * function for dashboard home page
@@ -516,7 +517,7 @@ function deleteStudentProposal() {
     console.log("You pressed delete student proposal button");
 }
 
-function closeStudentProfile() {
+function showStudentProfile() {
     if (daftarPelamarStudentProfile.classList.contains("d-block")) {
         daftarPelamarStudentProfile.classList.remove("d-block");
         daftarPelamarStudentProfile.classList.add("d-none");
@@ -529,5 +530,15 @@ function closeStudentProfile() {
 }
 
 function showStudentProposal(id) {
-    
+    if(daftarPelamarProposalInfoContainer.classList.contains("d-block")) {
+        daftarPelamarProposalInfoContainer.classList.remove("d-block");
+        daftarPelamarProposalInfoContainer.classList.add("d-none");
+
+        return;
+    }
+
+    daftarPelamarProposalInfoContainer.classList.remove("d-none");
+    daftarPelamarProposalInfoContainer.classList.add("d-block");
+
+    // fetch data to backend
 }
