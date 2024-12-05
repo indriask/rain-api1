@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminSigninController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanySignupController;
 use App\Http\Controllers\DaftarPelamarController;
@@ -21,6 +22,12 @@ Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 // Route halaman signin untuk perusahaan dan mahasiswa
 Route::get('/signin', [SigninController::class, 'index'])->name('signin');
 Route::post('/signin', [SigninController::class, 'validateCredentials'])->name('validate-credentials');
+
+/**
+ * Route ke halaman signin untuk admin
+ */
+Route::get('/admin/signin', [AdminSigninController::class, 'index'])->name('admin-signin');
+Route::post('/admin/signin', [AdminSigninController::class, 'validateCredentials', 'validateCredentials'])->name('admin-validate-credentials');
 
 // Route halaman signup untuk mahasiswa
 Route::get('/mahasiswa/signup', [StudentSignupController::class, 'index'])->name('student-signup');
