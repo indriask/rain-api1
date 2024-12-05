@@ -38,9 +38,14 @@ Route::get('/dashboard/mahasiswa/daftar-lamaran', [DashboardController::class, '
 Route::get('/dashboard/mahasiswa/daftar-lamaran/lamaran', [DashboardController::class, 'getLamaranStatus']);
 Route::get('/dashboard/mahasiswa/daftar-lamanaran/wawancara', [DashboardController::class, 'getWawancaraStatus']);
 
-// Route ke halaman profile mahasiswa dan perusahaan
+// Route ke halaman profile mahasiswa
 Route::get('/dashboard/mahasiswa/profile', [StudentProfileController::class, 'index'])->name('student-profile');
+
+/**
+ * Route ke halaman profile perusahaan
+ */
 Route::get('/dashboard/perusahaan/profile', [CompanyProfileController::class, 'index'])->name('company-profile');
+
 
 // Route halaman forget-password
 Route::get('/forget-password', [ForgetPasswordController::class, 'index'])->name('forget-password');

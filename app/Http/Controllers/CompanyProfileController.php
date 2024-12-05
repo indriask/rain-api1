@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;                
 
 class CompanyProfileController extends Controller
 {
@@ -10,6 +10,8 @@ class CompanyProfileController extends Controller
      * Render halaman profile perusahaan
      */
     public function index() {
-        return response()->view('company.profile');
+        return response()->view('company.profile', [
+            'role' => 'company'
+        ]);
     }
 }
