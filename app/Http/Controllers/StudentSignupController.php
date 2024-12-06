@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 
 class StudentSignupController extends Controller
 {
-    // Render halaman signup untuk mahasiswa
+    /**
+     * Method untuk me-render halaman signup mahasiswa
+     */
     public function index() {
         return response()->view('student.signup', [
-            'title' => 'Signup | RAIN'
+            'title' => 'Signup Mahasiswa | RAIN'
         ]);
     }
 
-    // Membuat akun untuk mahasiswa
+    /**
+     * Method untuk mem-proses logika pembuatan akun mahasiswa
+     */
     public function doSignup(Request $request) {
         return 1;
     }

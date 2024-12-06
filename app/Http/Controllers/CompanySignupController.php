@@ -6,14 +6,18 @@ use Illuminate\Http\Request;
 
 class CompanySignupController extends Controller
 {
-    // Render halaman signup untuk perusahaan
+    /**
+     * Method untuk me-render halaman signup perusahaan
+     */
     public function index() {
         return response()->view('company.signup', [
             'title' => 'Signup Perusahaan | RAIN'
         ]);
     }
 
-    // Membuat akun untuk perusahaan
+    /**
+     * Method untuk mem-proses logika pembuatan akun perusahaan
+     */
     public function doSignup(Request $request) {
         return 1;
     }

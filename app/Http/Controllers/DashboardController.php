@@ -3,47 +3,88 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class DashboardController extends Controller
 {
+    /**
+     * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
+     */
     public function index()
     {
         return response()->view('dashboard', [
-            'role' => 'company'
+            'role' => 'student'
         ]);
     }
 
-    public function daftarLamaran()
-    {
+    /**
+     * Method untuk me-render halaman daftar lamaran mahasiswa
+     */
+    public function studentProposalListPage() {
         return response()->view('student.daftar-lamaran', [
             'role' => 'student'
         ]);
     }
 
-    public function getLamaranStatus(Request $request)
-    {
-        $lamaran = [
-            [
-                'title' => 'lamaranmu sedang di proses',
-                'pesan' => 'Silahkan tunggu konfirmasi selanjutnya yaa!'
-            ],
-            ['title' => 'lamaranmu ditolak', 'pesan' => 'Silahkan tunggu konfirmasi selanjutnya yaa!'],
-            ['title' => 'lamaranmu diterima', 'pesan' => 'Silahkan tunggu konfirmas selanjutnya yaa!']
-        ];
-
-        $ambilLamaran = $lamaran[rand(0, 2)];
-
-        return response()->json(['data' => $ambilLamaran]);
+    /**
+     * Mehod untuk me-render halaman profile mahasiswa
+     */
+    public function studentProfilePage() {
+        return response()->view('company.profile', [
+            'role' => 'student'
+        ]);
     }
 
-    public function getWawancaraStatus(Request $request) {
-        return response()->json(['data' => 'Wawancara mu sedang di proses!']);
-    }
-
-    public function kelolaLowongan() {
+    /**
+     * Method untuk me-render halaman kelola lowongan perusahaan
+     */
+    public function companyManageVacancyPage() {
         return response()->view('company.kelola-lowongan', [
             'role' => 'company'
+        ]);
+    }
+
+    /**
+     * Method untuk me-render halaman daftar pelamar perusahaan
+     */
+    public function companyProposalListPage() {
+        return response()->view('company.daftar-pelamar', [
+            'role' => 'company'
+        ]);
+    }
+
+    /**
+     * Method untuk me-render halaman profile perusahaan
+     */
+    public function companyProfilePage() {
+        return response()->view('company.profile', [
+            'role' => 'company'
+        ]);
+    }
+
+    /**
+     * Method untuk me-render halaman kelola lowongan admin
+     */
+    public function adminManageVacancyPage() {
+        return response()->view('admin.kelola-lowongan', [
+            'role' => 'admin'
+        ]);
+    }
+
+    /**
+     * Method untuk me-render halaman kelola akun mahasiswa
+     */
+    public function adminManageUserStudent() {
+        return response()->view('admin.kelola-mahasiswa', [
+            'role' => 'student'
+        ]);
+    }
+
+    /**
+     * Method untuk me-render halaman kelola akun perusahaan
+     */
+    public function adminManageUserCompany() {
+        return response()->view('admin.kelola-perusahaan', [
+            'role' => 'admin'
         ]);
     }
 }

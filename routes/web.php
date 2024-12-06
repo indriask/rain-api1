@@ -3,84 +3,109 @@
 use App\Http\Controllers\AdminSigninController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanySignupController;
-use App\Http\Controllers\DaftarPelamarController;
+use App\Http\Controllers\DashboardCompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardStudentController;
 use App\Http\Controllers\ForgetPasswordController;
 use App\Http\Controllers\SigninController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\StudentSignupController;
 use App\Http\Controllers\WelcomeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route redirect ke halaman home RAIN
+
+/**
+ * Penjelasan singkat mengenai beberapa controller
+ * A
+ * 1. AdminSigninController => digunakan untuk mem-proses data signin admin dan mengarahkan
+ *                             user ke halaman signin perusahaan
+ * 
+ * C
+ * 1. CompanyProfileController => digunakan untuk mem-proses data profile perusahaan
+ * 2. CompanySignupController => digunakan untuk mem-proses data signup perusahaan dan mengarahkan 
+ *                               user ke halaman signup perusahaan
+ * 
+ * D
+ * 1. DashboardCompanyProfile => digunakan untuk mem-proses data dashboard perusahaan
+ * 2. DashboardController => hanya digunakan untuk mengarahkan user ke halaman tertentu
+ * 
+ * F
+ * 1. ForgetPasswordController => digunakan untuk mem-proses data forget password
+ * 
+ * S
+ * 1. StudentSignupController => digunakan untuk mem-proses data signup mahasiswa
+ * 2. StudentProfileController => digunakan untuk mem-proses data profile mahasiswa
+ * 3. SigninController => digunakan untuk mem-proses data signin mahasiswa dan perusahaan
+ * 
+ * W
+ * 1. WelcomeController => hanya digunakan untuk mengarahkan user pada halaman branding RAIN
+ */
+
+
+
+
+
+
+
+/**
+ * Route ke halaman branding RAIN
+ */
+Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
 Route::redirect('/index', '/', 302);
 
-// Route halaman home RAIN
-Route::get('/', [WelcomeController::class, 'welcome'])->name('welcome');
-
-// Route halaman signin untuk perusahaan dan mahasiswa
+/**
+ * Route ke halaman signin mahasiswa dan perusahaan
+ */
 Route::get('/signin', [SigninController::class, 'index'])->name('signin');
 Route::post('/signin', [SigninController::class, 'validateCredentials'])->name('validate-credentials');
 
 /**
- * Route ke halaman signin untuk admin
+ * Route ke halaman dashboard mahasiswa, perusahaan dan admin
  */
-Route::get('/admin/signin', [AdminSigninController::class, 'index'])->name('admin-signin');
-Route::post('/admin/signin', [AdminSigninController::class, 'validateCredentials', 'validateCredentials'])->name('admin-validate-credentials');
-
-// Route halaman signup untuk mahasiswa
-Route::get('/mahasiswa/signup', [StudentSignupController::class, 'index'])->name('student-signup');
-Route::post('/mahasiswa/signup', [StudentSignupController::class, 'doSignup'])->name('do-student-signup');
-
-// Route halaman signup untuk perusahaan
-Route::get('/perusahaan/signup', [CompanySignupController::class, 'index'])->name('company-signup');
-Route::post('/perusahaan/signup', [CompanySignupController::class, 'doSignup'])->name('do-company-signup');
-
-// Route halaman dashboard mahasiswa dan perusahaan
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard/mahasiswa/daftar-lamaran', [DashboardController::class, 'daftarLamaran'])->name('student-daftar-lamaran');
-
-// Route untuk melihat status lamaran dan wawancara mahasiswa
-Route::get('/dashboard/mahasiswa/daftar-lamaran/lamaran', [DashboardController::class, 'getLamaranStatus']);
-Route::get('/dashboard/mahasiswa/daftar-lamanaran/wawancara', [DashboardController::class, 'getWawancaraStatus']);
-
-// Route ke halaman profile mahasiswa
-Route::get('/dashboard/mahasiswa/profile', [StudentProfileController::class, 'index'])->name('student-profile');
 
 /**
- * Route ke halaman profile perusahaan
+ * Route ke halaman forget password untuk mahasiswa dan perusahaan
  */
-Route::get('/dashboard/perusahaan/profile', [CompanyProfileController::class, 'index'])->name('company-profile');
-
-
-// Route halaman forget-password
 Route::get('/forget-password', [ForgetPasswordController::class, 'index'])->name('forget-password');
 Route::post('/forget-password', [ForgetPasswordController::class, 'sendEmail'])->name('forget-password-post');
-Route::post("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "updatePassword"])->name('password.reset.post');
-Route::get("/password/reset/{token}/{email}" , [ForgetPasswordController::class , "formResetPassword"])->name('password.reset');
+Route::post("/password/reset/{token}/{email}", [ForgetPasswordController::class, "updatePassword"])->name('password.reset.post');
+Route::get("/password/reset/{token}/{email}", [ForgetPasswordController::class, "formResetPassword"])->name('password.reset');
 
 /**
- * Route tambah lowongan untuk perusahaan
+ * Routing khusus role mahasiswa
  */
-Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardController::class, 'tambahLowongan']);
+Route::prefix('/dashboard/mahasiswa')->group(function () {
+    Route::get('/signup', [StudentSignupController::class, 'index'])->name('student-signup');
+    Route::post('/signup', [StudentSignupController::class, 'doSignup'])->name('do-student-signup');
+
+    Route::get('/daftar/lamaran', [DashboardController::class, 'studentProposalListPage'])->name('student-proposal-list');
+    Route::get('/daftar/lamaran/status/lamaran/{id}', [DashboardStudentController::class, 'getLamaranStatus'])->name('student-proposal-status');
+    Route::get('/daftar/lamaran/status/wawancara/{id}', [DashboardStudentController::class, 'getWawancaraStatus'])->name('student-interview-status');
+    Route::get('/profile', [DashboardController::class, 'studentProfilePage'])->name('student-profile');
+});
 
 /**
- * Route kelola lowongan untuk perusahan
+ * Routing khusus role perusahaan
  */
-Route::get('/dashboard/perusahaan/kelola/lowongan', [DashboardController::class, 'kelolaLowongan'])->name('company-manage-vacancy');
+Route::prefix('/dashboard/perusahaan')->group(function () {
+    Route::get('/signup', [CompanySignupController::class, 'index'])->name('company-signup');
+    Route::post('/signup', [CompanySignupController::class, 'doSignup'])->name('do-signup-company');
+
+    Route::get('/tambah/lowongan', [DashboardCompanyController::class, 'addVacancy'])->name('company-add-vacancy');
+    Route::get('/kelola/lowongan', [DashboardController::class, 'companyManageVacancyPage'])->name('company-manage-vacancy');
+    Route::get('/daftar/pelamar', [DashboardController::class, 'companyProposalListPage'])->name('company-proposal-list');
+    Route::get('/profile', [DashboardController::class, 'companyProfilePage'])->name('company-profile');
+});
 
 /**
- * Route untuk kelola daftar pelamar
+ * Routing khusus role admin
  */
-Route::get('/dashboard/perusahaan/daftar/pelamar', [DaftarPelamarController::class, 'index'])->name('company-proposal-list');
+Route::prefix('/dashboard/admin')->group(function () {
+    Route::get('/signin', [AdminSigninController::class, 'index'])->name('admin-signin');
+    Route::post('signin', [AdminSigninController::class, 'validateCredentials'])->name('admin-validate-credentials');
 
-/**
- * Ini route dibuat untuk testing fitur atau halaman view.
- * mohon jangan di hapus
- */
-Route::post('/test', function (Request $request) {
-    // $email = $request->input('email');
-    // return response()->json(['email' => explode('@', $email)[0]]);
-    return response()->json(['data' => $request->file()]);
+    Route::get('/kelola/lowongan', [DashboardController::class, 'adminManageVacancyPage'])->name('admin-manage-vacancy');
+    Route::get('/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])->name('admin-manage-student');
+    Route::get('/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])->name('admin-manage-company');
 });
