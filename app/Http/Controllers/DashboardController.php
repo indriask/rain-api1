@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         return response()->view('dashboard', [
-            'role' => 'student'
+            'role' => 'company'
         ]);
     }
 
@@ -29,7 +29,7 @@ class DashboardController extends Controller
      * Mehod untuk me-render halaman profile mahasiswa
      */
     public function studentProfilePage() {
-        return response()->view('company.profile', [
+        return response()->view('student.profile', [
             'role' => 'student'
         ]);
     }

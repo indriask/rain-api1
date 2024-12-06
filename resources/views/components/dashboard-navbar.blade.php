@@ -11,7 +11,7 @@
                 </div>
             </a>
             @if ($role === 'student')
-                <a href="{{ route('student-daftar-lamaran') }}" class="underline-none">
+                <a href="{{ route('student-proposal-list') }}" class="underline-none">
                     <div class="aside-list-item py-2 px-2 text-white mb-2">
                         <i class="bi bi-card-list me-1"></i> Daftar Lamaran
                     </div>
@@ -33,14 +33,14 @@
             @endif
 
             @if ($role === 'admin')
-                <a href="{{ route('company-manage-vacancy') }}" class="underline-none">
+                <a href="{{ route('admin-manage-vacancy') }}" class="underline-none">
                     <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
                             class="bi bi-window me-1"></i>
                         Kelola Lowongan</div>
                 </a>
-                <a href="{{ route('company-proposal-list') }}" class="underline-none">
+                <a href="{{ route('admin-manage-student') }}" class="underline-none">
                     <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
-                            class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
+                            class="bi bi-person-vcard me-1"></i> Kelola Pengguna</div>
                 </a>
             @endif
 

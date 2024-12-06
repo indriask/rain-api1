@@ -59,8 +59,7 @@
         </div>
         <div id="add-vacancy-detail" class="w-50 d-block">
             <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
-            <textarea name="detail-lowongan" id="" class="dashboard__add-vacancy-textarea border border-0 p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!
-            </textarea>
+            <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
         </div>
         <div id="add-vacancy-logo" class="d-none">
             <h6 class="fw-700 text-center">Logo Perusahaan</h6>

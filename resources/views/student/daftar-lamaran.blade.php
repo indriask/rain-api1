@@ -131,7 +131,7 @@
             {{-- student applied vacandy detail card --}}
             <div id="vacancy-detail-card"
                 class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                <div method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+                <div  class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
                         <h1 class="apply-form-title">Frontend Developer</h1>
                         <div class="d-flex mt-3">

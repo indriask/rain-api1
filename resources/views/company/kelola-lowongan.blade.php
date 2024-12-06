@@ -132,7 +132,7 @@
                 </div>
             </div>
 
-            {{-- manage vacancy detail card --}}
+            {{-- manage vacancy detail edit card --}}
             <div id="manage-vacancy-container"
                 class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">

@@ -98,6 +98,10 @@ function closeApplyVacancyFormContainer() {
     return 1;
 }
 
+function processAddProposal(id) {
+    showNotification();
+}
+
 function showNotification() {
     applyFormNotifcation.classList.remove("d-none", "pe-none");
     applyFormNotifcation.classList.add("d-block");
@@ -125,7 +129,7 @@ function closeAllFormCard() {
 function showStudentVacancyStatus(id) {
     let template = ''
 
-    if (studentAppliedVacancyStatus.innerHTML.trim() === "") {
+    if (studentAppliedVacancyStatus.textContent.trim() === "") {
         template = `
                 <div
                     class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
@@ -151,8 +155,8 @@ function showStudentVacancyStatus(id) {
 function getApplyStatusInfo(id) {
     // do fetch to database first
 
-    fetch("/dashboard/mahasiswa/daftar-lamaran/lamaran", {
-        method: "GET",
+    fetch(`/dashboard/mahasiswa/list/lamaran/status/lamaran/${id}`, {
+        mthod: "GET",
         headers: {
             "X-CSRF-TOKEN": window.laravel.csrf_token
         },
@@ -179,7 +183,15 @@ function getApplyStatusInfo(id) {
 function getInterviewStatusInfo(id) {
     // do fetch to database first
 
-    studentAppliedVacancyStatusInfo.innerHTML = `
+    fetch(`/dashboard/mahasiswa/list/lamaran/status/wawancara/${id}`, {
+        mthod: "GET",
+        headers: {
+            "X-CSRF-TOKEN": window.laravel.csrf_token
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            studentAppliedVacancyStatusInfo.innerHTML = `
                             <div class="position-absolute top-0 start-0 bottom-0 end-0 d-flex align-items-center justify-content-center"
                         style="background-color: rgba(0, 0, 0, .4)">
                         <div class="bg-white d-flex rounded align-items-center justify-content-center flex-column p-5"
@@ -193,6 +205,7 @@ function getInterviewStatusInfo(id) {
                         </div>
                     </div>
     `;
+        });
 }
 
 function closeStatusInfo() {
@@ -217,22 +230,13 @@ function showEditProfileNotification() {
 
 function setProfileData() {
     let form = new FormData(editProfileForm);
+    console.log(form);
 
     // the value of this variabel come from fetch result
     profileEditNotificationTitle.textContent = "Profil berhasil diperbarui!";
     profileEditNotificationImg.src = "http://localhost:8000/storage/svg/success-checkmark.svg";
 
     showEditProfileNotification();
-
-    // fetch('/test', {
-    //     method: "POST",
-    //     headers: {
-    //         "X-CSRF-TOKEN": window.laravel.csrf_token
-    //     },
-    //     body: form
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
 }
 
 function showDeleteAccountCard() {
@@ -248,7 +252,7 @@ function showDeleteAccountCard() {
 }
 
 function processDeleteAccountRequest() {
-    // kode yang isi request untuk menghapus akun
+    // kode isi request untuk menghapus akun
 }
 
 function showLogoutCard() {
@@ -351,19 +355,7 @@ function nextVacancyForm() {
 
 function processAddVacancy() {
     const form = new FormData(addVacancyForm);
-
-    fetch('/test', {
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": window.laravel.csrf_token
-        },
-        body: form
-    })
-        .then(response => response.json())
-        .then(data => {
-            showAddVacancyNotification("Lowongan anda berhasil di ekspos!", "http://localhost:8000/storage/svg/success-checkmark.svg");
-        });
-
+    console.log(form);
 }
 
 function showAddVacancyNotification(message, icon) {
@@ -513,7 +505,7 @@ function showManageVacancyCardNotification(message, icon) {
 
 function editManageVacancy(id = 0) {
     // edit vacancy card
-    showManageVacancyCardNotification("Perubahan gagal di simpan", "http://localhost:8000/storage/svg/failed-x.svg");
+    showManageVacancyCardNotification("Perubahan berhasil di edit!", "http://localhost:8000/storage/svg/success-checkmark.svg");
 }
 
 /**
@@ -602,7 +594,7 @@ function showUpdateOptionStatusProposal(id, type) {
 
 function updateStatusProposal(status, id, type) {
     console.log(status, id, type);
-    updateProposalStatusNotification('Status gagal diperbarui!', 'Terjadi kesalahan saat melakukan update data, silahkan coba lagi!', 'http://localhost:8000/storage/svg/failed-x.svg');
+    updateProposalStatusNotification('Status berhasil diperbarui!', 'Terjadi kesalahan saat melakukan update data, silahkan coba lagi!', 'http://localhost:8000/storage/svg/success-checkmark.svg');
 }
 
 function updateProposalStatusNotification(title, message, image) {
@@ -630,8 +622,7 @@ function updateProposalStatusNotification(title, message, image) {
 }
 
 function showDeleteApplicant(id) {
-    console.log("Hello wORLD");
-    if(daftarPelamarHapusPelamar.textContent.trim() !== "") {
+    if (daftarPelamarHapusPelamar.textContent.trim() !== "") {
         daftarPelamarHapusPelamar.textContent = "";
         return;
     }
@@ -659,7 +650,7 @@ function showDeleteApplicant(id) {
 }
 
 function processDeleteApplicant(id) {
-    alert("Processing delete applicant");
+    alert("Processing delete applicant")
 }
 /**
  * function for profile company
@@ -671,7 +662,7 @@ function editProfileCompanyData(id) {
 
 
 function showEditCompanyProfileNotification(message, image) {
-    if(editCompanyProfileNotification.textContent.trim() !== "") {
+    if (editCompanyProfileNotification.textContent.trim() !== "") {
         editCompanyProfileNotification.textContent = "";
         return;
     }

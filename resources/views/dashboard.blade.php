@@ -59,14 +59,7 @@
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="" id="">
-                            <option>Pilih jurusan</option>
-                            <option>teknik informatika</option>
-                            <option>teknik elektro</option>
-                            <option>teknik mesin</option>
-                            <option>teknologi rekayasa elektronik</option>
-                            <option>teknologi rekayasa rekontruksi perkapalan</option>
-                            <option>teknologi rekayasa pengelasan dan fabrikasi</option>
-                            <option>tekn</option>
+                            <option>Pilih Jurusan</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
@@ -136,7 +129,7 @@
             {{-- vacancy detail card --}}
             <div id="vacancy-detail-card"
                 class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                <form method="POST" action="" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+                <div class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
                         <h1 class="apply-form-title">Frontend Developer</h1>
                         <div class="d-flex mt-3">
@@ -203,7 +196,7 @@
                             enim tenetur est esse quam dignissimos minus eveniet!
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
 
             {{-- vacancy apply form --}}
@@ -211,7 +204,7 @@
                 class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
                 {{-- vacancy apply form input --}}
-                <form id="vacancy-apply-form" action="" method="POST"
+                <form id="vacancy-apply-form" action="{{ route('student-applied-proposal') }}" method="POST"
                     class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
@@ -224,21 +217,21 @@
                     <div class="apply-form-common-info mt-4">
                         <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
                         <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nama Lengkap"
-                            name="">
+                            name="nama">
                         <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" name="">
                         <select name="" id="" class="w-100 border focus-ring mb-3">
                             <option selected>Jurusan</option>
-                            <option value="">Teknik Informatika</option>
-                            <option value="">Manajemen Bisnis</option>
-                            <option value="">Teknik Elektro</option>
-                            <option value="">Teknik Mesin</option>
+                            <option value="teknik informatika">Teknik Informatika</option>
+                            <option value="manajemen bisnis">Manajemen Bisnis</option>
+                            <option value="teknik elektro">Teknik Elektro</option>
+                            <option value="teknik mesin">Teknik Mesin</option>
                         </select>
                         <input type="text" class="w-100 border focus-ring mb-3" placeholder="Program Studi"
-                            name="">
+                            name="program-studi">
                         <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email"
-                            name="">
+                            name="email">
                         <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon"
-                            name="">
+                            name="nomor-telepon">
                     </div>
 
                     <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
@@ -246,11 +239,12 @@
                         <span>Dapat berupa CV atau dokumen lainnya</span>
                         <span>Maks. 6 Dokumen</span>
                     </div>
-                    <label for="upload-file" class="apply-form-upload-file text-white fw-700 text-center w-100">
+                    <label for="upload-file" class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
                         <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
+                    <input type="file" name="files" multiple id="upload-file" hidden>
 
                     {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
-                    <button type="button" onclick="showNotification()"
+                    <button type="button" onclick="processAddProposal(1)"
                         class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
 

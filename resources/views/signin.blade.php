@@ -49,9 +49,9 @@
                     </div>
                 </div>
                 <div>
-                    <label for="kata-sandi">Kata Sandi</label>
+                    <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="kata-sandi" id="kata-sandi" required>
+                        <input type="password" name="password" id="password" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>

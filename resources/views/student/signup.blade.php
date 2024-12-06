@@ -28,12 +28,13 @@
     <div class="form-container">
         {{-- form halaman signup mahasisswa --}}
         <form action="{{ route('do-student-signup') }}" method="POST">
+            @csrf
             <div>
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email-or-phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
@@ -45,9 +46,9 @@
                     </div>
                 </div>
                 <div>
-                    <label for="kata-sandi">Kata Sandi</label>
+                    <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="kata-sandi" id="kata-sandi" required>
+                        <input type="password" name="password" id="password" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -57,9 +58,9 @@
                     </div>
                 </div>
                 <div>
-                    <label for="konfirmasi-kata-sandi">Masukan Ulang Sandi</label>
+                    <label for="password-confirmation">Masukan Ulang Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="konfirmas-kata-sandi" id="konfirmas-kata-sandi" required>
+                        <input type="password" name="password-confirmation" id="password-confirmation" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>

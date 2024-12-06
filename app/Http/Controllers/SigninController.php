@@ -9,13 +9,20 @@ use Illuminate\Support\Facades\Http;
 
 class SigninController extends Controller
 {
-
-    public function index(){
+    /**
+     * Method untuk me-render halaman signin mahasiswa dan perusahaan
+     */
+    public function index()
+    {
         return view('signin');
     }
 
-    public function signin(Request $request){
-
+    /**
+     * Method untuk mem-proses logika signin mahasiswa dan perusahaan
+     */
+    public function signin(Request $request)
+    {
+        dd($request->all());
         try {
             //Memvalidasi request apakah email dan password sudah diisi
             $validated = $request->validate(
@@ -25,32 +32,29 @@ class SigninController extends Controller
                 ]
             );
 
-$data =[
-    'email' => $request->email_or_phone,
-    'password' => $request->password
-];
+            $data = [
+                'email' => $request->email_or_phone,
+                'password' => $request->password
+            ];
             $response = Http::asForm()->post('http://localhost/RAIN/public/api/signin', $data);
-            
+
             if ($response->successful()) {
                 // Anda bisa menangani token atau data respons API di sini, misalnya menyimpan token session
                 // Misalnya jika API mengembalikan token JWT, Anda bisa menyimpannya di session
                 session(['api_token' => $response->json('token')]); // Contoh menyimpan token
-    
+
                 // Redirect ke dashboard setelah login berhasil
                 return redirect()->route('dashboard');
             } else {
                 // Menangani kesalahan jika login gagal
                 return redirect()->back()->withErrors('Login gagal. Periksa email/telepon atau password.');
             }
-            
+
 
             return redirect()->route('dashboard');
-
         } catch (\Throwable $error) {
             //throw $error;
             return redirect()->back()->withErrors($error->getMessage());
         }
     }
-
-   
 }

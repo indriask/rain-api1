@@ -29,10 +29,8 @@
     {{-- navbar section start --}}
     <nav class="navbar fixed-top shadow p-2 bg-white">
         <div class="container p-0">
-            <div onclick="window.location.href='{{ route('signin') }}'" style="cursor: pointer">
-                <a href="/signin">
-                    <img src="{{ asset('storage/2d-logo.png') }}" class="rain-logo" alt="RAIN logo">
-                </a>
+            <div  style="cursor: pointer" onclick="window.location.href='{{ route('home') }}'">
+                <img src="{{ asset('storage/2d-logo.png') }}" class="rain-logo" alt="RAIN logo">
                 <span class="logo-title">RAIN</span>
             </div>
             <div class="custom-nav-list">

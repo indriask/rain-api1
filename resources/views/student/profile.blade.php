@@ -39,8 +39,8 @@
     <div class="dashboard-layout">
 
         {{-- dashboard navbar --}}
-        <x-dashboard-navbar :role="$role"/>
-        
+        <x-dashboard-navbar :role="$role" />
+
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
 
@@ -62,52 +62,53 @@
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
                             alt="Someone profile" class="profile__profile-img rounded">
                         <div class="w-100">
-                            <div class="profile__profile-nama-lengkap bg-white rounded p-2">Wasyn Sulaiman Siregar</div>
-                            <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
+                            <input type="text" name="nama" form="edit-profile-form" value="Wasyn Sulaiman Siregar"
+                                class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            <inpu class="fw-700" style="font-size: .9rem">Mahasiswa</inpu>
                         </div>
                     </div>
                     <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-4">
                         <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Politeknik Negeri Batam">
 
                         <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Teknik Informatika">
 
                         <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Teknologi Rekayasa Perangkat Lunak">
 
                         <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Hack website NASA">
 
                         <label for="alamat" style="font-size: .95rem">Alamat</label>
-                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Batam, Nogsa">
 
                         <label for="kota" style="font-size: .95rem">Kota</label>
-                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Kota Batam">
 
                         <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2"
-                            value="12345">
+                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring" value="12345">
 
                         <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="081234567890">
 
                         <label for="email" style="font-size: .95rem">Email</label>
-                        <input type="text" name="email" class="border border-0 rounded p-1 px-2"
+                        <input type="text" name="email" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="eric@laravel.com">
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
                         <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
                             onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
-                        <button onclick="showDeleteAccountCard()" class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                        <button onclick="showDeleteAccountCard()"
+                            class="border border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;">Hapus akun</button>
                     </div>
                 </div>
@@ -119,18 +120,8 @@
                     </div>
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <div class="bg-white shadow overflow-auto px-3 py-2"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi perferendis in soluta illum
-                            delectus eos possimus aspernatur, ea placeat ad voluptates inventore non temporibus expedita
-                            ratione quae consequuntur quod obcaecati? Quo, asperiores inventore! Error exercitationem
-                            delectus eaque iure ipsum numquam repudiandae placeat rem aliquam, quisquam, porro at! Ad
-                            quaerat ducimus tempora earum porro similique velit illum hic esse, consectetur aliquid
-                            provident voluptate eligendi harum, odio eveniet, rerum consequuntur. Facere, perspiciatis
-                            pariatur? Dolore debitis aliquid eius nobis deserunt sint accusantium fugit illo impedit,
-                            optio sit consequuntur laboriosam inventore dolores quo sequi dolorem necessitatibus?
-                            Repellat assumenda voluptate unde. Ipsa nihil eligendi maiores!
-                        </div>
+                        <textarea form="edit-profile-form" name="description" class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
                     </div>
                 </div>
             </div>
@@ -165,7 +156,8 @@
                     </div>
                     <div class="py-3 px-5">
                         <span class="fw-600">Apakah anda yakin ingin menghapus akun ini?</span>
-                        <button onclick="processDeleteAccountRequest()" class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                        <button onclick="processDeleteAccountRequest()"
+                            class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                     </div>
                 </div>
@@ -173,7 +165,7 @@
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
-            <x-logout-card/>
+            <x-logout-card />
 
         </main>
     </div>
