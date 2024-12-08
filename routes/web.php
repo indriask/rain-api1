@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminSigninController;
 use App\Http\Controllers\CompanyProfileController;
 use App\Http\Controllers\CompanySignupController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardCompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardStudentController;
@@ -122,11 +123,16 @@ Route::prefix('/dashboard/perusahaan')->group(function () {
 /**
  * Routing khusus role admin
  */
-Route::prefix('/dashboard/admin')->group(function () {
+Route::prefix('/admin')->group(function () {
     Route::get('/signin', [AdminSigninController::class, 'index'])->name('admin-signin');
-    Route::post('signin', [AdminSigninController::class, 'validateCredentials'])->name('admin-validate-credentials');
+    Route::post('/signin', [AdminSigninController::class, 'validateCredentials'])->name('admin-validate-credentials');
+});
 
+
+Route::prefix('/dashboard/admin')->group(function () {
     Route::get('/kelola/lowongan', [DashboardController::class, 'adminManageVacancyPage'])->name('admin-manage-vacancy');
+    Route::post('/kelola/lowongan/edit', [DashboardAdminController::class, 'editVacancy'])->name('admin-manage-vacnacy-edit');
+
     Route::get('/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])->name('admin-manage-student');
     Route::get('/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])->name('admin-manage-company');
 });

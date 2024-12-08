@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         return response()->view('dashboard', [
-            'role' => 'company'
+            'role' => 'admin'
         ]);
     }
 

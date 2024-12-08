@@ -38,10 +38,22 @@
                             class="bi bi-window me-1"></i>
                         Kelola Lowongan</div>
                 </a>
-                <a href="{{ route('admin-manage-student') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
-                            class="bi bi-person-vcard me-1"></i> Kelola Pengguna</div>
-                </a>
+                <div class="dropdown">
+                    <button class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer border border-0 w-100 d-flex align-items-center justify-content-between" style="text-align: initial" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <div><i class="bi bi-person me-1"></i> Kelola Pengguna</div>
+                      <i class="bi bi-caret-down-square position-relative" style="right: 4px;"></i>
+                    </button>
+                    <ul class="dropdown-menu mt-1">
+                      <li><a class="dropdown-item" href="{{ route('admin-manage-student') }}" style="font-size: .9rem;">
+                        <i class="bi bi-backpack"></i>
+                        Kelola Akun Mahasiswa</a>
+                    </li>
+                      <li><a class="dropdown-item" href="{{ route('admin-manage-company') }}" style="font-size: .9rem;">
+                        <i class="bi bi-building"></i>
+                        Kelola Akun Perusahaan</a>
+                    </li>
+                    </ul>
+                  </div>
             @endif
 
         </div>
