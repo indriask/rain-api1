@@ -26,15 +26,21 @@
 <body>
     <!-- wrapper form dan gambar ilustrasi signup mahasiswa -->
     <div class="form-container">
+
         {{-- form halaman signup mahasisswa --}}
         <form action="{{ route('do-student-signup') }}" method="POST">
             @csrf
+            @csrf
             <div>
+                
+        @if($errors->any())
+        {{ $errors->first() }}
+    @endif
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required>
+                        <input type="text" name="email-or-phone" id="email-or-phone" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
@@ -46,9 +52,16 @@
                     </div>
                 </div>
                 <div>
+                    <label for="nim">Masukan Nama</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="name" id="nim" required>
+                        <i class="bi bi-postcard"></i>
+                    </div>
+                </div>
+                <div>
                     <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="password" id="password" required>
+                        <input type="password" name="kata-sandi" id="kata-sandi" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -60,7 +73,7 @@
                 <div>
                     <label for="password-confirmation">Masukan Ulang Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="password-confirmation" id="password-confirmation" required>
+                        <input type="password" name="konfirmas-kata-sandi" id="konfirmas-kata-sandi" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>

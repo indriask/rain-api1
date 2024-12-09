@@ -17,7 +17,7 @@ class AccountController extends Controller
             //Memvalidasi request apakah email dan password sudah diisi
             $validated = $request->validate(
                 [
-                    'email' => 'required|string',
+                    'email' => 'required|string|email|unique',
                     'password' => 'required',
                 ]
             );

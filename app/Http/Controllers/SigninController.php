@@ -2,36 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 
 class SigninController extends Controller
 {
+<<<<<<< HEAD
     /**
      * Method untuk me-render halaman signin mahasiswa dan perusahaan
      */
+=======
+>>>>>>> c6efe51c5ae24bc550f217dd1fb39696f1de8917
     public function index()
     {
         return view('signin');
     }
 
+<<<<<<< HEAD
     /**
      * Method untuk mem-proses logika signin mahasiswa dan perusahaan
      */
     public function signin(Request $request)
     {
         dd($request->all());
+=======
+    public function validateCredentials(Request $request)
+    {
+>>>>>>> c6efe51c5ae24bc550f217dd1fb39696f1de8917
         try {
-            //Memvalidasi request apakah email dan password sudah diisi
+            // Validasi input
             $validated = $request->validate(
                 [
-                    'email_or_phone' => 'required',
+                    'email' => 'required|email',
                     'password' => 'required',
+                ],
+                [
+                    'email.required' => 'Email wajib diisi.',
+                    'email.email' => 'Format email tidak valid.',
+                    'password.required' => 'Password wajib diisi.',
                 ]
             );
 
+<<<<<<< HEAD
             $data = [
                 'email' => $request->email_or_phone,
                 'password' => $request->password
@@ -50,11 +64,28 @@ class SigninController extends Controller
                 return redirect()->back()->withErrors('Login gagal. Periksa email/telepon atau password.');
             }
 
+=======
+            // Cek apakah data ada di tabel `users`
+            $user = \App\Models\User::where('email', $request->email)->first();
 
+            if (!$user) {
+                return redirect()->back()->withErrors('Email tidak ditemukan.');
+            }
+>>>>>>> c6efe51c5ae24bc550f217dd1fb39696f1de8917
+
+            // Verifikasi password
+            if (!Hash::check($request->password, $user->password)) {
+                return redirect()->back()->withErrors('Password salah.');
+            }
+
+            // Simpan data user ke session
+            Auth::login($user);
+
+
+            // Redirect ke dashboard
             return redirect()->route('dashboard');
         } catch (\Throwable $error) {
-            //throw $error;
-            return redirect()->back()->withErrors($error->getMessage());
+            return redirect()->back()->withErrors('Terjadi kesalahan: ' . $error->getMessage());
         }
     }
 }

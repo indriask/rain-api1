@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
+
 class ForgetPasswordController extends Controller
 {
     public function index()
@@ -16,61 +17,52 @@ class ForgetPasswordController extends Controller
         return response()->view('forget-password');
     }
 
+    public function sendEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-    public function sendEmail(Request $request){
-        $user = User::where('email' , $request->email)->first();
-        if($user){
-            $token = Password::createToken($user);
+        $status = Password::sendResetLink(['email' => $request->email]);
 
-            $resetUrl = url(route('password.reset', ['token' => $token, 'email' => $user->email]));
-
-            Mail::to($user->email)->send(new ResetPassword($resetUrl));
-
+        if ($status === Password::RESET_LINK_SENT) {
             return redirect()->route('signin')->with('success', 'Password reset link has been sent to your email.');
-
-        }else{
-            return back()->with('error','Ops, user dengan email '.$request->email.' tidak ditemukan');
         }
+
+        return back()->withErrors(['email' => __($status)]);
     }
 
+    public function formResetPassword($token, $email)
+    {
+        $user = User::where('email', $email)->first();
 
-    public function formResetPassword($token , $email){
-        
-        $user =  User::where('email', $email)->first();
-
-        
-        $response = Password::broker()->tokenExists(
-            $user, $token
-         );   
-        
-    
-        if (!$response) {
-            // Token is invalid
-            return redirect()->route('signin')->with('error','Ops, token tidak valid silahkan lakuakn reset password ulang yaa');
+        if (!$user || !Password::getRepository()->exists($user, $token)) {
+            return redirect()->route('signin')->with('error', 'Ops, token tidak valid, silakan lakukan reset password ulang.');
         }
 
-        return view('reset' , ['token'=> $token,'email'=> $email]);
-
+        return view('reset', ['token' => $token, 'email' => $email]);
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:6',
+        ]);
 
-    public function updatePassword(Request $request , $token , $email){
-        $request->validate(
-           [ 'password' => 'required|confirmed|min:6',]      
-          );
-        $user =  User::where('email', $email)->first();
-        $response = Password::broker()->tokenExists(
-           $user, $token
-        );          
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->password = Hash::make($password);
+                $user->save();
+            }
+        );
 
-        if($response){
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return redirect()->route('signin')->with('success','Berhasil memperbarui password silahkan login !');
-            
-        }else{
-            return back()->withErrors(['Token atau email tidak valid!']);
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('signin')->with('success', 'Berhasil memperbarui password, silakan login!');
         }
 
+        return back()->withErrors(['email' => __($status)]);
     }
 }
+
