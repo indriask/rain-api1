@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('profile', function (Blueprint $table) {
-            $table->id('id_profile')->primary();
+            $table->id('id_profile')->primary()->autoIncrement();
             $table->string('photo_profile', 255);
             $table->string('first_name', 255);
             $table->string('last_name', 255);
-            $table->string('location', 255);
-            $table->string('postal_code', 20);
-            $table->string('city', 255);
-            $table->string('phone_number', 15);
-            $table->text('description');
+            $table->string('location', 255)->nullable(true);
+            $table->string('postal_code', 20)->nullable(true);
+            $table->string('city', 255)->nullable(true);
+            $table->string('phone_number', 15)->nullable(true);
+            $table->text('description')->nullable(true);
             $table->timestamps();
         });
     }

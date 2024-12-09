@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('label');
-            $table->timestamps();
-        });
+        // Schema::create('user_roles', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('label');
+        //     $table->timestamps();
+        // });
 
-        Schema::table("users", function (Blueprint $table){
-            $table->foreignId('roles_id')
-                  ->after('email')
-                  ->default(1)
-                  ->constrained('user_roles')
-                  ->onUpdate('cascade');
-        });
+        // Schema::table("users", function (Blueprint $table){
+        //     $table->foreignId('roles_id')
+        //           ->after('email')
+        //           ->default(1)
+        //           ->constrained('user_roles')
+        //           ->onUpdate('cascade');
+        // });
     }
 
     /**
@@ -31,10 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table){
-            $table->dropForeign(['roles_id']);
-            $table->dropColumn('roles_id');
-        });
-        Schema::dropIfExists('user_roles');
+        // Schema::table('users', function (Blueprint $table){
+        //     $table->dropForeign(['roles_id']);
+        //     $table->dropColumn('roles_id');
+        // });
+        // Schema::dropIfExists('user_roles');
     }
 };

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('nib')->primary();
             $table->unsignedBigInteger('id_profile');
             $table->unsignedBigInteger('id_user');
-            $table->string('type', 50);
-            $table->string('business_fields', 50);
-            $table->date('founded_date');
+            $table->string('type', 50)->nullable(true);
+            $table->string('business_fields', 50)->nullable(true);
+            $table->date('founded_date')->nullable(true);
 
             $table->foreign('id_profile')
                 ->references('id_profile')
