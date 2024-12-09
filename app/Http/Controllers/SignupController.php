@@ -4,35 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 
 class SignupController extends Controller
 {
     public function index()
     {
-        return response()->view('signup');
+        return view('signup');
     }
 
-    public function register(Request $request)
+    public function signup(Request $request)
     {
         try {
-            //code...
-            $validated = $request->validate(
-                [
-                    'email_or_phone' => 'required',
-                    'password' => 'required|confirmed',
-                    'name' => 'required'
-                ]
-            );
+            // Validasi input
+            $validated = $request->validate([
+                'email' => ['required|email|unique:users,email'],
+                'name' => 'required|string|max:255',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-            $validated['email'] = $request->email_or_phone;
-            $validated['password'] = bcrypt($request->password);
+            // Hash password
+            $validated['password'] = bcrypt($validated['password']);
+            
+            // Simpan data ke database
+            User::create($validated);
 
-            unset($validated['email_or_phone']);
-            $user = User::create($validated);
-            return redirect()->route('signin')->with('success', 'Berhasil registrasi silahkan login !');
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect()->back()->withErrors($th->getMessage());
+            // Redirect ke halaman login dengan pesan sukses
+            return redirect()->route('signin')->with('success', 'Berhasil registrasi, silakan login!');
+        } catch (\Exception $e) {
+            // Tangani error
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

@@ -26,14 +26,20 @@
 <body>
     <!-- wrapper form dan gambar ilustrasi signup mahasiswa -->
     <div class="form-container">
+
         {{-- form halaman signup mahasisswa --}}
         <form action="{{ route('do-student-signup') }}" method="POST">
+            @csrf
             <div>
+                
+        @if($errors->any())
+        {{ $errors->first() }}
+    @endif
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email-or-phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email-or-phone" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
@@ -45,9 +51,16 @@
                     </div>
                 </div>
                 <div>
+                    <label for="nim">Masukan Nama</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="name" id="nim" required>
+                        <i class="bi bi-postcard"></i>
+                    </div>
+                </div>
+                <div>
                     <label for="kata-sandi">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="kata-sandi" id="kata-sandi" required>
+                        <input type="password" name="password" id="kata-sandi" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -59,7 +72,7 @@
                 <div>
                     <label for="konfirmasi-kata-sandi">Masukan Ulang Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="konfirmas-kata-sandi" id="konfirmas-kata-sandi" required>
+                        <input type="password" name="password_confirmation" id="konfirmas-kata-sandi" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>

@@ -2,55 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Hash;
 
 class SigninController extends Controller
 {
-
-    public function index(){
+    public function index()
+    {
         return view('signin');
     }
 
-    public function signin(Request $request){
-
+    public function validateCredentials(Request $request)
+    {
         try {
-            //Memvalidasi request apakah email dan password sudah diisi
+            // Validasi input
             $validated = $request->validate(
                 [
-                    'email_or_phone' => 'required',
+                    'email' => 'required|email',
                     'password' => 'required',
+                ],
+                [
+                    'email.required' => 'Email wajib diisi.',
+                    'email.email' => 'Format email tidak valid.',
+                    'password.required' => 'Password wajib diisi.',
                 ]
             );
 
-$data =[
-    'email' => $request->email_or_phone,
-    'password' => $request->password
-];
-            $response = Http::asForm()->post('http://localhost/RAIN/public/api/signin', $data);
-            
-            if ($response->successful()) {
-                // Anda bisa menangani token atau data respons API di sini, misalnya menyimpan token session
-                // Misalnya jika API mengembalikan token JWT, Anda bisa menyimpannya di session
-                session(['api_token' => $response->json('token')]); // Contoh menyimpan token
-    
-                // Redirect ke dashboard setelah login berhasil
-                return redirect()->route('dashboard');
-            } else {
-                // Menangani kesalahan jika login gagal
-                return redirect()->back()->withErrors('Login gagal. Periksa email/telepon atau password.');
+            // Cek apakah data ada di tabel `users`
+            $user = \App\Models\User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return redirect()->back()->withErrors('Email tidak ditemukan.');
             }
-            
 
+            // Verifikasi password
+            if (!Hash::check($request->password, $user->password)) {
+                return redirect()->back()->withErrors('Password salah.');
+            }
+
+            // Simpan data user ke session
+            Auth::login($user);
+
+
+            // Redirect ke dashboard
             return redirect()->route('dashboard');
-
         } catch (\Throwable $error) {
-            //throw $error;
-            return redirect()->back()->withErrors($error->getMessage());
+            return redirect()->back()->withErrors('Terjadi kesalahan: ' . $error->getMessage());
         }
     }
-
-   
 }
