@@ -19,6 +19,8 @@ class SigninController extends Controller
 
     public function validateCredentials(Request $request)
     {
+
+        dd($request->all());
         try {
             // Validasi input
             $validated = $request->validate(

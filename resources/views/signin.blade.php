@@ -25,10 +25,10 @@
 
 <body>
 
-    <!-- bagian form signin mahasiswa -->
+    <!-- student and company signin form container -->
     <div class="form-container">
 
-        <!-- bagian gambar ilustrasi form signin mahasiswa -->
+        <!-- signin form image ilustrations -->
         <div class="img-container shadow-lg">
             <img src="{{ asset('storage/2d-logo.png') }}" class="form-ilustration" alt="Login RAIN">
             <img src="{{ asset('storage/svg/Scribble-6.svg') }}" class="top-ilustration-1" alt="">
@@ -37,12 +37,12 @@
             <img src="{{ asset('storage/svg/Spiral-1.svg') }}" class="right-bottom-ilustration-1" alt="">
         </div>
 
-        <!-- bagian form input mahasiswa -->
+        <!-- student and company signin form -->
         <form action="{{ route('validate-credentials') }}" method="POST">
             <div>
                 <h1>Dapatkan lowongan dan kandidat magang yang sesuai!</h1>
                 <div>
-                    <label for="email-or-phone">Masukan Email</label>
+                    <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
                         <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
@@ -65,13 +65,13 @@
                     <a href="{{ route('forget-password') }}">Lupa password?</a>
                 </div>
                 @csrf
-                <button type="submit" name="masuk">Masuk</button>
+                <button type="submit">Masuk</button>
             </div>
         </form>
 
     </div>
 
-    <!-- signin js -->
+    <!-- show password script -->
     <script defer src="{{ asset('js/show-password.js') }}"></script>
 </body>
 

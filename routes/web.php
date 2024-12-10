@@ -65,7 +65,7 @@ Route::redirect('/index', '/', 302);
  * Route ke halaman signin mahasiswa dan perusahaan
  */
 Route::get('/signin', [SigninController::class, 'index'])->name('signin');
-Route::post('/signin', [SigninController::class, 'signin'])->name('validate-credentials');
+Route::post('/signin', [SigninController::class, 'validateCredentials'])->name('validate-credentials');
 
 /**
  * Route ke halaman dashboard mahasiswa, perusahaan dan admin
