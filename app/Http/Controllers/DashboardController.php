@@ -44,9 +44,9 @@ class DashboardController extends Controller
     }
 
     /**
-     * Method untuk me-render halaman daftar pelamar perusahaan
+     * Method untuk me-render halaman daftar pelamar lowongan perusahaan
      */
-    public function companyProposalListPage() {
+    public function companyApplicantPage() {
         return response()->view('company.daftar-pelamar', [
             'role' => 'company'
         ]);

@@ -55,4 +55,11 @@ class AccountController extends Controller
     public static function signout (Request $request){
         return "Signout";
     }
+
+    /**
+     * Mehot untuk mem-proses logika hapus akun mahasiswa dan perusahaan
+     */
+    public function deleteAccount(Request $request) {
+        
+    }
 }

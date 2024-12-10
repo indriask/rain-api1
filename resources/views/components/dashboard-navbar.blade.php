@@ -26,7 +26,7 @@
                             class="bi bi-window me-1"></i>
                         Kelola Lowongan</div>
                 </a>
-                <a href="{{ route('company-proposal-list') }}" class="underline-none">
+                <a href="{{ route('company-applicant-list') }}" class="underline-none">
                     <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
                             class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
                 </a>
@@ -44,11 +44,11 @@
                       <i class="bi bi-caret-down-square position-relative" style="right: 4px;"></i>
                     </button>
                     <ul class="dropdown-menu mt-1">
-                      <li><a class="dropdown-item" href="{{ route('admin-manage-student') }}" style="font-size: .9rem;">
+                      <li><a class="dropdown-item" href="{{ route('admin-manage-user-student') }}" style="font-size: .9rem;">
                         <i class="bi bi-backpack"></i>
                         Kelola Akun Mahasiswa</a>
                     </li>
-                      <li><a class="dropdown-item" href="{{ route('admin-manage-company') }}" style="font-size: .9rem;">
+                      <li><a class="dropdown-item" href="{{ route('admin-manage-user-company') }}" style="font-size: .9rem;">
                         <i class="bi bi-building"></i>
                         Kelola Akun Perusahaan</a>
                     </li>

@@ -64,7 +64,11 @@
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="" id="">
-                            <option>Pilih Jurusan</option>
+                            <option>Pilih jurusan</option>
+                            <option value="Manajemen & Bisnis">Manajemen & Bisnis</option>
+                            <option value="Teknik Elektro">Teknik Elektro</option>
+                            <option value="Teknik Informatika">Teknik Informatika</option>
+                            <option value="Teknik Mesin">Teknik Mesin</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
@@ -209,7 +213,7 @@
                 class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
                 {{-- vacancy apply form input --}}
-                <form id="vacancy-apply-form" action="{{ route('student-applied-proposal') }}" method="POST"
+                <form id="vacancy-apply-form" action="{{ route('api-student-apply-vacancy') }}" method="POST"
                     class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>

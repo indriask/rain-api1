@@ -28,14 +28,13 @@
     <div class="form-container">
 
         {{-- form halaman signup mahasisswa --}}
-        <form action="{{ route('do-student-signup') }}" method="POST">
-            @csrf
+        <form action="{{ route('api-create-student-account') }}" method="POST">
             @csrf
             <div>
-                
-        @if($errors->any())
-        {{ $errors->first() }}
-    @endif
+
+                @if ($errors->any())
+                    {{ $errors->first() }}
+                @endif
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>

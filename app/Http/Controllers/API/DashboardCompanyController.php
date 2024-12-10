@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class DashboardCompanyController extends Controller
@@ -9,28 +10,20 @@ class DashboardCompanyController extends Controller
     /**
      * Method untuk mem-proses logika tambah lowongan
      */
-    public function tambahLowongan(Request $request) {
-
-    }
+    public function tambahLowongan(Request $request) {}
 
     /**
      * Method untuk mem-proses logika edit lowongan
      */
-    public function editVacancy(Request $request) {
-
-    }
+    public function editVacancy(Request $request) {}
 
     /**
      * Method untuk mem-proses logika penghapusan lamaran
      */
-    public function deleteApplicant(Request $request) {
-
-    }
+    public function deleteApplicant(Request $request) {}
 
     /**
      * Method untuk mem-proses logika perbarui status pelamar
      */
-    public function updateStatusApplicant(Request $request) {
-        
-    }
+    public function updateStatusApplicant(Request $request) {}
 }

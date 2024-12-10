@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
-use App\Mail\ResetPassword;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
-
 
 class ForgetPasswordController extends Controller
 {
-    public function index()
-    {
-        return response()->view('forget-password');
-    }
-
+    /**
+     * Method untuk mem-proses logika pengiriman email reset link
+     */
     public function sendEmail(Request $request)
     {
         $request->validate([
@@ -32,6 +28,9 @@ class ForgetPasswordController extends Controller
         return back()->withErrors(['email' => __($status)]);
     }
 
+    /**
+     * Method untuk menampilkan halaman form reset password
+     */
     public function formResetPassword($token, $email)
     {
         $user = User::where('email', $email)->first();
@@ -43,6 +42,9 @@ class ForgetPasswordController extends Controller
         return view('reset', ['token' => $token, 'email' => $email]);
     }
 
+    /**
+     * Method untuk mem-proses logika update password user
+     */
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -65,4 +67,3 @@ class ForgetPasswordController extends Controller
         return back()->withErrors(['email' => __($status)]);
     }
 }
-

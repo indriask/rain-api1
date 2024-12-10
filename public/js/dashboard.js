@@ -153,13 +153,12 @@ function showStudentVacancyStatus(id) {
 }
 
 function getApplyStatusInfo(id) {
-    // do fetch to database first
-
-    fetch(`/dashboard/mahasiswa/list/lamaran/status/lamaran/${id}`, {
-        mthod: "GET",
+    fetch("/api/dashboard/mahasiswa/list/lamaran/status/lamaran", {
+        method: "POST",
         headers: {
-            "X-CSRF-TOKEN": window.laravel.csrf_token
-        },
+            "X-CSRF-TOKEN": window.laravel.csrf_token,
+            "Content-Type": "application/json"
+        }
     })
         .then(response => response.json())
         .then(data => {
@@ -181,12 +180,11 @@ function getApplyStatusInfo(id) {
 }
 
 function getInterviewStatusInfo(id) {
-    // do fetch to database first
-
-    fetch(`/dashboard/mahasiswa/list/lamaran/status/wawancara/${id}`, {
-        mthod: "GET",
+    fetch(`/api/dashboard/mahasiswa/list/lamaran/status/wawancara/`, {
+        method: "POST",
         headers: {
-            "X-CSRF-TOKEN": window.laravel.csrf_token
+            "X-CSRF-TOKEN": window.laravel.csrf_token,
+            "Content-Type": "application/json"
         },
     })
         .then(response => response.json())
@@ -839,7 +837,7 @@ function showAdminManageVacancyNotification(message, image) {
 }
 
 function showAdminManageVacancyVerifyNotification(message, image) {
-    if(adminManageVacancyVerifyNotification.classList.contains("d-block")) {
+    if (adminManageVacancyVerifyNotification.classList.contains("d-block")) {
         adminManageVacancyVerifyNotification.classList.remove("d-block");
         adminManageVacancyVerifyNotification.classList.add("d-none");
 
@@ -883,7 +881,7 @@ function showAdminManageVacancyVerifyNotification(message, image) {
 }
 
 function showAdminManageVacancyVerify(id) {
-    if(adminManageVacancyVerify.classList.contains("d-block")) {
+    if (adminManageVacancyVerify.classList.contains("d-block")) {
         adminManageVacancyVerify.classList.remove("d-block");
         adminManageVacancyVerify.classList.add("d-none");
         return;

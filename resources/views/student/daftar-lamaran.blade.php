@@ -57,13 +57,10 @@
                     <div class="select-container">
                         <select name="" id="">
                             <option>Pilih jurusan</option>
-                            <option>teknik informatika</option>
-                            <option>teknik elektro</option>
-                            <option>teknik mesin</option>
-                            <option>teknologi rekayasa elektronik</option>
-                            <option>teknologi rekayasa rekontruksi perkapalan</option>
-                            <option>teknologi rekayasa pengelasan dan fabrikasi</option>
-                            <option>tekn</option>
+                            <option value="Manajemen & Bisnis">Manajemen & Bisnis</option>
+                            <option value="Teknik Elektro">Teknik Elektro</option>
+                            <option value="Teknik Informatika">Teknik Informatika</option>
+                            <option value="Teknik Mesin">Teknik Mesin</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>

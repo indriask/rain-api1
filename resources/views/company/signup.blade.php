@@ -27,7 +27,7 @@
     <!-- wrapper form dan gambar ilustrasi signup perusahaan -->
     <div class="form-container">
         {{-- form halaman signup perusahaan --}}
-        <form action="{{ route('do-company-signup') }}" method="POST">
+        <form action="{{ route('api-create-company-account') }}" method="POST">
             <div>
                 <h1>Daftarkan perusahaan anda!</h1>
                 <div>
