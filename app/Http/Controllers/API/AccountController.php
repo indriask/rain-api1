@@ -8,7 +8,6 @@ use App\Http\Controllers\Utils\ResponseController as Response;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\UserRole;
 
 class AccountController extends Controller
 {
