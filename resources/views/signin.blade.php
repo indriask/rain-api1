@@ -25,10 +25,10 @@
 
 <body>
 
-    <!-- student and company signin form container -->
+    <!-- container form signin mahasiswa dan perusahaan -->
     <div class="form-container">
 
-        <!-- signin form image ilustrations -->
+        <!-- gambar ilustrasi form signin -->
         <div class="img-container shadow-lg">
             <img src="{{ asset('storage/2d-logo.png') }}" class="form-ilustration" alt="Login RAIN">
             <img src="{{ asset('storage/svg/Scribble-6.svg') }}" class="top-ilustration-1" alt="">
@@ -37,8 +37,8 @@
             <img src="{{ asset('storage/svg/Spiral-1.svg') }}" class="right-bottom-ilustration-1" alt="">
         </div>
 
-        <!-- student and company signin form -->
-        <form action="{{ route('validate-credentials') }}" method="POST">
+        <!-- form signin untuk mahasiswa dan perusahaan -->
+        <form action="{{ route('api-validate-signin') }}" method="POST">
             <div>
                 <h1>Dapatkan lowongan dan kandidat magang yang sesuai!</h1>
                 <div>
@@ -52,12 +52,10 @@
                     <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
                         <input type="password" name="password" id="password" required>
-                        <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
-                        <!-- new code end -->
                     </div>
                 </div>
                 <div class="form-option">
@@ -71,7 +69,7 @@
 
     </div>
 
-    <!-- show password script -->
+    <!-- script js show password -->
     <script defer src="{{ asset('js/show-password.js') }}"></script>
 </body>
 

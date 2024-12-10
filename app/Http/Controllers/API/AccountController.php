@@ -12,6 +12,9 @@ use App\Models\UserRole;
 
 class AccountController extends Controller
 {
+    /**
+     * Method untuk mem-proses logika signin mahasiswa dan perusahaan
+     */
     public static function signin (Request $request){
         try {
             //Memvalidasi request apakah email dan password sudah diisi
@@ -42,11 +45,14 @@ class AccountController extends Controller
     }
         
 
-    public static function signup (Request $request){
-        // $user = User::find(1);
-        Response::send(UserRole::find(2)->users);
-    }
+    // public static function signup (Request $request){
+    //     $user = User::find(1);
+    //     Response::send(UserRole::find(2)->users);
+    // }
 
+    /**
+     * Method untuk mem-proses logika signout mahasiswa, perusahaan dan admin
+     */
     public static function signout (Request $request){
         return "Signout";
     }
