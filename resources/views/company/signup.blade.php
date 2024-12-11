@@ -27,7 +27,7 @@
     <!-- wrapper form dan gambar ilustrasi signup perusahaan -->
     <div class="form-container">
         {{-- form halaman signup perusahaan --}}
-        <form action="{{ route('api-create-company-account') }}" method="POST">
+        <form action="{{ route('api-create-company-account') }}" method="POST" enctype="multipart/form-data">
             <div>
                 <h1>Daftarkan perusahaan anda!</h1>
                 <div>
@@ -45,38 +45,48 @@
                     </div>
                 </div>
                 <div>
-                    <label for="kata-sandi">Kata Sandi</label>
+                    <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="kata-sandi" id="kata-sandi" required>
-                        <!-- new code start -->
+                        <input type="password" name="password" id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
-                        <!-- new code end -->
                     </div>
                 </div>
                 <div>
-                    <label for="konfirmasi-kata-sandi">Masukan Ulang Sandi</label>
+                    <label for="password_confirmation">Masukan Ulang Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="konfirmas-kata-sandi" id="konfirmas-kata-sandi" required>
-                        <!-- new code start -->
+                        <input type="password" name="password_confirmation" id="password_confirmation" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
-                        <!-- new code end -->
                     </div>
                 </div>
                 <div class="input-wrapper">
-                    <label for="surat-kerjasama">
-                        <p>Mauskan Bukti Surat Kerjasama Dengan Polibatam</p>
+                    <p class="file-label">Mauskan Bukti Surat Kerjasama Dengan Polibatam</p>
+                    <label for="cooperation-file-input" id="cooperation-file-label" class="d-block">
                         <div class="box-surat d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-plus-square-fill"></i>
-                            Tambahkan PDF atau DOCS
+                            Tambahkan PDF atau DOCX
                         </div>
                     </label>
-                    <input class="form-control input-surat" type="file" name="profile-mahasiswa" id="surat-kerjasama">
+                    <input class="form-control input-surat" onchange="displayFile()" type="file"
+                        name="cooperation_file" id="cooperation-file-input">
+
+                    <div id="display-file-name-container" class="display-file d-none">
+                        <div class="d-flex m-0 align-items-center justify-content-between">
+                            <div class="m-0 d-flex align-items-center">
+                                <i id="display-file-icon" class="bi me-1" style="font-size: 1.3rem;"></i>
+                                <span id="display-file-name" class="display-file-name"></span>
+                            </div>
+                            <button class="border border-0 text-danger bg-transparent cursor-pointer" onclick="displayFile()" type="button">
+                                <i class="bi bi-trash" style="font-size: 1.1rem;"></i>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
                 <button type="submit" name="daftar">Daftar</button>
             </div>
@@ -94,6 +104,9 @@
 
     <!-- script js untuk melihat password -->
     <script defer src="{{ asset('js/show-password.js') }}"></script>
+    <script defer src="{{ asset('js/file.js') }}"></script>
+
+
 </body>
 
 </html>

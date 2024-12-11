@@ -116,7 +116,8 @@ button {
     margin-bottom: .7rem;
 }
 
-.form-container form>div label {
+.form-container form>div label,
+.file-label {
     display: block;
     color: var(--blue);
     font-weight: var(--fw-600);
@@ -135,6 +136,24 @@ button {
     border: 1px solid #ddd;
     outline: none;
     padding-right: 2rem;
+}
+
+.display-file {
+    width: 100%;
+    font-size: .95rem;
+    background-color: var(--white);
+    border-radius: 6px;
+    padding: .6rem;
+    border: 1px solid #ddd;
+}
+
+.display-file-name {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 350px;
+    display: block;
+    margin: 0;
 }
 
 .form-container  form > div .input-wrapper {

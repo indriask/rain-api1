@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type', 50)->nullable(true);
             $table->string('business_fields', 50)->nullable(true);
             $table->date('founded_date')->nullable(true);
+            $table->date('status_verified_at')->nullable(true);
 
             $table->foreign('id_profile')
                 ->references('id_profile')

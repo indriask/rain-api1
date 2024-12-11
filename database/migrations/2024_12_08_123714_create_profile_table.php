@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('profile', function (Blueprint $table) {
             $table->id('id_profile')->primary()->autoIncrement();
             $table->string('photo_profile', 255);
-            $table->string('first_name', 255);
-            $table->string('last_name', 255);
+            $table->string('first_name', 255)->nullable(true);
+            $table->string('last_name', 255)->nullable(true);
             $table->string('location', 255)->nullable(true);
             $table->string('postal_code', 20)->nullable(true);
             $table->string('city', 255)->nullable(true);

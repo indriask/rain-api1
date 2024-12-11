@@ -30,8 +30,8 @@ class StudentSignupController extends Controller
         $validated['name'] = explode(' ', $validated['name']);
 
         $validated['created_date'] = date('Y-m-d', time());
-        $first_name = $validated['name'][0] ?? '';
-        $last_name = $validated['name'][1] ?? '';
+        $first_name = $validated['name'][0] ?? null;
+        $last_name = $validated['name'][1] ?? null;
 
         // Simpan data ke database
         $user = User::create($validated);
