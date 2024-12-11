@@ -11,7 +11,7 @@ use App\Http\Controllers\api\ForgetPasswordController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\api\VerifyEmailController;
 
 /**
  * INFORMASI PENTING!!!!!
@@ -24,8 +24,8 @@ use App\Http\Controllers\DashboardController;
 
 Route::post('/signin', [AccountController::class, 'signin'])->name('api-validate-signin');
 
-Route::post('/mahasiswa/signup', [StudentSignupController::class, 'doSignup'])->name('api-create-student-account');
-Route::post('/perusahaan/signup', [CompanySignupController::class, 'doSignup'])->name('api-create-company-account');
+Route::post('/mahasiswa/signup', [StudentSignupController::class, 'signup'])->name('api-create-student-account');
+Route::post('/perusahaan/signup', [CompanySignupController::class, 'signup'])->name('api-create-company-account');
 
 Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
 Route::post('/search/company', [SearchController::class, 'searchPerusahaan']);
@@ -49,7 +49,7 @@ Route::post('/dashboard/mahasiswa/profile/delete/account', [AccountController::c
  * Route untuk system dashboard perusahaan
  */
 Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardCompanyController::class, 'addVacancy'])->name('api-add-vacancy-page');
-Route::post('/dashboard/perusahaan/kelola/lowongan/edit', [DashboardController::class, 'editVacancy'])->name('api-company-edit-vacancy');
+Route::post('/dashboard/perusahaan/kelola/lowongan/edit', [DashboardCompanyController::class, 'editVacancy'])->name('api-company-edit-vacancy');
 Route::post('/dashboard/perusahaan/daftar/pelamar/delete/pelamar', [DashboardCompanyController::class, 'deleteApplicant'])->name('api-company-delete-applicant');
 Route::post('/dashboard/perusahaan/perbarui/status', [DashboardCompanyController::class, 'updateStatusApplicant'])->name('api-company-update-status-applicant');
 Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])->name('api-company-edit-profile');
@@ -61,3 +61,6 @@ Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::
 Route::post('/dashboard/admin/kelola/lowongan/edit', [DashboardAdminController::class, 'editVacancy'])->name('api-admin-manage-vacnacy-edit');
 Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
 Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
+
+// Route untuk mengirim verifikasi email ke pendaftar
+Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');

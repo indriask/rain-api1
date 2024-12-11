@@ -11,4 +11,15 @@ class Student extends Model
 
     protected $table = 'student';
     protected $guarded = ['id'];
+    protected $primaryKey = 'nim';
+
+    protected $fillable = [
+        'id_profile',
+        'id_user',
+        'institute',
+        'study_program',
+        'major',
+        'skill'
+    ];
+    
 }

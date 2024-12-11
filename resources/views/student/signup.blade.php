@@ -35,11 +35,12 @@
                 @if ($errors->any())
                     {{ $errors->first() }}
                 @endif
+
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email-or-phone" id="email-or-phone" required>
+                        <input type="text" name="email" id="email" required>
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
@@ -51,28 +52,26 @@
                     </div>
                 </div>
                 <div>
-                    <label for="nim">Masukan Nama</label>
+                    <label for="nama">Masukan Nama</label>
                     <div class="input-wrapper">
-                        <input type="text" name="name" id="nim" required>
+                        <input type="text" name="name" id="nama" required>
                         <i class="bi bi-postcard"></i>
                     </div>
                 </div>
                 <div>
                     <label for="password">Kata Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="kata-sandi" id="kata-sandi" required>
-                        <!-- new code start -->
+                        <input type="password" name="password" id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
-                        <!-- new code end -->
                     </div>
                 </div>
                 <div>
                     <label for="password-confirmation">Masukan Ulang Sandi</label>
                     <div class="input-wrapper">
-                        <input type="password" name="konfirmas-kata-sandi" id="konfirmas-kata-sandi" required>
+                        <input type="password" name="password_confirmation" id="password_confirmation" required>
                         <!-- new code start -->
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -81,7 +80,7 @@
                         <!-- new code end -->
                     </div>
                 </div>
-                <button type="submit" name="daftar">Daftar</button>
+                <button type="submit">Daftar</button>
             </div>
         </form>
 

@@ -4,6 +4,8 @@ use App\Http\Controllers\api\DashboardStudentController;
 use App\Http\Controllers\api\ForgetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -76,3 +78,15 @@ Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'compan
 Route::get('/dashbord/admin/kelola/lowongan', [DashboardController::class, 'adminManageVacancyPage'])->name('admin-manage-vacancy');
 Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])->name('admin-manage-user-student');
 Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserPerusahaan'])->name('admin-manage-user-company');
+
+// Routing untuk halaman verifikasi email yang di daftarkan
+Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/test', function(Request $request) {
+    dd($request->session()->all());
+});
+
+Route::get('/clear-session', function (Request $request) {
+    $request->session()->flush();
+});

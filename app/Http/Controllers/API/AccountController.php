@@ -19,36 +19,26 @@ class AccountController extends Controller
             //Memvalidasi request apakah email dan password sudah diisi
             $validated = $request->validate(
                 [
-                    'email' => 'required|string|email|unique',
-                    'password' => 'required',
+                    'email' => 'required|string|email:dns|present',
+                    'password' => 'required|string|present',
                 ]
             );
 
             //Mencari data dalam database sesuai request apakah ada atau tidak
-            if(Auth::attempt(['email' => $request->email , 'password' => $request->password])){
-                // Check if  Role ID is correct too
-                $user = User::where('email' , $request->email)->first();
-                Auth::login($user);
-                $data = [
-                    'email' => $user->email
-                ];
-                Response::send($data);
-            } else{
-                Response::badRequest('Login gagal harap check Email atau Password Anda');
-            }
+            if(Auth::attempt($validated)){
+                $request->session()->regenerate(true);
+                $request->session()->regenerateToken();
 
+                return redirect()->intended('dashboard');
+            }
+            
+            return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda']);
         } catch (\Throwable $error) {
             //throw $error;
-            Response::badRequest($error->getMessage());
+            return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda']);
         }
     }
         
-
-    // public static function signup (Request $request){
-    //     $user = User::find(1);
-    //     Response::send(UserRole::find(2)->users);
-    // }
-
     /**
      * Method untuk mem-proses logika signout mahasiswa, perusahaan dan admin
      */

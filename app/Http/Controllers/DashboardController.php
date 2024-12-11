@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -86,5 +87,17 @@ class DashboardController extends Controller
         return response()->view('admin.kelola-perusahaan', [
             'role' => 'admin'
         ]);
+    }
+
+     // Method untuk menampilkan halaman notifikasi email verifikasi sudah terkirim
+    public function verifyRegisteredEmailPage() {
+        return response()->view('auth.verify-email');
+    }
+
+    // Method untuk melakukan verifikasi email user
+    public function verifyRegisteredEmail(EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return redirect()->route('home');
     }
 }
