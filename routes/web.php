@@ -48,8 +48,8 @@ Route::redirect('/index', '/', 302);
 
 // Routing ke halaman signin mahasiswa, perusahaan dan admin
 Route::get('/signin', [IndexController::class, 'signinPage'])
-    ->name('signin')
-    
+    ->name('signin');
+
 Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])
     ->name('admin-singin');
 
