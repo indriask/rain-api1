@@ -8,12 +8,11 @@ use App\Http\Controllers\api\DashboardAdminController;
 use App\Http\Controllers\api\DashboardCompanyController;
 use App\Http\Controllers\api\DashboardStudentController;
 use App\Http\Controllers\api\ForgetPasswordController;
+use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
-use App\Http\Controllers\ResetPasswordController;
-use Illuminate\Http\Request;
 
 /**
  * INFORMASI PENTING!!!!!
@@ -23,6 +22,22 @@ use Illuminate\Http\Request;
  * 
  * /signin => /api/signin 
  */
+
+
+/**
+ * INFORMASI PENTING!!! HARAP DIBACA!!
+ * 
+ * JIKA INGIN MEMBUAT LOGIKA UNTUK MEM-PROSES DATA REQUEST, DIHARAPKAN MENGGUNAKAN
+ * CONTROLLER YANG SUDAH DISIPKAN, MASING MASING CONTROLLER MEMPUNYAI KEGUNAAAN NYA 
+ * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
+ * 
+ * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
+ * 1. web.php => hanya digunakan untuk menampilkan halaman view website
+ * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
+ * 
+ */
+
+
 
 Route::post('/signin', [AccountController::class, 'signin'])->name('api-validate-signin');
 

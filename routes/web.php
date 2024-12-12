@@ -1,45 +1,23 @@
 <?php
 
+use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
-use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 /**
- * Penjelasan singkat mengenai beberapa controller
- * A
- * 1. AdminSigninController => digunakan untuk mem-proses data signin admin dan mengarahkan
- *                             user ke halaman signin perusahaan
+ * INFORMASI PENTING!!! HARAP DIBACA!!
  * 
- * C
- * 1. CompanyProfileController => digunakan untuk mem-proses data profile perusahaan
- * 2. CompanySignupController => digunakan untuk mem-proses data signup perusahaan dan mengarahkan 
- *                               user ke halaman signup perusahaan
+ * JIKA INGIN MEMBUAT LOGIKA UNTUK MEM-PROSES DATA REQUEST, DIHARAPKAN MENGGUNAKAN
+ * CONTROLLER YANG SUDAH DISIPKAN, MASING MASING CONTROLLER MEMPUNYAI KEGUNAAAN NYA 
+ * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
  * 
- * D
- * 1. DashboardCompanyProfile => digunakan untuk mem-proses data dashboard perusahaan
- * 2. DashboardController => hanya digunakan untuk mengarahkan user ke halaman tertentu
- * 3. DashboardStudentController => digunakan untuk mem-proses data dashboard student
- * 4. DeleteAccountController => digunakan untuk mem-proses penghapusan akun mahasiswa dan perusahaan
+ * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
+ * 1. web.php => hanya digunakan untuk menampilkan halaman view website
+ * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
  * 
- * F
- * 1. ForgetPasswordController => digunakan untuk mem-proses data forget password
- * 
- * L
- * 1. LogoutController => digunakan untuk mem-proses data logout mahasiswa, perusahaan dan admin
- * 
- * S
- * 1. StudentSignupController => digunakan untuk mem-proses data signup mahasiswa
- * 2. StudentProfileController => digunakan untuk mem-proses data profile mahasiswa
- * 3. SigninController => digunakan untuk mem-proses data signin mahasiswa dan perusahaan
- * 
- * W
- * 1. IndexController => hanya digunakan untuk mengarahkan user pada halaman branding RAIN
  */
-
-
 
 
 // Routing ke halaman branding RAIN
