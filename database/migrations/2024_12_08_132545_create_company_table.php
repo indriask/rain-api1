@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->string('type', 50)->nullable(true);
             $table->string('business_fields', 50)->nullable(true);
+            $table->string('cooperation_file', 255);
             $table->date('founded_date')->nullable(true);
             $table->date('status_verified_at')->nullable(true);
 

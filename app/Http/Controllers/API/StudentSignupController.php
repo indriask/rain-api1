@@ -17,44 +17,46 @@ class StudentSignupController extends Controller
      */
     public function signup(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email:dns|present',
-            'name' => 'required|string|max:255|present',
-            'password' => 'required|string|min:8|confirmed|present',
-            'nim' => 'required|min:9|max:10'
-        ]);
+        try {
+            $validated = $request->validate([
+                'email' => 'required|email:dns|present',
+                'name' => 'required|string|max:255|present',
+                'password' => 'required|string|min:8|confirmed|present',
+                'nim' => 'required|min:9|max:10'
+            ]);
 
-        // Hash password
-        $validated['password'] = bcrypt($validated['password']);
-        $validated['role'] = 'student';
-        $validated['name'] = explode(' ', $validated['name']);
+            // Hash password
+            $validated['password'] = bcrypt($validated['password']);
+            $validated['role'] = 'student';
+            $validated['name'] = explode(' ', $validated['name']);
 
-        $validated['created_date'] = date('Y-m-d', time());
-        $first_name = $validated['name'][0] ?? null;
-        $last_name = $validated['name'][1] ?? null;
+            $validated['created_date'] = date('Y-m-d', time());
+            $first_name = $validated['name'][0] ?? null;
+            $last_name = $validated['name'][1] ?? null;
 
-        // Simpan data ke database
-        $user = User::create($validated);
+            // Simpan data ke database
+            $user = User::create($validated);
 
-        $profile = Profile::create([
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'photo_profile' => 'http://localhost:8000/storage/profile'
-        ]);
-        
-        $student = Student::create([
-            'nim' => $validated['nim'], 
-            'id_user' => $user->id_user, 
-            'id_profile' => $profile->id_profile
-        ]);
+            $profile = Profile::create([
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'photo_profile' => 'http://localhost:8000/storage/profile.jpg'
+            ]);
 
-        // mark user as authenticated but not verified
-        Auth::login($user);
+            $student = Student::create([
+                'nim' => $validated['nim'],
+                'id_user' => $user->id_user,
+                'id_profile' => $profile->id_profile
+            ]);
 
-        event(new Registered($user));
-        return redirect()->route('verification.notice');
+            // mark user as authenticated but not verified
+            Auth::login($user);
 
-        // Redirect ke halaman login dengan pesan sukses
-        // return redirect()->route('')->with('success', 'Berhasil registrasi, silakan login!');
+            event(new Registered($user));
+            return redirect()->route('verification.notice');
+        } catch (\Throwable $e) {
+            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+                ->onlyInput('email', 'nim', 'nama');
+        }
     }
 }

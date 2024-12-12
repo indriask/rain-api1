@@ -24,6 +24,20 @@
 </head>
 
 <body>
+
+    {{-- notifikai error signup --}}
+    @error('error')
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-danger d-flex align-items-center mx-auto d-block mt-2 gap-1" style="width: fit-content;"
+                role="alert">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div style="font-size: .95rem;">
+                    {{ $message }}
+                </div>
+            </div>
+        </div>
+    @enderror
+
     <!-- wrapper form dan gambar ilustrasi signup mahasiswa -->
     <div class="form-container">
 
@@ -31,30 +45,25 @@
         <form action="{{ route('api-create-student-account') }}" method="POST">
             @csrf
             <div>
-
-                @if ($errors->any())
-                    {{ $errors->first() }}
-                @endif
-
                 <h1>Daftarkan diri anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required>
+                        <input type="text" name="email" id="email" required value="{{ old('email', null) }}">
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
                 <div>
                     <label for="nim">Masukan NIM</label>
                     <div class="input-wrapper">
-                        <input type="text" name="nim" id="nim" required>
+                        <input type="text" name="nim" id="nim" required value="{{ old('nim', null) }}">
                         <i class="bi bi-postcard"></i>
                     </div>
                 </div>
                 <div>
                     <label for="nama">Masukan Nama</label>
                     <div class="input-wrapper">
-                        <input type="text" name="name" id="nama" required>
+                        <input type="text" name="name" id="nama" required value="{{ old('name', null) }}">
                         <i class="bi bi-postcard"></i>
                     </div>
                 </div>

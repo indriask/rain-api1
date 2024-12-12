@@ -56,7 +56,8 @@ Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
 Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])->name('admin-singin');
 
 // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')
+    ->middleware(['auth', 'verified']);
 
 
 // Routing ke halaman forget password mahasiswa dan perusahaan
@@ -83,7 +84,7 @@ Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class
 Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get('/test', function(Request $request) {
+Route::get('/test', function (Request $request) {
     dd($request->session()->all());
 });
 

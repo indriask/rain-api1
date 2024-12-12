@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Utils\ResponseController as Response;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class AccountController extends Controller
 {
@@ -20,12 +19,12 @@ class AccountController extends Controller
             $validated = $request->validate(
                 [
                     'email' => 'required|string|email:dns|present',
-                    'password' => 'required|string|present',
+                    'password' => 'required|string|present|min:8',
                 ]
             );
 
             //Mencari data dalam database sesuai request apakah ada atau tidak
-            if(Auth::attempt($validated)){
+            if(Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])){
                 $request->session()->regenerate(true);
                 $request->session()->regenerateToken();
 
@@ -35,7 +34,8 @@ class AccountController extends Controller
             return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda']);
         } catch (\Throwable $error) {
             //throw $error;
-            return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda']);
+            return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda'])
+                ->onlyInput('email');
         }
     }
         

@@ -27,7 +27,9 @@ Route::post('/signin', [AccountController::class, 'signin'])->name('api-validate
 Route::post('/mahasiswa/signup', [StudentSignupController::class, 'signup'])->name('api-create-student-account');
 Route::post('/perusahaan/signup', [CompanySignupController::class, 'signup'])->name('api-create-company-account');
 
-Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
+Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout')
+    ->middleware(['auth', 'verified']);
+    
 Route::post('/search/company', [SearchController::class, 'searchPerusahaan']);
 
 /**

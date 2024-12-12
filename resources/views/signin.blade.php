@@ -25,6 +25,19 @@
 
 <body>
 
+    {{-- notifikasi error signin --}}
+    @error('error')
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-danger d-flex align-items-center mx-auto d-block mt-2 gap-1" style="width: fit-content;"
+                role="alert">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div style="font-size: .95rem;">
+                    {{ $message }}
+                </div>
+            </div>
+        </div>
+    @enderror
+
     <!-- container form signin mahasiswa dan perusahaan -->
     <div class="form-container">
 
@@ -44,7 +57,7 @@
                 <div>
                     <label for="email">Masukan Email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required>
+                        <input type="text" name="email" id="email" required value="{{ old('email') }}">
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
