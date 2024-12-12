@@ -12,6 +12,8 @@ use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
+use App\Http\Controllers\ResetPasswordController;
+use Illuminate\Http\Request;
 
 /**
  * INFORMASI PENTING!!!!!
@@ -29,7 +31,7 @@ Route::post('/perusahaan/signup', [CompanySignupController::class, 'signup'])->n
 
 Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout')
     ->middleware(['auth', 'verified']);
-    
+
 Route::post('/search/company', [SearchController::class, 'searchPerusahaan']);
 
 /**
@@ -66,3 +68,10 @@ Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController
 
 // Route untuk mengirim verifikasi email ke pendaftar
 Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Route untuk system forgot password
+Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
+    ->middleware('guest')->name('password.email');
+
+Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
+    ->middleware('guest')->name('password.update');

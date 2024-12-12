@@ -25,6 +25,20 @@
 
 <body>
 
+    {{-- notifikasi status reset password --}}
+    @if (session('status'))
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-success d-flex align-items-center mx-auto d-block mt-2 gap-1"
+                style="width: fit-content;" role="alert">
+                <i class="bi bi-check-circle-fill"></i>
+                <div style="font-size: .95rem;">
+                    {{ session('status') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     {{-- notifikasi error signin --}}
     @error('error')
         <div class="position-absolute top-0 end-0 start-0 z-1">
@@ -73,7 +87,7 @@
                 </div>
                 <div class="form-option">
                     <p>Tidak punya akun? <a href="{{ route('student-signup') }}">Daftar</a></p>
-                    <a href="{{ route('forget-password') }}">Lupa password?</a>
+                    <a href="{{ route('password.request') }}">Lupa password?</a>
                 </div>
                 @csrf
                 <button type="submit">Masuk</button>

@@ -26,11 +26,31 @@
 
 <body>
 
+    @if (session('status'))
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-success d-flex align-items-center mx-auto mt-4" style="width: fit-content;"
+                role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>{{ session('status') }}</div>
+            </div>
+        </div>
+    @endif
+
+    @error('email')
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-danger d-flex align-items-center mx-auto mt-4" style="width: fit-content;"
+                role="alert">
+                <i class="bi bi-x-circle-fill me-2"></i>
+                <div>{{ $message }}</div>
+            </div>
+        </div>
+    @enderror
+
     <!-- bagian form forget password mahasiswa -->
     <div class="form-container">
 
         <!-- form input forget password -->
-        <form action="{{route('forget-password-post')}}" method="POST">
+        <form action="{{ route('password.email') }}" method="POST">
             @csrf
             <div>
                 <div class="form-title">
@@ -40,16 +60,10 @@
                 <div class="form-input">
                     <label for="email">Masukan email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email" id="email">
+                        <input type="text" name="email" id="email" value="{{ old('email') }}">
                         <i class="bi bi-envelope"></i>
                     </div>
                 </div>
-
-                <!-- bagian text konfimasik yang akan muncul -->
-                <!-- ketika  mahasiswa sudah me-kelik tombol kirim -->
-                <!-- <div class="confirmation-text">
-                    Email sudah terkirim, silahkan cek email anda!
-                </div> -->
 
                 <button type="submit" name="daftar">Kirim</button>
                 <div class="form-email-ilustration">

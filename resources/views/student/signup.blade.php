@@ -64,7 +64,7 @@
                     <label for="nama">Masukan Nama</label>
                     <div class="input-wrapper">
                         <input type="text" name="name" id="nama" required value="{{ old('name', null) }}">
-                        <i class="bi bi-postcard"></i>
+                        <i class="bi bi-person-square"></i>
                     </div>
                 </div>
                 <div>

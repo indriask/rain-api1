@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\api\DashboardStudentController;
-use App\Http\Controllers\api\ForgetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,25 +42,21 @@ use Illuminate\Support\Facades\Route;
 
 
 
-
-
-
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::redirect('/index', '/', 302);
 
 // Routing ke halaman signin mahasiswa, perusahaan dan admin
-Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
-Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])->name('admin-singin');
+Route::get('/signin', [IndexController::class, 'signinPage'])
+    ->name('signin')
+    
+Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])
+    ->name('admin-singin');
 
 // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
     ->middleware(['auth', 'verified']);
-
-
-// Routing ke halaman forget password mahasiswa dan perusahaan
-Route::get('/forget-password', [IndexController::class, 'forgetPasswordPage'])->name('forget-password');
-Route::get("/password/reset/{token}/{email}", [ForgetPasswordController::class, "formResetPassword"])->name('password.reset');
 
 // Routing khusus role mahasiswa
 Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])->name('student-signup');
@@ -84,6 +78,20 @@ Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class
 Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
 
+// Routing untuk system forgot password
+Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])
+    ->middleware('guest')->name('password.request');
+
+Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])
+    ->middleware('guest')->name('password.reset');
+
+
+
+
+
+
+
+// Route untuk testing session
 Route::get('/test', function (Request $request) {
     dd($request->session()->all());
 });
