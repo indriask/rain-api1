@@ -25,6 +25,19 @@
 
 <body>
 
+    {{-- notifikasi email berhasil dikirim --}}
+    @if (session('message'))
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-success d-flex align-items-center mx-auto d-block mt-2 gap-1"
+                style="width: fit-content;" role="alert">
+                <i class="bi bi-"></i>
+                <div style="font-size: .95rem;">
+                    {{ session('message') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- notifikai error signup --}}
     @error('error')
         <div class="position-absolute top-0 end-0 start-0 z-1">

@@ -38,7 +38,7 @@
         </div>
 
         <!-- bagian form input mahasiswa -->
-        <form action="{{ route('admin-validate-credentials') }}" method="POST">
+        <form action="{{ route('api-admin-validate-signin') }}" method="POST">
             <div>
                 <h1>selamat datang admin RAIN!</h1>
                 <div>

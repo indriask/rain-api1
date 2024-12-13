@@ -98,6 +98,6 @@ class DashboardController extends Controller
     public function verifyRegisteredEmail(EmailVerificationRequest $request) {
         $request->fulfill();
 
-        return redirect()->route('home');
+        return redirect()->route('signin');
     }
 }
