@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         return response()->view('dashboard', [
-            'role' => 'student'
+            'role' => auth('web')->user()->role
         ]);
     }
 

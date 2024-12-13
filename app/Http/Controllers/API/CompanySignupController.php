@@ -59,7 +59,7 @@ class CompanySignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors([['error' => 'Signin gagal, harap check data yang anda masukan!']])
+            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
                 ->onlyInput('email', 'nib');
         }
     }

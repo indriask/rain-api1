@@ -114,7 +114,7 @@
                             </button>
                         </div>
                     </div>
-
+                    @csrf
                 </div>
                 <button type="submit" name="daftar">Daftar</button>
             </div>
