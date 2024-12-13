@@ -20,4 +20,19 @@ class Company extends Model
         'email_verified_at',
         'status_verified_at'
     ];
+
+    // method one-to-one pada company ke user
+    public function account() {
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
+    // method one-to-one pada company ke profile
+    public function profile() {
+        return $this->belongsTo(Profile::class, 'id_profile', 'id_profile');
+    }
+
+    // method one-to-many pada company ke vacnacy
+    public function vacancies() {
+        return $this->hasMany(Vacancy::class, 'nib', 'nib');
+    }
 }

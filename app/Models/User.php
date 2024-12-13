@@ -49,4 +49,19 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             'password' => 'hashed',
         ];
     }
+
+    // method one-to-one pada user ke student
+    public function student() {
+        return $this->hasOne(Student::class, 'id_user', 'id_user');
+    }
+
+    // method one-to-one pada user ke company
+    public function company() {
+        return $this->hasOne(Company::class, 'id_user', 'id_user');
+    }
+
+    // metod one-to-one pada user ke admin
+    public function admin() {
+        return $this->hasOne(Admin::class, 'id_user', 'id_user');
+    }
 }

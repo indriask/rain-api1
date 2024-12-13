@@ -21,5 +21,19 @@ class Student extends Model
         'major',
         'skill'
     ];
-    
+
+    // method one-to-one pada student ke user
+    public function account() {
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
+    // method one-to-one pada student ke profile
+    public function profile() {
+        return $this->belongsTo(Profile::class, 'id_profile', 'id_profile');
+    }
+
+    // method one-to-many pada student ke proposal
+    public function proposals() {
+        return $this->hasMany(Proposal::class, 'nim', 'nim');
+    }
 }

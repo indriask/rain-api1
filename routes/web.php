@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
  * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
  * 
  * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
- * 1. web.php => hanya digunakan untuk menampilkan halaman view website
+ * 1. web.php => hanya digunakan untuk menampilkan data atau halaman
  * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
  * 
  */
