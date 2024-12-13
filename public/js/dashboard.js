@@ -24,7 +24,7 @@ const profileEditNotificationTitle = document.querySelector("#profile-edit-notif
 const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
 
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
-const logoutNotification = document.querySelector("#logout-notification");
+const logoutCard = document.querySelector("#logout-card");
 
 /**
  * Variable for company add vacancy
@@ -254,20 +254,39 @@ function processDeleteAccountRequest() {
 }
 
 function showLogoutCard() {
-    if (logoutNotification.classList.contains("d-block")) {
-        logoutNotification.classList.remove("d-block");
-        logoutNotification.classList.add("d-none");
+    if (logoutCard.classList.contains("d-block")) {
+        logoutCard.classList.remove("d-block");
+        logoutCard.classList.add("d-none");
 
         return;
     }
 
-    logoutNotification.classList.remove("d-none");
-    logoutNotification.classList.add("d-block");
+    logoutCard.classList.remove("d-none");
+    logoutCard.classList.add("d-block");
 }
 
 // do logout logic
 function processLogoutRequest() {
+    fetch('/api/signout', {
+        method: "POST",
+        headers: {
+            X_CSRF_TOKEN: window.laravel.csrf_token
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 302) {
+                document.querySelector("#logout-card-message").textContent = data.message;
+                document.querySelector("#logout-card-btn").remove();
+                document.querySelector("#logout-card-close-btn").remove();
 
+                setTimeout(() => window.location.href = `/index`, 500);
+            } else {
+                document.querySelector("#logout-card-message").textContent = data.message;
+                document.querySelector("#logout-card-btn").remove();
+                document.querySelector("#logout-card-close-btn").remove();
+            }
+        });
 }
 
 /**

@@ -26,6 +26,7 @@
 
 <body>
 
+    {{-- notifikasi berhasil mengirim email forgot password --}}
     @if (session('status'))
         <div class="position-absolute top-0 end-0 start-0 z-1">
             <div class="alert alert-success d-flex align-items-center mx-auto mt-4" style="width: fit-content;"
@@ -36,6 +37,7 @@
         </div>
     @endif
 
+    {{-- notifikasi gagal mengirim email forgot password --}}
     @error('email')
         <div class="position-absolute top-0 end-0 start-0 z-1">
             <div class="alert alert-danger d-flex align-items-center mx-auto mt-4" style="width: fit-content;"

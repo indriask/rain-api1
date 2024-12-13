@@ -25,11 +25,10 @@
 
 <body>
 
-
     {{-- navbar section start --}}
     <nav class="navbar fixed-top shadow p-2 bg-white">
         <div class="container p-0">
-            <div  style="cursor: pointer" onclick="window.location.href='{{ route('home') }}'">
+            <div style="cursor: pointer" onclick="window.location.href='{{ route('home') }}'">
                 <img src="{{ asset('storage/2d-logo.png') }}" class="rain-logo" alt="RAIN logo">
                 <span class="logo-title">RAIN</span>
             </div>
@@ -101,7 +100,8 @@
                     perusahaan dalam mencari talenta berkualitas di antara Mahasiswa Polibatam.</p>
             </div>
         </div>
-        <div class="container d-flex justify-content-center flex-wrap gap-5 position-relative" style="margin-top: 4.5rem;">
+        <div class="container d-flex justify-content-center flex-wrap gap-5 position-relative"
+            style="margin-top: 4.5rem;">
             <div class="feature-card position-relative bg-white">
                 <div class="feature-heading position-absolute rounded-pill text-center text-white start-0 end-0">
                     Pencarian Lowongan</div>

@@ -7,7 +7,6 @@ use App\Http\Controllers\api\CompanySignupController;
 use App\Http\Controllers\api\DashboardAdminController;
 use App\Http\Controllers\api\DashboardCompanyController;
 use App\Http\Controllers\api\DashboardStudentController;
-use App\Http\Controllers\api\ForgetPasswordController;
 use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
@@ -85,11 +84,9 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/search/company', [SearchController::class, 'searchPerusahaan']);
 
-// Route untuk mengirim verifikasi email ke pendaftar
-
 // Route untuk system forgot password
 Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
-    ->middleware('guest')->name('password.email');
+    ->name('password.email');
 
 Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
-    ->middleware('guest')->name('password.update');
+    ->name('password.update');
