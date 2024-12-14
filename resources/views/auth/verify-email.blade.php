@@ -11,6 +11,10 @@
 <body>
 
     <h1>We are sending an email verification, please check your inbox</h1>
+    <form action="{{ route('verification.send') }}" method="POST">
+        <button>Send email</button>
+        @csrf
+    </form>
 
 </body>
 

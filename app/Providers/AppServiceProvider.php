@@ -27,6 +27,5 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::component('logout-card', LogoutCard::class);
         Blade::component('dashboard-navbar', DashboardNavbar::class); 
-        Blade::component('add-vacancy', AddVacancy::class);  
     }
 }

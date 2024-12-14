@@ -2,18 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     /**
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
-    public function index()
+
+    public function index($id = 0)
     {
+        if(request()->hasHeader('x-get-data')) {
+            $vacancies = Vacancy::with('company.profile')->get();
+            return response()->json(['data' => $vacancies]);
+        }
+
+        if(request()->hasHeader('x-get-specific')) {
+            $vacancy = Vacancy::with('company.profile')->find($id);
+            return response()->json([
+                'data' => $vacancy,
+                'role' => auth('web')->user()->role
+            ]);
+        }
+    
+        $role = auth('web')->user()->role;
+        $user = auth('web')->user()->load("$role.profile");
+
         return response()->view('dashboard', [
-            'role' => auth('web')->user()->role
+            'role' => $role,
+            'user' => $user
         ]);
     }
 

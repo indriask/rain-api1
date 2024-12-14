@@ -40,7 +40,7 @@ class StudentSignupController extends Controller
             $profile = Profile::create([
                 'first_name' => $first_name,
                 'last_name' => $last_name,
-                'photo_profile' => 'http://localhost:8000/storage/profile.jpg'
+                'photo_profile' => '/default/profile.jpg'
             ]);
 
             $student = Student::create([

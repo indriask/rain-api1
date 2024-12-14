@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('company', function (Blueprint $table) {
-            $table->id('nib')->primary();
+            $table->string('nib')->primary();
             $table->unsignedBigInteger('id_profile');
             $table->unsignedBigInteger('id_user');
             $table->string('type', 50)->nullable(true);

@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\VacancyFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Vacancy extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = 'id_vacancy';
     protected $table = 'vacancy';
 
@@ -21,8 +25,15 @@ class Vacancy extends Model
         'major',
         'location',
         'description',
+        'date_created',
+        'date_ended',
         'quota'
     ];
+
+    // membuat instansiasi object baru dengan model vacancy
+    protected static function newFactory() {
+        return VacancyFactory::new();
+    }
 
     // method many-to-one pada vacancy ke company
     public function company() {

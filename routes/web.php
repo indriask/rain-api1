@@ -24,8 +24,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::redirect('/index', '/', 302);
 
-
-
 Route::middleware('guest')->group(function () {
     Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
     Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])->name('admin-singin');
@@ -34,10 +32,9 @@ Route::middleware('guest')->group(function () {
 });
 
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
     // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])->name('dashboard');
 
     // Routing khusus role mahasiswa
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])->name('student-proposal-list');
