@@ -31,7 +31,7 @@ class StudentSignupController extends Controller
             $validated['name'] = explode(' ', $validated['name']);
 
             $validated['created_at'] = date('Y-m-d', time());
-            $first_name = $validated['name'][0];
+            $first_name = $validated['name'][0] ?? '';
             $last_name = $validated['name'][1] ?? '';
             $validated['role'] = 1;
 
@@ -41,7 +41,7 @@ class StudentSignupController extends Controller
             $profile = Profile::create([
                 'first_name' => $first_name,
                 'last_name' => $last_name,
-                'photo_profile' => '/default/profile.jpg'
+                'photo_profile' => '/default/profile.png'
             ]);
 
             $student = Student::create([

@@ -5,42 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\Vacancy;
 use Clockwork\Request\RequestType;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use App\Models\Jurusan;
+use App\Models\Prodi;
+use App\Models\Lowongan;
 
 class DashboardController extends Controller
 {
+
+    public function getJurusan()
+    {
+        return response()->json(Jurusan::all());
+    }
+
+    public function getProdi($idJurusan)
+    {
+        return response()->json(Prodi::where('id_jurusan', $idJurusan)->get());
+    }
+
+    public function getLokasi()
+    {
+        $lokasi = Lowongan::select('lokasi')->distinct()->get(); // Ambil kolom 'lokasi' dan pastikan hanya yang unik
+
+        return response()->json($lokasi);
+    }
+
+    public function filterLowongan(Request $request)
+    {
+        $query = Lowongan::query();
+
+        if ($request->filled('mode_kerja')) {
+            $query->where('mode_kerja', 'like', '%' . $request->mode_kerja . '%');
+        }
+
+        if ($request->filled('lokasi')) {
+            $query->where('lokasi', 'like', '%' . $request->lokasi . '%');
+        }
+
+        if ($request->filled('search')) {
+            $query->where('nama_pekerjaan', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('jurusan')) {
+            $query->whereHas('jurusan', function ($q) use ($request) {
+                $q->where('id', $request->jurusan);
+            });
+        }
+
+        if ($request->filled('prodi')) {
+            $query->whereHas('prodis', function ($q) use ($request) {
+                $q->where('lowongan_prodi.prodi_id', $request->prodi); // Gunakan nama tabel pivot secara eksplisit
+            });
+        }
+
+        $lowongan = $query->with('jurusan', 'prodis')->get();
+
+        return response()->json($query->get());
+    }
+
+
     /**
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
-
     public function index($id = 0)
     {
-        if (request()->hasHeader('x-get-data')) {
-            $vacancies = Vacancy::with('company.profile')->get();
-            return response()->json(['data' => $vacancies]);
-        }
-
-        if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::with('company.profile')->find($id);
-            return response()->json([
-                'data' => $vacancy,
-                'role' => auth('web')->user()->role
-            ]);
-        }
-
-        $role = auth('web')->user()->role;
-        $user = auth('web')->user()->load("$role.profile");
-        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-
-        if (trim($fullName) === "") {
-            $fullName = "Username";
-        }
-
+        $lowongan = Lowongan::all();
         return response()->view('dashboard', [
-            'role' => $role,
-            'user' => $user,
-            'fullName' => $fullName
+            'role' => 'student',
+            'lowongan' => $lowongan,
         ]);
     }
+
 
     /**
      * Method untuk me-render halaman daftar lamaran mahasiswa

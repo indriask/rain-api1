@@ -20,5 +20,10 @@ class DatabaseSeeder extends Seeder
     {
         // Memanggil UsersTableSeeder untuk memasukkan data ke tabel users
         $this->call(UserRolesSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(JurusanSeeder::class);
+        $this->call(ProdiSeeder::class);
+        $this->call(LowonganSeeder::class);
+        $this->call(LowonganProdiSeeder::class);
     }
 }

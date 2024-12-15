@@ -38,12 +38,12 @@ class CompanySignupController extends Controller
             $user = User::create([
                 'email' => $validated['email'],
                 'password' => $validated['password'],
-                'role' => 'company',
+                'role' => 2,
                 'created_date' => date('Y-m-d', time())
             ]);
 
             $profile = Profile::create([
-                'photo_profile' => '/default/profile.jpg'
+                'photo_profile' => '/default/profile_company.jpg'
             ]);
 
             Company::create([
