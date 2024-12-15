@@ -30,9 +30,10 @@ class StudentSignupController extends Controller
             $validated['role'] = 'student';
             $validated['name'] = explode(' ', $validated['name']);
 
-            $validated['created_date'] = date('Y-m-d', time());
-            $first_name = $validated['name'][0] ?? null;
-            $last_name = $validated['name'][1] ?? null;
+            $validated['created_at'] = date('Y-m-d', time());
+            $first_name = $validated['name'][0];
+            $last_name = $validated['name'][1] ?? '';
+            $validated['role'] = 1;
 
             // Simpan data ke database
             $user = User::create($validated);
@@ -54,9 +55,9 @@ class StudentSignupController extends Controller
 
             event(new Registered($user));
             return redirect()->route('verification.notice');
-        } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
-                ->onlyInput('email', 'nim', 'nama');
+        }   catch (\Throwable $e) {
+            return response()->json(['message' => 'Error terjadi', 'error' => $e->getMessage()], 500);
+       
         }
     }
 }
