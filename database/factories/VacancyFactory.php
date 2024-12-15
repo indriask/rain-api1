@@ -21,7 +21,6 @@ class VacancyFactory extends Factory
     public function definition(): array
     {
         return [
-            'nib' => '4342401034',
             'applied' => fake()->numberBetween(5, 30),
             'title' => fake()->sentence(rand(1, 3)),
             'salary' => fake()->numberBetween(1000000, 6000000),
