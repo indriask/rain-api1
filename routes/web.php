@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Routing khusus role perusahaan
     Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])->name('company-applicant-list');
-    Route::get('/dashboard/perusahaan/kelola/lowongan', [DashboardController::class, 'companyManageVacancyPage'])->name('company-manage-vacancy');
+    Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])->name('company-manage-vacancy');
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])->name('company-profile');
 
     // Routing khusus role admin

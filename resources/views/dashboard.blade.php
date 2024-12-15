@@ -40,6 +40,18 @@
 
 <body onload="getDataOnLoad()">
 
+    {{-- notifikasi data tidak ditemukan atau kosong --}}
+    <div id="empty-data-list-notification" class="d-none position-absolute top-0 start-0 end-0 z-1 border border-black">
+        <div class="alert alert-warning alert-dismissible fade show mx-auto mt-4" role="alert"
+            style="width: fit-content; font-size: .9rem;">
+            <div class="d-flex align-items-center gap-1">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div id="empty-data-list-notification-title"></div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
     <div class="dashboard-layout">
 
         {{-- dashboard aside navigation --}}
@@ -53,8 +65,7 @@
                     <div class="d-flex align-items-center gap-1 mb-2">
                         <img src="http://localhost:8000/storage{{ $user->$role->profile->photo_profile }}"
                             alt="" class="profile-img rounded-circle shadow">
-                        <span
-                            class="profile-name">{{ "{$user->$role->profile->first_name} {$user->$role->profile->last_name}" }}</span>
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"

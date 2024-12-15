@@ -12,7 +12,8 @@ class DashboardCompanyController extends Controller
     /**
      * Method untuk mem-proses logika tambah lowongan
      */
-    public function addVacancy(Request $request) {
+    public function addVacancy(Request $request)
+    {
         try {
             $validated = $request->validate([
                 'salary' => ['required', 'present', 'integer', 'max:10000000'],
@@ -21,9 +22,9 @@ class DashboardCompanyController extends Controller
                 'location' => ['required', 'present', 'string', 'max:60'],
                 'date_created' => ['required', 'present', 'date'],
                 'date_ended' => ['required', 'present', 'date'],
-                'time_type' => ['required',' present', 'string', 'max:10', Rule::in(['Full time', 'Part time'])],
-                'type' => ['required',' present', 'string', 'max:10', Rule::in(['Online', 'Offline'])],
-                'duration' => ['required',' present', 'integer', 'max:12'],
+                'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['Full time', 'Part time'])],
+                'type' => ['required', ' present', 'string', 'max:10', Rule::in(['Online', 'Offline'])],
+                'duration' => ['required', ' present', 'integer', 'max:12'],
                 'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
                 'description' => ['required', 'present', 'string', 'max:1000']
             ]);
@@ -42,7 +43,7 @@ class DashboardCompanyController extends Controller
                     'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg'
                 ]
             ])->send();
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
                 'notification' => [
@@ -56,7 +57,48 @@ class DashboardCompanyController extends Controller
     /**
      * Method untuk mem-proses logika edit lowongan
      */
-    public function editVacancy(Request $request) {}
+    public function editVacancy(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'salary' => ['required', 'present', 'integer', 'max:10000000'],
+                'title' => ['required', 'present', 'string', 'max:100'],
+                'major' => ['required', 'present', 'string', Rule::in(['Teknik Informatika', 'Teknik Mesin', 'Teknik Elektro', 'Manajemen Bisnis'])],
+                'location' => ['required', 'present', 'string', 'max:60'],
+                'date_created' => ['required', 'present', 'date'],
+                'date_ended' => ['required', 'present', 'date'],
+                'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['full time', 'part time'])],
+                'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline'])],
+                'duration' => ['required', ' present', 'integer', 'max:12'],
+                'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
+                'description' => ['required', 'present', 'string', 'max:1000'],
+                'id_vacancy' => ['required', 'present', 'integer']
+            ]);
+
+            $validated['applied'] = 0;
+            $validated['nib'] = auth('web')->user()->company->nib;
+            $newData = Vacancy::where('id_vacancy', $validated['id_vacancy'])
+                ->where('nib', $validated['nib'])
+                ->update($validated);
+
+            response()->json([
+                'success' => true,
+                'notification' => [
+                    'message' => 'Lowongan anda berhasil di ekspos!',
+                    'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg'
+                ]
+            ])->send();
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'notification' => [
+                    'message' => 'Lowongan anda gagal di ekspos!',
+                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg'
+                ],
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 
     /**
      * Method untuk mem-proses logika penghapusan lamaran

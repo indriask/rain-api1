@@ -18,19 +18,6 @@ const deleteAccountNotification = document.querySelector("#delete-account-notifi
 const logoutCard = document.querySelector("#logout-card");
 
 /**
- * Variabel for manage vacancy 
- */
-const manageVacancyContainer = document.querySelector("#manage-vacancy-container");
-const manageVacancyForm = document.querySelector("#manage-vacancy-form");
-const manageVacancyInput = document.querySelector("#manage-vacancy-input");
-const manageVacancyDetail = document.querySelector("#manage-vacancy-detail");
-const manageVacancyLogo = document.querySelector("#manage-vacancy-logo");
-const manageVacancyBackForm = document.querySelector("#manage-vacancy-back-form");
-const manageVacancyNextForm = document.querySelector("#manage-vacancy-next-form");
-const manageVacancySubmitBtn = document.querySelector("#manage-vacancy-submit");
-const manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
-
-/**
  * Variable for proposal card list
  */
 const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
@@ -79,36 +66,41 @@ async function getDataOnLoad() {
             minimumFractionDigits: 0
         });
 
-        for (let data of result.data) {
-            vacancyCardList.innerHTML += `
-            <div class="vacancy-card bg-white py-3 px-4">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="salary-text">${formatter.format(data.salary)}/bulan</h5>
-                                    <img class="company-photo rounded"
-                                        src="http://localhost:8000/storage${data.company.profile.photo_profile}"
-                                        alt="${data.company.profile.first_name} photo">
+        if (result.data.length === 0 || result.data === undefined) {
+            document.querySelector("#empty-data-list-notification").classList.remove("d-none");
+            document.querySelector("#empty-data-list-notification-title").textContent = "Data tidak ditemukan, harap coba lagi!";
+        } else {
+            for (let data of result.data) {
+                vacancyCardList.innerHTML += `
+                <div class="vacancy-card bg-white py-3 px-4">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="salary-text">${formatter.format(data.salary)}/bulan</h5>
+                                        <img class="company-photo rounded"
+                                            src="http://localhost:8000/storage${data.company.profile.photo_profile}"
+                                            alt="${data.company.profile.first_name} photo">
+                                    </div>
+                                    <div>
+                                        <h6 class="vacancy-role m-0">${data.title}</h6>
+                                        <span class="vacancy-major-choice">${data.major}</span>
+        
+                                        <ul class="vacancy-small-detail p-0 mt-3">
+                                            <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
+                                            <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
+                                            <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
+                                        </ul>
+        
+                                        <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                            <li class="bg-white rounded-pill text-center">${data.time_type}</li>
+                                            <li class="bg-white rounded-pill text-center">${data.type}</li>
+                                            <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
+                                        </ul>
+        
+                                        <button onclick="showVacancyDetailCard(${data.id_vacancy})"
+                                            class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h6 class="vacancy-role m-0">${data.title}</h6>
-                                    <span class="vacancy-major-choice">${data.major}</span>
-    
-                                    <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
-                                        <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
-                                        <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
-                                    </ul>
-    
-                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">${data.time_type}</li>
-                                        <li class="bg-white rounded-pill text-center">${data.type}</li>
-                                        <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
-                                    </ul>
-    
-                                    <button onclick="showVacancyDetailCard(${data.id_vacancy})"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                                </div>
-                            </div>
-            `;
+                `;
+            }
         }
     } catch (error) {
         console.error("Error: ", error.message);
@@ -492,19 +484,19 @@ function showAddVacancyCard() {
                                 <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
                                 <div>
                                     <div>
-                                        <input type="radio" name="time_type" id="full-time" value="Full time">
+                                        <input type="radio" name="time_type" id="full-time" value="full time">
                                         <label for="full-time">Full time</label>
                                     </div>
                                     <div>
-                                        <input type="radio" name="time_type" value="Part time" id="part-time">
+                                        <input type="radio" name="time_type" value="part time" id="ar">
                                         <label for="part-time">Part time</label>
                                     </div>
                                 </div>
 
                                 <label for="jenis" class="fw-600">Jenis</label>
                                 <select name="type" id="" class="focus-ring bg-white border border-0">
-                                    <option value="Online">Online</option>
-                                    <option value="Offline">Offline</option>
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
                                 </select>
 
                                 <label for="durasi" class="fw-600">Durasi</label>
@@ -617,97 +609,224 @@ function closeAddVacancyForm() {
 }
 
 /**
+ * Variabel for manage vacancy 
+ */
+const manageVacancyContainer = document.querySelector("#manage-vacancy-container");
+let manageVacancyForm = null;
+let manageVacancyNotification = null;
+
+/**
  * function for manage vacancy
  */
-function showManageVacancyCard(id = 0) {
-    if (manageVacancyContainer.classList.contains("d-block")) {
-        manageVacancyContainer.classList.remove("d-block");
+async function getVacancyDataOnLoad() {
+    try {
+        const response = await fetch('/dashboard/perusahaan/kelola/lowongan', {
+            method: "GET",
+            headers: {
+                "X_GET_DATA": "all-data"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch data");
+        }
+
+        const result = await response.json();
+        const formatter = new Intl.NumberFormat('en-us', {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0
+        });
+
+
+        if (result.data.length === 0 || result.data === undefined) {
+            document.querySelector("#empty-vacancy-data-notification").classList.remove("d-none");
+            document.querySelector("#empty-vacancy-data-notification-title").textContent = "Anda belum mem-publish lowongan apa pun";
+        } else {
+            for (let data of result.data) {
+                vacancyCardList.innerHTML += `
+                <div class="vacancy-card bg-white py-3 px-4">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="salary-text">${formatter.format(data.salary)}/bulan</h5>
+                                        <img class="company-photo rounded"
+                                            src="http://localhost:8000/storage${data.company.profile.photo_profile}"
+                                            alt="${data.company.profile.first_name} photo">
+                                    </div>
+                                    <div>
+                                        <h6 class="vacancy-role m-0">${data.title}</h6>
+                                        <span class="vacancy-major-choice">${data.major}</span>
+        
+                                        <ul class="vacancy-small-detail p-0 mt-3">
+                                            <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
+                                            <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
+                                            <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
+                                        </ul>
+        
+                                        <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                            <li class="bg-white rounded-pill text-center">${data.time_type}</li>
+                                            <li class="bg-white rounded-pill text-center">${data.type}</li>
+                                            <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
+                                        </ul>
+        
+                                        <button onclick="showManageVacancyCard(${data.id_vacancy})"
+                                            class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                    </div>
+                                </div>
+                `;
+            }
+        }
+
+    } catch (error) {
+        console.error("Error: ", error.message);
+    }
+
+}
+
+async function showManageVacancyCard(id = 0) {
+    if (manageVacancyContainer.textContent.trim() !== '') {
+        manageVacancyContainer.textContent = '';
         manageVacancyContainer.classList.add("d-none");
 
         return;
     }
 
     manageVacancyContainer.classList.remove("d-none");
-    manageVacancyContainer.classList.add("d-block");
 
-    return 1;
-}
+    try {
+        const response = await fetch(`/dashboard/perusahaan/kelola/lowongan/${id}`, {
+            method: "GET",
+            headers: {
+                "X_GET_SPECIFIC": "specific-data"
+            }
+        });
 
-function nextManageVacancyForm() {
-    if (manageVacancyInput.classList.contains("d-block") && manageVacancyDetail.classList.contains("d-block")) {
-        manageVacancyLogo.classList.remove("d-none");
-        manageVacancyLogo.classList.add("d-block");
+        const result = await response.json();
 
-        manageVacancyInput.classList.remove("d-block");
-        manageVacancyInput.classList.add("d-none");
+        manageVacancyContainer.innerHTML = `
+     <form id="manage-vacancy-form" method="POST" enctype="multipart/form-data"
+                    class="dashboard__manage-vacancy-form bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
+                    <div id="manage-vacancy-input" class="w-50 d-block">
+                        <div class="dashboard__manage-vacancy-input">
+                            <label for="gaji">Gaji</label>
+                            <div>
+                                <input type="text" style="width: 120px" class="focus-ring" name="salary"
+                                    value="${result.data.salary}">
+                                <span class="mx-2">/</span>
+                                <input type="text" style="width: 120px;" class="focus-ring" name="salary-type"
+                                    value="bulan">
+                            </div>
 
-        manageVacancyDetail.classList.remove("d-block");
-        manageVacancyDetail.classList.add("d-none");
+                            <label for="judul" class="fw-600">Judul</label>
+                            <input type="text" name="title" class="focus-ring" value="${result.data.title}">
 
-        manageVacancyNextForm.classList.remove("d-block");
-        manageVacancyNextForm.classList.add("d-none");
+                            <label for="jurusan" class="fw-600">Jurusan</label>
+                            <select id='manage-vacancy-major-list' name="major" id="jurusan"
+                                class="bg-white border border-0 cursor-pointer focus-ring">
+                                <option value="Teknik Informatika">Teknik Informatika</option>
+                                <option value="Teknik Elektro">Teknik Elekro</option>
+                                <option value="Teknik Mesin">Teknik Mesin</option>
+                                <option value="Manajemen Bisnis">Manajemen Bisnis</option>
+                            </select>
 
-        manageVacancySubmitBtn.classList.remove("d-none");
-        manageVacancySubmitBtn.classList.add("d-block");
+                            <label for="lokasi" class="fw-600">Lokasi</label>
+                            <input type="text" name="location" class="focus-ring" value="${result.data.location}">
 
-        return;
+                            <label for="dibuka" class="fw-600">Dibuka</label>
+                            <div>
+                                <input type="date" style="width: 120px" value="${result.data.date_created}" class="focus-ring" name="date_created">
+                                <span class="mx-2">-</span>
+                                <input type="date" style="width: 120px;" value="${result.data.date_ended}" class="focus-ring" name="date_ended">
+                            </div>
+
+                            <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
+                            <div>
+                                <div>
+                                    <input type="radio" name="time_type" id="full-time" value="full time">
+                                    <label for="full-time">Full time</label>
+                                </div>
+                                <div>
+                                    <input type="radio" name="time_type" value="part time"
+                                        id="part-time">
+                                    <label for="part-time">Part time</label>
+                                </div>
+                            </div>
+
+                            <label for="jenis" class="fw-600">Jenis</label>
+                            <select name="type" id="manage-vacancy-type-list"
+                                class="focus-ring bg-white border border-0 cursor-pointer">
+                                <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                            </select>
+
+                            <label for="durasi" class="fw-600">Durasi</label>
+                            <div>
+                                <input type="text" name="duration" style='width: 100px;' class="focus-ring me-2" value="${result.data.duration}">
+                                <span>/ Bulan</span>
+                            </div>
+
+                            <label for="pendaftar" class="fw-600">Quota</label>
+                            <div class="d">
+                                <input type="text" name="quota" id="" value="${result.data.quota}"
+                                    class="focus-ring me-2" style="width: 100px;">
+                                <span>/ Pelamar</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="manage-vacancy-detail" class="w-50 d-block">
+                        <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
+                        <textarea name="description" id="" class="dashboard__manage-vacancy-textarea border border-0 p-3">${result.data.description}</textarea>
+                    </div>
+                    <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
+                        <button id="manage-vacancy-back-form" class="border border-0 bni-blue text-white fw-700"
+                            onclick="showManageVacancyCard()" type="button">Tutup</button>
+                        <div class="d-flex gap-2">
+                            <button id="manage-vacancy-submit" class="border border-0 bni-blue text-white fw-700"
+                                onclick="editManageVacancy(1)" type="button">Edit</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id_vacancy" value="${result.data.id_vacancy}">
+                </form>
+                <div id="manage-vacancy-notification"
+                    class="d-none dashboard__manage-vacancy-notification position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
+                    <h5 id="manage-vacancy-notification-title" class="fw-700">Perubahan berhasil di simpan!</h5>
+                    <img src="" alt="" id="manage-vacancy-notification-icon" class="fw-700">
+                    <button class="border border-0 bni-blue text-white fw-700 position-relative"
+                        onclick="closeManageVacancyForm()">Kembali</button>
+                </div>
+
+
+    `;
+
+        const majorList = document.querySelector("#manage-vacancy-major-list").children;
+        for (let major of majorList) {
+            if (result.data.major === major.value) {
+                major.selected = true;
+                break;
+            }
+        }
+
+        const timeTypeList = document.querySelectorAll('input[name="time_type"]');
+        timeTypeList.forEach(element => {
+            if (result.data.time_type === element.value) {
+                element.checked = true;
+                return;
+            }
+        });
+
+        const typeList = document.querySelector("#manage-vacancy-type-list").children;
+        for (let type of typeList) {
+            if (result.data.type === type.value) {
+                type.selected = true;
+                break;
+            }
+        }
+
+        manageVacancyForm = document.querySelector("#manage-vacancy-form");
+        manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
+
+    } catch (error) {
+        console.error("Error: ", error.message);
     }
-}
-
-function backManageVacancyForm() {
-
-    if (manageVacancyLogo.classList.contains("d-none")) {
-        manageVacancyContainer.classList.remove("d-block");
-        manageVacancyContainer.classList.add("d-none");
-
-        return;
-    }
-
-    if (manageVacancyLogo.classList.contains("d-block")) {
-        manageVacancyLogo.classList.remove("d-block");
-        manageVacancyLogo.classList.add("d-none");
-
-        manageVacancyInput.classList.remove("d-none");
-        manageVacancyInput.classList.add("d-block");
-
-        manageVacancyDetail.classList.remove("d-none");
-        manageVacancyDetail.classList.add("d-block");
-
-        manageVacancyNextForm.classList.remove("d-none");
-        manageVacancyNextForm.classList.remove("d-block");
-
-        manageVacancySubmitBtn.classList.remove("d-block");
-        manageVacancySubmitBtn.classList.add("d-none");
-
-        return;
-    }
-}
-
-function closeManageVacancyForm() {
-    manageVacancyNotification.classList.remove("d-block");
-    manageVacancyNotification.classList.add("d-none");
-
-    manageVacancyLogo.classList.remove("d-block");
-    manageVacancyLogo.classList.add("d-none");
-
-    manageVacancyDetail.classList.remove("d-none");
-    manageVacancyDetail.classList.add("d-block");
-
-    manageVacancyInput.classList.remove("d-none");
-    manageVacancyInput.classList.add("d-block");
-
-    manageVacancySubmitBtn.classList.remove("d-block");
-    manageVacancySubmitBtn.classList.add("d-none");
-
-    manageVacancyNextForm.classList.remove("d-none");
-    manageVacancyNextForm.classList.add("d-block");
-
-    manageVacancyContainer.classList.remove("d-block");
-    manageVacancyContainer.classList.add("d-none");
-
-    manageVacancyForm.reset();
-
-    return;
 }
 
 function showManageVacancyCardNotification(message, icon) {
@@ -723,11 +842,25 @@ function showManageVacancyCardNotification(message, icon) {
     return;
 }
 
-function editManageVacancy(id = 0) {
-    // edit vacancy card
-    showManageVacancyCardNotification("Perubahan berhasil di edit!", "http://localhost:8000/storage/svg/success-checkmark.svg");
-}
+async function editManageVacancy(id = 0) {
+    try {
+        const form = new FormData(manageVacancyForm);
+        const response = await fetch('/api/dashboard/perusahaan/kelola/lowongan/edit', {
+            method: "POST",
+            headers: {
+                "X_CSRF_TOKEN": window.laravel.csrf_token
+            },
+            body: form
+        });
 
+        const result = await response.json();
+
+        console.log(result);
+
+    } catch (error) {
+        console.error("Error: ", error.message);
+    }
+}
 /**
  * Function for proposal card list
  */

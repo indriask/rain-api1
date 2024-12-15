@@ -43,7 +43,7 @@ class CompanySignupController extends Controller
             ]);
 
             $profile = Profile::create([
-                'photo_profile' => 'http://localhost:8000/storage/profile.jpg'
+                'photo_profile' => '/default/profile.jpg'
             ]);
 
             Company::create([
