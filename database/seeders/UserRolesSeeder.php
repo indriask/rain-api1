@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Carbon;
 class UserRolesSeeder extends Seeder
 {
     /**
@@ -18,13 +18,19 @@ class UserRolesSeeder extends Seeder
         DB::table('user_roles')->insert([
             [
                 'id' => 1,
-                'label'=> 'Mahasiswa'
+                'label'=> 'Mahasiswa',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ], [
                 'id' => 2,
-                'label'=> 'Perusahaan'
+                'label'=> 'Perusahaan',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ], [
                 'id' => 3,
-                'label'=> 'Admin'
+                'label'=> 'Admin',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         ]);
     }

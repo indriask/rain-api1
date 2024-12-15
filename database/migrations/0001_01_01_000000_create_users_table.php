@@ -12,17 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('id_user')->primary()->autoIncrement();
+            $table->id('id_user');
             $table->string('email', 100)->unique();
-            $table->string('password', 255);
-            $table->enum('role', ['student', 'company', 'admin'])->default('student');
-            $table->date('created_date');
+            $table->unsignedBigInteger('role');
+            $table->foreign('role')->references('id')->on('user_roles')->onDelete('cascade');
             $table->date('email_verified_at')->nullable();
+            $table->string('password', 255);
             $table->rememberToken();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
