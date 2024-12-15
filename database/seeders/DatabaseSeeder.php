@@ -73,7 +73,6 @@ class DatabaseSeeder extends Seeder
         Company::factory(1)->create();
 
         Vacancy::factory(10)
-            ->randStatus()
             ->randSalary()
             ->randTimeTypeAndType()
             ->randMajor()

@@ -33,7 +33,7 @@
     </script>
 </head>
 
-<body>
+<body onload="getVacancyDataOnLoad()">
 
     <div class="dashboard-layout">
 
@@ -176,7 +176,8 @@
                                     <label for="full-time">Full time</label>
                                 </div>
                                 <div>
-                                    <input type="radio" checked name="tipe-waktu" value="part-time" id="part-time">
+                                    <input type="radio" checked name="tipe-waktu" value="part-time"
+                                        id="part-time">
                                     <label for="part-time">Part time</label>
                                 </div>
                             </div>
@@ -195,7 +196,8 @@
                             <div class="dashboard__manage-vacancy-status bg-white">Verified</div>
 
                             <label for="pendaftar" class="fw-600">Pendaftar</label>
-                            <input type="text" name="pendaftar" id="" value="30 Pelamar" class="focus-ring">
+                            <input type="text" name="pendaftar" id="" value="30 Pelamar"
+                                class="focus-ring">
                         </div>
                     </div>
                     <div id="manage-vacancy-detail" class="w-50 d-block">
@@ -228,7 +230,8 @@
                     class="d-none dashboard__manage-vacancy-notification position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
                     <h5 id="manage-vacancy-notification-title" class="fw-700">Perubahan berhasil di simpan!</h5>
                     <img src="" alt="" id="manage-vacancy-notification-icon" class="fw-700">
-                    <button class="border border-0 bni-blue text-white fw-700 position-relative" onclick="closeManageVacancyForm()">Kembali</button>
+                    <button class="border border-0 bni-blue text-white fw-700 position-relative"
+                        onclick="closeManageVacancyForm()">Kembali</button>
                 </div>
             </div>
 
@@ -236,7 +239,7 @@
             <x-logout-card />
 
             {{-- tambah lowongan untuk perusahaan --}}
-            <x-add-vacancy />
+            <div id="add-vacancy"></div>
 
         </main>
     </div>

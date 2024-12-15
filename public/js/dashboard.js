@@ -441,11 +441,6 @@ function processLogoutRequest() {
  * Variable for company add vacancy
  */
 let addVacancy = document.querySelector("#add-vacancy");
-let addVacancyInput = null;
-let addVacancyDetail = null;
-let addVacancyLogo = null;
-let addVacancySubmitBtn = null;
-let addVacancyNextForm = null;
 let addVacancyForm = null;
 let addVacancyNotification = null;
 
@@ -475,8 +470,14 @@ function showAddVacancyCard() {
                                 <label for="judul" class="fw-600">Judul</label>
                                 <input type="text" name="title" class="focus-ring">
 
-                                <label for="jurusan" class="fw-600">Jurusan</label>
-                                <input type="text" name="major" class="focus-ring">
+                                <label for="major" class="fw-600">Jurusan</label>
+                                <select name="major" id="" class="focus-ring bg-white border border-0">
+                                    <option value="Teknik Informatika">Teknik Informatika</option>
+                                    <option value="Teknik Elektro">Teknik Elektro</option>
+                                    <option value="Teknik Mesin">Teknik Mesin</option>
+                                    <option value="Manajemen Bisnis">Manajemen Bisnis</option>
+                                </select>
+
 
                                 <label for="lokasi" class="fw-600">Lokasi</label>
                                 <input type="text" name="location" class="focus-ring">
@@ -517,23 +518,10 @@ function showAddVacancyCard() {
                             <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
                             <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
                         </div>
-                        <div id="add-vacancy-logo" class="d-none">
-                            <h6 class="fw-700 text-center">Logo Perusahaan</h6>
-                            <label for="company-logo"
-                                class="dashboard__add-vacancy-logo cursor-pointer d-flex align-items-center justify-content-center flex-column">
-                                <div>Format gambar JPG, PNG, JPEG.</div>
-                                <i class="bi bi-plus-square"></i>
-                            </label>
-                            <input type="file" name="company_logo" id="company-logo" hidden>
-                        </div>
-
                         <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
-                            <button class="border border-0 bni-blue text-white fw-700" onclick="backAddVacancyForm()"
-                                type="button">Kembali</button>
-                            <button id="add-vacancy-next-form"
-                                class="d-block border border-0 bni-blue text-white fw-700" onclick="nextVacancyForm()"
-                                type="button">Berikutnya</button>
-                            <button id="add-vacancy-submit" class="d-none border border-0 bni-blue text-white fw-700"
+                            <button class="border border-0 bni-blue text-white fw-700" onclick="showAddVacancyCard()"
+                                type="button">Tutup</button>
+                            <button id="add-vacancy-submit" class="d-block border border-0 bni-blue text-white fw-700"
                                 onclick="processAddVacancy()" type="button">Ekspos</button>
                         </div>
                     </form>
@@ -543,85 +531,14 @@ function showAddVacancyCard() {
                         <h5 id="add-vacancy-notification-title" class="fw-700"></h5>
                         <img id="add-vacancy-notification-icon" src="" alt="">
                         <button class="border border-0 bni-blue text-white fw-700 position-relative"
-                            onclick="closeAddVacancyForm()">Kembali</button>
+                            onclick="closeAddVacancyForm()">Tutup</button>
                     </div>
                 </div>
     `;
 
-    addVacancyInput = document.querySelector("#add-vacancy-input");
-    addVacancyDetail = document.querySelector("#add-vacancy-detail");
-    addVacancyLogo = document.querySelector("#add-vacancy-logo");
-    addVacancySubmitBtn = document.querySelector("#add-vacancy-submit");
-    addVacancyNextForm = document.querySelector("#add-vacancy-next-form");
     addVacancyForm = document.querySelector("#add-vacancy-form");
     addVacancyNotification = document.querySelector("#add-vacancy-notification");
 
-}
-
-function showAddVacancyInput() {
-    if (addVacancyInput.classList.contains("d-block")) {
-        addVacancyInput.classList.remove("d-block");
-        addVacancyInput.classList.add("d-none");
-
-        return;
-    }
-
-    addVacancyInput.classList.remove("d-none");
-    addVacancyInput.classList.add("d-block");
-}
-
-function showAddVacancyDetail() {
-    if (addVacancyDetail.classList.contains("d-block")) {
-        addVacancyDetail.classList.remove("d-block");
-        addVacancyDetail.classList.add("d-none");
-
-        return;
-    }
-
-    addVacancyDetail.classList.remove("d-none");
-    addVacancyDetail.classList.add("d-block");
-}
-
-function backAddVacancyForm() {
-    if (addVacancyInput.classList.contains("d-none") && addVacancyDetail.classList.contains("d-none")) {
-        addVacancyLogo.classList.remove("d-block");
-        addVacancyLogo.classList.add("d-none");
-
-        addVacancyInput.classList.remove("d-none");
-        addVacancyInput.classList.add("d-block");
-
-        addVacancyDetail.classList.remove("d-none");
-        addVacancyDetail.classList.add("d-block");
-
-        addVacancyNextForm.classList.remove("d-none");
-        addVacancyNextForm.classList.add("d-block");
-
-        addVacancySubmitBtn.classList.remove("d-block");
-        addVacancySubmitBtn.classList.add("d-none");
-
-        return;
-    }
-}
-
-function nextVacancyForm() {
-    if (addVacancyInput.classList.contains("d-block") && addVacancyDetail.classList.contains("d-block")) {
-        addVacancyLogo.classList.remove("d-none");
-        addVacancyLogo.classList.add("d-block");
-
-        addVacancyInput.classList.remove("d-block");
-        addVacancyInput.classList.add("d-none");
-
-        addVacancyDetail.classList.remove("d-block");
-        addVacancyDetail.classList.add("d-none");
-
-        addVacancyNextForm.classList.remove("d-block");
-        addVacancyNextForm.classList.add("d-none");
-
-        addVacancySubmitBtn.classList.remove("d-none");
-        addVacancySubmitBtn.classList.add("d-block");
-
-        return;
-    }
 }
 
 async function processAddVacancy() {
@@ -629,13 +546,51 @@ async function processAddVacancy() {
     const response = await fetch('/api/dashboard/perusahaan/tambah/lowongan', {
         method: "POST",
         headers: {
-            "X_CSRF_TOKEN": window.laravel.csrf_token
+            "X_CSRF_TOKEN": window.laravel.csrf_token,
         },
         body: form
     })
 
     const result = await response.json();
-    console.log(result);
+    const formatter = new Intl.NumberFormat('en-us', {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0
+    });
+
+    showAddVacancyNotification(result.notification.message, result.notification.icon);
+
+    if (result.success) {
+        vacancyCardList.innerHTML += `
+        <div class="vacancy-card bg-white py-3 px-4">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="salary-text">${formatter.format(result.newData.salary)}/bulan</h5>
+                                    <img class="company-photo rounded"
+                                        src="http://localhost:8000/storage${result.newData.company.profile.photo_profile}"
+                                        alt="${result.newData.company.profile.first_name} photo">
+                                </div>
+                                <div>
+                                    <h6 class="vacancy-role m-0">${result.newData.title}</h6>
+                                    <span class="vacancy-major-choice">${result.newData.major}</span>
+    
+                                    <ul class="vacancy-small-detail p-0 mt-3">
+                                        <li><i class="bi bi-geo-alt me-3"></i>${result.newData.location}</li>
+                                        <li><i class="bi bi-calendar3 me-3"></i>${result.newData.date_created}</li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>${result.newData.quota} Kuota</li>
+                                    </ul>
+    
+                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                        <li class="bg-white rounded-pill text-center">${result.newData.time_type}</li>
+                                        <li class="bg-white rounded-pill text-center">${result.newData.type}</li>
+                                        <li class="bg-white rounded-pill text-center">${result.newData.duration} Bulan</li>
+                                    </ul>
+    
+                                    <button onclick="showVacancyDetailCard(${result.newData.id_vacancy})"
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                </div>
+                            </div>
+        `;
+    }
 }
 
 
@@ -654,23 +609,7 @@ function closeAddVacancyForm() {
     addVacancyNotification.classList.remove("d-block");
     addVacancyNotification.classList.add("d-none");
 
-    addVacancyLogo.classList.remove("d-block");
-    addVacancyLogo.classList.add("d-none");
-
-    addVacancyDetail.classList.remove("d-none");
-    addVacancyDetail.classList.add("d-block");
-
-    addVacancyInput.classList.remove("d-none");
-    addVacancyInput.classList.add("d-block");
-
-    addVacancySubmitBtn.classList.remove("d-block");
-    addVacancySubmitBtn.classList.add("d-none");
-
-    addVacancyNextForm.classList.remove("d-none");
-    addVacancyNextForm.classList.add("d-block");
-
-    addVacancy.classList.remove("d-block");
-    addVacancy.classList.add("d-none");
+    addVacancy.textContent = '';
 
     addVacancyForm.reset();
 

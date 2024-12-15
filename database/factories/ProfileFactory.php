@@ -20,7 +20,7 @@ class ProfileFactory extends Factory
             'id_profile' => 1,
             'first_name' => 'Hosea',
             'last_name' => 'Corp',
-            'photo_profile' => '/default/profile.jpg'
+            'photo_profile' => '/default/profile.png'
         ];
     }
 }

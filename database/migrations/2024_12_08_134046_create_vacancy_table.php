@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id('id_vacancy')->primary()->autoIncrement();
             $table->string('nib');
             $table->integer('applied');
-            $table->enum('status', ['verified', 'unverified'])->default('unverified');
             $table->string('title', 225);
             $table->string('salary', 20);
             $table->enum('time_type', ['part time', 'full time'])->default('full time');

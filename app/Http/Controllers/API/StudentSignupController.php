@@ -19,7 +19,7 @@ class StudentSignupController extends Controller
     {
         try {
             $validated = $request->validate([
-                'email' => 'required|email:dns|present',
+                'email' => 'required|email:dns|present|unique:users,email',
                 'name' => 'required|string|max:255|present',
                 'password' => 'required|string|min:8|confirmed|present',
                 'nim' => 'required|min:9|max:10'

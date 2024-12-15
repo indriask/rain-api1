@@ -29,10 +29,10 @@ class DashboardController extends Controller
         $role = auth('web')->user()->role;
         $user = auth('web')->user()->load("$role.profile");
 
-        return response()->view('dashboard', [
+        response()->view('dashboard', [
             'role' => $role,
             'user' => $user
-        ]);
+        ])->send();
     }
 
     /**

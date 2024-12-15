@@ -23,7 +23,6 @@ class VacancyFactory extends Factory
         return [
             'nib' => '4342401034',
             'applied' => fake()->numberBetween(5, 30),
-            'status' => 'unverified',
             'title' => fake()->sentence(rand(1, 3)),
             'salary' => fake()->numberBetween(1000000, 6000000),
             'time_type' => 'full time',
@@ -36,14 +35,6 @@ class VacancyFactory extends Factory
             'date_created' => date('Y-m-d', time()),
             'date_ended' => date('Y-m-d', time() + 86400)
         ];
-    }
-
-    public function randStatus() {
-        return $this->state(function (array $attribute) {
-            return [
-                'status' => ['verified', 'unverified'][rand(0, 1)]
-            ];
-        });
     }
 
     public function randSalary() {

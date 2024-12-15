@@ -14,8 +14,8 @@ class DashboardCompanyController extends Controller
      */
     public function addVacancy(Request $request) {
         try {
-           $validated = $request->validate([
-                'salary' => ['required', 'present', 'string'],
+            $validated = $request->validate([
+                'salary' => ['required', 'present', 'integer', 'max:10000000'],
                 'title' => ['required', 'present', 'string', 'max:100'],
                 'major' => ['required', 'present', 'string', Rule::in(['Teknik Informatika', 'Teknik Mesin', 'Teknik Elektro', 'Manajemen Bisnis'])],
                 'location' => ['required', 'present', 'string', 'max:60'],
@@ -25,28 +25,31 @@ class DashboardCompanyController extends Controller
                 'type' => ['required',' present', 'string', 'max:10', Rule::in(['Online', 'Offline'])],
                 'duration' => ['required',' present', 'integer', 'max:12'],
                 'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-                'description' => ['required', 'present', 'string', 'max:1000'],
-                'company_logo' => ['file', 'mimes:jpg,jpeg,png']
+                'description' => ['required', 'present', 'string', 'max:1000']
             ]);
 
             $validated['applied'] = 0;
             $validated['nib'] = auth('web')->user()->company->nib;
-            // hapus attribute status
-            $validated['status'] = 'verified';
+            $newData = Vacancy::create($validated);
 
-            if($request->has('company_logo')) {
-                $file = $request->file('company_logo');
+            $findData = Vacancy::with('company.profile')->find($newData->id_vacancy);
 
-                if($file->getSize() > 2000000) {
-                    throw new \Exception("Ukuran file harus dibawah 2mb");
-                }
-            }
-
-            Vacancy::create($validated);
-
-            return response()->json(['berhasil derr']);
+            response()->json([
+                'success' => true,
+                'newData' => $findData,
+                'notification' => [
+                    'message' => 'Lowongan anda berhasil di ekspos!',
+                    'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg'
+                ]
+            ])->send();
         } catch(\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'notification' => [
+                    'message' => 'Lowongan anda gagal di ekspos!',
+                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg'
+                ]
+            ]);
         }
     }
 
