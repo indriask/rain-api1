@@ -55,6 +55,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserPerusahaan'])->name('admin-manage-user-company');
 });
 
+Route::get('/lowongan', [DashboardController::class, 'getLowongan']);
+Route::get('/lowongan/filter', [DashboardController::class, 'filterLowongan']);
+Route::get('/jurusan', [DashboardController::class, 'getJurusan']);
+Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
+Route::get('/prodi/{idJurusan}', [DashboardController::class, 'getProdi']);
 
 
 Route::middleware('auth')->group(function () {
