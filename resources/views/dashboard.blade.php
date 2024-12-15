@@ -63,29 +63,29 @@
                 </div>
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih jurusan</option>
-                            <option value="Manajemen & Bisnis">Manajemen & Bisnis</option>
-                            <option value="Teknik Elektro">Teknik Elektro</option>
-                            <option value="Teknik Informatika">Teknik Informatika</option>
-                            <option value="Teknik Mesin">Teknik Mesin</option>
+                        <select name="jurusan" id="jurusan">
+                            <option value="">Pilih jurusan</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih prodi</option>
+                        <select name="prodi" id="prodi">
+                            <option value="">Pilih prodi</option>
+                        </select>
+                        <div class="select-bg"></div>
+                    </div>
+
+                    <div class="select-container">
+                        <select name="mode_kerja" id="">
+                            <option value="" selected>Pilih lowongan</option>
+                            <option value="offline">Offline</option>
+                            <option value="online">Online</option>
+                            <option value="hybrid">Hybrid</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih lowongan</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="" id="">
+                        <select name="lokasi" id="lokasi">
                             <option>Pilih lokasi</option>
                         </select>
                         <div class="select-bg"></div>
@@ -100,37 +100,44 @@
             {{-- vacancy card list --}}
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
-                    <div class="vacancy-card-list px-3 gap-3 mt-4">
+                    <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
                         {{-- vacancy card --}}
-                        @for ($i = 0; $i < 6; $i++)
+                        @foreach ($lowongan as $lowong)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="salary-text">Rp. ***/bulan</h5>
+                                    <h5 class="salary-text">Rp.
+                                        {{ number_format($lowong->gaji_perbulan, 0, ',', '.') }}/bulan
+                                    </h5>
                                     <img class="company-photo rounded"
                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
                                         alt="Company photo">
                                 </div>
                                 <div>
-                                    <h6 class="vacancy-role m-0">Frontend Developer</h6>
-                                    <span class="vacancy-major-choice">Teknik Informatika</span>
+                                    <h6 class="vacancy-role m-0">{{ $lowong->nama_pekerjaan }}</h6>
+                                    <span class="vacancy-major-choice">{{ $lowong->jurusan->name }}</span>
 
                                     <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>Nongsa, Batam</li>
-                                        <li><i class="bi bi-calendar3 me-3"></i>20 September 2024</li>
-                                        <li><i class="bi bi-bar-chart-line me-3"></i>30 Kuota</li>
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->lokasi }}</li>
+                                        <li><i
+                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->tanggal_pendaftaran)->format('d-F-Y') }}
+
+                                        </li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->jumlah_kouta }} Kuota
+                                        </li>
                                     </ul>
 
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">Full-time</li>
-                                        <li class="bg-white rounded-pill text-center">Offline</li>
-                                        <li class="bg-white rounded-pill text-center">6 Bulan</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->jenis_kerja }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->mode_kerja }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->lama_magang }} Bulan
+                                        </li>
                                     </ul>
 
                                     <button onclick="showVacancyDetail('1')"
                                         class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
                                 </div>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -286,6 +293,117 @@
     </div>
 
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Ambil daftar jurusan dari server
+            $.getJSON('/jurusan', function(data) {
+                let jurusanSelect = $('#jurusan');
+                jurusanSelect.empty().append('<option value="">Pilih jurusan</option>');
+                data.forEach(function(jurusan) {
+                    jurusanSelect.append(`<option value="${jurusan.id}">${jurusan.name}</option>`);
+                });
+            });
+
+            // Ketika jurusan dipilih, ambil daftar prodi
+            $('#jurusan').on('change', function() {
+                let idJurusan = $(this).val();
+                let prodiSelect = $('#prodi');
+                prodiSelect.empty().append('<option value="">Pilih prodi</option>');
+                if (idJurusan) {
+                    $.getJSON(`/prodi/${idJurusan}`, function(data) {
+                        data.forEach(function(prodi) {
+                            prodiSelect.append(
+                                `<option value="${prodi.id}">${prodi.name}</option>`);
+                        });
+                    });
+                }
+            });
+
+            $.getJSON('/lokasi', function(data) {
+                let lokasiSelect = $('#lokasi');
+                lokasiSelect.empty().append('<option value="">Pilih Lokasi</option>');
+                data.forEach(function(lokasi) {
+                    lokasiSelect.append(
+                        `<option value="${lokasi.lokasi}">${lokasi.lokasi}</option>`);
+                });
+            });
+
+        });
+
+        function fetchLowongan() {
+            const jurusan = $('#jurusan').val();
+            const prodi = $('#prodi').val();
+            const modeKerja = $('select[name="mode_kerja"]').val();
+            const lokasi = $('#lokasi').val();
+            const search = $('input[name="cari-perusahaan"]').val();
+
+            $.ajax({
+                url: '/lowongan/filter',
+                method: 'GET',
+                data: {
+                    jurusan,
+                    prodi,
+                    mode_kerja: modeKerja,
+                    lokasi,
+                    search,
+                },
+                success: function(data) {
+                    const container = $('#data-lowongan');
+                    container.empty();
+                    data.forEach((lowong) => {
+                        // Memformat tanggal
+                        const tanggal = new Date(lowong.tanggal_pendaftaran);
+                        const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
+                            "Agustus", "September", "Oktober", "November", "Desember"
+                        ];
+                        const tanggalFormat = ("0" + tanggal.getDate()).slice(-2) + "-" + bulan[tanggal
+                            .getMonth()] + "-" + tanggal.getFullYear();
+
+                        container.append(`
+            <div class="vacancy-card bg-white py-3 px-4">
+                <div class="d-flex justify-content-between">
+                    <h5 class="salary-text">Rp. ${lowong.gaji_perbulan.toLocaleString('id-ID')}/bulan</h5>
+                    <img class="company-photo rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s" alt="Company photo">
+                </div>
+                <div>
+                    <h6 class="vacancy-role m-0">${lowong.nama_pekerjaan}</h6>
+                    <span class="vacancy-major-choice">${lowong.jurusan.name}</span>
+                    <ul class="vacancy-small-detail p-0 mt-3">
+                        <li><i class="bi bi-geo-alt me-3"></i>${lowong.lokasi}</li>
+                        <li><i class="bi bi-calendar3 me-3"></i>${tanggalFormat}</li> <!-- Tanggal yang diformat -->
+                        <li><i class="bi bi-bar-chart-line me-3"></i>${lowong.jumlah_kouta} Kuota</li>
+                    </ul>
+                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                        <li class="bg-white rounded-pill text-center">${lowong.jenis_kerja}</li>
+                        <li class="bg-white rounded-pill text-center">${lowong.mode_kerja}</li>
+                        <li class="bg-white rounded-pill text-center">${lowong.lama_magang} Bulan</li>
+                    </ul>
+                    <button onclick="showVacancyDetail('1')"
+                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                </div>
+            </div>
+        `);
+                    });
+                },
+
+            });
+        }
+
+        $('#jurusan, #prodi, select[name="mode_kerja"], #lokasi, input[name="cari-perusahaan"]').on('change keyup',
+            fetchLowongan);
+
+        $('.hapus-filter').on('click', function() {
+            $('#jurusan').val('');
+            $('#prodi').val('');
+            $('#prodi').find('option').not(':first').remove();
+            $('select[name="mode_kerja"]').val('');
+            $('#lokasi').val('');
+            $('input[name="cari-perusahaan"]').val('');
+            fetchLowongan();
+        });
+    </script>
+
 
 </body>
 
