@@ -65,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route khusus system dashboard perusahaan
     Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardCompanyController::class, 'addVacancy'])->name('api-add-vacancy-page');
     Route::post('/dashboard/perusahaan/kelola/lowongan/edit', [DashboardCompanyController::class, 'editVacancy'])->name('api-company-edit-vacancy');
+    Route::post('/dashboard/perusahaan/kelola/lowongan/delete', [DashboardCompanyController::class, 'deleteVacancy'])->name('api-company-delete-vacancy');
     Route::post('/dashboard/perusahaan/daftar/pelamar/delete/pelamar', [DashboardCompanyController::class, 'deleteApplicant'])->name('api-company-delete-applicant');
     Route::post('/dashboard/perusahaan/perbarui/status', [DashboardCompanyController::class, 'updateStatusApplicant'])->name('api-company-update-status-applicant');
     Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])->name('api-company-edit-profile');

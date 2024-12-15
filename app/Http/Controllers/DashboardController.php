@@ -79,7 +79,7 @@ class DashboardController extends Controller
         }
 
         if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::where('id_vacancy', $id)
+            $vacancy = Vacancy::with('company.profile')->where('id_vacancy', $id)
                 ->where('nib', $user->company->nib)
                 ->first();
 

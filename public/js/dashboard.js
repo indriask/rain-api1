@@ -780,10 +780,13 @@ async function showManageVacancyCard(id = 0) {
                             onclick="showManageVacancyCard()" type="button">Tutup</button>
                         <div class="d-flex gap-2">
                             <button id="manage-vacancy-submit" class="border border-0 bni-blue text-white fw-700"
-                                onclick="editManageVacancy(1)" type="button">Edit</button>
+                                onclick="deleteManageVacancy(${result.data.id_vacancy}, '${result.data.company.nib}')" type="button">Delete</button>
+                            <button id="manage-vacancy-submit" class="border border-0 bni-blue text-white fw-700"
+                                onclick="editManageVacancy()" type="button">Edit</button>
                         </div>
                     </div>
                     <input type="hidden" name="id_vacancy" value="${result.data.id_vacancy}">
+                    <input type="hidden" name="nib" value="${result.data.company.nib}">
                 </form>
 
                 <div id="manage-vacancy-notification"
@@ -793,8 +796,6 @@ async function showManageVacancyCard(id = 0) {
                     <button class="border border-0 bni-blue text-white fw-700 position-relative"
                         onclick="showManageVacancyCardNotification()">Tutup</button>
                 </div>
-
-
     `;
 
         const majorList = document.querySelector("#manage-vacancy-major-list").children;
@@ -823,8 +824,6 @@ async function showManageVacancyCard(id = 0) {
 
         manageVacancyForm = document.querySelector("#manage-vacancy-form");
         manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
-
-        console.log(manageVacancyNotification);
 
     } catch (error) {
         console.error("Error: ", error.message);
@@ -862,7 +861,7 @@ async function editManageVacancy(id = 0) {
         const response = await fetch('/api/dashboard/perusahaan/kelola/lowongan/edit', {
             method: "POST",
             headers: {
-                "X_CSRF_TOKEN": window.laravel.csrf_token
+                "X_CSRF_TOKEN": window.laravel.csrf_token,
             },
             body: form
         });
@@ -873,6 +872,26 @@ async function editManageVacancy(id = 0) {
         console.error("Error: ", error.message);
     }
 }
+
+async function deleteManageVacancy(id = 0, nib = "") {
+    try {
+        const response = await fetch('/api/dashboard/perusahaan/kelola/lowongan/delete', {
+            method: "POST",
+            headers: {
+                "X_CSRF_TOKEN": window.laravel.csrf_token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({"id_vacancy": id, "nib": nib})
+        });
+
+        const result = await response.json();
+        console.log(result);
+        showManageVacancyCardNotification(result.notification.message, result.notification.icon);
+    } catch (error) {
+        console.error("Error: ", error.message);
+    }
+}
+
 /**
  * Function for proposal card list
  */

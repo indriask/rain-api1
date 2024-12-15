@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 class DashboardCompanyController extends Controller
 {
     /**
+     * 
      * Method untuk mem-proses logika tambah lowongan
      */
     public function addVacancy(Request $request)
@@ -30,7 +31,7 @@ class DashboardCompanyController extends Controller
             ]);
 
             $validated['applied'] = 0;
-            $validated['nib'] = auth('web')->user()->company->nib;
+            $validated['nib'] = auth('web')->user()->nib;
             $newData = Vacancy::create($validated);
 
             $findData = Vacancy::with('company.profile')->find($newData->id_vacancy);
@@ -73,19 +74,19 @@ class DashboardCompanyController extends Controller
                 'duration' => ['required', ' present', 'integer', 'max:12'],
                 'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
                 'description' => ['required', 'present', 'string', 'max:1000'],
-                'id_vacancy' => ['required', 'present', 'integer']
+                'id_vacancy' => ['required', 'present', 'integer'],
+                'nib' => ['required', 'present', 'string'],
             ]);
 
             $validated['applied'] = 0;
-            $validated['nib'] = auth('web')->user()->company->nib;
-            $newData = Vacancy::where('id_vacancy', $validated['id_vacancy'])
+            Vacancy::where('id_vacancy', $validated['id_vacancy'])
                 ->where('nib', $validated['nib'])
                 ->update($validated);
 
             response()->json([
                 'success' => true,
                 'notification' => [
-                    'message' => 'Lowongan anda berhasil di ekspos!',
+                    'message' => 'Lowongan anda berhasil di edit!',
                     'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg'
                 ]
             ])->send();
@@ -93,7 +94,41 @@ class DashboardCompanyController extends Controller
             return response()->json([
                 'success' => false,
                 'notification' => [
-                    'message' => 'Lowongan anda gagal di ekspos!',
+                    'message' => 'Lowongan anda gagal di edit!',
+                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg',
+                ],
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Method untuk mem-proses logika penghapusan lowongan
+     */
+    public function deleteVacancy(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'nib' => ['required', 'present', 'string'],
+                'id_vacancy' => ['required', 'present', 'integer'],
+            ]);
+
+            Vacancy::where('id_vacancy', $validated['id_vacancy'])
+                ->where('nib', $validated['nib'])
+                ->delete();
+
+            return response()->json([
+                'success' => true,
+                'notification' => [
+                    'message' => 'Lowongan anda berhasil di hapus!',
+                    'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg',
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'notification' => [
+                    'message' => 'Lowongan anda gagal di hapus!',
                     'icon' => 'http://localhost:8000/storage/svg/failed-x.svg',
                 ],
                 'error' => $e->getMessage()
