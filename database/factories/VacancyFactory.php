@@ -28,7 +28,7 @@ class VacancyFactory extends Factory
             'time_type' => 'full time',
             'type' => 'offline',
             'duration' => fake()->numberBetween(3, 6),
-            'major' => 'Teknik Informatika',
+            'major' => 'teknik informatika',
             'location' => fake()->streetAddress(),
             'description' => fake()->paragraph(rand(3, 6)),
             'quota' => fake()->numberBetween(5, 30),
@@ -57,7 +57,7 @@ class VacancyFactory extends Factory
     public function randMajor() {
         return $this->state(function (array $attribute) {
             return [
-                'major' => ['Teknik Informatika', 'Teknik Elektro', 'Manajemen Bisnis', 'Teknik Mesin'][rand(0, 3)]
+                'major' => ['teknik infromatika', 'teknik elektro', 'manajemen bisnis', 'teknik mesin'][rand(0, 3)]
             ];
         });
     }

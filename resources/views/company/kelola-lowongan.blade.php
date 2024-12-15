@@ -49,12 +49,13 @@
 
     <div class="dashboard-layout">
 
-        {{-- dashboard aside navigation --}}
+        {{-- navigasi samping kiri dashboard --}}
         <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
-            {{-- user profile and filter input --}}
+
+            {{-- bagian html profile user, search bar dan filter --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
@@ -107,7 +108,7 @@
                 </div>
             </div>
 
-            {{-- manage vacancy card list --}}
+            {{-- list lowongan yang sudah di publish --}}
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="vacancy-card-list" class="vacancy-card-list px-3 gap-3 mt-4 position-relative">
@@ -115,13 +116,14 @@
                 </div>
             </div>
 
-            {{-- manage vacancy detail edit card --}}
+            {{-- bagian html melihat detail lowongan di publish --}}
             <div id="mange-vacancy-container"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto"
                 style="background-color: rgba(0, 0, 0, .4)">
 
             </div>
 
+            {{-- bagian html edit lowongan yang di publish --}}
             <div id="manage-vacancy-container"
                 class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">

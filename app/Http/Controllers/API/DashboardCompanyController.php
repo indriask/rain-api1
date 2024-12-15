@@ -18,12 +18,12 @@ class DashboardCompanyController extends Controller
             $validated = $request->validate([
                 'salary' => ['required', 'present', 'integer', 'max:10000000'],
                 'title' => ['required', 'present', 'string', 'max:100'],
-                'major' => ['required', 'present', 'string', Rule::in(['Teknik Informatika', 'Teknik Mesin', 'Teknik Elektro', 'Manajemen Bisnis'])],
+                'major' => ['required', 'present', 'string', Rule::in(['teknik informatika', 'teknik mesin', 'teknik elektro', 'manajemen bisnis'])],
                 'location' => ['required', 'present', 'string', 'max:60'],
                 'date_created' => ['required', 'present', 'date'],
                 'date_ended' => ['required', 'present', 'date'],
-                'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['Full time', 'Part time'])],
-                'type' => ['required', ' present', 'string', 'max:10', Rule::in(['Online', 'Offline'])],
+                'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['full time', 'part time'])],
+                'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline'])],
                 'duration' => ['required', ' present', 'integer', 'max:12'],
                 'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
                 'description' => ['required', 'present', 'string', 'max:1000']
@@ -49,7 +49,8 @@ class DashboardCompanyController extends Controller
                 'notification' => [
                     'message' => 'Lowongan anda gagal di ekspos!',
                     'icon' => 'http://localhost:8000/storage/svg/failed-x.svg'
-                ]
+                ],
+                'error' => $e->getMessage()
             ]);
         }
     }
@@ -63,7 +64,7 @@ class DashboardCompanyController extends Controller
             $validated = $request->validate([
                 'salary' => ['required', 'present', 'integer', 'max:10000000'],
                 'title' => ['required', 'present', 'string', 'max:100'],
-                'major' => ['required', 'present', 'string', Rule::in(['Teknik Informatika', 'Teknik Mesin', 'Teknik Elektro', 'Manajemen Bisnis'])],
+                'major' => ['required', 'present', 'string', Rule::in(['teknik informatika', 'teknik mesin', 'teknik elektro', 'manajemen bisnis'])],
                 'location' => ['required', 'present', 'string', 'max:60'],
                 'date_created' => ['required', 'present', 'date'],
                 'date_ended' => ['required', 'present', 'date'],
@@ -93,7 +94,7 @@ class DashboardCompanyController extends Controller
                 'success' => false,
                 'notification' => [
                     'message' => 'Lowongan anda gagal di ekspos!',
-                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg'
+                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg',
                 ],
                 'error' => $e->getMessage()
             ]);

@@ -200,9 +200,6 @@ async function showVacancyDetailCard(id = 0) {
                             <label class="fw-500">Kuota</label>
                             <div class="box">${result.data.quota}</div>
 
-                            <label class="fw-500">Status</label>
-                            <div class="box">${result.data.status}</div>
-
                             <label class="fw-500">Pendaftar</label>
                             <div class="box">${result.data.applied}</div>
                         </div>
@@ -464,10 +461,10 @@ function showAddVacancyCard() {
 
                                 <label for="major" class="fw-600">Jurusan</label>
                                 <select name="major" id="" class="focus-ring bg-white border border-0">
-                                    <option value="Teknik Informatika">Teknik Informatika</option>
-                                    <option value="Teknik Elektro">Teknik Elektro</option>
-                                    <option value="Teknik Mesin">Teknik Mesin</option>
-                                    <option value="Manajemen Bisnis">Manajemen Bisnis</option>
+                                    <option value="teknik informatika">Teknik Informatika</option>
+                                    <option value="teknik elektro">Teknik Elektro</option>
+                                    <option value="teknik mesin">Teknik Mesin</option>
+                                    <option value="manajemen bisnis">Manajemen Bisnis</option>
                                 </select>
 
 
@@ -544,6 +541,8 @@ async function processAddVacancy() {
     })
 
     const result = await response.json();
+    console.log(result);
+
     const formatter = new Intl.NumberFormat('en-us', {
         style: "currency",
         currency: "IDR",
@@ -703,7 +702,7 @@ async function showManageVacancyCard(id = 0) {
         const result = await response.json();
 
         manageVacancyContainer.innerHTML = `
-     <form id="manage-vacancy-form" method="POST" enctype="multipart/form-data"
+                <form id="manage-vacancy-form" method="POST" enctype="multipart/form-data"
                     class="dashboard__manage-vacancy-form bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
                     <div id="manage-vacancy-input" class="w-50 d-block">
                         <div class="dashboard__manage-vacancy-input">
@@ -722,10 +721,10 @@ async function showManageVacancyCard(id = 0) {
                             <label for="jurusan" class="fw-600">Jurusan</label>
                             <select id='manage-vacancy-major-list' name="major" id="jurusan"
                                 class="bg-white border border-0 cursor-pointer focus-ring">
-                                <option value="Teknik Informatika">Teknik Informatika</option>
-                                <option value="Teknik Elektro">Teknik Elekro</option>
-                                <option value="Teknik Mesin">Teknik Mesin</option>
-                                <option value="Manajemen Bisnis">Manajemen Bisnis</option>
+                                <option value="teknik informatika">Teknik Informatika</option>
+                                <option value="teknik elektro">Teknik Elekro</option>
+                                <option value="teknik mesin">Teknik Mesin</option>
+                                <option value="manajemen bisnis">Manajemen Bisnis</option>
                             </select>
 
                             <label for="lokasi" class="fw-600">Lokasi</label>
@@ -765,7 +764,7 @@ async function showManageVacancyCard(id = 0) {
                             </div>
 
                             <label for="pendaftar" class="fw-600">Quota</label>
-                            <div class="d">
+                            <div>
                                 <input type="text" name="quota" id="" value="${result.data.quota}"
                                     class="focus-ring me-2" style="width: 100px;">
                                 <span>/ Pelamar</span>
@@ -786,12 +785,13 @@ async function showManageVacancyCard(id = 0) {
                     </div>
                     <input type="hidden" name="id_vacancy" value="${result.data.id_vacancy}">
                 </form>
+
                 <div id="manage-vacancy-notification"
                     class="d-none dashboard__manage-vacancy-notification position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
                     <h5 id="manage-vacancy-notification-title" class="fw-700">Perubahan berhasil di simpan!</h5>
                     <img src="" alt="" id="manage-vacancy-notification-icon" class="fw-700">
                     <button class="border border-0 bni-blue text-white fw-700 position-relative"
-                        onclick="closeManageVacancyForm()">Kembali</button>
+                        onclick="showManageVacancyCardNotification()">Tutup</button>
                 </div>
 
 
@@ -824,12 +824,26 @@ async function showManageVacancyCard(id = 0) {
         manageVacancyForm = document.querySelector("#manage-vacancy-form");
         manageVacancyNotification = document.querySelector("#manage-vacancy-notification");
 
+        console.log(manageVacancyNotification);
+
     } catch (error) {
         console.error("Error: ", error.message);
     }
 }
 
 function showManageVacancyCardNotification(message, icon) {
+    if (manageVacancyNotification.classList.contains("d-block")) {
+        manageVacancyNotification.classList.remove("d-block");
+        manageVacancyNotification.classList.add("d-none");
+
+        manageVacancyForm.remove();
+
+        manageVacancyContainer.textContent = '';
+        manageVacancyContainer.classList.add("d-none");
+
+        return;
+    }
+
     const notificationTitle = document.querySelector("#manage-vacancy-notification-title");
     const notificationIcon = document.querySelector("#manage-vacancy-notification-icon");
 
@@ -854,9 +868,7 @@ async function editManageVacancy(id = 0) {
         });
 
         const result = await response.json();
-
-        console.log(result);
-
+        showManageVacancyCardNotification(result.notification.message, result.notification.icon);
     } catch (error) {
         console.error("Error: ", error.message);
     }
