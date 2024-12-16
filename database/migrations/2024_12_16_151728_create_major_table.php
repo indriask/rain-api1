@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prodi', function (Blueprint $table) {
+        Schema::create('major', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_jurusan');
-            $table->foreign('id_jurusan')->references('id')->on('jurusan')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prodi');
+        Schema::dropIfExists('major');
     }
 };
