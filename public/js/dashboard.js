@@ -146,8 +146,7 @@ async function showVacancyDetailCard(id = 0) {
             minimumFractionDigits: 0
         });
 
-
-        if (result.role === 'student') {
+        if (result.role === 1) {
             studentForm = `
                 <div class="d-flex">
                 <button type="button"

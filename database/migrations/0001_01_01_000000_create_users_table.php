@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('id_user')->primary()->autoIncrement();
+            $table->unsignedBigInteger('role');
             $table->string('email', 100)->unique();
             $table->string('password', 255);
-            $table->enum('role', ['student', 'company', 'admin'])->default('student');
             $table->date('created_date');
             $table->date('email_verified_at')->nullable();
             $table->rememberToken();
+            $table->timestamps();
+
+            $table->foreign('role')->references('id')->on('user_roles')->onDelete('cascade');
+        });
+
+        Schema::create('users_roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
             $table->timestamps();
         });
     }

@@ -38,12 +38,12 @@ class CompanySignupController extends Controller
             $user = User::create([
                 'email' => $validated['email'],
                 'password' => $validated['password'],
-                'role' => 'company',
-                'created_date' => date('Y-m-d', time())
+                'role' => 2,
+                'created_at' => date('Y-m-d', time())
             ]);
 
             $profile = Profile::create([
-                'photo_profile' => '/default/profile.jpg'
+                'photo_profile' => '/default/profile_company.jpg'
             ]);
 
             Company::create([
@@ -59,7 +59,9 @@ class CompanySignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+            // return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+            //     ->onlyInput('email', 'nib');
+            return back()->withErrors(['error' => $e->getMessage()])
                 ->onlyInput('email', 'nib');
         }
     }

@@ -31,7 +31,8 @@ class DashboardCompanyController extends Controller
             ]);
 
             $validated['applied'] = 0;
-            $validated['nib'] = auth('web')->user()->nib;
+            $validated['nib'] = auth('web')->user()->company->nib;
+
             $newData = Vacancy::create($validated);
 
             $findData = Vacancy::with('company.profile')->find($newData->id_vacancy);

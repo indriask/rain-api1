@@ -17,6 +17,7 @@ class StudentSignupController extends Controller
      */
     public function signup(Request $request)
     {
+        // dd($request->all());
         try {
             $validated = $request->validate([
                 'email' => 'required|email:dns|present|unique:users,email',
@@ -27,10 +28,10 @@ class StudentSignupController extends Controller
 
             // Hash password
             $validated['password'] = bcrypt($validated['password']);
-            $validated['role'] = 'student';
+            $validated['role'] = 1;
             $validated['name'] = explode(' ', $validated['name']);
 
-            $validated['created_date'] = date('Y-m-d', time());
+            $validated['created_at'] = date('Y-m-d', time());
             $first_name = $validated['name'][0] ?? null;
             $last_name = $validated['name'][1] ?? null;
 
@@ -40,7 +41,7 @@ class StudentSignupController extends Controller
             $profile = Profile::create([
                 'first_name' => $first_name,
                 'last_name' => $last_name,
-                'photo_profile' => '/default/profile.jpg'
+                'photo_profile' => '/default/profile.png'
             ]);
 
             $student = Student::create([
@@ -55,7 +56,9 @@ class StudentSignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+            // return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+            //     ->onlyInput('email', 'nim', 'nama');
+            return back()->withErrors(['error' => $e->getMessage()])
                 ->onlyInput('email', 'nim', 'nama');
         }
     }

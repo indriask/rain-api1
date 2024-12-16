@@ -35,7 +35,9 @@ class AccountController extends Controller
             return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda']);
         } catch (\Throwable $error) {
             //throw $error;
-            return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda'])
+            // return back()->withErrors(['error' => 'Login gagal harap check Email atau Password Anda'])
+            //     ->onlyInput('email');
+            return back()->withErrors(['error' => $error->getMessage()])
                 ->onlyInput('email');
         }
     }

@@ -27,9 +27,12 @@ class DashboardController extends Controller
             ]);
         }
 
-        $role = auth('web')->user()->role;
+        $roles = ['student', 'company', 'admin'];
+        $role = $roles[auth('web')->user()->role - 1];
+
         $user = auth('web')->user()->load("$role.profile");
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = "Username";
 
         if (trim($fullName) === "") {
             $fullName = "Username";
@@ -67,7 +70,9 @@ class DashboardController extends Controller
      */
     public function companyManageVacancyPage($id = 0)
     {
-        $role = auth('web')->user()->role;
+        $roles = ['student', 'company', 'admin'];
+        $role = $roles[auth('web')->user()->role - 1];
+
         $user = auth('web')->user()->load("$role.profile");
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
 
