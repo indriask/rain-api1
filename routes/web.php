@@ -6,20 +6,6 @@ use App\Http\Controllers\IndexController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/**
- * INFORMASI PENTING!!! HARAP DIBACA!!
- * 
- * JIKA INGIN MEMBUAT LOGIKA UNTUK MEM-PROSES DATA REQUEST, DIHARAPKAN MENGGUNAKAN
- * CONTROLLER YANG SUDAH DISIPKAN, MASING MASING CONTROLLER MEMPUNYAI KEGUNAAAN NYA 
- * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
- * 
- * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
- * 1. web.php => hanya digunakan untuk menampilkan data atau halaman
- * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
- * 
- */
-
-
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::redirect('/index', '/', 302);

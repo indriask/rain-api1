@@ -16,7 +16,7 @@ class LowonganSeeder extends Seeder
         $teknikElektroId = DB::table('jurusan')->where('name', 'Teknik Elektro')->value('id');
 
         // Insert data lowongan
-        DB::table('lowongan')->insert([
+        DB::table('vacancy')->insert([
             // Lowongan untuk Teknik Informatika
             [
                 'nama_pekerjaan' => 'Software Developer',

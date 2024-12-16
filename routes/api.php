@@ -13,28 +13,9 @@ use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
 
-/**
- * INFORMASI PENTING!!!!!
- * 
- * SEMUA NAMA AWAL ROUTE DI FILE INI SECARA OTOMATIS AKAN DITAMBAHKAN KATA '/api' OLEH LARAVEL.
- * JIKA MAU MENGGUNAKANNYA PADA FETCH JS HARAP TAMBAHKAN KATA '/api' PADA AWAL NAMA ROUTE NYA, CONTOH
- * 
- * /signin => /api/signin 
- */
 
 
-/**
- * INFORMASI PENTING!!! HARAP DIBACA!!
- * 
- * JIKA INGIN MEMBUAT LOGIKA UNTUK MEM-PROSES DATA REQUEST, DIHARAPKAN MENGGUNAKAN
- * CONTROLLER YANG SUDAH DISIPKAN, MASING MASING CONTROLLER MEMPUNYAI KEGUNAAAN NYA 
- * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
- * 
- * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
- * 1. web.php => hanya digunakan untuk menampilkan halaman view website
- * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
- * 
- */
+
 
 Route::middleware('guest')->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan

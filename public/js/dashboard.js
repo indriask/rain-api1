@@ -885,7 +885,6 @@ async function deleteManageVacancy(id = 0, nib = "") {
         });
 
         const result = await response.json();
-        console.log(result);
         showManageVacancyCardNotification(result.notification.message, result.notification.icon);
     } catch (error) {
         console.error("Error: ", error.message);
