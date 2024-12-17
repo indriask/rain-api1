@@ -113,7 +113,7 @@ class DashboardController extends Controller
      */
     public function companyManageVacancyPage($id = 0)
     {
-        $role = auth('web')->user()->role;
+        $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
 
