@@ -186,6 +186,13 @@ class DashboardController extends Controller
         ]);
     }
 
+    // menampilkan halaman profile admin
+    public function adminProfilePage() {
+        return response()->view('admin.profile', [
+            'role' => 'admin'
+        ]);
+    }
+
     /**
      * Method untuk me-render halaman kelola akun perusahaan
      */

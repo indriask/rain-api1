@@ -20,14 +20,10 @@ Route::redirect('/index', '/', 302);
 Route::middleware('guest')->group(function () {
     Route::get('/signin', [IndexController::class, 'signinPage'])->name('login');
     Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
-    Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])->name('admin-singin');
+    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])->name('admin-singin');
     Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])->name('student-signup');
     Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])->name('company-signup');
 });
-
-
-
-
 
 
 // akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
@@ -46,8 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])->name('company-profile');
 
     // Routing khusus role admin
+    Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
     Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])->name('admin-manage-user-student');
-    Route::get('/dashbord/admin/kelola/lowongan', [DashboardController::class, 'adminManageVacancyPage'])->name('admin-manage-vacancy');
     Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserPerusahaan'])->name('admin-manage-user-company');
 });
 

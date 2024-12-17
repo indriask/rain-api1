@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])->name('api-company-delete-account');
 
     // Route khusus untuk system dashboard admin
-    Route::post('/dashboard/admin/kelola/lowongan/edit', [DashboardAdminController::class, 'editVacancy'])->name('api-admin-manage-vacnacy-edit');
+    Route::post('/dashboard/admin/kelola/lowongan/delete', [DashboardAdminController::class, 'deleteVacancy'])->name('api-admin-manage-vacnacy-edit');
     Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
     Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
 });
