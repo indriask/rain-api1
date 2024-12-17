@@ -15,15 +15,15 @@ class AccountController extends Controller
      */
     public static function signin(Request $request)
     {
+        // Memvalidasi request apakah email dan password sudah diisi
+        $validated = $request->validate(
+            [
+                'email' => 'required|string|email:dns|present',
+                'password' => 'required|string|present|min:8',
+            ]
+        );
+        
         try {
-            // Memvalidasi request apakah email dan password sudah diisi
-            $validated = $request->validate(
-                [
-                    'email' => 'required|string|email:dns|present',
-                    'password' => 'required|string|present|min:8',
-                ]
-            );
-    
             // Mencoba login dengan email dan password yang telah divalidasi
             if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']], true)) {
                 // Regenerasi session dan token untuk meningkatkan keamanan

@@ -59,31 +59,51 @@
                 <h1>Daftarkan perusahaan anda!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required value="{{ old('email', null) }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="email" id="email"
+                            class="form-control @error('email') is-invalid @enderror" required
+                            value="{{ old('email', null) }}">
                         <i class="bi bi-envelope"></i>
                     </div>
+                    @error('email')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="nib">Masukan NIB</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="nib" id="nib" required value="{{ old('nib', null) }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="nib" id="nib"
+                            class="form-control @error('nib') is-invalid @enderror" required
+                            value="{{ old('nib', null) }}">
                         <i class="bi bi-postcard"></i>
                     </div>
+                    @error('nib')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password">Kata Sandi</label>
-                    <div class="input-wrapper">
-                        <input type="password" name="password" id="password" required>
+                    <div class="input-wrapper m-0">
+                        <input type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
                     </div>
+                    @error('password')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password_confirmation">Masukan Ulang Sandi</label>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper m-0">
                         <input type="password" name="password_confirmation" id="password_confirmation" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
@@ -91,17 +111,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="input-wrapper">
+                <div class="input-wrapper m-0">
                     <p class="file-label">Mauskan Bukti Surat Kerjasama Dengan Polibatam</p>
-                    <label for="cooperation-file-input" id="cooperation-file-label" class="d-block">
+                    <label for="cooperation-file-input" id="cooperation-file-label" class="d-block m-0">
                         <div class="box-surat d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-plus-square-fill"></i>
                             Tambahkan PDF atau DOCX
                         </div>
                     </label>
+                    @error('cooperation_file')
+                        <div class="text-danger m-0" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                     <input class="form-control input-surat" onchange="displayFile()" type="file"
                         name="cooperation_file" id="cooperation-file-input">
 
+                    {{-- bagian yag akan men-display file yang di input --}}
                     <div id="display-file-name-container" class="display-file d-none">
                         <div class="d-flex m-0 align-items-center justify-content-between">
                             <div class="m-0 d-flex align-items-center">
@@ -114,6 +140,7 @@
                             </button>
                         </div>
                     </div>
+
                     @csrf
                 </div>
                 <button type="submit" name="daftar">Daftar</button>

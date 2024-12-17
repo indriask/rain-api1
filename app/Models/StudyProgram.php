@@ -13,7 +13,7 @@ class StudyProgram extends Model
         'name'
     ];
 
-    public function studyPrograms()
+    public function major()
     {
         return $this->belongsTo(Major::class, 'id_jurusan', 'id');
     }

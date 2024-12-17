@@ -17,6 +17,7 @@ use App\Http\Controllers\api\VerifyEmailController;
 
 
 
+
 Route::middleware('guest')->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan
     Route::post('/signin', [AccountController::class, 'signin'])->name('api-validate-signin');
@@ -30,6 +31,10 @@ Route::middleware('guest')->group(function () {
     // Route untuk system signup admin
     Route::post('/admin/signin', [AccountController::class, 'adminSignin'])->name('api-admin-validate-signin');
 });
+
+
+
+
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -58,17 +63,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
 });
 
+
+
+
+
+
 Route::middleware('auth')->group(function () {
     // Route untuk mengirim kembali verifikasi email
     Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])
         ->middleware('throttle:6,1')->name('verification.send');
 });
 
+
+
+
+
+
 Route::post('/search/company', [SearchController::class, 'searchPerusahaan']);
 
 // Route untuk system forgot password
 Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
     ->name('password.email');
-
 Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
     ->name('password.update');

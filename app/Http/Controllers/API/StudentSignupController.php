@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 
 class StudentSignupController extends Controller
 {
@@ -17,20 +18,19 @@ class StudentSignupController extends Controller
      */
     public function signup(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'email' => 'required|email:dns|present|unique:users,email',
-                'name' => 'required|string|max:255|present',
-                'password' => 'required|string|min:8|confirmed|present',
-                'nim' => 'required|min:9|max:10'
-            ]);
+        $validated = $request->validate([
+            'email' => 'required|email:dns|present|unique:users,email',
+            'name' => 'required|string|max:255|present',
+            'password' => 'required|string|min:8|confirmed|present',
+            'nim' => 'required|min:9|max:10'
+        ]);
 
+        try {
             // Hash password
             $validated['password'] = bcrypt($validated['password']);
-            $validated['role'] = 'student';
             $validated['name'] = explode(' ', $validated['name']);
-
             $validated['created_at'] = date('Y-m-d', time());
+
             $first_name = $validated['name'][0] ?? '';
             $last_name = $validated['name'][1] ?? '';
             $validated['role'] = 1;
@@ -41,7 +41,7 @@ class StudentSignupController extends Controller
             $profile = Profile::create([
                 'first_name' => $first_name,
                 'last_name' => $last_name,
-                'photo_profile' => '/default/profile.png'
+                'photo_profile' => 'default/profile.png'
             ]);
 
             $student = Student::create([
@@ -53,11 +53,12 @@ class StudentSignupController extends Controller
             // mark user as authenticated but not verified
             Auth::login($user);
 
+            // mengirim email verifikasi kepada user
             event(new Registered($user));
             return redirect()->route('verification.notice');
-        }   catch (\Throwable $e) {
-            return response()->json(['message' => 'Error terjadi', 'error' => $e->getMessage()], 500);
-       
+        } catch (\Throwable $e) {
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat melakukan proses signup, silahkan coba lagi!'])
+                ->onlyInput('email', 'name', 'nim');
         }
     }
 }

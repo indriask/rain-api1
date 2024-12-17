@@ -18,14 +18,14 @@ class CompanySignupController extends Controller
      */
     public function signup(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'email' => 'required|email:dns|present|string',
-                'password' => 'required|string|min:8|confirmed|present',
-                'nib' => 'required|min:9|max:10|present',
-                'cooperation_file' => 'required|file|mimes:pdf,docx|present|'
-            ]);
+        $validated = $request->validate([
+            'email' => 'required|email:dns|present|string',
+            'password' => 'required|string|min:8|confirmed|present',
+            'nib' => 'required|min:9|max:10|present',
+            'cooperation_file' => 'required|file|mimes:pdf,docx|present|'
+        ]);
 
+        try {
             // mengembalikan ukuran file upload dengan format byte
             if ($validated['cooperation_file']->getSize() > 2000000) {
                 return back()->withErrors('error', 'Ukuran file harus dibawah 2MB')
@@ -39,11 +39,11 @@ class CompanySignupController extends Controller
                 'email' => $validated['email'],
                 'password' => $validated['password'],
                 'role' => 2,
-                'created_date' => date('Y-m-d', time())
+                'created_at' => date('Y-m-d', time())
             ]);
 
             $profile = Profile::create([
-                'photo_profile' => '/default/profile_company.jpg'
+                'photo_profile' => 'default/profile_company.jpg'
             ]);
 
             Company::create([
@@ -59,7 +59,7 @@ class CompanySignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Signin gagal, harap check data yang anda masukan!'])
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat melakukan proses signup, silahkan coba lagi!'])
                 ->onlyInput('email', 'nib');
         }
     }
