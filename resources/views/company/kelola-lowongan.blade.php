@@ -171,7 +171,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+    <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman kelola lowondan perusahaan --}}
     <script defer src="{{ asset('js/company/kelola-lowongan.js') }}"></script>
