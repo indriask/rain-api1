@@ -25,9 +25,14 @@
     {{-- css link --}}
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-    <title>Dashborad | RAIN</title>
+    <title>Daftar Lamaran | RAIN</title>
     <script>
-        window.laravel = {csrf_token: "{{ csrf_token() }}"};
+        window.laravel = {
+            csrf_token: "{{ csrf_token() }}"
+        };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
+        };
     </script>
 </head>
 
@@ -35,8 +40,8 @@
 
     <div class="dashboard-layout">
         {{-- dashboard aside navigation --}}
-        <x-dashboard-navbar :role="$role"/>
-        
+        <x-dashboard-navbar :role="$role" />
+
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative" id="dashboard-main">
             {{-- user profile and filter input --}}
@@ -55,29 +60,25 @@
                 </div>
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="jurusan" id="jurusan">
                             <option>Pilih jurusan</option>
-                            <option value="Manajemen & Bisnis">Manajemen & Bisnis</option>
-                            <option value="Teknik Elektro">Teknik Elektro</option>
-                            <option value="Teknik Informatika">Teknik Informatika</option>
-                            <option value="Teknik Mesin">Teknik Mesin</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="prodi" id="prodi">
                             <option>Pilih prodi</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="mode_kerja" id="mode_kerja">
                             <option>Pilih lowongan</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="lokasi" id="lokasi">
                             <option>Pilih lokasi</option>
                         </select>
                         <div class="select-bg"></div>
@@ -89,9 +90,9 @@
                 </div>
             </div>
 
-            {{-- student applied vacancy list --}}
+            {{-- bagian menampilkan semua lowngan yang dilamar --}}
             <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
-                <div class="vacancy-card-list px-3 gap-3 mt-4">
+                <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
                     {{-- vacancy card --}}
                     @for ($i = 0; $i < 3; $i++)
                         <div class="vacancy-card bg-white py-3 px-4">
@@ -117,7 +118,7 @@
                                     <li class="bg-white rounded-pill text-center">6 Bulan</li>
                                 </ul>
 
-                                <button onclick="showVacancyDetail('1')"
+                                <button onclick="showAppliedVacancyDetail('1')"
                                     class="vacancy-detail border border-0 text-white mx-auto d-block mt">Lihat</button>
                             </div>
                         </div>
@@ -125,10 +126,10 @@
                 </div>
             </div>
 
-            {{-- student applied vacandy detail card --}}
-            <div id="vacancy-detail-card"
+            {{-- bagian menampilkan detail lowongan yang dilamar --}}
+            <div id="student-applied-vacancy-detail"
                 class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                <div  class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+                <div class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
                         <h1 class="apply-form-title">Frontend Developer</h1>
                         <div class="d-flex mt-3">
@@ -176,7 +177,7 @@
                             <div class="box">18</div>
                         </div>
                         <div class="position-absolute bottom-0">
-                            <button onclick="closeVacancyDetail()" type="button"
+                            <button onclick="showAppliedVacancyDetail()" type="button"
                                 class="close-apply-form text-white fw-700 border border-0 me-2">Kembali</button>
                             <button class="close-apply-form border border-0 text-white bni-blue fw-700" type="button"
                                 onclick="showStudentVacancyStatus(1)">Cek Status</button>
@@ -201,12 +202,18 @@
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
-            <x-logout-card/>
-            
+            <x-logout-card />
         </main>
     </div>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+
+    {{-- script js buat logika fitur dashboard daftar lamaran mahasiswa --}}
+    <script defer src="{{ asset('js/student/daftar-lamaran.js') }}"></script>
 
 </body>
 

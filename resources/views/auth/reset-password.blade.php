@@ -35,12 +35,23 @@
         @csrf
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                aria-describedby="emailHelp">
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1"
+                name="email" aria-describedby="emailHelp">
+            @error('email')
+                <div class="text-danger m-0" style="font-size: .85rem;">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputEmail1" name="password">
+            <input type="password" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1"
+                name="password">
+            @error('password')
+                <div class="text-danger m-0" style="font-size: .85rem;">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Password confirmation</label>

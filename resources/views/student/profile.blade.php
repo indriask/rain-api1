@@ -26,10 +26,13 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
-    <title>Wasyn Sulaiman Siregar Profile | RAIN</title>
+    <title>Profile | RAIN</title>
     <script>
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"
+        };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
         };
     </script>
 </head>
@@ -38,13 +41,13 @@
 
     <div class="dashboard-layout">
 
-        {{-- dashboard navbar --}}
+        {{-- dashboard navbar samping kanan --}}
         <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
 
-            {{-- user profile and filter input --}}
+            {{-- photo profile dan nama mahasiswa --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
@@ -55,7 +58,7 @@
                 </div>
             </div>
 
-            {{-- profile section mahasiswa --}}
+            {{-- form edit profile mahasiswa --}}
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
@@ -93,7 +96,8 @@
                             value="Kota Batam">
 
                         <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring" value="12345">
+                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="12345">
 
                         <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
                         <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2 focus-ring"
@@ -120,7 +124,8 @@
                     </div>
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <textarea form="edit-profile-form" name="description" class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                        <textarea form="edit-profile-form" name="description"
+                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
                             style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
                     </div>
                 </div>
@@ -138,7 +143,7 @@
                         <button onclick="showEditProfileNotification()"
                             class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
                     </div>
-                    <img id="profile-edit-notification-img" src="" alt=""
+                    <img id="profile-edit-notification-img" src="{{ asset('storage/svg/success-checkmark.svg') }}" alt=""
                         class="profile__profile-success-edit-icon position-absolute">
                 </div>
             </div>
@@ -170,7 +175,15 @@
         </main>
     </div>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+
+    {{-- script js buat logika fitur dashboard profile mahasiswa --}}
+    <script defer src="{{ asset('js/student/profile.js') }}"></script>
 
 </body>
 

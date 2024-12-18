@@ -62,9 +62,15 @@
                 <div class="form-input">
                     <label for="email">Masukan email</label>
                     <div class="input-wrapper">
-                        <input type="text" name="email" id="email" value="{{ old('email') }}">
+                        <input type="text" name="email" id="email"
+                            class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
                         <i class="bi bi-envelope"></i>
                     </div>
+                    @error('email')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <button type="submit" name="daftar">Kirim</button>

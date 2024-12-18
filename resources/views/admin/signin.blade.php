@@ -25,6 +25,19 @@
 
 <body>
 
+    {{-- notifikasi error signin --}}
+    @error('error')
+        <div class="position-absolute top-0 end-0 start-0 z-1">
+            <div class="alert alert-danger d-flex align-items-center mx-auto d-block mt-2 gap-1" style="width: fit-content;"
+                role="alert">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div style="font-size: .95rem;">
+                    {{ $message }}
+                </div>
+            </div>
+        </div>
+    @enderror
+
     <!-- bagian form signin mahasiswa -->
     <div class="form-container">
 
@@ -43,22 +56,32 @@
                 <h1>selamat datang admin RAIN!</h1>
                 <div>
                     <label for="email-or-phone">Masukan Email</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required>
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="email" class="form-control @error('email') is-invalid @enderror"
+                            id="email" required>
                         <i class="bi bi-envelope"></i>
                     </div>
+                    @error('email')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password">Kata Sandi</label>
-                    <div class="input-wrapper">
-                        <input type="password" name="password" id="password" required>
-                        <!-- new code start -->
+                    <div class="input-wrapper m-0">
+                        <input type="password" name="password" class="form-control @error('email') is-invalid @enderror"
+                            id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
-                        <!-- new code end -->
                     </div>
+                    @error('password')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 @csrf
                 <button type="submit" name="masuk">Masuk</button>

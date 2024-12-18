@@ -3,47 +3,90 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
-use Clockwork\Request\RequestType;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use App\Models\Major;
+use App\Models\StudyProgram;
 
 class DashboardController extends Controller
 {
+    protected $roles = ['student', 'company', 'admin'];
+
+    public function getJurusan()
+    {
+        return response()->json(Major::all());
+    }
+
+    public function getProdi($idJurusan)
+    {
+        return response()->json(StudyProgram::where('id_major', $idJurusan)->get());
+    }
+
+    public function getLokasi()
+    {
+        $lokasi = Vacancy::select('location')->distinct()->get(); // Ambil kolom 'lokasi' dan pastikan hanya yang unik
+
+        return response()->json($lokasi);
+    }
+
+    public function filterLowongan(Request $request)
+    {
+        $query = Vacancy::query();
+
+        if ($request->filled('mode_kerja')) {
+            // $query->where('mode_kerja', 'like', '%' . $request->mode_kerja . '%');
+            $query->where('time_type', 'like', '%' . $request->mode_kerja . '%');
+        }
+
+        if ($request->filled('lokasi')) {
+            $query->where('location', 'like', '%' . $request->lokasi . '%');
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('jurusan')) {
+            $query->whereHas('major', function ($q) use ($request) {
+                $q->where('id', $request->jurusan);
+            });
+        }
+
+        if ($request->filled('prodi')) {
+            $query->whereHas('study_program', function ($q) use ($request) {
+                $q->where('lowongan_prodi.prodi_id', $request->prodi); // Gunakan nama tabel pivot secara eksplisit
+            });
+        }
+
+        $lowongan = $query->with('major', 'studyPrograms')->get();
+
+        return response()->json($query->get());
+    }
+
     /**
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
-
     public function index($id = 0)
     {
-        if (request()->hasHeader('x-get-data')) {
-            $vacancies = Vacancy::with('company.profile')->get();
-            return response()->json(['data' => $vacancies]);
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user();
+        $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+
+        // jika fullname kosong, isi dengan data username
+        if(trim($fullName) === '') {
+            $fullName = 'Username';
         }
 
-        if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::with('company.profile')->find($id);
-            return response()->json([
-                'data' => $vacancy,
-                'role' => auth('web')->user()->role
-            ]);
-        }
-
-        $roles = ['student', 'company', 'admin'];
-        $role = $roles[auth('web')->user()->role - 1];
-
-        $user = auth('web')->user()->load("$role.profile");
-        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-        $fullName = "Username";
-
-        if (trim($fullName) === "") {
-            $fullName = "Username";
-        }
-
+        $lowongan = Vacancy::with('company.profile')->get();
+        
         return response()->view('dashboard', [
             'role' => $role,
-            'user' => $user,
+            'lowongan' => $lowongan,
+            'user' => auth('web')->user(),
             'fullName' => $fullName
         ]);
     }
+
 
     /**
      * Method untuk me-render halaman daftar lamaran mahasiswa
@@ -70,9 +113,7 @@ class DashboardController extends Controller
      */
     public function companyManageVacancyPage($id = 0)
     {
-        $roles = ['student', 'company', 'admin'];
-        $role = $roles[auth('web')->user()->role - 1];
-
+        $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
 
@@ -142,6 +183,13 @@ class DashboardController extends Controller
     {
         return response()->view('admin.kelola-mahasiswa', [
             'role' => 'student'
+        ]);
+    }
+
+    // menampilkan halaman profile admin
+    public function adminProfilePage() {
+        return response()->view('admin.profile', [
+            'role' => 'admin'
         ]);
     }
 

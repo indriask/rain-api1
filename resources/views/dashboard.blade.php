@@ -30,15 +30,18 @@
     {{-- css link --}}
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-    <title>Dashborad | RAIN</title>
+    <title>Beranda | RAIN</title>
     <script>
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"
         };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
+        };
     </script>
 </head>
 
-<body onload="getDataOnLoad()">
+<body>
 
     {{-- notifikasi data tidak ditemukan atau kosong --}}
     <div id="empty-data-list-notification" class="d-none position-absolute top-0 start-0 end-0 z-1 border border-black">
@@ -54,17 +57,18 @@
 
     <div class="dashboard-layout">
 
-        {{-- dashboard aside navigation --}}
+        {{-- navigasi dashboard samping --}}
         <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
-            {{-- user profile and filter input --}}
+
+            {{-- profile user, search lowongan dan filter lowongan --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="http://localhost:8000/storage{{ $user->$role->profile->photo_profile }}"
-                            alt="" class="profile-img rounded-circle shadow">
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
@@ -75,29 +79,29 @@
                 </div>
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih jurusan</option>
-                            <option value="Manajemen & Bisnis">Manajemen & Bisnis</option>
-                            <option value="Teknik Elektro">Teknik Elektro</option>
-                            <option value="Teknik Informatika">Teknik Informatika</option>
-                            <option value="Teknik Mesin">Teknik Mesin</option>
+                        <select name="jurusan" id="jurusan">
+                            <option value="">Pilih jurusan</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih prodi</option>
+                        <select name="prodi" id="prodi">
+                            <option value="">Pilih prodi</option>
+                        </select>
+                        <div class="select-bg"></div>
+                    </div>
+
+                    <div class="select-container">
+                        <select name="mode_kerja" id="">
+                            <option value="" selected>Pilih lowongan</option>
+                            <option value="offline">Offline</option>
+                            <option value="online">Online</option>
+                            <option value="hybrid">Hybrid</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih lowongan</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="" id="">
+                        <select name="lokasi" id="lokasi">
                             <option>Pilih lokasi</option>
                         </select>
                         <div class="select-bg"></div>
@@ -109,30 +113,93 @@
                 </div>
             </div>
 
-            {{-- vacancy card list --}}
+            {{-- menampilkan semua lowongan magang yang tersedia --}}
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
-                    <div id="vacancy-card-list" class="vacancy-card-list px-3 gap-3 mt-4">
+                    <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">Rp. ${lowong.gaji_perbulan.toLocaleString('id-ID')}/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                    alt="Company photo">
+                            </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">${lowong.nama_pekerjaan}</h6>
+                                <span class="vacancy-major-choice">${lowong.jurusan.name}</span>
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>${lowong.lokasi}</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>${tanggalFormat}</li>
+                                    <!-- Tanggal yang diformat -->
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>${lowong.jumlah_kouta} Kuota</li>
+                                </ul>
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">${lowong.jenis_kerja}</li>
+                                    <li class="bg-white rounded-pill text-center">${lowong.mode_kerja}</li>
+                                    <li class="bg-white rounded-pill text-center">${lowong.lama_magang} Bulan</li>
+                                </ul>
+                                <button onclick="showVacancyDetailCard('1')"
+                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                            </div>
+                        </div>
+
+                        {{-- vacancy card --}}
+                        {{-- @foreach ($lowongan as $lowong)
+                            <div class="vacancy-card bg-white py-3 px-4">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="salary-text">Rp.
+                                        {{ number_format($lowong->gaji_perbulan, 0, ',', '.') }}/bulan
+                                    </h5>
+                                    <img class="company-photo rounded"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                        alt="Company photo">
+                                </div>
+                                <div>
+                                    <h6 class="vacancy-role m-0">{{ $lowong->nama_pekerjaan }}</h6>
+                                    <span class="vacancy-major-choice">{{ $lowong->jurusan->name }}</span>
+
+                                    <ul class="vacancy-small-detail p-0 mt-3">
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->lokasi }}</li>
+                                        <li><i
+                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->tanggal_pendaftaran)->format('d-F-Y') }}
+
+                                        </li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->jumlah_kouta }} Kuota
+                                        </li>
+                                    </ul>
+
+                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->jenis_kerja }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->mode_kerja }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->lama_magang }} Bulan
+                                        </li>
+                                    </ul>
+
+                                    <button onclick="showVacancyDetail('1')"
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                </div>
+                            </div>
+                        @endforeach --}}
                     </div>
                 </div>
             </div>
 
-            {{-- vacancy detail card --}}
+            {{-- bagian untuk menampilan detail lowongan --}}
             <div id="vacancy-detail-card"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
             </div>
 
-            {{-- vacancy apply form --}}
+            {{-- form daftar lowongan mahasiswa --}}
             <div id="vacancy-apply-form-container"
                 class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
-                {{-- vacancy apply form input --}}
+                {{-- form input isi data diri mahasiswa --}}
                 <form id="vacancy-apply-form" action="{{ route('api-student-apply-vacancy') }}" method="POST"
                     class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
                         <button type="button" class="border border-0 bg-transparent"
-                            onclick="closeApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
+                            onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                     </div>
                     <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
                         ketentuan berikut</span>
@@ -167,22 +234,17 @@
                         <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
                     <input type="file" name="files" multiple id="upload-file" hidden>
 
-                    {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
                     <button type="button" onclick="processAddProposal(1)"
                         class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
 
-                {{-- apply form notification --}}
+                {{-- notifikasi gagal atau sukses daftar lowongan mahasiswa --}}
                 <div id="apply-form-notification" class="d-none pe-none vacancy-apply-form-card bg-white p-5 rounded">
                     <div class="d-flex align-items-center justify-content-center flex-column">
                         {{-- success message --}}
                         <img class="apply-form-icon ratio-1x1" src="{{ asset('storage/svg/success-checkmark.svg') }}"
                             alt="Success checkmar">
                         <span>Lamaran berhasil di kirim!</span>
-
-                        {{-- failed message --}}
-                        {{-- <img src="{{ asset("storage/svg/failed-x.svg") }}" class="apply-form-icon ratio-1x1" alt="Failed Icon">
-                        <span>Lamaran gagal di kirim {{ ":(" }}</span> --}}
 
                         <button onclick="closeAllFormCard()" class="bni-blue border border-0 text-white mt-5 rounded"
                             style="width: 100px; padding: 5px;">Kembali</button>
@@ -193,12 +255,19 @@
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
-            {{-- tambah lowongan untuk perusahaan --}}
+            {{-- tambah lowongan untuk perusahaan, hanya muncul jika role user adalah company --}}
             <div id="add-vacancy"></div>
         </main>
     </div>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+
+
+
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
 
 </body>
 

@@ -30,10 +30,13 @@
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"
         };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
+        };
     </script>
 </head>
 
-<body onload="getVacancyDataOnLoad()">
+<body>
 
     <div id="empty-vacancy-data-notification"
         class="d-none position-absolute top-0 start-0 end-0 z-1 border border-black">
@@ -59,8 +62,8 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="http://localhost:8000/storage{{ $user->$role->profile->photo_profile }}"
-                            alt="" class="profile-img rounded-circle shadow">
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
@@ -71,32 +74,27 @@
                 </div>
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih jurusan</option>
-                            <option>teknik informatika</option>
-                            <option>teknik elektro</option>
-                            <option>teknik mesin</option>
-                            <option>teknologi rekayasa elektronik</option>
-                            <option>teknologi rekayasa rekontruksi perkapalan</option>
-                            <option>teknologi rekayasa pengelasan dan fabrikasi</option>
-                            <option>tekn</option>
+                        <select name="jurusan" id="jurusan">
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="prodi" id="prodi">
                             <option>Pilih prodi</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih lowongan</option>
+                        <select name="mode_kerja" id="mode_kerja">
+                            <option value="" selected>Pilih lowongan</option>
+                            <option value="offline">Offline</option>
+                            <option value="online">Online</option>
+                            <option value="hybrid">Hybrid</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="lokasi" id="lokasi">
                             <option>Pilih lokasi</option>
                         </select>
                         <div class="select-bg"></div>
@@ -108,22 +106,48 @@
                 </div>
             </div>
 
-            {{-- list lowongan yang sudah di publish --}}
+            {{-- menampilkan list lowongan yang sudah di publish --}}
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="vacancy-card-list" class="vacancy-card-list px-3 gap-3 mt-4 position-relative">
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">4000000/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="http://localhost:8000/storage${data.company.profile.photo_profile}"
+                                    alt="${data.company.profile.first_name} photo">
+                            </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">${data.title}</h6>
+                                <span class="vacancy-major-choice">${data.major}</span>
+
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
+                                </ul>
+
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">${data.time_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${data.type}</li>
+                                    <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
+                                </ul>
+
+                                <button onclick="showManageVacancyCard()"
+                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {{-- bagian html melihat detail lowongan di publish --}}
+            {{-- menampilkan detail lowongan yang sudah di publish --}}
             <div id="mange-vacancy-container"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto"
                 style="background-color: rgba(0, 0, 0, .4)">
-
             </div>
 
-            {{-- bagian html edit lowongan yang di publish --}}
+            {{-- menampilkan edit detail lowongan yang sudah di publish --}}
             <div id="manage-vacancy-container"
                 class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
@@ -143,7 +167,16 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+
+    {{-- script js buat logika fitur pada halaman kelola lowondan perusahaan --}}
+    <script defer src="{{ asset('js/company/kelola-lowongan.js') }}"></script>
+
+
 
 </body>
 

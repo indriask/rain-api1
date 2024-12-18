@@ -2,10 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
-use App\Models\Profile;
-use App\Models\User;
-use App\Models\Vacancy;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+<<<<<<< HEAD
         DB::table('users')->insert([
             [
                 'id_user' => 1,
@@ -224,5 +221,12 @@ class DatabaseSeeder extends Seeder
             ->randTimeTypeAndType()
             ->randMajor()
             ->create();
+=======
+        // Memanggil UsersTableSeeder untuk memasukkan data ke tabel users
+        $this->call(UserRolesSeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(MajorSeeder::class);
+        $this->call(StudyProgramSeeder::class);
+>>>>>>> fix/conflict
     }
 }

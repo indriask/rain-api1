@@ -18,6 +18,13 @@ body {
     background-color: #e5e5e5;
 }
 
+/*menghilangkan icond default bootstrap */
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid {
+    background-image: none !important;
+}
+
 button,
 input,
 textarea,
@@ -112,7 +119,7 @@ button {
     text-transform: capitalize;
 }
 
-.form-container form > div div:not(.form-option) {
+.form-container form>div div:not(.form-option) {
     margin-bottom: .7rem;
 }
 
@@ -134,7 +141,7 @@ button {
     font-size: .95rem;
     transition: all 200ms;
     border: 1px solid #ddd;
-    outline: none;
+    /* outline: none; */
     padding-right: 2rem;
 }
 
@@ -156,11 +163,11 @@ button {
     margin: 0;
 }
 
-.form-container  form > div .input-wrapper {
+.form-container form>div .input-wrapper {
     position: relative;
 }
 
-.form-container form > div .input-wrapper > i {
+.form-container form>div .input-wrapper>i {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -168,7 +175,7 @@ button {
     transition: all 200ms;
 }
 
-.form-container form > div .show-password {
+.form-container form>div .show-password {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -179,7 +186,7 @@ button {
 }
 
 
-.form-container form > div input:focus {
+.form-container form>div input:focus {
     transform: translateY(-5px);
     border: 1px solid transparent;
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.26);
@@ -187,22 +194,22 @@ button {
     -moz-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.26);
 }
 
-.form-container form > div input:focus ~ i,
-.form-container form > div input:focus ~ .show-password {
+.form-container form>div input:focus~i,
+.form-container form>div input:focus~.show-password {
     top: 7px;
 }
 
-.form-container form > div .form-option {
+.form-container form>div .form-option {
     display: flex;
     font-size: .8rem;
     justify-content: space-between;
 }
 
-.form-container form > div .form-option a {
+.form-container form>div .form-option a {
     color: var(--blue);
 }
 
-.form-container form > div > button {
+.form-container form>div>button {
     display: block;
     margin-inline: auto;
     font-size: .9rem;
@@ -215,35 +222,35 @@ button {
     width: 100px;
 }
 
-.form-container form > div .other-option .border{
+.form-container form>div .other-option .border {
     display: flex;
     align-items: center;
     gap: 1.2rem;
 }
 
-.form-container form > div .other-option .border .text {
+.form-container form>div .other-option .border .text {
     font-size: .8rem;
     position: relative;
     opacity: .8;
 }
 
-.form-container form > div .other-option .border .line {
+.form-container form>div .other-option .border .line {
     height: 1px;
     width: 100%;
     background-color: rgba(8, 8, 56, 0.747);
 }
 
-.form-container form > div .other-option img {
+.form-container form>div .other-option img {
     width: inherit;
     aspect-ratio: 1/1;
 }
 
-.form-container form > div .other-option .social-button-wrapper {
+.form-container form>div .other-option .social-button-wrapper {
     width: fit-content;
     margin: 1rem auto;
 }
 
-.form-container form > div .other-option .social-button {
+.form-container form>div .other-option .social-button {
     border: 1px solid transparent;
     width: 30px;
     overflow: hidden;
