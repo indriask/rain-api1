@@ -4,7 +4,9 @@ use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 // Routing ke halaman branding RAIN
@@ -96,4 +98,10 @@ Route::get('/test', function (Request $request) {
 
 Route::get('/clear-session', function (Request $request) {
     $request->session()->flush();
+});
+
+// route untuk debugging
+Route::get('/login-perusahaan', function() {
+    Auth::attempt(['email' => 'ptsukamaju@gmail.com', 'password' => 'password123']);
+    return redirect()->route('dashboard');
 });

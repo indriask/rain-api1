@@ -283,32 +283,63 @@ function showLogoutCard() {
 
 // function untuk request logout ke server
 function processLogoutRequest() {
-    fetch('/api/signout', {
-        method: "POST",
+    $.ajax({
+        url: "/api/signout",
+        type: "POST",
         headers: {
             X_CSRF_TOKEN: window.laravel.csrf_token
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.code === 302) {
-                document.querySelector("#logout-card-message").textContent = data.message;
-                document.querySelector("#logout-card-btn").remove();
-                document.querySelector("#logout-card-close-btn").remove();
+        },
+        success: function (response) {
+            if (response.code === 302) {
+                $("#logout-card-message").text(response.message);
+                $("#logout-card-close-btn").remove();
+                $("#logout-card-btn").remove();
 
                 setTimeout(() => window.location.replace('/index'), 500);
             } else {
-                document.querySelector("#logout-card-message").textContent = data.message;
-                document.querySelector("#logout-card-btn").remove();
-                document.querySelector("#logout-card-close-btn").remove();
+                console.log("makanbang");
+                $("#logout-card-message").text(response.message);
+
+                setTimeout(() => {
+                    $("#logout-card-content").append(`
+                         <div id="logout-card-close-btn" class="d-flex">
+                            <button onclick="showLogoutCard()"
+                                class="dashboard__close-btn ms-auto bni-blue text-white border border-0">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
+                        </div>
+                        <div class="py-3 px-5">
+                            <span id="logout-card-message" class="fw-600 text-center d-block">Apakah anda yakin ingin keluar dari akun ini?</span>
+                            <button id="logout-card-btn" onclick="processLogoutRequest()"
+                            class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Keluar</button>
+                        </div>
+                    `);
+
+                    $("#logout-card").removeClass("d-block");
+                    $("#logout-card").addClass("d-none");
+                }, 1000);
             }
-        });
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+        }
+    });
 }
 
 // function untuk menampilkan form tambah lowongan untuk role perusahaan
 function showAddVacancyCard() {
-    if (addVacancy.textContent.trim() !== '') {
-        addVacancy.textContent = '';
+    if ($("#add-vacancy").text().trim() !== '') {
+        $("#add-vacancy").text("");
         return;
     }
 
@@ -426,13 +457,11 @@ function showAddVacancyCard() {
     </div>
     `);
 
-    addVacancyForm = document.querySelector("#add-vacancy-form");
-    addVacancyNotification = document.querySelector("#add-vacancy-notification");
-
 }
 
+// function untuk mengirim data lowongan baru ke server
 function processAddVacancy() {
-    const form = new FormData(addVacancyForm);
+    const form = new FormData($('#add-vacancy-form').get(0));
 
     $.ajax({
         url: '/api/dashboard/perusahaan/tambah/lowongan',
@@ -441,12 +470,6 @@ function processAddVacancy() {
         processData: false,
         contentType: false,
         success: function (response) {
-            const formatter = new Intl.NumberFormat('en-us', {
-                style: "currency",
-                currency: "IDR",
-                minimumFractionDigits: 0
-            });
-
             if (response.validation_error) {
                 (response.validation_error.salary !== undefined) ? $("#input-salary").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.salary}</div>`) : "";
                 (response.validation_error.title !== undefined) ? $("#input-title").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.title}</div>`) : "";
@@ -462,6 +485,7 @@ function processAddVacancy() {
             }
 
             showAddVacancyNotification(response.notification.message, response.notification.icon);
+            $("add-vacancy-form").get(0).reset();
         },
         error: function (jqXHR) {
             // check apakah response code nya 401 (user tidak ter-autentikasi)
@@ -479,81 +503,16 @@ function processAddVacancy() {
     })
 }
 
-// function untuk mengirim data lowongan baru ke server
-async function processAddVacancy_old() {
-    const form = new FormData(addVacancyForm);
-    const response = await fetch('/api/dashboard/perusahaan/tambah/lowongan', {
-        method: "POST",
-        headers: {
-            "X_CSRF_TOKEN": window.laravel.csrf_token,
-        },
-        body: form
-    })
-
-    // redirect user tidak authentikasi ke halaman branding RAIN
-    if (response.redirected) {
-        let currentUrl = window.location.href;
-        let currentPath = window.location.pathname;
-        let url = currentUrl.split(currentPath);
-        url[1] = 'index';
-
-        url = url.join('/');
-        window.location.replace(url);
-        return false;
-    }
-
-    const result = await response.json();
-    console.log(result);
-
-    const formatter = new Intl.NumberFormat('en-us', {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0
-    });
-
-    if (result.success) {
-        vacancyCardList.innerHTML += `
-        <div class="vacancy-card bg-white py-3 px-4">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="salary-text">${formatter.format(result.newData.salary)}/bulan</h5>
-                                    <img class="company-photo rounded"
-                                        src="http://localhost:8000/storage${result.newData.company.profile.photo_profile}"
-                                        alt="${result.newData.company.profile.first_name} photo">
-                                </div>
-                                <div>
-                                    <h6 class="vacancy-role m-0">${result.newData.title}</h6>
-                                    <span class="vacancy-major-choice">${result.newData.major}</span>
-
-                                    <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>${result.newData.location}</li>
-                                        <li><i class="bi bi-calendar3 me-3"></i>${result.newData.date_created}</li>
-                                        <li><i class="bi bi-bar-chart-line me-3"></i>${result.newData.quota} Kuota</li>
-                                    </ul>
-
-                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">${result.newData.time_type}</li>
-                                        <li class="bg-white rounded-pill text-center">${result.newData.type}</li>
-                                        <li class="bg-white rounded-pill text-center">${result.newData.duration} Bulan</li>
-                                    </ul>
-
-                                    <button onclick="showVacancyDetailCard(${result.newData.id_vacancy})"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                                </div>
-                            </div>
-        `;
-    }
-}
-
 // function untuk menampilkan notifikasi berhasil atau tidak tambah lowongan
 function showAddVacancyNotification(message, icon) {
-    const notificationTitle = document.querySelector("#add-vacancy-notification-title");
-    const notificationIcon = document.querySelector("#add-vacancy-notification-icon");
+    const notificationTitle = $("#add-vacancy-notification-title").get(0);
+    const notificationIcon = $("#add-vacancy-notification-icon").get(0);
 
     notificationTitle.textContent = message;
     notificationIcon.src = icon;
 
-    addVacancyNotification.classList.remove("d-none");
-    addVacancyNotification.classList.add("d-block");
+    $("#add-vacancy-notification").removeClass("d-none");
+    $("#add-vacancy-notification").addClass("d-block");
 }
 
 // function untuk menutup tampilan dan me-reset form input tambah lowongan 
