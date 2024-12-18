@@ -69,7 +69,7 @@ class DashboardController extends Controller
     public function index($id = 0)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
-        $user = auth('web')->user();
+        $user = auth('web')->user()->load('company.profile');
         $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
 
         // jika fullname kosong, isi dengan data username
@@ -77,7 +77,7 @@ class DashboardController extends Controller
             $fullName = 'Username';
         }
 
-        $lowongan = Vacancy::with('company.profile')->get();
+        $lowongan = Vacancy::with('company.profile', 'major')->get();
         
         return response()->view('dashboard', [
             'role' => $role,

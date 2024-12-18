@@ -451,7 +451,7 @@ button {
 .dashboard__add-vacancy-form {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 15px 2rem;
+    gap: 10px 2rem;
 }
 
 .dashboard__add-vacancy-company label {

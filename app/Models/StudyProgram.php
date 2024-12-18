@@ -13,6 +13,7 @@ class StudyProgram extends Model
         'name'
     ];
 
+    // method one-to-many pada study_program ke major
     public function major()
     {
         return $this->belongsTo(Major::class, 'id_jurusan', 'id');

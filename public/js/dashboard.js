@@ -114,13 +114,14 @@ const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
 const vacancyCardList = document.querySelector("#vacancy-card-list");
 const logoutCard = document.querySelector("#logout-card");
+let isValidationError = false;
 
 let addVacancy = document.querySelector("#add-vacancy");
 let addVacancyForm = null;
 let addVacancyNotification = null;
 
 // function untuk mengambil data lowongan dan menampilkannya
-async function showVacancyDetailCard(id = 0) {
+async function showVacancyDetail(id = 0) {
     if (vacancyDetailCard.classList.contains("d-block")) {
         vacancyDetailCard.classList.remove("d-block");
         vacancyDetailCard.classList.add("d-none");
@@ -311,96 +312,175 @@ function showAddVacancyCard() {
         return;
     }
 
-    addVacancy.innerHTML = `
-       <div class="position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center position-relative"
-                    style="background-color: rgba(0, 0, 0, .4)">
-                    <form method="POST" id="add-vacancy-form" enctype="multipart/form-data"
-                        class="dashboard__add-vacancy-company bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
-                        <div id="add-vacancy-input" class="w-50 d-block">
-                            <div class="dashboard__add-vacancy-form">
-                                <label for="gaji" class="fw-600">Gaji</label>
-                                <div>
-                                    <input type="text" style="width: 120px" class="focus-ring" name="salary">
-                                    <span class="mx-2">/</span>
-                                    <input type="text" style="width: 120px;" class="focus-ring" value="bulan">
-                                </div>
+    $("#add-vacancy").html(`
+        <div class="position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center position-relative"
+        style="background-color: rgba(0, 0, 0, .4)">
+        <form method="POST" id="add-vacancy-form" enctype="multipart/form-data"
+            class="dashboard__add-vacancy-company bg-white p-4 d-flex align-items-center justify-content-center gap-4 mt-3 position-relative">
+            <div id="add-vacancy-input" class="w-50 d-block">
+                <div class="dashboard__add-vacancy-form">
+                    <label for="gaji" class="fw-600">Gaji</label>
+                    <div>
+                        <div>
+                            <input type="text" id="vacancy-salary" style="width: 120px" class="focus-ring"
+                                name="salary">
+                            <span class="mx-2">/</span>
+                            <input type="text" style="width: 120px;" class="focus-ring" value="bulan">
+                        </div>
+                        <div id="input-salary"></div>
+                    </div>
 
-                                <label for="judul" class="fw-600">Judul</label>
-                                <input type="text" name="title" class="focus-ring">
+                    <label for="judul" class="fw-600">Judul</label>
+                    <div class="w-100">
+                        <input type="text" class="w-100" name="title" class="focus-ring">
+                        <div id="input-title"></div>
+                    </div>
 
-                                <label for="major" class="fw-600">Jurusan</label>
-                                <select name="major" id="" class="focus-ring bg-white border border-0">
-                                    <option value="teknik informatika">Teknik Informatika</option>
-                                    <option value="teknik elektro">Teknik Elektro</option>
-                                    <option value="teknik mesin">Teknik Mesin</option>
-                                    <option value="manajemen bisnis">Manajemen Bisnis</option>
-                                </select>
+                    <label for="major" class="fw-600">Jurusan</label>
+                    <div class="w-100">
+                        <select name="id_major" id="vacancy-major" class="w-100 focus-ring bg-white border border-0">
+                            <option value="3">Teknik Informatika</option>
+                            <option value="2">Teknik Elektro</option>
+                            <option value="4">Teknik Mesin</option>
+                            <option value="1">Manajemen Bisnis</option>
+                        </select>
+                        <div id="input-major"></div>
+                    </div>
 
 
-                                <label for="lokasi" class="fw-600">Lokasi</label>
-                                <input type="text" name="location" class="focus-ring">
+                    <label for="lokasi" class="fw-600">Lokasi</label>
+                    <div class="w-100">
+                        <input type="text" id="vacancy-location" name="location" class="w-100 focus-ring">
+                        <div id="input-location"></div>
+                    </div>
 
-                                <label for="dibuka" class="fw-600">Dibuka</label>
-                                <div>
-                                    <input type="date" style="width: 120px" class="focus-ring" name="date_created">
-                                    <span class="mx-2">-</span>
-                                    <input type="date" style="width: 120px;" class="focus-ring" name="date_ended">
-                                </div>
+                    <label for="dibuka" class="fw-600">Dibuka</label>
+                    <div>
+                        <div>
+                            <input type="date" id="vacancy-date-created" style="width: 120px" class="focus-ring"
+                                name="date_created">
+                            <span class="mx-2">-</span>
+                            <input type="date" id="vacancy-date-ended" style="width: 120px;" class="focus-ring"
+                                name="date_ended">
+                        </div>
+                        <div id="input-date"></div>
+                    </div>
 
-                                <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
-                                <div>
-                                    <div>
-                                        <input type="radio" name="time_type" id="full-time" value="full time">
-                                        <label for="full-time">Full time</label>
-                                    </div>
-                                    <div>
-                                        <input type="radio" name="time_type" value="part time" id="ar">
-                                        <label for="part-time">Part time</label>
-                                    </div>
-                                </div>
-
-                                <label for="jenis" class="fw-600">Jenis</label>
-                                <select name="type" id="" class="focus-ring bg-white border border-0">
-                                    <option value="online">Online</option>
-                                    <option value="offline">Offline</option>
-                                </select>
-
-                                <label for="durasi" class="fw-600">Durasi</label>
-                                <input type="text" name="duration" class="focus-ring">
-
-                                <label for="pendaftar" class="fw-600">Pendaftar</label>
-                                <input type="text" name="quota" id="" class="focus-ring">
+                    <label for="tipe-waktu" class="fw-600">Tipe waktu</label>
+                    <div>
+                        <div>
+                            <div>
+                                <input type="radio" name="time_type" id="full-time" value="full time">
+                                <label for="full-time">Full time</label>
                             </div>
+                            <div>
+                                <input type="radio" name="time_type" value="part time" id="">
+                                <label for="part-time">Part time</label>
+                            </div>
+                            <div id="input-time-type"></div>
                         </div>
-                        <div id="add-vacancy-detail" class="w-50 d-block">
-                            <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
-                            <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
-                        </div>
-                        <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
-                            <button class="border border-0 bni-blue text-white fw-700" onclick="showAddVacancyCard()"
-                                type="button">Tutup</button>
-                            <button id="add-vacancy-submit" class="d-block border border-0 bni-blue text-white fw-700"
-                                onclick="processAddVacancy()" type="button">Ekspos</button>
-                        </div>
-                    </form>
+                    </div>
 
-                    <div id="add-vacancy-notification"
-                        class="dashboard__add-vacancy-notification d-none position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
-                        <h5 id="add-vacancy-notification-title" class="fw-700"></h5>
-                        <img id="add-vacancy-notification-icon" src="" alt="">
-                        <button class="border border-0 bni-blue text-white fw-700 position-relative"
-                            onclick="closeAddVacancyForm()">Tutup</button>
+                    <label for="jenis" class="fw-600">Jenis</label>
+                    <div class="w-100">
+                        <select name="type" id="" class="w-100 focus-ring bg-white border border-0">
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                        <div id="input-type"></div>
+                    </div>
+
+                    <label for="durasi" class="fw-600">Durasi</label>
+                    <div class="w-100">
+                        <input type="text" name="duration" class="focus-ring">
+                        <div id="input-duration"></div>
+                    </div>
+
+                    <label for="pendaftar" class="fw-600">Pendaftar</label>
+                    <div>
+                        <input type="text" name="quota" id="" class="focus-ring">
+                        <div id="input-quota"></div>
                     </div>
                 </div>
-    `;
+            </div>
+            <div id="add-vacancy-detail" class="w-50 d-block">
+                <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
+                <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
+            </div>
+            <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
+                <button class="border border-0 bni-blue text-white fw-700" onclick="showAddVacancyCard()"
+                    type="button">Tutup</button>
+                <button id="add-vacancy-submit" class="d-block border border-0 bni-blue text-white fw-700"
+                    onclick="processAddVacancy()" type="button">Ekspos</button>
+            </div>
+        </form>
+
+        <div id="add-vacancy-notification"
+            class="dashboard__add-vacancy-notification d-none position-absolute bg-white p-4 mt-3 d-flex flex-column align-items-center justify-content-center">
+            <h5 id="add-vacancy-notification-title" class="fw-700"></h5>
+            <img id="add-vacancy-notification-icon" src="" alt="">
+            <button class="border border-0 bni-blue text-white fw-700 position-relative"
+                onclick="closeAddVacancyForm()">Tutup</button>
+        </div>
+    </div>
+    `);
 
     addVacancyForm = document.querySelector("#add-vacancy-form");
     addVacancyNotification = document.querySelector("#add-vacancy-notification");
 
 }
 
+function processAddVacancy() {
+    const form = new FormData(addVacancyForm);
+
+    $.ajax({
+        url: '/api/dashboard/perusahaan/tambah/lowongan',
+        type: "POST",
+        data: form,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            const formatter = new Intl.NumberFormat('en-us', {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+            });
+
+            if (response.validation_error) {
+                (response.validation_error.salary !== undefined) ? $("#input-salary").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.salary}</div>`) : "";
+                (response.validation_error.title !== undefined) ? $("#input-title").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.title}</div>`) : "";
+                (response.validation_error.major !== undefined) ? $("#input-major").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.major}</div>`) : "";
+                (response.validation_error.location !== undefined) ? $("#input-location").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.location}</div>`) : "";
+                (response.validation_error.date_created !== undefined) ? $("#input-date").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.date_created}</div>`) : "";
+                (response.validation_error.time_type !== undefined) ? $("#input-time-type").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.time_type}</div>`) : "";
+                (response.validation_error.type !== undefined) ? $("#input-type").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.type}</div>`) : "";
+                (response.validation_error.duration !== undefined) ? $("#input-duration").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.duration}</div>`) : "";
+                (response.validation_error.quota !== undefined) ? $("#input-quota").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.quota}</div>`) : "";
+
+                return false;
+            }
+
+            showAddVacancyNotification(response.notification.message, response.notification.icon);
+        },
+        error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+        }
+    })
+}
+
 // function untuk mengirim data lowongan baru ke server
-async function processAddVacancy() {
+async function processAddVacancy_old() {
     const form = new FormData(addVacancyForm);
     const response = await fetch('/api/dashboard/perusahaan/tambah/lowongan', {
         method: "POST",
@@ -410,6 +490,18 @@ async function processAddVacancy() {
         body: form
     })
 
+    // redirect user tidak authentikasi ke halaman branding RAIN
+    if (response.redirected) {
+        let currentUrl = window.location.href;
+        let currentPath = window.location.pathname;
+        let url = currentUrl.split(currentPath);
+        url[1] = 'index';
+
+        url = url.join('/');
+        window.location.replace(url);
+        return false;
+    }
+
     const result = await response.json();
     console.log(result);
 
@@ -418,8 +510,6 @@ async function processAddVacancy() {
         currency: "IDR",
         minimumFractionDigits: 0
     });
-
-    showAddVacancyNotification(result.notification.message, result.notification.icon);
 
     if (result.success) {
         vacancyCardList.innerHTML += `
@@ -433,19 +523,19 @@ async function processAddVacancy() {
                                 <div>
                                     <h6 class="vacancy-role m-0">${result.newData.title}</h6>
                                     <span class="vacancy-major-choice">${result.newData.major}</span>
-    
+
                                     <ul class="vacancy-small-detail p-0 mt-3">
                                         <li><i class="bi bi-geo-alt me-3"></i>${result.newData.location}</li>
                                         <li><i class="bi bi-calendar3 me-3"></i>${result.newData.date_created}</li>
                                         <li><i class="bi bi-bar-chart-line me-3"></i>${result.newData.quota} Kuota</li>
                                     </ul>
-    
+
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
                                         <li class="bg-white rounded-pill text-center">${result.newData.time_type}</li>
                                         <li class="bg-white rounded-pill text-center">${result.newData.type}</li>
                                         <li class="bg-white rounded-pill text-center">${result.newData.duration} Bulan</li>
                                     </ul>
-    
+
                                     <button onclick="showVacancyDetailCard(${result.newData.id_vacancy})"
                                         class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
                                 </div>
