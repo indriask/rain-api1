@@ -36,5 +36,9 @@ class DashboardAdminController extends Controller
             "icon" => "svg/success-checkmark.svg"
         ]);
     }
+
+    // method untuk proses edit data profile
+    public function editProfile(Request $request) {
+    }
 }
 
