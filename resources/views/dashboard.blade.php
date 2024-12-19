@@ -148,7 +148,7 @@
                                         </li>
                                     </ul>
 
-                                    <button onclick="showVacancyDetail({{ $lowong->id_vacancy }})"
+                                    <button onclick="showVacancyDetailCard({{ $lowong->id_vacancy }})"
                                         class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
                                 </div>
                             </div>

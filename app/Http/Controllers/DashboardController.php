@@ -67,18 +67,25 @@ class DashboardController extends Controller
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
     public function index($id = 0)
-    {
+    {       
+        // dd(auth('web')->user()->company->profile);
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load('company.profile');
-        $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+        $value = $this->handleCustomHeader($id, $role, $user);
+
+        if($value['success'] === true) {
+            return response()->json($value);
+        }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
 
         // jika fullname kosong, isi dengan data username
-        if(trim($fullName) === '') {
+        if (trim($fullName) === '') {
             $fullName = 'Username';
         }
 
         $lowongan = Vacancy::with('company.profile', 'major')->get();
-        
+
         return response()->view('dashboard', [
             'role' => $role,
             'lowongan' => $lowongan,
@@ -87,6 +94,29 @@ class DashboardController extends Controller
         ]);
     }
 
+    private function handleCustomHeader(int $id)
+    {
+        $args = func_get_args();
+
+        if (request()->hasHeader('x-get-data')) {
+            $value = request()->header('x-get-data');
+
+            if ($value === 'specific-data') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('nib', $args[2]->company->nib)
+                    ->where('id_vacancy', $id)
+                    ->first();
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $args[1],
+                    'success' => true
+                ];
+            }
+        }
+
+        return ['success' => false];
+    }
 
     /**
      * Method untuk me-render halaman daftar lamaran mahasiswa
@@ -137,10 +167,13 @@ class DashboardController extends Controller
             $fullName = "Username";
         }
 
+        $lowongan = Vacancy::with('company.profile', 'major')->get();
+
         return response()->view('company.kelola-lowongan', [
             'role' => $role,
             'user' => $user,
-            'fullName' => $fullName
+            'fullName' => $fullName,
+            'lowongan' => $lowongan
         ]);
     }
 
@@ -187,7 +220,8 @@ class DashboardController extends Controller
     }
 
     // menampilkan halaman profile admin
-    public function adminProfilePage() {
+    public function adminProfilePage()
+    {
         return response()->view('admin.profile', [
             'role' => 'admin'
         ]);

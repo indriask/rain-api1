@@ -110,33 +110,41 @@
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="vacancy-card-list" class="vacancy-card-list px-3 gap-3 mt-4 position-relative">
-                        <div class="vacancy-card bg-white py-3 px-4">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="salary-text">4000000/bulan</h5>
-                                <img class="company-photo rounded"
-                                    src="http://localhost:8000/storage${data.company.profile.photo_profile}"
-                                    alt="${data.company.profile.first_name} photo">
+                        @foreach ($lowongan as $lowong)
+                            <div class="vacancy-card bg-white py-3 px-4">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="salary-text">
+                                        Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
+                                    </h5>
+                                    <img class="company-photo rounded"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                        alt="Company photo">
+                                </div>
+                                <div>
+                                    <h6 class="vacancy-role m-0">{{ $lowong->title }}</h6>
+                                    <span class="vacancy-major-choice">{{ $lowong->major->name }}</span>
+
+                                    <ul class="vacancy-small-detail p-0 mt-3">
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->location }}</li>
+                                        <li><i
+                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->date_created)->format('d-F-Y') }}
+                                        </li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->quota }} Kuota
+                                        </li>
+                                    </ul>
+
+                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->time_type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->duration }} Bulan
+                                        </li>
+                                    </ul>
+
+                                    <button onclick="showVacancyDetail({{ $lowong->id_vacancy }})"
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                </div>
                             </div>
-                            <div>
-                                <h6 class="vacancy-role m-0">${data.title}</h6>
-                                <span class="vacancy-major-choice">${data.major}</span>
-
-                                <ul class="vacancy-small-detail p-0 mt-3">
-                                    <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
-                                    <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
-                                    <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
-                                </ul>
-
-                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                    <li class="bg-white rounded-pill text-center">${data.time_type}</li>
-                                    <li class="bg-white rounded-pill text-center">${data.type}</li>
-                                    <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
-                                </ul>
-
-                                <button onclick="showManageVacancyCard()"
-                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

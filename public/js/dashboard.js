@@ -108,7 +108,7 @@ $('.hapus-filter').on('click', function () {
 });
 
 const vacancyCardListContainer = document.querySelector("#vacancy-card-list-container");
-const vacancyDetailCard = document.querySelector("#vacancy-detail-card");
+const vacancyDetailCard = $("#vacancy-detail-card");
 const vacancyApplyFormContainer = document.querySelector("#vacancy-apply-form-container")
 const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
@@ -120,64 +120,70 @@ let addVacancy = document.querySelector("#add-vacancy");
 let addVacancyForm = null;
 let addVacancyNotification = null;
 
+
 // function untuk mengambil data lowongan dan menampilkannya
-async function showVacancyDetail(id = 0) {
-    if (vacancyDetailCard.classList.contains("d-block")) {
-        vacancyDetailCard.classList.remove("d-block");
-        vacancyDetailCard.classList.add("d-none");
+function showVacancyDetailCard(id = 0) {
+    const vacancyDetailCard = $("#vacancy-detail-card");
 
-        document.querySelector("#vacancy-detail-card-info").remove();
+    if (vacancyDetailCard.hasClass("d-block")) {
+        vacancyDetailCard.removeClass("d-block");
+        vacancyDetailCard.addClass("d-none");
 
+        $("#vacancy-detail-card-info").remove();
         return 1;
+    } else {
+        vacancyDetailCard.addClass("d-block");
+        vacancyDetailCard.removeClass("d-none");
     }
 
-    vacancyDetailCard.classList.remove("d-none");
-    vacancyDetailCard.classList.add("d-block");
+    $.ajax({
+        url: `/dashboard/${id}`,
+        method: "GET",
+        headers: {
+            "X-GET-DATA": "specific-data",
+        },
+        success: function (response) {
+            let vacancy = response.vacancy;
+            let applyForm = "";
+            let fullName = `${vacancy.company.profile.first_name ?? "" } ${vacancy.company.profile.last_name ?? ""}`;
 
+            const formatter = new Intl.NumberFormat('en-us', {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+            });
 
-    try {
-        const response = await fetch(`/dashboard/${id}`, {
-            method: "GET",
-            headers: {
-                "X_GET_SPECIFIC": "specific-data"
+            if(fullName.trim() === "") {
+                fullName = "Username";
             }
-        });
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch data");
-        }
+            if(response.role === 'student') {
+                applyForm = `
+                    <div class="d-flex">
+                            <button type="button"
+                            class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
+                            onclick="showApplyVacancyFormContainer(1)">Daftar</button>
+                        </div>
+                `;
+            }
 
-        if (response.redirected) {
-            window.location.replace('/index');
-            return 1;
-        }
-
-        let studentForm = '';
-        const result = await response.json();
-
-        const formatter = new Intl.NumberFormat('en-us', {
-            style: "currency",
-            currency: "IDR",
-            minimumFractionDigits: 0
-        });
-
-        vacancyDetailCard.innerHTML = `
-            <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
+            $("#vacancy-detail-card").append(`
+                <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
-                        <h1 class="apply-form-title">${result.data.title}</h1>
+                        <h1 class="apply-form-title">${vacancy.title}</h1>
                         <div class="d-flex mt-3">
                             <img
-                                class="apply-vacancy-img object-fit-cover object-fit-position me-2" src="http://localhost:8000/storage${result.data.company.profile.photo_profile}"
+                                class="apply-vacancy-img object-fit-cover object-fit-position me-2" src="${window.storage_path.path + vacancy.company.profile.photo_profile}"
                                 alt="Company photo">
                             <div style="width: 250px">
                                 <div class="apply-company-title d-flex justify-content-between">
-                                    <span class="fw-500" style="width: 100px;">${result.data.company.profile.first_name} ${result.data.company.profile.last_name}</span>
-                                    <span class="fw-500">${result.data.location}</span>
+                                    <span class="fw-500" style="width: 100px;">${fullName}</span>
+                                    <span class="fw-500">${vacancy.location}</span>
                                 </div>
                                 <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
-                                    <span class="bg-white rounded-pill p-1">${result.data.time_type}</span>
-                                    <span class="bg-white rounded-pill p-1">${result.data.type}</span>
-                                    <span class="bg-white rounded-pill p-1">${result.data.duration} Bulan/span>
+                                    <span class="bg-white rounded-pill p-1">${vacancy.time_type}</span>
+                                    <span class="bg-white rounded-pill p-1">${vacancy.type}</span>
+                                    <span class="bg-white rounded-pill p-1">${vacancy.duration} Bulan/span>
                                 </div>
                             </div>
                         </div>
@@ -185,26 +191,26 @@ async function showVacancyDetail(id = 0) {
                         <div class="form-input-container mt-4">
                             <label class="fw-500">Gaji</label>
                             <div class="input-group">
-                                <div class="box" style="width: 50px;">${formatter.format(result.data.salary)}</div>
+                                <div class="box" style="width: 50px;">${formatter.format(vacancy.salary)}</div>
                                 <span class="mx-3">/</span>
-                                <div class="box" style="width: 30px;">${result.data.salary === 0 ? "-" : "bulan"}</div>
+                                <div class="box" style="width: 30px;">${vacancy.salary === 0 ? "-" : "bulan"}</div>
                             </div>
 
                             <label class="fw-500">Jurusan</label>
-                            <div class="box">${result.data.major}</div>
+                            <div class="box">${vacancy.major.name}</div>
 
                             <label class="fw-500">Dibuka</label>
                             <div class="input-group">
-                                <div class="box">${result.data.date_created}</div>
+                                <div class="box">${vacancy.date_created}</div>
                                 <span class="mx-3">-</span>
-                                <div class="box">${result.data.date_ended}</div>
+                                <div class="box">${vacancy.date_ended}</div>
                             </div>
 
                             <label class="fw-500">Kuota</label>
-                            <div class="box">${result.data.quota}</div>
+                            <div class="box">${vacancy.quota}</div>
 
                             <label class="fw-500">Pendaftar</label>
-                            <div class="box">${result.data.applied}</div>
+                            <div class="box">${vacancy.applied}</div>
                         </div>
                         <div class="position-absolute bottom-0">
                             <button onclick="showVacancyDetailCard()" type="button"
@@ -212,21 +218,31 @@ async function showVacancyDetail(id = 0) {
                         </div>
                     </div>
                     <div class="w-50">
-                        <div class="d-flex">
-                            <button type="button"
-                            class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
-                            onclick="showApplyVacancyFormContainer(1)">Daftar</button>
-                        </div>
+                        ${applyForm}
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                        <div class="apply-vacancy-detail overflow-auto">${result.data.description}</div>
+                        <div class="apply-vacancy-detail overflow-auto">${vacancy.description}</div>
                     </div>
-                </div>
-        `;
+                </div>    
+            
+            
+            `);
 
-    } catch (error) {
-        console.error("Error: ", error.message);
-    }
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+        }
+    });
 }
+
 
 // function untuk meng-aktifkan dan non-aktifkan form daftar lowongan mahasiswa
 function showApplyVacancyFormContainer(id) {
@@ -263,7 +279,7 @@ function closeAllFormCard() {
     vacancyApplyForm.classList.remove("d-none", "pe-none");
 
     showApplyVacancyFormContainer();
-    showVacancyDetailCard();
+    showVacancyDetail();
 
     return 1;
 }
@@ -286,9 +302,7 @@ function processLogoutRequest() {
     $.ajax({
         url: "/api/signout",
         type: "POST",
-        headers: {
-            X_CSRF_TOKEN: window.laravel.csrf_token
-        },
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         success: function (response) {
             if (response.code === 302) {
                 $("#logout-card-message").text(response.message);
@@ -466,6 +480,7 @@ function processAddVacancy() {
     $.ajax({
         url: '/api/dashboard/perusahaan/tambah/lowongan',
         type: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: form,
         processData: false,
         contentType: false,

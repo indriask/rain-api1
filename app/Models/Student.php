@@ -16,9 +16,9 @@ class Student extends Model
     protected $fillable = [
         'id_profile',
         'id_user',
+        'id_major',
+        'id_study_program',
         'institute',
-        'study_program',
-        'major',
         'skill'
     ];
 
@@ -35,5 +35,15 @@ class Student extends Model
     // method one-to-many pada student ke proposal
     public function proposals() {
         return $this->hasMany(Proposal::class, 'nim', 'nim');
+    }
+
+    // method one-to-one pada student ke proposal
+    public function major() {
+        return $this->belongsTo(Major::class, 'id_major', 'id');
+    }
+
+    // method one-to-many pada student ke study_program
+    public function study_program() {
+        return $this->belongsTo(StudyProgram::class, 'id_study_program', 'id');
     }
 }

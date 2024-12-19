@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('nim')->primary();
             $table->unsignedBigInteger('id_profile');
             $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_major');
+            $table->unsignedBigInteger('id_study_program');
             $table->string('institute', 100)->nullable(true);
-            $table->string('study_program', 100)->nullable(true);
-            $table->string('major', 100)->nullable(true);
             $table->string('skill', 100)->nullable(true);
             $table->timestamps();
 
@@ -29,6 +29,16 @@ return new class extends Migration
             $table->foreign('id_user')
                 ->references('id_user')
                 ->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('id_major')
+                ->references('id')
+                ->on('major')
+                ->onDelete('cascade');
+
+            $table->foreign('id_study_program')
+                ->references('id')
+                ->on('study_program')
                 ->onDelete('cascade');
         });
     }
