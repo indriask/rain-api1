@@ -67,13 +67,19 @@ class DashboardController extends Controller
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
     public function index($id = 0)
-    {       
-        // dd(auth('web')->user()->company->profile);
+    {
+        $lowongan = Vacancy::with('company.profile', 'major')->get();
+
+        return response()->view('dashboard', [
+            'role' => 'admin',
+            'lowongan' => $lowongan
+        ]);
+
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load('company.profile');
         $value = $this->handleCustomHeader($id, $role, $user);
 
-        if($value['success'] === true) {
+        if ($value['success'] === true) {
             return response()->json($value);
         }
 
@@ -215,7 +221,14 @@ class DashboardController extends Controller
     public function adminManageUserStudent()
     {
         return response()->view('admin.kelola-mahasiswa', [
-            'role' => 'student'
+            'role' => 'admin'
+        ]);
+    }
+
+    // menampilkan halaman mahasiswa tertentu
+    public function adminViewUserStudent(int $id) {
+        return view('admin.view-mahasiswa', [
+            'role' => 'admin'
         ]);
     }
 

@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
 });
 
+Route::post('/dashboard/admin/kelola/user/mahasiswa/delete', [DashboardAdminController::class, 'deleteUser']);
+
 
 
 

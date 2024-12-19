@@ -623,3 +623,15 @@ button {
     border-radius: 7px;
     top: 4rem;
 }
+
+/* animasi klik tombol */
+.click-animation {
+    transform: scale(1);
+    opacity: 1;
+    transition: all 100ms ease;
+}
+
+.click-animation:active {
+    opacity: .9;
+    transform: scale(.95);
+}

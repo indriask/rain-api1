@@ -21,5 +21,12 @@ class DashboardAdminController extends Controller
     public function manageUserVacancy(Request $request) {
         
     }
+
+    // method untuk menghapus akun user secara permanen
+    public function deleteUser(Request $request) {
+        return response()->json([
+            "message" => "Berhasil menghapus akun!"
+        ]);
+    }
 }
 

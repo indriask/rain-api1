@@ -40,15 +40,15 @@
                         <div><i class="bi bi-person me-1"></i> Kelola Pengguna</div>
                         <i class="bi bi-caret-down-square position-relative" style="right: 4px;"></i>
                     </button>
-                    <ul class="dropdown-menu mt-1">
-                        <li><a class="dropdown-item" href="{{ route('admin-manage-user-student') }}"
+                    <ul class="dropdown-menu mt-1 w-100">
+                        <li><a class="dropdown-item px-2" href="{{ route('admin-manage-user-student') }}"
                                 style="font-size: .9rem;">
-                                <i class="bi bi-backpack"></i>
+                                <i class="bi bi-backpack me-1"></i>
                                 Kelola Akun Mahasiswa</a>
                         </li>
-                        <li><a class="dropdown-item" href="{{ route('admin-manage-user-company') }}"
+                        <li><a class="dropdown-item px-2" href="{{ route('admin-manage-user-company') }}"
                                 style="font-size: .9rem;">
-                                <i class="bi bi-building"></i>
+                                <i class="bi bi-building me-1"></i>
                                 Kelola Akun Perusahaan</a>
                         </li>
                     </ul>
