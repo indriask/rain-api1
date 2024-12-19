@@ -56,8 +56,8 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="{{ asset('storage/default/profile.png') }}"
-                            alt="" class="profile-img rounded-circle shadow">
+                        <img src="{{ asset('storage/default/profile.png') }}" alt=""
+                            class="profile-img rounded-circle shadow">
                         <span class="profile-name">Nama Admin</span>
                     </div>
                 </div>
@@ -67,10 +67,11 @@
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="{{ asset('storage/default/profile.png') }}"
-                            alt="Someone profile" class="profile__profile-img rounded">
+                        <img src="{{ asset('storage/default/profile.png') }}" alt="Someone profile"
+                            class="profile__profile-img rounded">
                         <div class="w-100">
-                            <input type="text" form="edit-company-profile-form" name="nama" value="Admin Polibatam"
+                            <input type="text" form="edit-company-profile-form" name="nama"
+                                value="Admin Polibatam"
                                 class="profile__profile-nama-lengkap border focus-ring border-0 bg-white rounded p-2 w-100">
                             <span class="fw-700 d-block" style="font-size: .9rem">Admin</span>
                         </div>
