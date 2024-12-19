@@ -145,7 +145,7 @@ function showVacancyDetailCard(id = 0) {
         success: function (response) {
             let vacancy = response.vacancy;
             let applyForm = "";
-            let fullName = `${vacancy.company.profile.first_name ?? "" } ${vacancy.company.profile.last_name ?? ""}`;
+            let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
 
             const formatter = new Intl.NumberFormat('en-us', {
                 style: "currency",
@@ -153,11 +153,11 @@ function showVacancyDetailCard(id = 0) {
                 minimumFractionDigits: 0
             });
 
-            if(fullName.trim() === "") {
+            if (fullName.trim() === "") {
                 fullName = "Username";
             }
 
-            if(response.role === 'student') {
+            if (response.role === 'student') {
                 applyForm = `
                     <div class="d-flex">
                             <button type="button"
@@ -311,7 +311,6 @@ function processLogoutRequest() {
 
                 setTimeout(() => window.location.replace('/index'), 500);
             } else {
-                console.log("makanbang");
                 $("#logout-card-message").text(response.message);
 
                 setTimeout(() => {
@@ -341,6 +340,17 @@ function processLogoutRequest() {
                 let currentPath = window.location.pathname;
                 let url = currentUrl.split(currentPath);
                 url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            if (jqXHR.status === 403) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'signin';
 
                 url = url.join('/');
                 window.location.replace(url);

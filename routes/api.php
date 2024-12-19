@@ -64,6 +64,8 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 });
 
 Route::post('/dashboard/admin/kelola/user/mahasiswa/delete', [DashboardAdminController::class, 'deleteUser']);
+Route::post('/dashboard/admin/kelola/user/perusahaan/verify', [DashboardAdminController::class, 'verifyCompany']);
+
 
 
 

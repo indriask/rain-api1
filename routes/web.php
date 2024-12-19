@@ -63,8 +63,10 @@ Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class
     ->name('admin-manage-user-student');
 Route::get('/dashboard/admin/kelola/user/mahasiswa/{id}', [DashboardController::class, 'adminViewUserStudent'])
     ->name('admin-view-user-student');
-Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserPerusahaan'])
+Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])
     ->name('admin-manage-user-company');
+Route::get('/dashboad/admin/kelola/user/perusahaan/{id}', [DashboardController::class, 'adminViewUserCompany'])
+    ->name('admin-view-user-company');
 Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
 
 

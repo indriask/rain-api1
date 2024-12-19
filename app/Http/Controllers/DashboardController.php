@@ -226,9 +226,11 @@ class DashboardController extends Controller
     }
 
     // menampilkan halaman mahasiswa tertentu
-    public function adminViewUserStudent(int $id) {
+    public function adminViewUserStudent(int $id)
+    {
         return view('admin.view-mahasiswa', [
-            'role' => 'admin'
+            'role' => 'admin',
+            'id_vacancy' => $id
         ]);
     }
 
@@ -247,6 +249,15 @@ class DashboardController extends Controller
     {
         return response()->view('admin.kelola-perusahaan', [
             'role' => 'admin'
+        ]);
+    }
+
+    // menampilkan halaman perusahaan tertentu
+    public function adminViewUserCompany(int $id)
+    {
+        return view('admin.view-perusahaan', [
+            'role' => 'admin',
+            'id_vacancy' => $id
         ]);
     }
 

@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="{{ asset('css/daftar-pelamar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
-    <title>Beranda | RAIN</title>
+    <title>Kelola Mahasiswa | RAIN</title>
     <script>
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"

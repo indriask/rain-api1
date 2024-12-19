@@ -28,5 +28,13 @@ class DashboardAdminController extends Controller
             "message" => "Berhasil menghapus akun!"
         ]);
     }
+    
+    // method untuk verifikasi akun perusahaan
+    public function verifyCompany(Request $request) {
+        return response()->json([
+            "message" => "Akun berhasil diverifikasi",
+            "icon" => "svg/success-checkmark.svg"
+        ]);
+    }
 }
 
