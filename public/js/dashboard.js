@@ -114,7 +114,6 @@ const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
 const vacancyCardList = document.querySelector("#vacancy-card-list");
 const logoutCard = document.querySelector("#logout-card");
-let isValidationError = false;
 
 let addVacancy = document.querySelector("#add-vacancy");
 let addVacancyForm = null;
@@ -143,6 +142,7 @@ function showVacancyDetailCard(id = 0) {
             "X-GET-DATA": "specific-data",
         },
         success: function (response) {
+            console.log(response);
             let vacancy = response.vacancy;
             let applyForm = "";
             let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
@@ -183,7 +183,7 @@ function showVacancyDetailCard(id = 0) {
                                 <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
                                     <span class="bg-white rounded-pill p-1">${vacancy.time_type}</span>
                                     <span class="bg-white rounded-pill p-1">${vacancy.type}</span>
-                                    <span class="bg-white rounded-pill p-1">${vacancy.duration} Bulan/span>
+                                    <span class="bg-white rounded-pill p-1">${vacancy.duration} Bulan</span>
                                 </div>
                             </div>
                         </div>
@@ -510,7 +510,6 @@ function processAddVacancy() {
             }
 
             showAddVacancyNotification(response.notification.message, response.notification.icon);
-            $("add-vacancy-form").get(0).reset();
         },
         error: function (jqXHR) {
             // check apakah response code nya 401 (user tidak ter-autentikasi)
@@ -519,6 +518,17 @@ function processAddVacancy() {
                 let currentPath = window.location.pathname;
                 let url = currentUrl.split(currentPath);
                 url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            if (jqXHR.status === 403) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'signin';
 
                 url = url.join('/');
                 window.location.replace(url);
@@ -542,12 +552,12 @@ function showAddVacancyNotification(message, icon) {
 
 // function untuk menutup tampilan dan me-reset form input tambah lowongan 
 function closeAddVacancyForm() {
-    addVacancyNotification.classList.remove("d-block");
-    addVacancyNotification.classList.add("d-none");
+    $("#add-vacancy-notification").removeClass("d-block");
+    $("#add-vacancy-notification").addClass("d-none");
+    
+    $("#add-vacancy-form").get(0).reset();
 
-    addVacancy.textContent = '';
-
-    addVacancyForm.reset();
+    $("#add-vacancy").text("");
 
     return;
 }

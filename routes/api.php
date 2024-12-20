@@ -18,7 +18,7 @@ use App\Http\Controllers\api\VerifyEmailController;
 
 
 
-Route::middleware('guest', 'web')->group(function () {
+Route::middleware(['guest', 'web'])->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan
     Route::post('/signin', [AccountController::class, 'signin'])->name('api-validate-signin');
 

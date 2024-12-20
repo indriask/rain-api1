@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\api\DashboardAdminController;
 use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
@@ -9,7 +8,6 @@ use App\Http\Middleware\IsRoleStudent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 // Routing ke halaman branding RAIN
@@ -33,17 +31,16 @@ Route::middleware('guest')->group(function () {
 
 
 // akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
-Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])->name('dashboard');
-Route::middleware('verified')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
+    Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])->name('dashboard');
 
     // Routing khusus role mahasiswa
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
         ->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
     Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
-        ->name('student-profile')
-        ->middleware(IsRoleStudent::class);
+        ->name('student-profile');
 
     // Routing khusus role perusahaan
     Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])
@@ -53,21 +50,19 @@ Route::middleware('verified')->group(function () {
         ->name('company-manage-vacancy')
         ->middleware(IsRoleCompany::class);
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
-        ->name('company-profile')
-        ->middleware(IsRoleCompany::class);
+        ->name('company-profile');
 
     // Routing khusus role admin
+    Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])
+        ->name('admin-manage-user-student');
+    Route::get('/dashboard/admin/kelola/user/mahasiswa/{id}', [DashboardController::class, 'adminViewUserStudent'])
+        ->name('admin-view-user-student');
+    Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])
+        ->name('admin-manage-user-company');
+    Route::get('/dashboad/admin/kelola/user/perusahaan/{id}', [DashboardController::class, 'adminViewUserCompany'])
+        ->name('admin-view-user-company');
+    Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
 });
-
-Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])
-    ->name('admin-manage-user-student');
-Route::get('/dashboard/admin/kelola/user/mahasiswa/{id}', [DashboardController::class, 'adminViewUserStudent'])
-    ->name('admin-view-user-student');
-Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])
-    ->name('admin-manage-user-company');
-Route::get('/dashboad/admin/kelola/user/perusahaan/{id}', [DashboardController::class, 'adminViewUserCompany'])
-    ->name('admin-view-user-company');
-Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
 
 
 
@@ -127,4 +122,8 @@ Route::get('/login-perusahaan', function () {
 Route::get('/login-mahasiswa', function () {
     Auth::attempt(['email' => 'indria@gmail.com', 'password' => 'password123']);
     return redirect()->route('dashboard');
+});
+
+Route::get('/hash', function() {
+    return Hash::make('password123');
 });

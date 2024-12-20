@@ -117,7 +117,7 @@
                                         Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
                                     </h5>
                                     <img class="company-photo rounded"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                        src="{{ asset('storage/' .  $lowong->company->profile->photo_profile) }}"
                                         alt="Company photo">
                                 </div>
                                 <div>
@@ -140,7 +140,7 @@
                                         </li>
                                     </ul>
 
-                                    <button onclick="showVacancyDetail({{ $lowong->id_vacancy }})"
+                                    <button onclick="showDetailManageVacancy({{ $lowong->id_vacancy }})"
                                         class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
             </div>
 
             {{-- menampilkan detail lowongan yang sudah di publish --}}
-            <div id="mange-vacancy-container"
+            <div id="manage-vacancy-detail"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto"
                 style="background-color: rgba(0, 0, 0, .4)">
             </div>

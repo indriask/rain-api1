@@ -68,16 +68,9 @@ class DashboardController extends Controller
      */
     public function index($id = 0)
     {
-        $lowongan = Vacancy::with('company.profile', 'major')->get();
-
-        return response()->view('dashboard', [
-            'role' => 'admin',
-            'lowongan' => $lowongan
-        ]);
-
         $role = $this->roles[auth('web')->user()->role - 1];
-        $user = auth('web')->user()->load('company.profile');
-        $value = $this->handleCustomHeader($id, $role, $user);
+        $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
 
         if ($value['success'] === true) {
             return response()->json($value);
@@ -100,22 +93,20 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function handleCustomHeader(int $id)
+    private function handleCustomHeader(int $id, $user, $role)
     {
-        $args = func_get_args();
-
         if (request()->hasHeader('x-get-data')) {
             $value = request()->header('x-get-data');
 
             if ($value === 'specific-data') {
                 $vacancy = Vacancy::with('company.profile', 'major')
-                    ->where('nib', $args[2]->company->nib)
+                    ->where('nib', $user->company->nib)
                     ->where('id_vacancy', $id)
                     ->first();
 
                 return [
                     'vacancy' => $vacancy,
-                    'role' => $args[1],
+                    'role' => $role,
                     'success' => true
                 ];
             }
@@ -151,6 +142,8 @@ class DashboardController extends Controller
     {
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
 
         if (request()->hasHeader('x-get-data')) {
@@ -198,8 +191,6 @@ class DashboardController extends Controller
      */
     public function companyProfilePage()
     {
-
-
         return response()->view('company.profile', [
             'role' => 'company'
         ]);

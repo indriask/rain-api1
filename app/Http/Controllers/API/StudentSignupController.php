@@ -47,7 +47,9 @@ class StudentSignupController extends Controller
             $student = Student::create([
                 'nim' => $validated['nim'],
                 'id_user' => $user->id_user,
-                'id_profile' => $profile->id_profile
+                'id_profile' => $profile->id_profile,
+                'id_major' => 3,
+                'id_study_program' => 2,
             ]);
 
             // mark user as authenticated but not verified
