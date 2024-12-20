@@ -77,18 +77,13 @@ class DashboardController extends Controller
         }
 
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-
-        // jika fullname kosong, isi dengan data username
-        if (trim($fullName) === '') {
-            $fullName = 'Username';
-        }
-
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
         $lowongan = Vacancy::with('company.profile', 'major')->get();
 
         return response()->view('dashboard', [
             'role' => $role,
             'lowongan' => $lowongan,
-            'user' => auth('web')->user(),
+            'user' => $user,
             'fullName' => $fullName
         ]);
     }
@@ -144,28 +139,12 @@ class DashboardController extends Controller
         $user = auth('web')->user()->load("$role.profile");
         $value = $this->handleCustomHeader($id, $user, $role);
 
+        if ($value['success'] === true) {
+            return $value;
+        }
+
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-
-        if (request()->hasHeader('x-get-data')) {
-            $vacancies = Vacancy::with('company.profile')->where('nib', $user->company->nib)
-                ->get();
-
-            return response()->json(['data' => $vacancies]);
-        }
-
-        if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::with('company.profile')->where('id_vacancy', $id)
-                ->where('nib', $user->company->nib)
-                ->first();
-
-            return response()->json(['data' => $vacancy]);
-        }
-
-
-        if (trim($fullName) === "") {
-            $fullName = "Username";
-        }
-
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
         $lowongan = Vacancy::with('company.profile', 'major')->get();
 
         return response()->view('company.kelola-lowongan', [

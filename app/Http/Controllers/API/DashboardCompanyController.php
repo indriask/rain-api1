@@ -85,7 +85,7 @@ class DashboardCompanyController extends Controller
             $validated = $request->validate([
                 'salary' => ['required', 'present', 'integer', 'max:10000000'],
                 'title' => ['required', 'present', 'string', 'max:100'],
-                'major' => ['required', 'present', 'string', Rule::in(['1', '2', '3', '4'])],
+                'id_major' => ['required', 'present', 'string', Rule::in(['1', '2', '3', '4'])],
                 'location' => ['required', 'present', 'string', 'max:60'],
                 'date_created' => ['required', 'present', 'date'],
                 'date_ended' => ['required', 'present', 'date'],
@@ -107,7 +107,7 @@ class DashboardCompanyController extends Controller
                 'success' => true,
                 'notification' => [
                     'message' => 'Lowongan anda berhasil di edit!',
-                    'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg'
+                    'icon' => asset('storage/svg/success-checkmark.svg')
                 ]
             ])->send();
         } catch (\Throwable $e) {
@@ -115,7 +115,7 @@ class DashboardCompanyController extends Controller
                 'success' => false,
                 'notification' => [
                     'message' => 'Lowongan anda gagal di edit!',
-                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg',
+                    'icon' => asset('storage/svg/failed-x.svg'),
                 ],
                 'error' => $e->getMessage()
             ]);
@@ -129,7 +129,7 @@ class DashboardCompanyController extends Controller
     {
         try {
             $validated = $request->validate([
-                'nib' => ['required', 'present', 'string'],
+                'nib' => ['required', 'present', 'string', 'min:9', 'max:10'],
                 'id_vacancy' => ['required', 'present', 'integer'],
             ]);
 
@@ -141,7 +141,7 @@ class DashboardCompanyController extends Controller
                 'success' => true,
                 'notification' => [
                     'message' => 'Lowongan anda berhasil di hapus!',
-                    'icon' => 'http://localhost:8000/storage/svg/success-checkmark.svg',
+                    'icon' => asset('storage/svg/success-checkmark.svg')
                 ],
             ]);
         } catch (\Throwable $e) {
@@ -149,7 +149,7 @@ class DashboardCompanyController extends Controller
                 'success' => false,
                 'notification' => [
                     'message' => 'Lowongan anda gagal di hapus!',
-                    'icon' => 'http://localhost:8000/storage/svg/failed-x.svg',
+                    'icon' => asset('storage/svg/failed-x.svg')
                 ],
                 'error' => $e->getMessage()
             ]);

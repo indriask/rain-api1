@@ -117,7 +117,7 @@
                                         Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
                                     </h5>
                                     <img class="company-photo rounded"
-                                        src="{{ asset('storage/' .  $lowong->company->profile->photo_profile) }}"
+                                        src="{{ asset('storage/' . $lowong->company->profile->photo_profile) }}"
                                         alt="Company photo">
                                 </div>
                                 <div>
@@ -156,10 +156,10 @@
             </div>
 
             {{-- menampilkan edit detail lowongan yang sudah di publish --}}
-            <div id="manage-vacancy-container"
+            {{-- <div id="manage-vacancy-container"
                 class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
-            </div>
+            </div> --}}
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
