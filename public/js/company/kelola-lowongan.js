@@ -18,7 +18,7 @@ function showDetailManageVacancy(id = 0) {
     $.ajax({
         url: `/dashboard/perusahaan/kelola/lowongan/${id}`,
         method: "GET",
-        headers: { "X-GET-DATA": "specific-data" },
+        headers: { "X-GET-DATA": "specific-data-company" },
         success: function (response) {
             if(response.vacancy === null || response.vacancy === undefined) {
                 manageVacancyDetail.html(`
@@ -204,13 +204,7 @@ function showDetailManageVacancy(id = 0) {
             }
 
             if (jqXHR.status === 403) {
-                let currentUrl = window.location.href;
-                let currentPath = window.location.pathname;
-                let url = currentUrl.split(currentPath);
-                url[1] = 'signin';
-
-                url = url.join('/');
-                window.location.replace(url);
+                console.error("Someting when wrong when accesing the page");
                 return false;
             }
         }
@@ -229,7 +223,6 @@ function editManageVacancy(id = 0) {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response);
             if (response.validation_error) {
                 (response.validation_error.salary !== undefined) ? $("#input-salary").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.salary}</div>`) : "";
                 (response.validation_error.title !== undefined) ? $("#input-title").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.title}</div>`) : "";
@@ -260,13 +253,7 @@ function editManageVacancy(id = 0) {
             }
 
             if (jqXHR.status === 403) {
-                let currentUrl = window.location.href;
-                let currentPath = window.location.pathname;
-                let url = currentUrl.split(currentPath);
-                url[1] = 'signin';
-
-                url = url.join('/');
-                window.location.replace(url);
+                console.error("Someting when wrong when accesing the page");
                 return false;
             }
         }
@@ -326,13 +313,7 @@ function deleteManageVacancy(id = 0, nib = "") {
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                // let currentUrl = window.location.href;
-                // let currentPath = window.location.pathname;
-                // let url = currentUrl.split(currentPath);
-                // url[1] = 'signin';
-
-                // url = url.join('/');
-                // window.location.replace(url);
+                console.error("Someting when wrong when accesing the page");
                 return false;
             }
         }

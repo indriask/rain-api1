@@ -249,6 +249,7 @@ function showVacancyDetailCard(id = 0) {
 
         },
         error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
                 let currentPath = window.location.pathname;
@@ -259,10 +260,15 @@ function showVacancyDetailCard(id = 0) {
                 window.location.replace(url);
                 return false;
             }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                console.error("Someting when wrong when accesing the page");
+                return false;
+            }
         }
     });
 }
-
 
 // function untuk meng-aktifkan dan non-aktifkan form daftar lowongan mahasiswa
 function showApplyVacancyFormContainer(id) {
@@ -355,6 +361,7 @@ function processLogoutRequest() {
             }
         },
         error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
                 let currentPath = window.location.pathname;
@@ -366,14 +373,9 @@ function processLogoutRequest() {
                 return false;
             }
 
+            // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                let currentUrl = window.location.href;
-                let currentPath = window.location.pathname;
-                let url = currentUrl.split(currentPath);
-                url[1] = 'signin';
-
-                url = url.join('/');
-                window.location.replace(url);
+                console.error("Someting when wrong when accesing the page");
                 return false;
             }
         }
@@ -544,14 +546,9 @@ function processAddVacancy() {
                 return false;
             }
 
+            // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                let currentUrl = window.location.href;
-                let currentPath = window.location.pathname;
-                let url = currentUrl.split(currentPath);
-                url[1] = 'signin';
-
-                url = url.join('/');
-                window.location.replace(url);
+                console.error("Someting when wrong when accesing the page");
                 return false;
             }
         }

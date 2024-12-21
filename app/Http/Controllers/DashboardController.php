@@ -6,7 +6,11 @@ use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Major;
+use App\Models\Proposal;
+use App\Models\Student;
 use App\Models\StudyProgram;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -95,7 +99,6 @@ class DashboardController extends Controller
 
             if ($value === 'specific-data') {
                 $vacancy = Vacancy::with('company.profile', 'major')
-                    ->where('nib', $user->company->nib)
                     ->where('id_vacancy', $id)
                     ->first();
 
@@ -104,6 +107,48 @@ class DashboardController extends Controller
                     'role' => $role,
                     'success' => true
                 ];
+            }
+
+            if($value === 'specific-data-company') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('id_vacancy', $id)
+                    ->where('nib', $user->$role->nib)
+                    ->first();
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $role,
+                    'success' => true
+                ];
+            }
+
+            if ($value === 'get-applicants') {
+                $applicants = Proposal::select(['id_proposal', 'nim','id_vacancy', 'resume'])
+                    ->with([
+                        'student.profile' => function($query) {
+                            $query->select(['id_profile', 'photo_profile', 'first_name', 'last_name']);
+                        },
+                        'student.account' => function ($query) {
+                            $query->select(['id_user', 'email']);
+                        },
+                        'vacancy' => function ($query) use ($user) {
+                            $query->select(['title', 'id_vacancy'])->where('nib', $user->company->nib);
+                        }
+                    ])->get();
+                
+                // ubah string file menjadi array
+                foreach($applicants as $applicant) {
+                    $applicant->resume = Storage::allFiles($applicant->resume);
+                }
+
+                return [
+                    'success' => true,
+                    'applicants' => $applicants,
+                ];
+            }
+
+            if($value === 'get-applicant-profile') {
+                
             }
         }
 
@@ -145,7 +190,7 @@ class DashboardController extends Controller
 
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
         $fullName = trim($fullName) === "" ? "Username" : $fullName;
-        $lowongan = Vacancy::with('company.profile', 'major')->get();
+        $lowongan = Vacancy::with('company.profile', 'major')->where('nib', $user->company->nib)->get();
 
         return response()->view('company.kelola-lowongan', [
             'role' => $role,
@@ -158,10 +203,23 @@ class DashboardController extends Controller
     /**
      * Method untuk me-render halaman daftar pelamar lowongan perusahaan
      */
-    public function companyApplicantPage()
+    public function companyApplicantPage($id = 0)
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return response()->json($value);
+        }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+
         return response()->view('company.daftar-pelamar', [
-            'role' => 'company'
+            'role' => $role,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
     }
 

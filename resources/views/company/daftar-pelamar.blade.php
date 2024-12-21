@@ -47,13 +47,13 @@
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
-            {{-- user profile and filter input --}}
+            {{-- profile user, search query dan filter input --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}"
                             alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Mahasiswa</span>
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
@@ -96,35 +96,10 @@
                 </div>
             </div>
 
-            {{-- daftar pelamar pada lowongan --}}
+            {{-- menampilkan list pelamar pada lowongan--}}
             <div id="card-container" class="overflow-auto">
                 <div id="proposal-list-container" class="overflow-auto position-relative h-100">
-                    <div class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
-                        @for ($i = 1; $i <= 7; $i++)
-                            <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
-                                <div onclick="showStudentProfile({{ $i }})" class="cursor-pointer">
-                                    <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHr74Pjdj__bQPnZK-BFujbwgnP1t5PIqkig&s"
-                                            class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
-                                        <div class="d-flex flex-column">
-                                            <span class="daftar-pelamar__proposal-card-name fw-700"
-                                                style="font-size: .95rem" title="">Wasyn Sulaiman Siregar</span>
-                                            <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
-                                                title="">wasynsulaiman@laravel.com</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="daftar-pelamar__proposal-card-name fw-600"
-                                            style="font-size: .95rem">Frontend Developer</span>
-                                        <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> 4</span>
-                                    </div>
-                                </div>
-                                <button type="button" onclick="showDeleteApplicant({{ $i }})"
-                                    class="daftar-pelamar__proposal-card-delete border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        @endfor
+                    <div id="applicant-list-data" class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
                     </div>
                 </div>
             </div>

@@ -49,8 +49,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('company-manage-vacancy')
         ->middleware(IsRoleCompany::class);
 
-    Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])
+    Route::get('/dashboard/perusahaan/daftar/pelamar/{id?}', [DashboardController::class, 'companyApplicantPage'])
         ->name('company-applicant-list')
+        ->whereNumber('id')
         ->middleware(IsRoleCompany::class);
 
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])

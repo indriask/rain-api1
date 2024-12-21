@@ -118,38 +118,6 @@
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
                         {{-- vacancy card --}}
-                        {{-- <div class="vacancy-card bg-white py-3 px-4">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="salary-text">
-                                    Rp. 4000000/bulan
-                                </h5>
-                                <img class="company-photo rounded"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
-                                    alt="Company photo">
-                            </div>
-                            <div>
-                                <h6 class="vacancy-role m-0">Backend Developer</h6>
-                                <span class="vacancy-major-choice">Teknik Informatika</span>
-
-                                <ul class="vacancy-small-detail p-0 mt-3">
-                                    <li><i class="bi bi-geo-alt me-3"></i>Batam Nongsa</li>
-                                    <li><i class="bi bi-calendar3 me-3"></i>14 Desember 2024
-                                    </li>
-                                    <li><i class="bi bi-bar-chart-line me-3"></i>10 Kuota
-                                    </li>
-                                </ul>
-
-                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                    <li class="bg-white rounded-pill text-center">Full Time</li>
-                                    <li class="bg-white rounded-pill text-center">Offline</li>
-                                    <li class="bg-white rounded-pill text-center">6 Bulan
-                                    </li>
-                                </ul>
-
-                                <button onclick="showVacancyDetailCard({{ $i }})"
-                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                            </div>
-                        </div> --}}
                         @foreach($lowongan as $lowong)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">

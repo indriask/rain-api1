@@ -1,3 +1,66 @@
+$(document).ready(function () {
+    $.ajax({
+        url: "/dashboard/perusahaan/daftar/pelamar",
+        method: "GET",
+        headers: { "X-GET-DATA": "get-applicants" },
+        success: function (response) {
+            const applicantListData = $("#applicant-list-data");
+            const applicants = response.applicants;
+
+            for (applicant of applicants) {
+                let fullName = `${applicant.student.profile.first_name} ${applicant.student.profile.last_name}`;
+                fullName = (fullName.trim() === "") ? "Username" : fullName;
+                // console.log(applicant);
+
+                applicantListData.append(`
+                    <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
+                                    <div onclick="showStudentProfile(${applicant.student.id_profile})" class="cursor-pointer">
+                                        <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
+                                            <img src="${window.storage_path.path + applicant.student.profile.photo_profile}"
+                                                class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
+                                            <div class="d-flex flex-column">
+                                                <span class="daftar-pelamar__proposal-card-name fw-700"
+                                                    style="font-size: .95rem" title="">${fullName}</span>
+                                                <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
+                                                    title="">${applicant.student.account.email}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between mt-3">
+                                            <span class="daftar-pelamar__proposal-card-name fw-600"
+                                                style="font-size: .95rem">${applicant.vacancy.title}</span>
+                                            <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> ${applicant.resume.length}</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="showDeleteApplicant(${applicant.id_proposal})"
+                                        class="daftar-pelamar__proposal-card-delete click-animation border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                `);
+            }
+        },
+        error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                console.error("Someting when wrong when accesing the page");
+                return false;
+            }
+        }
+    });
+});
+
 const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
 const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelamar-proposal-info-container");
 const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
@@ -136,14 +199,14 @@ function showDeleteApplicant(id) {
                     <div class="dashboard__logout bg-white" style="width: 500px;">
                         <div class="d-flex">
                             <button onclick="showDeleteApplicant()"
-                                class="dashboard__close-btn ms-auto bni-blue text-white border border-0">
+                                class="dashboard__close-btn click-animation ms-auto bni-blue text-white border border-0">
                                 <i class="bi bi-x-circle"></i>
                             </button>
                         </div>
                         <div class="py-3 px-5">
                             <span class="fw-700 text-center d-block" style="font-size: .9rem;">Apakah anda yakin ingin menghapus kandidat tidak berguna ini?</span>
                             <button onclick="processDeleteApplicant(${id})"
-                                class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                                class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
                                 style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                         </div>
                     </div>

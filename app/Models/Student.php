@@ -14,6 +14,7 @@ class Student extends Model
     protected $primaryKey = 'nim';
 
     protected $fillable = [
+        'nim',
         'id_profile',
         'id_user',
         'id_major',
