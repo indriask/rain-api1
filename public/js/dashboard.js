@@ -129,6 +129,7 @@ function showVacancyDetailCard(id = 0) {
         vacancyDetailCard.addClass("d-none");
 
         $("#vacancy-detail-card-info").remove();
+        $("#dashboard__not-found-container").remove();
         return 1;
     } else {
         vacancyDetailCard.addClass("d-block");
@@ -142,7 +143,26 @@ function showVacancyDetailCard(id = 0) {
             "X-GET-DATA": "specific-data",
         },
         success: function (response) {
-            console.log(response);
+            if (response.vacancy === null || response.vacancy === undefined) {
+                vacancyDetailCard.html(`
+                     <div id="dashboard__not-found-container">
+                    <div class="dashboard__not-found-container rounded border py-3 px-4 bg-white">
+                        <div class="mx-auto">
+                            <img class="dashboard__not-found-icon d-block mx-auto mb-1"
+                                src="${window.storage_path.path}svg/failed-x.svg" alt="">
+                            <h4 class="text-center fw-700" style="font-size: 1.35rem;">Oops</h4>
+                        </div>
+                        <p class="text-center text-body-secondary mb-0">Data tidak ditemukan dengan kriteria ini.</p>
+                        <p class="text-center text-body-secondary">Silahkan coba lagi nanti</p>
+                        <button
+                            class="bni-blue border border-0 text-white rounded d-block mx-auto p-1 click-animation cursor-pointer"
+                            style="width: 90px;" onclick="showVacancyDetailCard()">Tutup</button>
+                    </div>
+                </div>
+                `);
+                return false;
+            }
+
             let vacancy = response.vacancy;
             let applyForm = "";
             let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
@@ -554,7 +574,7 @@ function showAddVacancyNotification(message, icon) {
 function closeAddVacancyForm() {
     $("#add-vacancy-notification").removeClass("d-block");
     $("#add-vacancy-notification").addClass("d-none");
-    
+
     $("#add-vacancy-form").get(0).reset();
 
     $("#add-vacancy").text("");

@@ -15,10 +15,21 @@ class IsRoleAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth('web')->user()->role === 3) {
-            return $next($request);
+        if ($request->ajax()) {
+            if($this->validateRole() === true) {
+                return $next($request);
+            } else {
+                return response(status: 403);
+            }
+        }
+    }
+
+    private function validateRole()
+    {
+        if (auth('web')->user()->role === 3) {
+            return true;
         }
 
-        return redirect()->route('dashboard');
+        return false;
     }
 }

@@ -15,10 +15,29 @@ class IsRoleStudent
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(auth('web')->user()->role === 1) {
-            return $next($request);
+        // kirim status 403 jika request berasal dari ajax
+        if ($request->ajax()) {
+            if ($this->validateRole() === true) {
+                return $next($request);
+            } else {
+                return response(status: 403);
+            }
         }
 
-        return redirect()->route('dashboard');
+        // arahkan user kembali ke halaman sebelumnya
+        if ($this->validateRole() === true) {
+            return $next($request);
+        } else {
+            return back();
+        }
+    }
+
+    private function validateRole()
+    {
+        if (auth('web')->user()->role === 1) {
+            return true;
+        }
+
+        return false;
     }
 }

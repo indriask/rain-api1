@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
+use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
 use Illuminate\Http\Request;
@@ -39,32 +40,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
         ->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
+
     Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
         ->name('student-profile');
 
     // Routing khusus role perusahaan
-    Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])
-        ->name('company-applicant-list')
-        ->middleware(IsRoleCompany::class);
     Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])
         ->name('company-manage-vacancy')
         ->middleware(IsRoleCompany::class);
+
+    Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])
+        ->name('company-applicant-list')
+        ->middleware(IsRoleCompany::class);
+
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
         ->name('company-profile');
 
     // Routing khusus role admin
     Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])
-        ->name('admin-manage-user-student');
+        ->name('admin-manage-user-student')
+        ->middleware(IsRoleAdmin::class);
+
     Route::get('/dashboard/admin/kelola/user/mahasiswa/{id}', [DashboardController::class, 'adminViewUserStudent'])
-        ->name('admin-view-user-student');
+        ->name('admin-view-user-student')
+        ->middleware(IsRoleAdmin::class);
+
     Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])
-        ->name('admin-manage-user-company');
+        ->name('admin-manage-user-company')
+        ->middleware(IsRoleAdmin::class);
+
     Route::get('/dashboad/admin/kelola/user/perusahaan/{id}', [DashboardController::class, 'adminViewUserCompany'])
-        ->name('admin-view-user-company');
+        ->name('admin-view-user-company')
+        ->middleware(IsRoleAdmin::class);
+
     Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
 });
-
-
 
 
 
@@ -120,10 +130,10 @@ Route::get('/login-perusahaan', function () {
 });
 
 Route::get('/login-mahasiswa', function () {
-    Auth::attempt(['email' => 'indria@gmail.com', 'password' => 'password123']);
+    Auth::attempt(['email' => 'johndoe@gmail.com', 'password' => 'password123']);
     return redirect()->route('dashboard');
 });
 
-Route::get('/hash', function() {
+Route::get('/hash', function () {
     return Hash::make('password123');
 });

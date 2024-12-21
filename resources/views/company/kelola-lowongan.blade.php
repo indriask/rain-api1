@@ -12,9 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
 
-    <!-- box icons cdn link -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     {{-- bootstrap icon web font link --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -153,13 +150,8 @@
             <div id="manage-vacancy-detail"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto"
                 style="background-color: rgba(0, 0, 0, .4)">
+               
             </div>
-
-            {{-- menampilkan edit detail lowongan yang sudah di publish --}}
-            {{-- <div id="manage-vacancy-container"
-                class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
-                style="background-color: rgba(0, 0, 0, .4)">
-            </div> --}}
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />

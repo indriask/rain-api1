@@ -27,7 +27,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', 'present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['required', 'present', 'string', 'max:1000']
+            'description' => ['present', 'string', 'max:1000']
         ]);
 
         if ($validated->fails()) {
@@ -81,27 +81,30 @@ class DashboardCompanyController extends Controller
      */
     public function editVacancy(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'salary' => ['required', 'present', 'integer', 'max:10000000'],
-                'title' => ['required', 'present', 'string', 'max:100'],
-                'id_major' => ['required', 'present', 'string', Rule::in(['1', '2', '3', '4'])],
-                'location' => ['required', 'present', 'string', 'max:60'],
-                'date_created' => ['required', 'present', 'date'],
-                'date_ended' => ['required', 'present', 'date'],
-                'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['full time', 'part time'])],
-                'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
-                'duration' => ['required', ' present', 'integer', 'max:12'],
-                'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-                'description' => ['required', 'present', 'string', 'max:1000'],
-                'id_vacancy' => ['required', 'present', 'integer'],
-                'nib' => ['required', 'present', 'string'],
-            ]);
+        $validator = Validator::make($request->input(), [
+            'salary' => ['required', 'present', 'integer', 'max:10000000'],
+            'title' => ['required', 'present', 'string', 'max:100'],
+            'id_major' => ['required', 'present', 'string', Rule::in(['1', '2', '3', '4'])],
+            'location' => ['required', 'present', 'string', 'max:60'],
+            'date_created' => ['required', 'present', 'date'],
+            'date_ended' => ['required', 'present', 'date'],
+            'time_type' => ['required', ' present', 'string', 'max:10', Rule::in(['full time', 'part time'])],
+            'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
+            'duration' => ['required', ' present', 'integer', 'max:12'],
+            'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
+            'description' => ['present', 'string', 'max:1000'],
+            'id_vacancy' => ['required', 'present', 'integer'],
+            'nib' => ['required', 'present', 'string'],
+        ]);
 
-            $validated['applied'] = 0;
-            Vacancy::where('id_vacancy', $validated['id_vacancy'])
-                ->where('nib', $validated['nib'])
-                ->update($validated);
+        if($validator->fails()) {
+            return response()->json(['validation_error' => $validator->errors()]);
+        }
+
+        try {
+            Vacancy::where('id_vacancy', $validator->getValue('id_vacancy'))
+                ->where('nib', $validator->getValue('nib'))
+                ->update($request->except('id_vacancy', 'nib'));
 
             response()->json([
                 'success' => true,
