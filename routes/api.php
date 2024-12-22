@@ -74,8 +74,14 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->name('api-company-delete-vacancy')
         ->middleware(IsRoleCompany::class);
         
-    Route::post('/dashboard/perusahaan/daftar/pelamar/delete', [DashboardCompanyController::class, 'deleteApplicant'])->name('api-company-delete-applicant');
-    Route::post('/dashboard/perusahaan/perbarui/status', [DashboardCompanyController::class, 'updateStatusApplicant'])->name('api-company-update-status-applicant');
+    Route::post('/dashboard/perusahaan/daftar/pelamar/delete', [DashboardCompanyController::class, 'deleteApplicant'])
+        ->name('api-company-delete-applicant')
+        ->middleware(IsRoleCompany::class);
+
+    Route::post('/dashboard/perusahaan/perbarui/status', [DashboardCompanyController::class, 'updateStatusApplicant'])
+        ->name('api-company-update-status-applicant')
+        ->middleware(IsRoleCompany::class);
+        
     Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])->name('api-company-edit-profile');
     Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])->name('api-company-delete-account');
 

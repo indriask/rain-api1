@@ -10,11 +10,10 @@ $(document).ready(function () {
             for (applicant of applicants) {
                 let fullName = `${applicant.student.profile.first_name} ${applicant.student.profile.last_name}`;
                 fullName = (fullName.trim() === "") ? "Username" : fullName;
-                // console.log(applicant);
 
                 applicantListData.append(`
                     <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
-                                    <div onclick="showStudentProfile(${applicant.student.id_profile})" class="cursor-pointer">
+                                    <div onclick="showStudentProfile(${applicant.student.id_profile}, ${applicant.id_proposal})" class="cursor-pointer">
                                         <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
                                             <img src="${window.storage_path.path + applicant.student.profile.photo_profile}"
                                                 class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
@@ -61,44 +60,243 @@ $(document).ready(function () {
     });
 });
 
-const daftarPelamarStudentProfile = document.querySelector("#daftar-pelamar-student-profile");
-const daftarPelamarProposalInfoContainer = document.querySelector("#daftar-pelamar-proposal-info-container");
+const daftarPelamarStudentProfileContainer = $("#daftar-pelamar-student-profile-container");
+const daftarPelamarStudentProfile = $("#daftar-pelamar-student-profile");
+const daftarPelamarProposalInfoContainer = $("#daftar-pelamar-proposal-info-container");
 const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
 const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
 const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
 const daftarPelamarHapusPelamar = document.querySelector("#daftar-pelamar-hapus-pelamar");
 
 // function untuk menampilkan profile mahasiswa
-function showStudentProfile() {
-    if (daftarPelamarStudentProfile.classList.contains("d-block")) {
-        daftarPelamarStudentProfile.classList.remove("d-block");
-        daftarPelamarStudentProfile.classList.add("d-none");
+function showStudentProfile(id_profile, id_proposal) {
+    if (daftarPelamarStudentProfileContainer.hasClass("d-block")) {
+        daftarPelamarStudentProfileContainer.removeClass("d-block");
+        daftarPelamarStudentProfileContainer.addClass("d-none");
 
+        daftarPelamarStudentProfile.html("");
         return;
     }
 
-    daftarPelamarStudentProfile.classList.remove("d-none");
-    daftarPelamarStudentProfile.classList.add("d-block");
+    daftarPelamarStudentProfileContainer.removeClass("d-none");
+    daftarPelamarStudentProfileContainer.addClass("d-block");
+
+    $.ajax({
+        url: `/dashboard/perusahaan/daftar/pelamar/${id_profile}`,
+        method: "GET",
+        headers: { "X-GET-DATA": "get-applicant-profile" },
+        data: { id_profile },
+        success: function (response) {
+            let profile = response.profile;
+            let fullName = `${profile.first_name} ${profile.last_name}`;
+            fullName = (fullName.trim() === "") ? "Username" : fullName;
+
+            daftarPelamarStudentProfile.html(`
+                <div class="daftar-pelamar__student-profile mx-auto bg-white p-4 d-flex gap-5 mt-3">
+                        <div class="profile-info w-50 position-relative">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="${window.storage_path.path + profile.photo_profile}"
+                                    alt="Someone profile" class="profile__profile-img rounded">
+                                <div class="w-100">
+                                    <div class="profile__profile-nama-lengkap bg-white rounded p-2">${fullName}
+                                    </div>
+                                    <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
+                                </div>
+                            </div>
+                            <div class="profile__profile-more-info mt-4">
+                                <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.institute ?? ""}</div>
+    
+                                <label for="jurusan" style="font-size: .95rem">Jurusan</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.major.name ?? ""}</div>
+    
+                                <label for="program-studi" style="font-size: .95rem">Program studi</label>
+                                <div class="border border-0 rounded px-2 shadow" style="font-size: .9rem;">${profile.student.study_program.name ?? ""}</div>
+    
+                                <label for="keahlian" style="font-size: .95rem">Keahlian</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.skill ?? ""}</div>
+    
+                                <label for="alamat" style="font-size: .95rem">Alamat</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.location ?? ""}</div>
+    
+                                <label for="kota" style="font-size: .95rem">Kota</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.city ?? ""}</div>
+    
+                                <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.postal_code ?? ""}</div>
+    
+                                <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.phone_number ?? ""}</div>
+    
+                                <label for="email" style="font-size: .95rem">Email</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.account.email}</div>
+                            </div>
+                            <div class="position-absolute" style="bottom: 10px;">
+                                <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
+                                    style="font-size: .9rem; width: 100px;" onclick="showStudentProfile()">Tutup</button>
+                                <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                    style="font-size: .9rem; width: 130px;" onclick="showStudentProposal(${id_proposal})">Lihat
+                                    Lamaran</button>
+                            </div>
+                        </div>
+                        <div class="profile__profile-description w-50">
+                            <div class="h-100">
+                                <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi ProfilMahasiswa</span>
+                                <div class="bg-white shadow overflow-x-hidden overflow-y-auto px-3 py-2 w-100"
+                                    style="font-size: .9rem; height: 500px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+            `);
+        },
+        error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                console.error("Someting when wrong when accesing the page");
+                return false;
+            }
+        }
+    });
 }
 
 // function untuk menampilkan lamaran mahasiswa
-function showStudentProposal(id) {
-    if (daftarPelamarProposalInfoContainer.classList.contains("d-block")) {
-        daftarPelamarProposalInfoContainer.classList.remove("d-block");
-        daftarPelamarProposalInfoContainer.classList.add("d-none");
+function showStudentProposal(id_proposal) {
+    if (daftarPelamarProposalInfoContainer.hasClass("d-block")) {
+        daftarPelamarProposalInfoContainer.removeClass("d-block");
+        daftarPelamarProposalInfoContainer.addClass("d-none");
+
+        daftarPelamarProposalInfoContainer.html(``);
 
         return;
     }
 
-    daftarPelamarProposalInfoContainer.classList.remove("d-none");
-    daftarPelamarProposalInfoContainer.classList.add("d-block");
+    daftarPelamarProposalInfoContainer.removeClass("d-none");
+    daftarPelamarProposalInfoContainer.addClass("d-block");
 
-    // fetch data to backend
+    $.ajax({
+        url: `/dashboard/perusahaan/daftar/pelamar/${id_proposal}`,
+        method: "GET",
+        headers: { "X-GET-DATA": "get-applicant-proposal" },
+        data: { id_proposal },
+        success: function (response) {
+            let proposal = response.proposal;
+            let fullName = `${proposal.student.profile.first_name} ${proposal.student.profile.last_name}`;
+            fullName = (fullName.trim() === "") ? "Username" : fullName;
+
+            daftarPelamarProposalInfoContainer.html(`
+                <div id="daftar-pelamar-proposal-info-box"
+                        class="vacancy-apply-form-card bg-white p-4 position-relative">
+                        <div class="position-absolute top-0 end-0">
+                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue"
+                                onclick="showStudentProposal()"><i class="bi bi-x-circle"></i></button>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Informasi Lamaran</h1>
+                        </div>
+
+                        <div class="apply-form-common-info mt-4">
+                            <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
+
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${fullName}
+                            </div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.nim}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.major.name ?? ""}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.study_program.name ?? ""}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.account.email}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.profile.phone_number ?? ""}</div>
+                        </div>
+
+                        <button for="upload-file" onclick="installProposalFiles(${id_proposal})"
+                            class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
+                            <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Dokumen
+                        </button>
+
+                        <button type="button" onclick="showUpdateStatusProposal(1)"
+                            class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center px-2"
+                            style="width: fit-content;">Perbarui Status Pelamar</button>
+                    </div>    
+            `);
+        },
+        error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                console.error("Someting when wrong when accesing the page");
+                return false;
+            }
+        }
+    });
 }
 
 // function untuk donwload lamaran mahasiswa
-function installProposalFiles(id) {
-    // do installation on student proposal files
+function installProposalFiles(id_proposal) {
+    $.ajax({
+        url: `/dashboard/perusahaan/daftar/pelamar/download/${id_proposal}`,
+        method: "GET",
+        data: { id_proposal },
+        success: function (response) {
+            if(response.file_error) {
+                console.error(response.file_error);
+
+                return;
+            }
+
+            if (response.url) {
+                const link = document.createElement('a');
+                link.href = response.url;
+                link.setAttribute('donwload', '');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                return;
+            }
+        },
+        error: function (jqXHR) {
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return false;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                console.error("Something wrong when accessing the page");
+                return false;
+            }
+        }
+    })
 }
 
 // fucntion untuk menampilkan opsi update status lamaran dan interview

@@ -28,6 +28,15 @@
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     font-size: .9rem;
 }
+.profile__profile-more-info > div {
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    font-size: .9rem;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
 
 .profile__profile-edit-notification {
     border-radius: 20px;

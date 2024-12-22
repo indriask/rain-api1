@@ -47,11 +47,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routing khusus role perusahaan
     Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])
         ->name('company-manage-vacancy')
+        ->whereNumber('id')
         ->middleware(IsRoleCompany::class);
 
     Route::get('/dashboard/perusahaan/daftar/pelamar/{id?}', [DashboardController::class, 'companyApplicantPage'])
         ->name('company-applicant-list')
         ->whereNumber('id')
+        ->middleware(IsRoleCompany::class);
+
+    Route::get('/dashboard/perusahaan/daftar/pelamar/download/{id?}', [DashboardController::class, 'companyDownloadProposal'])
+        ->whereNumber('id')
+        ->middleware(IsRoleCompany::class);
+
+    Route::get('/download-proposal/{name}', [DashboardController::class, 'downloadProposal'])
         ->middleware(IsRoleCompany::class);
 
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
