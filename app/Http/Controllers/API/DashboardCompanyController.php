@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Proposal;
 use App\Models\Vacancy;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -69,11 +70,10 @@ class DashboardCompanyController extends Controller
             return response()->json([
                 'success' => false,
                 'notification' => [
-                    'message' => 'Lowongan anda gagal di ekspos!',
+                    'message' => 'Terjadi kesalahaan saat tambah lowongan!',
                     'icon' => asset('storage/svg/failed-x.svg')
                 ],
-                'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
@@ -118,11 +118,10 @@ class DashboardCompanyController extends Controller
             return response()->json([
                 'success' => false,
                 'notification' => [
-                    'message' => 'Lowongan anda gagal di edit!',
+                    'message' => 'Terjadi kesalahaan saat edit lowongan!',
                     'icon' => asset('storage/svg/failed-x.svg'),
                 ],
-                'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
@@ -152,11 +151,10 @@ class DashboardCompanyController extends Controller
             return response()->json([
                 'success' => false,
                 'notification' => [
-                    'message' => 'Lowongan anda gagal di hapus!',
+                    'message' => 'Terjadi kesalahaan saat menghapus lowongan!',
                     'icon' => asset('storage/svg/failed-x.svg')
                 ],
-                'error' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
@@ -166,6 +164,7 @@ class DashboardCompanyController extends Controller
     public function deleteApplicant(Request $request)
     {
         try {
+            return throw new Exception();
             $validated = $request->validate(['id_proposal' => ['required', 'integer', 'present', 'min:1']]);
             $proposal = Proposal::select('id_proposal')->where('id_proposal', $validated['id_proposal'])
                 ->whereHas('vacancy', function ($query) {
@@ -192,7 +191,13 @@ class DashboardCompanyController extends Controller
                 ]
             ]);
         } catch (\Throwable $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return response()->json([
+                'error' => true,
+                'notification' => [
+                    'message' => 'Terjadi kesalahan saat penghapusan data',
+                    'icon' => asset('storage/svg/failed-x.svg')
+                ]
+            ], 500);
         }
     }
 

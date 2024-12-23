@@ -155,7 +155,7 @@ function showVacancyDetailCard(id = 0) {
                         <p class="text-center text-body-secondary mb-0">Data tidak ditemukan dengan kriteria ini.</p>
                         <p class="text-center text-body-secondary">Silahkan coba lagi nanti</p>
                         <button
-                            class="bni-blue border border-0 text-white rounded d-block mx-auto p-1 click-animation cursor-pointer"
+                            class="bni-blue border border-0 text-white rounded click-animation d-block mx-auto p-1 click-animation cursor-pointer"
                             style="width: 90px;" onclick="showVacancyDetailCard()">Tutup</button>
                     </div>
                 </div>
@@ -181,7 +181,7 @@ function showVacancyDetailCard(id = 0) {
                 applyForm = `
                     <div class="d-flex">
                             <button type="button"
-                            class="apply-vacancy-button border border-0 text-white fw-700 ms-auto"
+                            class="apply-vacancy-button click-animation border border-0 text-white fw-700 ms-auto"
                             onclick="showApplyVacancyFormContainer(1)">Daftar</button>
                         </div>
                 `;
@@ -234,7 +234,7 @@ function showVacancyDetailCard(id = 0) {
                         </div>
                         <div class="position-absolute bottom-0">
                             <button onclick="showVacancyDetailCard()" type="button"
-                                class="close-apply-form text-white fw-700 border border-0">Kembali</button>
+                                class="close-apply-form text-white click-animation fw-700 border border-0">Kembali</button>
                         </div>
                     </div>
                     <div class="w-50">
@@ -249,6 +249,18 @@ function showVacancyDetailCard(id = 0) {
 
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -263,8 +275,8 @@ function showVacancyDetailCard(id = 0) {
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Someting when wrong when accesing the page");
-                return false;
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
             }
         }
     });
@@ -361,6 +373,18 @@ function processLogoutRequest() {
             }
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -375,7 +399,7 @@ function processLogoutRequest() {
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Someting when wrong when accesing the page");
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return false;
             }
         }
@@ -486,9 +510,9 @@ function showAddVacancyCard() {
                 <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
             </div>
             <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
-                <button class="border border-0 bni-blue text-white fw-700" onclick="showAddVacancyCard()"
+                <button class="border border-0 bni-blue click-animation text-white fw-700" onclick="showAddVacancyCard()"
                     type="button">Tutup</button>
-                <button id="add-vacancy-submit" class="d-block border border-0 bni-blue text-white fw-700"
+                <button id="add-vacancy-submit" class="d-block click-animation border border-0 bni-blue text-white fw-700"
                     onclick="processAddVacancy()" type="button">Ekspos</button>
             </div>
         </form>
@@ -534,6 +558,18 @@ function processAddVacancy() {
             showAddVacancyNotification(response.notification.message, response.notification.icon);
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -548,7 +584,7 @@ function processAddVacancy() {
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Someting when wrong when accesing the page");
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return false;
             }
         }
@@ -577,4 +613,20 @@ function closeAddVacancyForm() {
     $("#add-vacancy").text("");
 
     return;
+}
+
+function showCustomNotification(message, icon) {
+    if (daftarPelamarCustomNotification.hasClass("d-block")) {
+        daftarPelamarCustomNotification.removeClass("d-block");
+        daftarPelamarCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    console.log(icon);
+    daftarPelamarCustomNotification.removeClass("d-none");
+    daftarPelamarCustomNotification.addClass("d-block");
+
+    $("#custom-notification-message").text(message);
+    $("#custom-notification-icon").attr('src', icon);
 }

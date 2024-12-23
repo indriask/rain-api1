@@ -55,13 +55,13 @@
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    <div class="position-relative">
+                    {{-- <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
                             name="cari-perusahaan" placeholder="Cari perusahaan">
                         <i class="bi bi-search search-icon"></i>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="select-container w-100 mt-2 d-flex gap-3">
+                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="jurusan" id="jurusan">
                             <option>Pilih jurusan</option>
@@ -93,7 +93,7 @@
                         <i class="bi bi-x-square me-1"></i>
                         Hapus filter
                     </button>
-                </div>
+                </div> --}}
             </div>
 
             {{-- menampilkan list pelamar pada lowongan --}}
@@ -139,12 +139,30 @@
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="dashboard__logout bg-white" style="width: 500px;">
                     <div class="p-5 d-flex flex-column align-items-center position-relative">
-                        <img src="" id="delete-applicant-notification-icon" class="position-absolute" style="width: 80px; top: 1.1rem; opacity: .5;" alt="">
-                        <span class="fw-700 text-center d-block position-relative z-1" id="delete-applicant-notification-message" style="font-size: 1.2rem;"></span>
+                        <img src="" id="delete-applicant-notification-icon" class="position-absolute"
+                            style="width: 80px; top: 1.1rem; opacity: .5;" alt="">
+                        <span class="fw-700 text-center d-block position-relative z-1"
+                            id="delete-applicant-notification-message" style="font-size: 1.2rem;"></span>
                         <button onclick="showDeleteApplicantNotification()"
                             class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
                     </div>
+                </div>
+            </div>
+
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="position-absolute"
+                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan saat penghapusan data</h6>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
                 </div>
             </div>
 

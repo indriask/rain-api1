@@ -68,6 +68,7 @@ const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-
 const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
 const daftarPelamarHapusPelamar = $("#daftar-pelamar-hapus-pelamar");
 const deleteApplicantNotification = $("#daftar-pelamar-delete-applicant-notification");
+const daftarPelamarCustomNotification = $("#custom-notification");
 
 // function untuk menampilkan profile mahasiswa
 function showStudentProfile(id_profile, id_proposal) {
@@ -133,9 +134,9 @@ function showStudentProfile(id_profile, id_proposal) {
                                 <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.account.email}</div>
                             </div>
                             <div class="position-absolute" style="bottom: 10px;">
-                                <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
+                                <button class="border border-0 bni-blue text-white fw-700 click-animation p-1 rounded me-2"
                                     style="font-size: .9rem; width: 100px;" onclick="showStudentProfile()">Tutup</button>
-                                <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                <button class="border border-0 bni-blue text-white fw-700 click-animation p-1 rounded"
                                     style="font-size: .9rem; width: 130px;" onclick="showStudentProposal(${id_proposal})">Lihat
                                     Lamaran</button>
                             </div>
@@ -152,6 +153,18 @@ function showStudentProfile(id_profile, id_proposal) {
             `);
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -166,7 +179,7 @@ function showStudentProfile(id_profile, id_proposal) {
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Someting when wrong when accesing the page");
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return false;
             }
         }
@@ -201,7 +214,7 @@ function showStudentProposal(id_proposal) {
                 <div id="daftar-pelamar-proposal-info-box"
                         class="vacancy-apply-form-card bg-white p-4 position-relative">
                         <div class="position-absolute top-0 end-0">
-                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue"
+                            <button class="daftar-pelamar__proposal-info-close click-animation text-white border border-0 bni-blue"
                                 onclick="showStudentProposal()"><i class="bi bi-x-circle"></i></button>
                         </div>
 
@@ -222,17 +235,29 @@ function showStudentProposal(id_proposal) {
                         </div>
 
                         <button for="upload-file" onclick="installProposalFiles(${id_proposal})"
-                            class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
+                            class="apply-form-upload-file border border-0 click-animation text-white fw-700 text-center w-100">
                             <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Dokumen
                         </button>
 
                         <button type="button" onclick="showUpdateStatusProposal(1)"
-                            class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center px-2"
+                            class="apply-form-common-info-btn border border-0 text-white click-animation fw-700 d-block mx-auto mt-2 text-center px-2"
                             style="width: fit-content;">Perbarui Status Pelamar</button>
                     </div>    
             `);
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -242,13 +267,13 @@ function showStudentProposal(id_proposal) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Someting when wrong when accesing the page");
-                return false;
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
             }
         }
     });
@@ -279,6 +304,18 @@ function installProposalFiles(id_proposal) {
             }
         },
         error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
             // check apakah response code nya 401 (user tidak ter-autentikasi)
             if (jqXHR.status === 401) {
                 let currentUrl = window.location.href;
@@ -288,13 +325,13 @@ function installProposalFiles(id_proposal) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                console.error("Something wrong when accessing the page");
-                return false;
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
             }
         }
     })
@@ -418,22 +455,46 @@ function processDeleteApplicant(id_proposal) {
     $.ajax({
         url: "/api/dashboard/perusahaan/daftar/pelamar/delete",
         method: "POST",
-        headers: {"X-CSRF-TOKEN": window.laravel.csrf_token},
-        data: {id_proposal},
-        success: function(response) {
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: { id_proposal },
+        success: function (response) {
             console.log(response);
-            if(response.success) {
+            if (response.success) {
                 showDeleteApplicantNotification(response.notification.message, response.notification.icon);
             }
 
-            if(response.error) {
+            if (response.error) {
                 showDeleteApplicantNotification(response.notification.message, response.notification.icon);
             }
         },
-        error: function(jqXHR) {
-            // error untuk validasi CSRF token
-            if(jqXHR.status === 419) {
-                console.error("Gagal melakukan request, harap coba lagi");
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
             }
         }
@@ -441,18 +502,34 @@ function processDeleteApplicant(id_proposal) {
 }
 
 function showDeleteApplicantNotification(message, icon) {
-    if(deleteApplicantNotification.hasClass("d-block")) {
+    if (deleteApplicantNotification.hasClass("d-block")) {
         deleteApplicantNotification.removeClass("d-block");
         deleteApplicantNotification.addClass("d-none");
-        
+
         daftarPelamarHapusPelamar.text("");
-        
+
         return;
     }
-    
+
     deleteApplicantNotification.removeClass("d-none");
     deleteApplicantNotification.addClass("d-block");
 
     $("#delete-applicant-notification-message").text(message);
     $("#delete-applicant-notification-icon").attr('src', icon);
+}
+
+function showCustomNotification(message, icon) {
+    if (daftarPelamarCustomNotification.hasClass("d-block")) {
+        daftarPelamarCustomNotification.removeClass("d-block");
+        daftarPelamarCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    console.log(icon);
+    daftarPelamarCustomNotification.removeClass("d-none");
+    daftarPelamarCustomNotification.addClass("d-block");
+
+    $("#custom-notification-message").text(message);
+    $("#custom-notification-icon").attr('src', icon);
 }

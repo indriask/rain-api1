@@ -149,7 +149,7 @@
                                     </ul>
     
                                     <button onclick="showVacancyDetailCard({{ $lowong->id_vacancy }})"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Detail</button>
                                 </div>
                             </div>
                         @endforeach
@@ -171,7 +171,7 @@
                     class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                        <button type="button" class="border border-0 bg-transparent"
+                        <button type="button" class="border border-0 bg-transparent click-animation"
                             onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                     </div>
                     <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
@@ -208,7 +208,7 @@
                     <input type="file" name="files" multiple id="upload-file" hidden>
 
                     <button type="button" onclick="processAddProposal(1)"
-                        class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
+                        class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
 
                 {{-- notifikasi gagal atau sukses daftar lowongan mahasiswa --}}
