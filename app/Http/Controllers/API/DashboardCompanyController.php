@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Proposal;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -97,7 +98,7 @@ class DashboardCompanyController extends Controller
             'nib' => ['required', 'present', 'string'],
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['validation_error' => $validator->errors()]);
         }
 
@@ -162,7 +163,38 @@ class DashboardCompanyController extends Controller
     /**
      * Method untuk mem-proses logika penghapusan lamaran
      */
-    public function deleteApplicant(Request $request) {}
+    public function deleteApplicant(Request $request)
+    {
+        try {
+            $validated = $request->validate(['id_proposal' => ['required', 'integer', 'present', 'min:1']]);
+            $proposal = Proposal::select('id_proposal')->where('id_proposal', $validated['id_proposal'])
+                ->whereHas('vacancy', function ($query) {
+                    $query->where('nib', auth('web')->user()->company->nib);
+                })
+                ->first();
+
+            if (empty($proposal)) {
+                return response()->json([
+                    'error' => true,
+                    'notification' => [
+                        'message' => 'Data tidak ditemukan',
+                        'icon' => asset('storage/svg/failed-x.svg')
+                    ]
+                ]);
+            }
+
+            $proposal->delete();
+            return response()->json([
+                'success' => true,
+                'notification' => [
+                    'message' => 'Data berhasil di hapus!',
+                    'icon' => asset('storage/svg/success-checkmark.svg')
+                ]
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
 
     /**
      * Method untuk mem-proses logika perbarui status pelamar

@@ -63,10 +63,11 @@ $(document).ready(function () {
 const daftarPelamarStudentProfileContainer = $("#daftar-pelamar-student-profile-container");
 const daftarPelamarStudentProfile = $("#daftar-pelamar-student-profile");
 const daftarPelamarProposalInfoContainer = $("#daftar-pelamar-proposal-info-container");
-const daftarPelamarUpdateProposalStatus = document.querySelector("#daftar-pelamar-update-proposal-status")
+const daftarPelamarUpdateProposalStatus = $("#daftar-pelamar-update-proposal-status")
 const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
 const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
-const daftarPelamarHapusPelamar = document.querySelector("#daftar-pelamar-hapus-pelamar");
+const daftarPelamarHapusPelamar = $("#daftar-pelamar-hapus-pelamar");
+const deleteApplicantNotification = $("#daftar-pelamar-delete-applicant-notification");
 
 // function untuk menampilkan profile mahasiswa
 function showStudentProfile(id_profile, id_proposal) {
@@ -260,7 +261,7 @@ function installProposalFiles(id_proposal) {
         method: "GET",
         data: { id_proposal },
         success: function (response) {
-            if(response.file_error) {
+            if (response.file_error) {
                 console.error(response.file_error);
 
                 return;
@@ -273,7 +274,7 @@ function installProposalFiles(id_proposal) {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
+
                 return;
             }
         },
@@ -301,13 +302,13 @@ function installProposalFiles(id_proposal) {
 
 // fucntion untuk menampilkan opsi update status lamaran dan interview
 function showUpdateStatusProposal(id) {
-    if (daftarPelamarUpdateProposalStatus.textContent.trim() !== '') {
-        daftarPelamarUpdateProposalStatus.textContent = '';
+    if (daftarPelamarUpdateProposalStatus.text().trim() !== '') {
+        daftarPelamarUpdateProposalStatus.text('');
 
         return;
     }
 
-    daftarPelamarUpdateProposalStatus.innerHTML = `
+    daftarPelamarUpdateProposalStatus.html(`
                 <div
                     class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
                     <div class="status-btn-container bg-white p-5">
@@ -322,7 +323,7 @@ function showUpdateStatusProposal(id) {
                             onclick="showUpdateStatusProposal(${id})">Tutup</button>
                     </div>
                 </div>
-    `;
+    `);
 }
 
 // function untuk menampilkan opsi terima, tinjau, tolak pada lamaran dan interview
@@ -384,13 +385,13 @@ function updateProposalStatusNotification(title, message, image) {
 }
 
 // function untuk menampilkan informasi hapus pelamar
-function showDeleteApplicant(id) {
-    if (daftarPelamarHapusPelamar.textContent.trim() !== "") {
-        daftarPelamarHapusPelamar.textContent = "";
+function showDeleteApplicant(id_proposal) {
+    if (daftarPelamarHapusPelamar.text().trim() !== "") {
+        daftarPelamarHapusPelamar.text("");
         return;
     }
 
-    daftarPelamarHapusPelamar.innerHTML = `
+    daftarPelamarHapusPelamar.html(`
         <div id="logout-notification"
                     class="d-block position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
                     style="background-color: rgba(0, 0, 0, .4)">
@@ -402,17 +403,56 @@ function showDeleteApplicant(id) {
                             </button>
                         </div>
                         <div class="py-3 px-5">
-                            <span class="fw-700 text-center d-block" style="font-size: .9rem;">Apakah anda yakin ingin menghapus kandidat tidak berguna ini?</span>
-                            <button onclick="processDeleteApplicant(${id})"
+                            <span class="fw-700 text-center d-block" style="font-size: .9rem;">Apakah anda yakin ingin menghapus kandidat ini?</span>
+                            <button onclick="processDeleteApplicant(${id_proposal})"
                                 class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
                                 style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                         </div>
                     </div>
                 </div>
-    `;
+    `);
 }
 
 // function untuk request hapus pelamar ke server
-function processDeleteApplicant(id) {
-    alert("Processing delete applicant")
+function processDeleteApplicant(id_proposal) {
+    $.ajax({
+        url: "/api/dashboard/perusahaan/daftar/pelamar/delete",
+        method: "POST",
+        headers: {"X-CSRF-TOKEN": window.laravel.csrf_token},
+        data: {id_proposal},
+        success: function(response) {
+            console.log(response);
+            if(response.success) {
+                showDeleteApplicantNotification(response.notification.message, response.notification.icon);
+            }
+
+            if(response.error) {
+                showDeleteApplicantNotification(response.notification.message, response.notification.icon);
+            }
+        },
+        error: function(jqXHR) {
+            // error untuk validasi CSRF token
+            if(jqXHR.status === 419) {
+                console.error("Gagal melakukan request, harap coba lagi");
+                return;
+            }
+        }
+    });
+}
+
+function showDeleteApplicantNotification(message, icon) {
+    if(deleteApplicantNotification.hasClass("d-block")) {
+        deleteApplicantNotification.removeClass("d-block");
+        deleteApplicantNotification.addClass("d-none");
+        
+        daftarPelamarHapusPelamar.text("");
+        
+        return;
+    }
+    
+    deleteApplicantNotification.removeClass("d-none");
+    deleteApplicantNotification.addClass("d-block");
+
+    $("#delete-applicant-notification-message").text(message);
+    $("#delete-applicant-notification-icon").attr('src', icon);
 }

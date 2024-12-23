@@ -34,7 +34,8 @@ Route::middleware('guest')->group(function () {
 // akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
 Route::middleware(['auth', 'verified'])->group(function () {
     // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
-    Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
     // Routing khusus role mahasiswa
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
@@ -59,9 +60,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->whereNumber('id')
         ->middleware(IsRoleCompany::class);
 
-    Route::get('/download-proposal/{name}', [DashboardController::class, 'downloadProposal'])
-        ->middleware(IsRoleCompany::class);
-
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
         ->name('company-profile');
 
@@ -72,6 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/admin/kelola/user/mahasiswa/{id}', [DashboardController::class, 'adminViewUserStudent'])
         ->name('admin-view-user-student')
+        ->whereNumber('id')
         ->middleware(IsRoleAdmin::class);
 
     Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserCompany'])
@@ -80,9 +79,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboad/admin/kelola/user/perusahaan/{id}', [DashboardController::class, 'adminViewUserCompany'])
         ->name('admin-view-user-company')
+        ->whereNumber('id')
         ->middleware(IsRoleAdmin::class);
 
-    Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
+    Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])
+        ->name('admin-profile');
+
+    // Route untuk download file
+    Route::get('/download-proposal/{name}', [DashboardController::class, 'downloadProposal'])
+        ->middleware(IsRoleCompany::class);
 });
 
 
@@ -92,8 +97,6 @@ Route::get('/lowongan/filter', [DashboardController::class, 'filterLowongan']);
 Route::get('/jurusan', [DashboardController::class, 'getJurusan']);
 Route::get('/prodi', [DashboardController::class, 'getProdi']);
 Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
-
-
 
 
 

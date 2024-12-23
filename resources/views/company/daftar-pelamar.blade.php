@@ -51,8 +51,8 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}"
-                            alt="" class="profile-img rounded-circle shadow">
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
@@ -96,7 +96,7 @@
                 </div>
             </div>
 
-            {{-- menampilkan list pelamar pada lowongan--}}
+            {{-- menampilkan list pelamar pada lowongan --}}
             <div id="card-container" class="overflow-auto">
                 <div id="proposal-list-container" class="overflow-auto position-relative h-100">
                     <div id="applicant-list-data" class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
@@ -133,12 +133,26 @@
             <div id="daftar-pelamar-hapus-pelamar">
             </div>
 
+            {{-- pop up notifikasi berhasil atau gagal hapus pelamar --}}
+            <div id="daftar-pelamar-delete-applicant-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="dashboard__logout bg-white" style="width: 500px;">
+                    <div class="p-5 d-flex flex-column align-items-center position-relative">
+                        <img src="" id="delete-applicant-notification-icon" class="position-absolute" style="width: 80px; top: 1.1rem; opacity: .5;" alt="">
+                        <span class="fw-700 text-center d-block position-relative z-1" id="delete-applicant-notification-message" style="font-size: 1.2rem;"></span>
+                        <button onclick="showDeleteApplicantNotification()"
+                            class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
+                    </div>
+                </div>
+            </div>
+
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
             {{-- tambah lowongan untuk perusahaan --}}
             <div id="add-vacancy"></div>
-
 
         </main>
     </div>
