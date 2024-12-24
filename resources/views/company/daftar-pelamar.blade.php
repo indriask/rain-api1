@@ -158,7 +158,9 @@
                     <div class="position-relative d-flex flex-column align-items-center">
                         <img id="custom-notification-icon" class="position-absolute"
                             style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
-                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan saat penghapusan data</h6>
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan
+                            saat
+                            penghapusan data</h6>
                     </div>
                     <button
                         class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"

@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Mockery\CountValidator\Exact;
 
 class DashboardCompanyController extends Controller
 {
@@ -201,8 +202,82 @@ class DashboardCompanyController extends Controller
         }
     }
 
-    /**
-     * Method untuk mem-proses logika perbarui status pelamar
-     */
-    public function updateStatusApplicant(Request $request) {}
+    // method request ubah status lamaran
+    public function updateStatusApplicantProposal(Request $request)
+    {
+        // kirim email setelah berhasil diperbarui
+        try {
+            $validated = $request->validate([
+                'id_proposal' => ['required', 'integer', 'present', 'min:1'],
+                'status' => ['required', 'string', 'present', Rule::in(['waiting', 'approved', 'rejected'])]
+            ]);
+
+            $proposal = Proposal::select('proposal_status', 'nim', 'id_proposal')
+                ->with(['student' => function ($query) {
+                    return $query->select('nim', 'approved_datetime');
+                }])
+                ->where('id_proposal', $validated['id_proposal'])
+                ->first();
+
+            if (empty($proposal) === true) {
+                return response()->json([
+                    'error' => true,
+                    'notification' => [
+                        'title' => 'Data tidak ditemukan!',
+                        'message' => 'Tidak dapat melakukan update, data tidak ditemukan',
+                        'icon' => asset('storage/svg/failed-x.svg')
+                    ]
+                ]);
+            }
+
+            if (empty($proposal->student->approved_datetime) === true && $validated['status'] === 'approved') {
+                $proposal->student->approved_datetime = now();
+                $proposal->proposal_status = 'approved';
+                $proposal->save();
+                $proposal->student->save();
+
+                return response()->json([
+                    'success' => true,
+                    'notification' => [
+                        'title' => 'Status berhasil diperbarui!',
+                        'message' => 'Silahkan hubungi kontak pelamar untuk melakukan konfirmasi!',
+                        'icon' => asset('storage/svg/success-checkmark.svg')
+                    ]
+                ]);
+            }
+
+            if ($validated['status'] === 'rejected' || $validated['status'] === 'waiting') {
+                $proposal->student->approved_datetime = null;
+                $proposal->proposal_status = $validated['status'];
+                $proposal->save();
+                $proposal->student->save();
+
+                return response()->json([
+                    'success' => true,
+                    'notification' => [
+                        'title' => 'Status berhasil diperbarui!',
+                        'message' => 'Silahkan menghubungi kontak pelamar untuk konfirmasi!',
+                        'icon' => asset('storage/svg/success-checkmark.svg')
+                    ]
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'notification' => [
+                    'title' => 'Status tidak diperbarui!',
+                    'message' => 'Tidak ada status yang di update',
+                    'icon' => asset('storage/svg/success-checkmark.svg')
+                ]
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => true,
+                'notification' => [
+                    'message' => 'Terjadi kesalahan saat melakukan update',
+                    'icon' => asset('storage/svg/failed-x.svg')
+                ]
+            ], 500);
+        }
+    }
 }

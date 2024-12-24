@@ -12,10 +12,10 @@ use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
-use Clockwork\Request\Request;
 
 Route::middleware(['guest', 'web'])->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan
@@ -78,12 +78,19 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->name('api-company-delete-applicant')
         ->middleware(IsRoleCompany::class);
 
-    Route::post('/dashboard/perusahaan/perbarui/status', [DashboardCompanyController::class, 'updateStatusApplicant'])
-        ->name('api-company-update-status-applicant')
+    Route::post('/dashboard/perusahaan/daftar/pelamar/update-status/proposal', [DashboardCompanyController::class, 'updateStatusApplicantProposal'])
         ->middleware(IsRoleCompany::class);
+
+    Route::post('/dashboard/perusahaan/daftar/pelamar/update-status/interview', [DashboardCompanyController::class, 'updateStatusApplicantInterview'])
+        ->middleware(IsRoleCompany::class);
+
+    Route::post('/dashboard/perusahaan/daftar/pelamar/interview-date', [DashboardCompanyController::class, 'setInterviewDate'])
+        ->middleware(IsRoleAdmin::class);
+
         
     Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])->name('api-company-edit-profile');
-    Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])->name('api-company-delete-account');
+    Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])
+        ->middleware(IsRoleCompany::class);
 
     // Route khusus untuk system dashboard admin
     Route::post('/dashboard/admin/kelola/lowongan/delete', [DashboardAdminController::class, 'deleteVacancy'])->name('api-admin-manage-vacnacy-edit');
@@ -101,7 +108,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])
         ->middleware('throttle:6,1')->name('verification.send');
 });
-
 
 
 

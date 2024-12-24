@@ -64,8 +64,8 @@ const daftarPelamarStudentProfileContainer = $("#daftar-pelamar-student-profile-
 const daftarPelamarStudentProfile = $("#daftar-pelamar-student-profile");
 const daftarPelamarProposalInfoContainer = $("#daftar-pelamar-proposal-info-container");
 const daftarPelamarUpdateProposalStatus = $("#daftar-pelamar-update-proposal-status")
-const daftarPelamarUpdateOptionProposalStatus = document.querySelector("#daftar-pelamar-update-option-proposal-status");
-const daftarPelamarUpdateProposalStatusNotification = document.querySelector("#daftar-pelamar-update-proposal-status-notification");
+const daftarPelamarUpdateOptionProposalStatus = $("#daftar-pelamar-update-option-proposal-status");
+const daftarPelamarUpdateProposalStatusNotification = $("#daftar-pelamar-update-proposal-status-notification");
 const daftarPelamarHapusPelamar = $("#daftar-pelamar-hapus-pelamar");
 const deleteApplicantNotification = $("#daftar-pelamar-delete-applicant-notification");
 const daftarPelamarCustomNotification = $("#custom-notification");
@@ -110,10 +110,10 @@ function showStudentProfile(id_profile, id_proposal) {
                                 <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.institute ?? ""}</div>
     
                                 <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.major.name ?? ""}</div>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student?.major?.name ?? ""}</div>
     
                                 <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                                <div class="border border-0 rounded px-2 shadow" style="font-size: .9rem;">${profile.student.study_program.name ?? ""}</div>
+                                <div class="border border-0 rounded px-2 shadow" style="font-size: .9rem;">${profile.student?.study_program?.name ?? ""}</div>
     
                                 <label for="keahlian" style="font-size: .95rem">Keahlian</label>
                                 <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.skill ?? ""}</div>
@@ -228,8 +228,8 @@ function showStudentProposal(id_proposal) {
                             <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${fullName}
                             </div>
                             <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.nim}</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.major.name ?? ""}</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.study_program.name ?? ""}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student?.major?.name ?? ""}</div>
+                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student?.study_program?.name ?? ""}</div>
                             <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.account.email}</div>
                             <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">${proposal.student.profile.phone_number ?? ""}</div>
                         </div>
@@ -239,7 +239,7 @@ function showStudentProposal(id_proposal) {
                             <i class="bi bi-file-earmark-arrow-down me-1"></i> Unduh Dokumen
                         </button>
 
-                        <button type="button" onclick="showUpdateStatusProposal(1)"
+                        <button type="button" onclick="showUpdateStatusProposal(${id_proposal})"
                             class="apply-form-common-info-btn border border-0 text-white click-animation fw-700 d-block mx-auto mt-2 text-center px-2"
                             style="width: fit-content;">Perbarui Status Pelamar</button>
                     </div>    
@@ -338,9 +338,9 @@ function installProposalFiles(id_proposal) {
 }
 
 // fucntion untuk menampilkan opsi update status lamaran dan interview
-function showUpdateStatusProposal(id) {
-    if (daftarPelamarUpdateProposalStatus.text().trim() !== '') {
-        daftarPelamarUpdateProposalStatus.text('');
+function showUpdateStatusProposal(id_proposal) {
+    if (daftarPelamarUpdateProposalStatus.text().trim() !== "") {
+        daftarPelamarUpdateProposalStatus.text("");
 
         return;
     }
@@ -350,75 +350,158 @@ function showUpdateStatusProposal(id) {
                     class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
                     <div class="status-btn-container bg-white p-5">
                         <div class="d-flex justify-content-between mk">
-                            <button onclick="showUpdateOptionStatusProposal(${id}, 'lamaran')"
-                                class="border border-0 text-white fw-500 bni-blue">LAMARAN</button>
-                            <button onclick="showUpdateOptionStatusProposal(${id}, 'wawancara')"
-                                class="border border-0 text-white fw-500 bni-blue">WAWANCARA</button>
+                            <button onclick="showUpdateOptionStatusProposal(${id_proposal}, 'proposal')"
+                                class="border click-animation border-0 text-white fw-500 bni-blue">LAMARAN</button>
+                            <button onclick="showUpdateOptionStatusProposal(${id_proposal}, 'interview')"
+                                class="border border-0 click-animation text-white fw-500 bni-blue">WAWANCARA</button>
                         </div>
-                        <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                        <button class="border border-0 text-white click-animation fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
-                            onclick="showUpdateStatusProposal(${id})">Tutup</button>
+                            onclick="showUpdateStatusProposal()">Tutup</button>
                     </div>
                 </div>
     `);
 }
 
 // function untuk menampilkan opsi terima, tinjau, tolak pada lamaran dan interview
-function showUpdateOptionStatusProposal(id, type) {
-    if (daftarPelamarUpdateOptionProposalStatus.textContent.trim() !== "") {
-        daftarPelamarUpdateOptionProposalStatus.textContent = "";
+function showUpdateOptionStatusProposal(id_proposal, type) {
+    if (daftarPelamarUpdateOptionProposalStatus.text().trim() !== "") {
+        daftarPelamarUpdateOptionProposalStatus.text("");
 
         return;
     }
 
-    daftarPelamarUpdateOptionProposalStatus.innerHTML = `
+    if (type.toLowerCase() === "proposal") {
+        daftarPelamarUpdateOptionProposalStatus.html(`
             <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center"
                     style="background-color: rgba(0, 0, 0, .4)">
                     <div class="status-btn-container bg-white p-5" style="width: 500px;">
                         <div class="d-flex justify-content-between mk d-flex gap-3">
-                            <button onclick="updateStatusProposal('review', ${id}, '${type}')"
-                                class="border border-0 bg-primary text-white fw-500">TINJAU</button>
-                            <button onclick="updateStatusProposal('approved', ${id}, '${type}')"
-                                class="border border-0 text-white bg-success fw-500">TERIMA</button>
-                            <button onclick="updateStatusProposal('rejected', ${id}, '${type}')" class="border border-0 text-white bg-danger fw-500">TOLAK</button>
+                            <button onclick="updateStatusProposal(${id_proposal}, 'waiting')"
+                                class="border click-animation border-0 bg-primary text-white fw-500">TINJAU</button>
+                            <button onclick="updateStatusProposal(${id_proposal}, 'approved')"
+                                class="border click-animation border-0 text-white bg-success fw-500">TERIMA</button>
+                            <button onclick="updateStatusProposal(${id_proposal}, 'rejected')" class="border click-animation border-0 text-white bg-danger fw-500">TOLAK</button>
                         </div>
-                        <button class="border border-0 text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                        <button class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
                             onclick="showUpdateOptionStatusProposal()">Tutup</button>
                     </div>
                 </div>
-    `;
-}
+    `);
 
-// function untuk mengirim request update status ke server
-function updateStatusProposal(status, id, type) {
-    console.log(status, id, type);
-    updateProposalStatusNotification('Status berhasil diperbarui!', 'Terjadi kesalahan saat melakukan update data, silahkan coba lagi!', 'http://localhost:8000/storage/svg/success-checkmark.svg');
-}
-
-// function untuk menampilkan notifikasi berhasil atau gagal update statua
-function updateProposalStatusNotification(title, message, image) {
-    if (daftarPelamarUpdateProposalStatusNotification.textContent.trim() !== "") {
-        daftarPelamarUpdateProposalStatusNotification.textContent = "";
         return;
     }
 
-    daftarPelamarUpdateProposalStatusNotification.innerHTML = `
+    if (type.toLowerCase() === 'interview') {
+        daftarPelamarUpdateOptionProposalStatus.html(`
+            <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center"
+                    style="background-color: rgba(0, 0, 0, .4)">
+                    <div class="status-btn-container bg-white p-4 py-5" style="width: 500px;">
+                        <div class="d-flex justify-content-between mk d-flex gap-3">
+                            <button onclick="updateStatusInterview(${id_proposal}, 'waiting')"
+                                class="border click-animation border-0 bg-primary text-white fw-500">TINJAU</button>
+                            <button onclick="updateStatusInterview(${id_proposal}, 'approved')"
+                                class="border click-animation border-0 text-white bg-success fw-500">TERIMA</button>
+                            <button onclick="updateStatusInterview(${id_proposal}, 'rejected')"
+                                class="border click-animation border-0 text-white bg-danger fw-500">TOLAK</button>
+                        </div>
+                        <div class="mt-3">
+                            <label class="form-label mb-1">Interview date</label>
+                            <div class="d-flex gap-3">
+                                <input type="date" name="interview-date" id="interview-date"
+                                    class="form-control border border-black">
+                                <button type="button" class="btn btn-dark" onclick="setInterviewDate()">Set</button>
+                            </div>
+                        </div>
+                        <button class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                            style="width: 100px; font-size: .9rem; padding: 5px;"
+                            onclick="showUpdateOptionStatusProposal()">Tutup</button>
+                    </div>
+                </div>
+    `);
+        return;
+    }
+}
+
+// function untuk mengirim request update status proposal ke server
+function updateStatusProposal(id_proposal, status) {
+    $.ajax({
+        url: `/api/dashboard/perusahaan/daftar/pelamar/update-status/proposal`,
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: { id_proposal: id_proposal, status: status },
+        success: function (response) {
+            let notification = response.notification;
+            updateProposalStatusNotification(notification.title, notification.message, notification.icon);
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+        }
+    })
+}
+
+// function untuk mengirim request update status interview ke server
+function updateStatusInterview(id_proposal, status) {
+    alert("you pressed the interview one");
+}
+
+// function untuk mengatur tanggal interview pelamar ke server
+function setInterviewDate() {
+    const value = $("#interview-date").val();
+
+}
+
+// function untuk menampilkan notifikasi berhasil atau gagal update statua
+function updateProposalStatusNotification(title, message, icon) {
+    if (daftarPelamarUpdateProposalStatusNotification.text().trim() !== "") {
+        daftarPelamarUpdateProposalStatusNotification.text("");
+        return;
+    }
+
+    daftarPelamarUpdateProposalStatusNotification.html(`
     <div class="d-block position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
                     style="background-color: rgba(0, 0, 0, .4)">
                     <div class="dashboard__logout bg-white p-5" style="width: 500px;">
                         <div class="d-flex flex-column align-items-center justify-content-center position-relative">
                             <span class="fw-700 d-block">${title}</span>
                             <div class="text-center" style="font-size: .85rem;">${message}</div>
-                            <img src="${image}" alt="" class="daftar-pelamar__update-proposal-notification-img position-absolute">
+                            <img src="${icon}" alt="" class="daftar-pelamar__update-proposal-notification-img position-absolute">
                             <button onclick="updateProposalStatusNotification()"
-                                class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                                class="border border-0 bni-blue text-white click-animation d-block mx-auto fw-700 mt-4"
                                 style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
                         </div>
                     </div>
                 </div>
-    
-    `;
+    `);
 }
 
 // function untuk menampilkan informasi hapus pelamar

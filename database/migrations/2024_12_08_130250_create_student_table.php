@@ -15,10 +15,11 @@ return new class extends Migration
             $table->string('nim')->primary();
             $table->unsignedBigInteger('id_profile');
             $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_major');
-            $table->unsignedBigInteger('id_study_program');
-            $table->string('institute', 100)->nullable(true);
+            $table->unsignedBigInteger('id_major')->nullable(true);
+            $table->unsignedBigInteger('id_study_program')->nullable(true);
+            $table->string('institute', 100)->default('Politeknik Negeri Batam');
             $table->string('skill', 100)->nullable(true);
+            $table->dateTime('approved_datetime')->nullable(true);
             $table->timestamps();
 
             $table->foreign('id_profile')
