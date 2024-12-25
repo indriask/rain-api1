@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Prodi;
 use App\Models\Proposal;
 use App\Models\Vacancy;
 use Exception;
@@ -205,7 +206,6 @@ class DashboardCompanyController extends Controller
     // method request ubah status lamaran
     public function updateStatusApplicantProposal(Request $request)
     {
-        // kirim email setelah berhasil diperbarui
         try {
             $validated = $request->validate([
                 'id_proposal' => ['required', 'integer', 'present', 'min:1'],
@@ -213,9 +213,13 @@ class DashboardCompanyController extends Controller
             ]);
 
             $proposal = Proposal::select('proposal_status', 'nim', 'id_proposal')
-                ->with(['student' => function ($query) {
-                    return $query->select('nim', 'approved_datetime');
-                }])
+                ->with([
+                    'student' => function ($query) {
+                        $query->select('nim', 'id_user', 'approved_datetime')->with(['account' => function ($query) {
+                            $query->select('id_user', 'email');
+                        }]);
+                    }
+                ])
                 ->where('id_proposal', $validated['id_proposal'])
                 ->first();
 
@@ -262,6 +266,8 @@ class DashboardCompanyController extends Controller
                 ]);
             }
 
+            // send an email afterward
+
             return response()->json([
                 'success' => true,
                 'notification' => [
@@ -279,5 +285,30 @@ class DashboardCompanyController extends Controller
                 ]
             ], 500);
         }
+    }
+
+    // method request atur tanggal interview
+    public function setInterviewDate(Request $request) {
+        $validator = Validator::make($request->input(), [
+            'interview_date' => ['required', 'present', 'date_format:Y-m-d\TH:i', 'after:tomorrow']
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => true,
+                'notification' => [
+                    'message' => $validator->errors(),
+                    'type' => 'danger'
+                ]
+            ]);
+        }
+
+        // check proposal_status = true
+        // check interview_status = null
+        $proposal = Proposal::select('interview_date')
+            ->whereNotNull('proposal_status')
+            ->where('interview_status', null);
+
+        return response()->json('success');
     }
 }

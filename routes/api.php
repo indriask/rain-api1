@@ -33,9 +33,6 @@ Route::middleware(['guest', 'web'])->group(function () {
 
 
 
-
-
-
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route signout mahasiswa, perusahaan dan admin
     Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
@@ -85,7 +82,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->middleware(IsRoleCompany::class);
 
     Route::post('/dashboard/perusahaan/daftar/pelamar/interview-date', [DashboardCompanyController::class, 'setInterviewDate'])
-        ->middleware(IsRoleAdmin::class);
+        ->middleware(IsRoleCompany::class);
 
         
     Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])->name('api-company-edit-profile');

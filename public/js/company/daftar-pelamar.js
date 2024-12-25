@@ -409,12 +409,15 @@ function showUpdateOptionStatusProposal(id_proposal, type) {
                         <div class="mt-3">
                             <label class="form-label mb-1">Interview date</label>
                             <div class="d-flex gap-3">
-                                <input type="date" name="interview-date" id="interview-date"
+                                <input type="datetime-local" name="interview-date" id="interview-date"
                                     class="form-control border border-black">
                                 <button type="button" class="btn btn-dark" onclick="setInterviewDate()">Set</button>
                             </div>
+                            <div id="interview-date-notification">
+                            </div>
                         </div>
-                        <button class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
+                        <button
+                            class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
                             onclick="showUpdateOptionStatusProposal()">Tutup</button>
                     </div>
@@ -432,6 +435,7 @@ function updateStatusProposal(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
+            // console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
@@ -477,7 +481,29 @@ function updateStatusInterview(id_proposal, status) {
 // function untuk mengatur tanggal interview pelamar ke server
 function setInterviewDate() {
     const value = $("#interview-date").val();
+    console.log(value);
 
+    $.ajax({
+        url: '/api/dashboard/perusahaan/daftar/pelamar/interview-date',
+        method: "POST",
+        headers: {"X-CSRF-TOKEN": window.laravel.csrf_token},
+        data: {interview_date: value},
+        success: function(response) {
+            console.log(response);
+            if(response.error) {
+                let notification = response.notification;
+
+                $("#interview-date-notification").html(`
+                    <div class="alert alert-${notification.type} py-1 mt-2" style="font-size: .9rem;" role="alert">
+                        ${notification.message.interview_date}
+                    </div>
+                `);
+            }
+        },
+        error: function(jqXHR) {
+            console.log(jqXHR)
+        }
+    });
 }
 
 // function untuk menampilkan notifikasi berhasil atau gagal update statua
