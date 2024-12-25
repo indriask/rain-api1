@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,9 +17,7 @@ class DatabaseSeeder extends Seeder
         // Memanggil UsersTableSeeder untuk memasukkan data ke tabel users
         $this->call(UserRolesSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(JurusanSeeder::class);
-        $this->call(ProdiSeeder::class);
-        $this->call(LowonganSeeder::class);
-        $this->call(LowonganProdiSeeder::class);
+        $this->call(MajorSeeder::class);
+        $this->call(StudyProgramSeeder::class);
     }
 }

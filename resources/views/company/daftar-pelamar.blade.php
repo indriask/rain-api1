@@ -27,10 +27,13 @@
     <link rel="stylesheet" href="{{ asset('css/daftar-pelamar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
-    <title>Kelola Lowongan | RAIN</title>
+    <title>Daftar Pelamar | RAIN</title>
     <script>
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"
+        };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
         };
     </script>
 </head>
@@ -60,25 +63,28 @@
                 </div>
                 <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="jurusan" id="jurusan">
                             <option>Pilih jurusan</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="prodi" id="prodi">
                             <option>Pilih prodi</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
-                            <option>Pilih lowongan</option>
+                        <select name="mode_kerja" id="mode_kerja">
+                            <option value="" selected>Pilih lowongan</option>
+                            <option value="offline">Offline</option>
+                            <option value="online">Online</option>
+                            <option value="hybrid">Hybrid</option>
                         </select>
                         <div class="select-bg"></div>
                     </div>
                     <div class="select-container">
-                        <select name="" id="">
+                        <select name="lokasi" id="lokasi">
                             <option>Pilih lokasi</option>
                         </select>
                         <div class="select-bg"></div>
@@ -270,19 +276,27 @@
             </div>
 
             {{-- pop up pesan konfirmasi penghapusan pelamar --}}
-            <div id="daftar-pelamar-hapus-pelamar"> 
+            <div id="daftar-pelamar-hapus-pelamar">
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
             {{-- tambah lowongan untuk perusahaan --}}
-            <x-add-vacancy />
+            <div id="add-vacancy"></div>
+
 
         </main>
     </div>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+
+    {{-- script js buat logika fitur pada halaman daftar pelamar perusahaan --}}
+    <script defer src="{{ asset('js/company/daftar-pelamar.js') }}"></script>
 
 </body>
 

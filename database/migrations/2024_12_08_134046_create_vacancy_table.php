@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('vacancy', function (Blueprint $table) {
             $table->id('id_vacancy')->primary()->autoIncrement();
-            $table->unsignedBigInteger('nib');
+            $table->string('nib');
             $table->integer('applied');
-            $table->enum('status', ['verified', 'unverified'])->default('unverified');
             $table->string('title', 225);
             $table->string('salary', 20);
             $table->enum('time_type', ['part time', 'full time'])->default('full time');
@@ -25,6 +24,8 @@ return new class extends Migration
             $table->string('location', 100);
             $table->text('description');
             $table->integer('quota');
+            $table->date('date_created');
+            $table->date('date_ended');
             $table->timestamps();
 
             $table->foreign('nib')

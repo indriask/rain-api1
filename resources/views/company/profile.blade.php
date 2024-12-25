@@ -26,10 +26,13 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 
-    <title>Wasyn Sulaiman Siregar Profile | RAIN</title>
+    <title>Profile | RAIN</title>
     <script>
         window.laravel = {
             csrf_token: "{{ csrf_token() }}"
+        };
+        window.storage_path = {
+            path: "{{ asset('storage') }}/"
         };
     </script>
 </head>
@@ -156,10 +159,20 @@
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
+            {{-- tambah lowongan untuk perusahaan --}}
+            <div id="add-vacancy"></div>
+
         </main>
     </div>
 
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- script jquery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
+    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+
+    {{-- script js buat logika fitur pada halaman profile perusahaan --}}
+    <script defer src="{{ asset('js/company/profile.js') }}"></script>
 
 </body>
 

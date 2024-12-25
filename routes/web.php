@@ -6,39 +6,31 @@ use App\Http\Controllers\IndexController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/**
- * INFORMASI PENTING!!! HARAP DIBACA!!
- * 
- * JIKA INGIN MEMBUAT LOGIKA UNTUK MEM-PROSES DATA REQUEST, DIHARAPKAN MENGGUNAKAN
- * CONTROLLER YANG SUDAH DISIPKAN, MASING MASING CONTROLLER MEMPUNYAI KEGUNAAAN NYA 
- * MASING MASING. INI UNTUK KETENTRAMA KITA BERSAMA
- * 
- * FILE web.php dan api.php MEMPUNYAI KEGUNAAN MAING MAING
- * 1. web.php => hanya digunakan untuk menampilkan halaman view website
- * 2. api.php => hanya digunakan untuk mem-proses logika request dan response
- * 
- */
-
-
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::redirect('/index', '/', 302);
 
 
 
+
+
+
+// akun user tidak perlu ter-authentikasi dan email terverifikasi kalau mau masuk
+// route dibawah ini
 Route::middleware('guest')->group(function () {
     Route::get('/signin', [IndexController::class, 'signinPage'])->name('login');
     Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
-    Route::get('/admin/signin', [IndexController::class, 'adminSigninPage'])->name('admin-singin');
+    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])->name('admin-singin');
     Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])->name('student-signup');
     Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])->name('company-signup');
 });
 
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
 Route::middleware(['auth', 'verified'])->group(function () {
     // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/lowongan', [DashboardController::class, 'getVacancy'])->name('dashboard-get-lowongan');
 
     // Routing khusus role mahasiswa
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])->name('student-proposal-list');
@@ -46,33 +38,53 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Routing khusus role perusahaan
     Route::get('/dashboard/perusahaan/daftar/pelamar', [DashboardController::class, 'companyApplicantPage'])->name('company-applicant-list');
-    Route::get('/dashboard/perusahaan/kelola/lowongan', [DashboardController::class, 'companyManageVacancyPage'])->name('company-manage-vacancy');
+    Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])->name('company-manage-vacancy');
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])->name('company-profile');
 
     // Routing khusus role admin
+    Route::get('/dashboard/admin/profile', [DashboardController::class, 'adminProfilePage'])->name('admin-profile');
     Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])->name('admin-manage-user-student');
-    Route::get('/dashbord/admin/kelola/lowongan', [DashboardController::class, 'adminManageVacancyPage'])->name('admin-manage-vacancy');
     Route::get('/dashboad/admin/kelola/user/perusahaan', [DashboardController::class, 'adminManageUserPerusahaan'])->name('admin-manage-user-company');
 });
+
+
+
+
+
 
 Route::get('/lowongan', [DashboardController::class, 'getLowongan']);
 Route::get('/lowongan/filter', [DashboardController::class, 'filterLowongan']);
 Route::get('/jurusan', [DashboardController::class, 'getJurusan']);
+Route::get('/prodi', [DashboardController::class, 'getProdi']);
 Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
-Route::get('/prodi/{idJurusan}', [DashboardController::class, 'getProdi']);
 
 
+
+
+
+
+
+// akun user harus ter-autentikasi sebelum masuk ke route dibawah ini
 Route::middleware('auth')->group(function () {
     // Routing untuk halaman verifikasi email yang di daftarkan
     Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])
-        ->middleware('signed')->name('verification.verify');
+        ->middleware('signed')
+        ->name('verification.verify');
 });
+
+
+
+
+
 
 
 // Routing untuk system forgot password
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])->name('password.request');
 Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password.reset');
+
+
+
 
 
 

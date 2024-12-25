@@ -84,20 +84,33 @@
                 <h1>Dapatkan lowongan dan kandidat magang yang sesuai!</h1>
                 <div>
                     <label for="email">Masukan Email</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required value="{{ old('email') }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="email" id="email"
+                            class="form-control @error('email') is-invalid @enderror" required
+                            value="{{ old('email') }}">
                         <i class="bi bi-envelope"></i>
                     </div>
+                    @error('email')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password">Kata Sandi</label>
-                    <div class="input-wrapper">
-                        <input type="password" name="password" id="password" required>
+                    <div class="input-wrapper m-0">
+                        <input type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
                     </div>
+                    @error('password')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div class="form-option">
                     <p>Tidak punya akun? <a href="{{ route('student-signup') }}">Daftar</a></p>

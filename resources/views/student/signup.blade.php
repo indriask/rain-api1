@@ -59,40 +59,66 @@
             @csrf
             <div>
                 <h1>Daftarkan diri anda!</h1>
-                <div>
+                <div class="has-validation">
                     <label for="email">Masukan Email</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="email" id="email" required value="{{ old('email', null) }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="email" class="form-control @error('email') is-invalid @enderror"
+                            required value="{{ old('email', null) }}">
                         <i class="bi bi-envelope"></i>
                     </div>
+                    @error('email')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="nim">Masukan NIM</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="nim" id="nim" required value="{{ old('nim', null) }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="nim" id="nim"
+                            class="form-control @error('nim') is-invalid @enderror" required
+                            value="{{ old('nim', null) }}">
                         <i class="bi bi-postcard"></i>
                     </div>
+                    @error('nim')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="nama">Masukan Nama</label>
-                    <div class="input-wrapper">
-                        <input type="text" name="name" id="nama" required value="{{ old('name', null) }}">
+                    <div class="input-wrapper m-0">
+                        <input type="text" name="name" id="nama"
+                            class="form-control @error('name') is-invalid @enderror" required
+                            value="{{ old('name', null) }}">
                         <i class="bi bi-person-square"></i>
                     </div>
+                    @error('name')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password">Kata Sandi</label>
-                    <div class="input-wrapper">
-                        <input type="password" name="password" id="password" required>
+                    <div class="input-wrapper m-0">
+                        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                            id="password" required>
                         <div class="show-password">
                             <i class="bi bi-eye-slash"></i>
                             <i class="bi bi-eye d-none"></i>
                         </div>
                     </div>
+                    @error('password')
+                        <div class="text-danger" style="font-size: .85rem;">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div>
                     <label for="password-confirmation">Masukan Ulang Sandi</label>
-                    <div class="input-wrapper">
+                    <div class="input-wrapper m-0">
                         <input type="password" name="password_confirmation" id="password_confirmation" required>
                         <!-- new code start -->
                         <div class="show-password">
