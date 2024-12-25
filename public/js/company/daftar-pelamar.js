@@ -411,6 +411,8 @@ function showUpdateOptionStatusProposal(id_proposal, type) {
                             <div class="d-flex gap-3">
                                 <input type="datetime-local" name="interview-date" id="interview-date"
                                     class="form-control border border-black">
+                                <input type="hidden" name="id_proposal" id="id_proposal"
+                                    class="form-control border border-black" value="${id_proposal}">
                                 <button type="button" class="btn btn-dark" onclick="setInterviewDate()">Set</button>
                             </div>
                             <div id="interview-date-notification">
@@ -435,7 +437,6 @@ function updateStatusProposal(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
-            // console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
@@ -475,33 +476,110 @@ function updateStatusProposal(id_proposal, status) {
 
 // function untuk mengirim request update status interview ke server
 function updateStatusInterview(id_proposal, status) {
-    alert("you pressed the interview one");
+    $.ajax({
+        url: `/api/dashboard/perusahaan/daftar/pelamar/update-status/interview`,
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: { id_proposal: id_proposal, status: status },
+        success: function (response) {
+            let notification = response.notification;
+            updateProposalStatusNotification(notification.title, notification.message, notification.icon);
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+        }
+    })
 }
 
 // function untuk mengatur tanggal interview pelamar ke server
 function setInterviewDate() {
-    const value = $("#interview-date").val();
-    console.log(value);
+    const interview_date = $("#interview-date").val();
+    const id_proposal = $("#id_proposal").val();
 
     $.ajax({
         url: '/api/dashboard/perusahaan/daftar/pelamar/interview-date',
         method: "POST",
-        headers: {"X-CSRF-TOKEN": window.laravel.csrf_token},
-        data: {interview_date: value},
-        success: function(response) {
-            console.log(response);
-            if(response.error) {
-                let notification = response.notification;
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: { interview_date: interview_date, id_proposal, id_proposal },
+        success: function (response) {
+            let notification = response.notification;
 
+            if (response.success === true) {
                 $("#interview-date-notification").html(`
                     <div class="alert alert-${notification.type} py-1 mt-2" style="font-size: .9rem;" role="alert">
-                        ${notification.message.interview_date}
+                        ${notification.message}
                     </div>
                 `);
+
+                return;
+            } else {
+                $("#interview-date-notification").html(`
+                    <div class="alert alert-${notification.type} py-1 mt-2" style="font-size: .9rem;" role="alert">
+                        ${notification.message}
+                    </div>
+                `);
+
+                return;
             }
         },
-        error: function(jqXHR) {
-            console.log(jqXHR)
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                const response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
         }
     });
 }

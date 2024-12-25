@@ -12,7 +12,6 @@ use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;

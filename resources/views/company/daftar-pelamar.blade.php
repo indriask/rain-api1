@@ -55,45 +55,7 @@
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    {{-- <div class="position-relative">
-                        <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
-                            name="cari-perusahaan" placeholder="Cari perusahaan">
-                        <i class="bi bi-search search-icon"></i>
-                    </div> --}}
                 </div>
-                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
-                    <div class="select-container">
-                        <select name="jurusan" id="jurusan">
-                            <option>Pilih jurusan</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="prodi" id="prodi">
-                            <option>Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="mode_kerja" id="mode_kerja">
-                            <option value="" selected>Pilih lowongan</option>
-                            <option value="offline">Offline</option>
-                            <option value="online">Online</option>
-                            <option value="hybrid">Hybrid</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="lokasi" id="lokasi">
-                            <option>Pilih lokasi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <button class="hapus-filter ms-auto">
-                        <i class="bi bi-x-square me-1"></i>
-                        Hapus filter
-                    </button>
-                </div> --}}
             </div>
 
             {{-- menampilkan list pelamar pada lowongan --}}

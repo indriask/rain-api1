@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nim');
             $table->string('resume', 50);
             $table->date('applied_date');
-            $table->date('interview_date')->nullable(true);
+            $table->dateTime('interview_date')->nullable(true);
             $table->enum('final_status', ['approved', 'rejected', 'waiting'])->default('waiting');
             $table->enum('proposal_status', ['approved', 'rejected', 'waiting'])->default('waiting');
             $table->enum('interview_status', ['approved', 'rejected', 'waiting'])->default('waiting');
