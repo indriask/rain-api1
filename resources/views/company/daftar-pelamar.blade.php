@@ -47,21 +47,21 @@
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
-            {{-- user profile and filter input --}}
+            {{-- profile user, search query dan filter input --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Mahasiswa</span>
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    <div class="position-relative">
+                    {{-- <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
                             name="cari-perusahaan" placeholder="Cari perusahaan">
                         <i class="bi bi-search search-icon"></i>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="select-container w-100 mt-2 d-flex gap-3">
+                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="jurusan" id="jurusan">
                             <option>Pilih jurusan</option>
@@ -93,174 +93,28 @@
                         <i class="bi bi-x-square me-1"></i>
                         Hapus filter
                     </button>
-                </div>
+                </div> --}}
             </div>
 
-            {{-- daftar pelamar pada lowongan --}}
+            {{-- menampilkan list pelamar pada lowongan --}}
             <div id="card-container" class="overflow-auto">
                 <div id="proposal-list-container" class="overflow-auto position-relative h-100">
-                    <div class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
-                        @for ($i = 1; $i <= 7; $i++)
-                            <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
-                                <div onclick="showStudentProfile({{ $i }})" class="cursor-pointer">
-                                    <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
-                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHr74Pjdj__bQPnZK-BFujbwgnP1t5PIqkig&s"
-                                            class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
-                                        <div class="d-flex flex-column">
-                                            <span class="daftar-pelamar__proposal-card-name fw-700"
-                                                style="font-size: .95rem" title="">Wasyn Sulaiman Siregar</span>
-                                            <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
-                                                title="">wasynsulaiman@laravel.com</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-3">
-                                        <span class="daftar-pelamar__proposal-card-name fw-600"
-                                            style="font-size: .95rem">Frontend Developer</span>
-                                        <span><i class="bi bi-folder fw-500" style="font-size: .85rem;"></i> 4</span>
-                                    </div>
-                                </div>
-                                <button type="button" onclick="showDeleteApplicant({{ $i }})"
-                                    class="daftar-pelamar__proposal-card-delete border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        @endfor
+                    <div id="applicant-list-data" class="daftar-pelamar__proposal-card-list px-3 gap-3 mt-4">
                     </div>
                 </div>
             </div>
 
             {{-- profile pelamar mahasiswa --}}
-            <div id="daftar-pelamar-student-profile"
+            <div id="daftar-pelamar-student-profile-container"
                 class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
-                <div class="daftar-pelamar__student-profile bg-white p-4 d-flex gap-5 mt-3">
-                    <div class="profile-info w-50 position-relative">
-                        <div class="d-flex align-items-center gap-3">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                                alt="Someone profile" class="profile__profile-img rounded">
-                            <div class="w-100">
-                                <div class="profile__profile-nama-lengkap bg-white rounded p-2">Wasyn Sulaiman Siregar
-                                </div>
-                                <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
-                            </div>
-                        </div>
-                        <div class="profile__profile-more-info mt-4">
-                            <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Politeknik
-                                Negeri Batam</div>
-
-                            <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknik
-                                Informatika
-                            </div>
-
-                            <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Teknologi
-                                Rekayasa Perangkat Lunak
-                            </div>
-
-                            <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Hack
-                                Webiste NASA</div>
-
-                            <label for="alamat" style="font-size: .95rem">Alamat</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Batam,
-                                Nongsa
-                            </div>
-
-                            <label for="kota" style="font-size: .95rem">Kota</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">Kota Batam
-                            </div>
-
-                            <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">12345
-                            </div>
-
-                            <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">
-                                081234567890
-                            </div>
-
-                            <label for="email" style="font-size: .95rem">Email</label>
-                            <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">
-                                eric@laravel.com
-                            </div>
-                        </div>
-                        <div class="position-absolute" style="bottom: 10px;">
-                            <button class="border border-0 bni-blue text-white fw-700 p-1 rounded me-2"
-                                style="font-size: .9rem; width: 100px;" onclick="showStudentProfile()">Tutup</button>
-                            <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                                style="font-size: .9rem; width: 130px;" onclick="showStudentProposal('1')">Lihat
-                                Lamaran</button>
-                        </div>
-                    </div>
-                    <div class="profile__profile-description w-50">
-                        <div class="h-100">
-                            <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil
-                                Mahasiswa</span>
-                            <div class="bg-white shadow overflow-auto px-3 py-2"
-                                style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nisi perferendis in soluta
-                                illum
-                                delectus eos possimus aspernatur, ea placeat ad voluptates inventore non temporibus
-                                expedita
-                                ratione quae consequuntur quod obcaecati? Quo, asperiores inventore! Error
-                                exercitationem
-                                delectus eaque iure ipsum numquam repudiandae placeat rem aliquam, quisquam, porro at!
-                                Ad
-                                quaerat ducimus tempora earum porro similique velit illum hic esse, consectetur aliquid
-                                provident voluptate eligendi harum, odio eveniet, rerum consequuntur. Facere,
-                                perspiciatis
-                                pariatur? Dolore debitis aliquid eius nobis deserunt sint accusantium fugit illo
-                                impedit,
-                                optio sit consequuntur laboriosam inventore dolores quo sequi dolorem necessitatibus?
-                                Repellat assumenda voluptate unde. Ipsa nihil eligendi maiores!
-                            </div>
-                        </div>
-                    </div>
+                {{-- informasi profile pelamar --}}
+                <div id="daftar-pelamar-student-profile" class="w-100">
                 </div>
 
                 {{-- informasi proposal pelamar --}}
                 <div id="daftar-pelamar-proposal-info-container"
                     class="d-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
-                    <div id="daftar-pelamar-proposal-info-box"
-                        class="vacancy-apply-form-card bg-white p-4 position-relative">
-                        <div class="position-absolute top-0 end-0">
-                            <button class="daftar-pelamar__proposal-info-close text-white border border-0 bni-blue"
-                                onclick="showStudentProposal()"><i class="bi bi-x-circle"></i></button>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Informasi Lamaran</h1>
-                        </div>
-
-                        <div class="apply-form-common-info mt-4">
-                            <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
-
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Wasyn Sulaiman Siregar
-                            </div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">4342401034</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Teknik Informatika</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">Program Studi</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">wasyn@domain.com</div>
-                            <div class="daftar-pelamar__proposal-info-box w-100 border mb-3">0812345678910</div>
-                        </div>
-
-                        <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
-                        <div class="apply-form-upload-file-info d-flex justify-content-between">
-                            <span>Dapat berupa CV atau dokumen lainnya</span>
-                            <span>Maks. 6 Dokumen</span>
-                        </div>
-                        <button for="upload-file"
-                            class="apply-form-upload-file border border-0 text-white fw-700 text-center w-100">
-                            <i class="bi bi-file-earmark-arrow-down me-1" onclick="installProposalFiles(1)"></i> Unduh
-                            Dokumen</button>
-
-                        {{-- this button will send a request to an api, and will return boolean condition which determine success or not --}}
-                        <button type="button" onclick="showUpdateStatusProposal(1)"
-                            class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center px-2"
-                            style="width: fit-content;">Perbarui Status Pelamar</button>
-                    </div>
                 </div>
             </div>
 
@@ -279,12 +133,46 @@
             <div id="daftar-pelamar-hapus-pelamar">
             </div>
 
+            {{-- pop up notifikasi berhasil atau gagal hapus pelamar --}}
+            <div id="daftar-pelamar-delete-applicant-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="dashboard__logout bg-white" style="width: 500px;">
+                    <div class="p-5 d-flex flex-column align-items-center position-relative">
+                        <img src="" id="delete-applicant-notification-icon" class="position-absolute"
+                            style="width: 80px; top: 1.1rem; opacity: .5;" alt="">
+                        <span class="fw-700 text-center d-block position-relative z-1"
+                            id="delete-applicant-notification-message" style="font-size: 1.2rem;"></span>
+                        <button onclick="showDeleteApplicantNotification()"
+                            class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="position-absolute"
+                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan
+                            saat
+                            penghapusan data</h6>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
+            </div>
+
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
             {{-- tambah lowongan untuk perusahaan --}}
             <div id="add-vacancy"></div>
-
 
         </main>
     </div>
@@ -293,7 +181,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+    <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman daftar pelamar perusahaan --}}
     <script defer src="{{ asset('js/company/daftar-pelamar.js') }}"></script>

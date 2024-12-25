@@ -22,7 +22,7 @@ class Vacancy extends Model
         'time_type',
         'type',
         'duration',
-        'major',
+        'id_major',
         'location',
         'description',
         'date_created',
@@ -43,5 +43,10 @@ class Vacancy extends Model
     // method one-to-meny pada vacancy ke proposal
     public function proposals() {
         return $this->hasMany(Proposal::class, 'id_vacancy', 'id_vacancy');
+    }
+
+    // method one-to-many pada vacancy ke major
+    public function major() {
+        return $this->belongsTo(Major::class, 'id_major', 'id');
     }
 }

@@ -6,7 +6,10 @@ use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Major;
+use App\Models\Profile;
+use App\Models\Proposal;
 use App\Models\StudyProgram;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -69,24 +72,116 @@ class DashboardController extends Controller
     public function index($id = 0)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
-        $user = auth('web')->user();
-        $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+        $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
 
-        // jika fullname kosong, isi dengan data username
-        if(trim($fullName) === '') {
-            $fullName = 'Username';
+        if ($value['success'] === true) {
+            return response()->json($value);
         }
 
-        $lowongan = Vacancy::with('company.profile')->get();
-        
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $lowongan = Vacancy::with('company.profile', 'major')->get();
+
         return response()->view('dashboard', [
             'role' => $role,
             'lowongan' => $lowongan,
-            'user' => auth('web')->user(),
+            'user' => $user,
             'fullName' => $fullName
         ]);
     }
 
+    private function handleCustomHeader(int $id, $user, $role)
+    {
+        if (request()->hasHeader('x-get-data')) {
+            $value = request()->header('x-get-data');
+
+            if ($value === 'specific-data') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('id_vacancy', $id)
+                    ->first();
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $role,
+                    'success' => true
+                ];
+            }
+
+            if ($value === 'specific-data-company') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('id_vacancy', $id)
+                    ->where('nib', $user->$role->nib)
+                    ->first();
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $role,
+                    'success' => true
+                ];
+            }
+
+            if ($value === 'get-applicants') {
+                $applicants = Proposal::select(['id_proposal', 'nim', 'id_vacancy', 'resume'])
+                    ->with([
+                        'student.profile' => function ($query) {
+                            $query->select(['id_profile', 'photo_profile', 'first_name', 'last_name']);
+                        },
+                        'student.account' => function ($query) {
+                            $query->select(['id_user', 'email']);
+                        },
+                        'vacancy' => function ($query) use ($user) {
+                            $query->select(['title', 'id_vacancy'])->where('nib', $user->company->nib);
+                        }
+                    ])->get();
+
+                // ubah string file menjadi array
+                foreach ($applicants as $applicant) {
+                    $applicant->resume = Storage::allFiles($applicant->resume);
+                }
+
+                return [
+                    'success' => true,
+                    'applicants' => $applicants,
+                ];
+            }
+
+            if ($value === 'get-applicant-profile') {
+                $profile = Profile::with('student.account', 'student.major', 'student.study_program')
+                    ->where('id_profile', $id)
+                    ->first();
+
+                return [
+                    'success' => true,
+                    'profile' => $profile
+                ];
+            }
+
+            if ($value === 'get-applicant-proposal') {
+                $proposal = Proposal::select('resume', 'nim')->with([
+                    'student.profile' => function ($query) {
+                        $query->select(['first_name', 'last_name', 'phone_number', 'id_profile']);
+                    },
+                    'student.account' => function ($query) {
+                        $query->select(['email', 'id_user']);
+                    },
+                    'student.major' => function ($query) {
+                        $query->select(['name', 'id']);
+                    },
+                    'student.study_program' => function ($query) {
+                        $query->select(['name', 'id']);
+                    }
+                ])->where('id_proposal', $id)->first();
+
+                return [
+                    'success' => true,
+                    'proposal' => $proposal
+                ];
+            }
+        }
+
+        return ['success' => false];
+    }
 
     /**
      * Method untuk me-render halaman daftar lamaran mahasiswa
@@ -115,43 +210,83 @@ class DashboardController extends Controller
     {
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return $value;
+        }
+
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-
-        if (request()->hasHeader('x-get-data')) {
-            $vacancies = Vacancy::with('company.profile')->where('nib', $user->company->nib)
-                ->get();
-
-            return response()->json(['data' => $vacancies]);
-        }
-
-        if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::with('company.profile')->where('id_vacancy', $id)
-                ->where('nib', $user->company->nib)
-                ->first();
-
-            return response()->json(['data' => $vacancy]);
-        }
-
-
-        if (trim($fullName) === "") {
-            $fullName = "Username";
-        }
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $lowongan = Vacancy::with('company.profile', 'major')->where('nib', $user->company->nib)->get();
 
         return response()->view('company.kelola-lowongan', [
             'role' => $role,
             'user' => $user,
-            'fullName' => $fullName
+            'fullName' => $fullName,
+            'lowongan' => $lowongan
         ]);
     }
 
     /**
      * Method untuk me-render halaman daftar pelamar lowongan perusahaan
      */
-    public function companyApplicantPage()
+    public function companyApplicantPage($id = 0)
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return response()->json($value);
+        }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+
         return response()->view('company.daftar-pelamar', [
-            'role' => 'company'
+            'role' => $role,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
+    }
+
+    // method untuk download file proposal pelamar
+    public function companyDownloadProposal($id = 0)
+    {
+        $data = Proposal::select(['nim', 'resume'])->where('id_proposal', $id)->first();
+        $files = Storage::files($data['resume']);
+
+        if (empty($files)) {
+            return response()->json(['file_error' => 'File tidak ada']);
+        }
+
+        $zipName = $data['nim'] . '.zip';
+        $zipPath = storage_path($zipName);
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($files as $file) {
+                $filePath = storage_path("app/$file");
+                $fileName = basename($file);
+                $zip->addFile($filePath, $fileName);
+            }
+            $zip->close();
+        } else {
+            return response()->json(['file_error' => 'Terjadi kesalahan saat melakukan zip']);
+        }
+
+        return response()->json(['url' => url('/download-proposal/' . $zipName)]);
+    }
+
+    public function downloadProposal($filename)
+    {
+        $filePath = storage_path($filename);
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
     /**
@@ -159,8 +294,6 @@ class DashboardController extends Controller
      */
     public function companyProfilePage()
     {
-
-
         return response()->view('company.profile', [
             'role' => 'company'
         ]);
@@ -182,12 +315,22 @@ class DashboardController extends Controller
     public function adminManageUserStudent()
     {
         return response()->view('admin.kelola-mahasiswa', [
-            'role' => 'student'
+            'role' => 'admin'
+        ]);
+    }
+
+    // menampilkan halaman mahasiswa tertentu
+    public function adminViewUserStudent(int $id)
+    {
+        return view('admin.view-mahasiswa', [
+            'role' => 'admin',
+            'id_vacancy' => $id
         ]);
     }
 
     // menampilkan halaman profile admin
-    public function adminProfilePage() {
+    public function adminProfilePage()
+    {
         return response()->view('admin.profile', [
             'role' => 'admin'
         ]);
@@ -200,6 +343,15 @@ class DashboardController extends Controller
     {
         return response()->view('admin.kelola-perusahaan', [
             'role' => 'admin'
+        ]);
+    }
+
+    // menampilkan halaman perusahaan tertentu
+    public function adminViewUserCompany(int $id)
+    {
+        return view('admin.view-perusahaan', [
+            'role' => 'admin',
+            'id_vacancy' => $id
         ]);
     }
 

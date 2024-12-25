@@ -12,9 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
 
-    <!-- box icons cdn link -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     {{-- bootstrap icon web font link --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -66,13 +63,13 @@
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    <div class="position-relative">
+                    {{-- <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
                             name="cari-perusahaan" placeholder="Cari perusahaan">
                         <i class="bi bi-search search-icon"></i>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="select-container w-100 mt-2 d-flex gap-3">
+                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="jurusan" id="jurusan">
                         </select>
@@ -103,54 +100,74 @@
                         <i class="bi bi-x-square me-1"></i>
                         Hapus filter
                     </button>
-                </div>
+                </div> --}}
             </div>
 
             {{-- menampilkan list lowongan yang sudah di publish --}}
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="vacancy-card-list" class="vacancy-card-list px-3 gap-3 mt-4 position-relative">
-                        <div class="vacancy-card bg-white py-3 px-4">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="salary-text">4000000/bulan</h5>
-                                <img class="company-photo rounded"
-                                    src="http://localhost:8000/storage${data.company.profile.photo_profile}"
-                                    alt="${data.company.profile.first_name} photo">
+                        @foreach ($lowongan as $lowong)
+                            <div class="vacancy-card bg-white py-3 px-4">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="salary-text">
+                                        Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
+                                    </h5>
+                                    <img class="company-photo rounded"
+                                        src="{{ asset('storage/' . $lowong->company->profile->photo_profile) }}"
+                                        alt="Company photo">
+                                </div>
+                                <div>
+                                    <h6 class="vacancy-role m-0">{{ $lowong->title }}</h6>
+                                    <span class="vacancy-major-choice">{{ $lowong->major->name }}</span>
+
+                                    <ul class="vacancy-small-detail p-0 mt-3">
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->location }}</li>
+                                        <li><i
+                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->date_created)->format('d-F-Y') }}
+                                        </li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->quota }} Kuota
+                                        </li>
+                                    </ul>
+
+                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->time_type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->duration }} Bulan
+                                        </li>
+                                    </ul>
+
+                                    <button onclick="showDetailManageVacancy({{ $lowong->id_vacancy }})"
+                                        class="vacancy-detail border border-0 click-animation text-white mx-auto d-block mt">Detail</button>
+                                </div>
                             </div>
-                            <div>
-                                <h6 class="vacancy-role m-0">${data.title}</h6>
-                                <span class="vacancy-major-choice">${data.major}</span>
-
-                                <ul class="vacancy-small-detail p-0 mt-3">
-                                    <li><i class="bi bi-geo-alt me-3"></i>${data.location}</li>
-                                    <li><i class="bi bi-calendar3 me-3"></i>${data.date_created}</li>
-                                    <li><i class="bi bi-bar-chart-line me-3"></i>${data.quota} Kuota</li>
-                                </ul>
-
-                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                    <li class="bg-white rounded-pill text-center">${data.time_type}</li>
-                                    <li class="bg-white rounded-pill text-center">${data.type}</li>
-                                    <li class="bg-white rounded-pill text-center">${data.duration} Bulan</li>
-                                </ul>
-
-                                <button onclick="showManageVacancyCard()"
-                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
 
             {{-- menampilkan detail lowongan yang sudah di publish --}}
-            <div id="mange-vacancy-container"
+            <div id="manage-vacancy-detail"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto"
                 style="background-color: rgba(0, 0, 0, .4)">
+
             </div>
 
-            {{-- menampilkan edit detail lowongan yang sudah di publish --}}
-            <div id="manage-vacancy-container"
-                class="d-none position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-center"
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="position-absolute"
+                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan saat
+                            penghapusan data</h6>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
@@ -171,7 +188,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+    <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman kelola lowondan perusahaan --}}
     <script defer src="{{ asset('js/company/kelola-lowongan.js') }}"></script>

@@ -180,7 +180,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+    <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur dashboard profile mahasiswa --}}
     <script defer src="{{ asset('js/student/profile.js') }}"></script>

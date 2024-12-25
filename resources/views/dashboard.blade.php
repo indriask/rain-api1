@@ -67,9 +67,9 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
-                            class="profile-img rounded-circle shadow">
-                        <span class="profile-name">{{ $fullName }}</span>
+                            <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                                class="profile-img rounded-circle shadow">
+                            <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
@@ -117,69 +117,42 @@
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
-                        <div class="vacancy-card bg-white py-3 px-4">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="salary-text">Rp. ${lowong.gaji_perbulan.toLocaleString('id-ID')}/bulan</h5>
-                                <img class="company-photo rounded"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
-                                    alt="Company photo">
-                            </div>
-                            <div>
-                                <h6 class="vacancy-role m-0">${lowong.nama_pekerjaan}</h6>
-                                <span class="vacancy-major-choice">${lowong.jurusan.name}</span>
-                                <ul class="vacancy-small-detail p-0 mt-3">
-                                    <li><i class="bi bi-geo-alt me-3"></i>${lowong.lokasi}</li>
-                                    <li><i class="bi bi-calendar3 me-3"></i>${tanggalFormat}</li>
-                                    <!-- Tanggal yang diformat -->
-                                    <li><i class="bi bi-bar-chart-line me-3"></i>${lowong.jumlah_kouta} Kuota</li>
-                                </ul>
-                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                    <li class="bg-white rounded-pill text-center">${lowong.jenis_kerja}</li>
-                                    <li class="bg-white rounded-pill text-center">${lowong.mode_kerja}</li>
-                                    <li class="bg-white rounded-pill text-center">${lowong.lama_magang} Bulan</li>
-                                </ul>
-                                <button onclick="showVacancyDetailCard('1')"
-                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-                            </div>
-                        </div>
-
                         {{-- vacancy card --}}
-                        {{-- @foreach ($lowongan as $lowong)
+                        @foreach($lowongan as $lowong)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">
-                                    <h5 class="salary-text">Rp.
-                                        {{ number_format($lowong->gaji_perbulan, 0, ',', '.') }}/bulan
+                                    <h5 class="salary-text">
+                                        Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
                                     </h5>
                                     <img class="company-photo rounded"
-                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
+                                        src="{{ asset('storage/' .  $lowong->company->profile->photo_profile) }}"
                                         alt="Company photo">
                                 </div>
                                 <div>
-                                    <h6 class="vacancy-role m-0">{{ $lowong->nama_pekerjaan }}</h6>
-                                    <span class="vacancy-major-choice">{{ $lowong->jurusan->name }}</span>
-
+                                    <h6 class="vacancy-role m-0">{{ $lowong->title }}</h6>
+                                    <span class="vacancy-major-choice">{{ $lowong->major->name }}</span>
+    
                                     <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->lokasi }}</li>
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->location }}</li>
                                         <li><i
-                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->tanggal_pendaftaran)->format('d-F-Y') }}
-
+                                                class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($lowong->date_created)->format('d-F-Y') }}
                                         </li>
-                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->jumlah_kouta }} Kuota
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->quota }} Kuota
                                         </li>
                                     </ul>
-
+    
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">{{ $lowong->jenis_kerja }}</li>
-                                        <li class="bg-white rounded-pill text-center">{{ $lowong->mode_kerja }}</li>
-                                        <li class="bg-white rounded-pill text-center">{{ $lowong->lama_magang }} Bulan
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->time_type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $lowong->duration }} Bulan
                                         </li>
                                     </ul>
-
-                                    <button onclick="showVacancyDetail('1')"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
+    
+                                    <button onclick="showVacancyDetailCard({{ $lowong->id_vacancy }})"
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Detail</button>
                                 </div>
                             </div>
-                        @endforeach --}}
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -198,7 +171,7 @@
                     class="vacancy-apply-form-card bg-white p-4">
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                        <button type="button" class="border border-0 bg-transparent"
+                        <button type="button" class="border border-0 bg-transparent click-animation"
                             onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                     </div>
                     <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
@@ -235,7 +208,7 @@
                     <input type="file" name="files" multiple id="upload-file" hidden>
 
                     <button type="button" onclick="processAddProposal(1)"
-                        class="apply-form-common-info-btn border border-0 text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
+                        class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
 
                 {{-- notifikasi gagal atau sukses daftar lowongan mahasiswa --}}
@@ -261,13 +234,11 @@
     </div>
 
 
-
-
     {{-- script jquery --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard-new.js') }}"></script>
+    <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
 </body>
 

@@ -44,10 +44,12 @@ class StudentSignupController extends Controller
                 'photo_profile' => 'default/profile.png'
             ]);
 
-            $student = Student::create([
+            Student::create([
                 'nim' => $validated['nim'],
                 'id_user' => $user->id_user,
-                'id_profile' => $profile->id_profile
+                'id_profile' => $profile->id_profile,
+                // 'id_major' => 3,
+                // 'id_study_program' => 2,
             ]);
 
             // mark user as authenticated but not verified
@@ -57,7 +59,7 @@ class StudentSignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Terjadi kesalahan saat melakukan proses signup, silahkan coba lagi!'])
+            return back()->withErrors(['error' => $e->getMessage()])
                 ->onlyInput('email', 'name', 'nim');
         }
     }

@@ -7,11 +7,11 @@
         <div class="border-bottom border-black" style="height: 300px;">
             <p class="aside-subheading">MENU UTAMA</p>
             <a href="{{ route('dashboard') }}" class="underline-none">
-                <div class="aside-list-item py-2 px-2 text-white mb-2"><i class="bi bi-house-door me-1"></i> Beranda
+                <div class="aside-list-item py-2 px-2 text-white mb-2 click-animation"><i class="bi bi-house-door me-1"></i> Beranda
                 </div>
             </a>
             @if ($role === 'student')
-                <a href="{{ route('student-proposal-list') }}" class="underline-none">
+                <a href="{{ route('student-proposal-list') }}" class="underline-none click-animation">
                     <div class="aside-list-item py-2 px-2 text-white mb-2">
                         <i class="bi bi-card-list me-1"></i> Daftar Lamaran
                     </div>
@@ -19,15 +19,15 @@
             @endif
 
             @if ($role === 'company')
-                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="showAddVacancyCard()"><i
+                <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer click-animation" onclick="showAddVacancyCard()"><i
                         class="bi bi-plus-circle me-1"></i> Tambah Lowongan</div>
                 <a href="{{ route('company-manage-vacancy') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
+                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer click-animation"><i
                             class="bi bi-window me-1"></i>
                         Kelola Lowongan</div>
                 </a>
                 <a href="{{ route('company-applicant-list') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer"><i
+                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer click-animation"><i
                             class="bi bi-person-vcard me-1"></i> Daftar Pelamar</div>
                 </a>
             @endif
@@ -40,15 +40,15 @@
                         <div><i class="bi bi-person me-1"></i> Kelola Pengguna</div>
                         <i class="bi bi-caret-down-square position-relative" style="right: 4px;"></i>
                     </button>
-                    <ul class="dropdown-menu mt-1">
-                        <li><a class="dropdown-item" href="{{ route('admin-manage-user-student') }}"
+                    <ul class="dropdown-menu mt-1 w-100">
+                        <li><a class="dropdown-item px-2 click-animation" href="{{ route('admin-manage-user-student') }}"
                                 style="font-size: .9rem;">
-                                <i class="bi bi-backpack"></i>
+                                <i class="bi bi-backpack me-1"></i>
                                 Kelola Akun Mahasiswa</a>
                         </li>
-                        <li><a class="dropdown-item" href="{{ route('admin-manage-user-company') }}"
+                        <li><a class="dropdown-item px-2 click-animation" href="{{ route('admin-manage-user-company') }}"
                                 style="font-size: .9rem;">
-                                <i class="bi bi-building"></i>
+                                <i class="bi bi-building me-1"></i>
                                 Kelola Akun Perusahaan</a>
                         </li>
                     </ul>
@@ -60,25 +60,25 @@
             <p class="aside-subheading">Lainnya</p>
             @if ($role === 'student')
                 <a href="{{ route('student-profile') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer">
+                    <div class="aside-list-item py-2 click-animation px-2 text-white mb-2 cursor-pointer">
                         <i class="bi bi-gear me-1"></i>Pengaturan
                     </div>
                 </a>
             @elseif ($role === 'company')
                 <a href="{{ route('company-profile') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer">
+                    <div class="aside-list-item py-2 click-animation px-2 text-white mb-2 cursor-pointer">
                         <i class="bi bi-gear me-1"></i>Pengaturan
                     </div>
                 </a>
             @elseif ($role === 'admin')
                 <a href="{{ route('admin-profile') }}" class="underline-none">
-                    <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer">
+                    <div class="aside-list-item py-2 click-animation px-2 text-white mb-2 cursor-pointer">
                         <i class="bi bi-gear me-1"></i>Pengaturan
                     </div>
                 </a>
             @endif
 
-            <div class="aside-list-item py-2 px-2 text-white mb-2 cursor-pointer" onclick="showLogoutCard()"><i
+            <div class="aside-list-item py-2 px-2 text-white mb-2 click-animation cursor-pointer" onclick="showLogoutCard()"><i
                     class="bi bi-box-arrow-left me-1"></i> Keluar</div>
         </div>
     </div>

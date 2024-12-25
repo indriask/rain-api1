@@ -46,84 +46,86 @@
 
     <div class="dashboard-layout">
 
-        {{-- dashboard navbar --}}
+        {{-- dashboard navbar samping kanan --}}
         <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
         <main class="dashboard-main position-relative">
 
-            {{-- user profile and filter input --}}
+            {{-- photo profile dan nama mahasiswa --}}
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="{{ asset('storage/default/profile.png') }}" alt=""
-                            class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Admin</span>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
+                            alt="" class="profile-img rounded-circle shadow">
+                        <span class="profile-name">Nama Mahasiswa</span>
                     </div>
                 </div>
             </div>
 
-            {{-- profile section perusahaan --}}
+            {{-- form edit profile mahasiswa --}}
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="{{ asset('storage/default/profile.png') }}" alt="Someone profile"
-                            class="profile__profile-img rounded">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
+                            alt="Someone profile" class="profile__profile-img rounded">
                         <div class="w-100">
-                            <input type="text" form="edit-company-profile-form" name="nama"
-                                value="Admin Polibatam"
-                                class="profile__profile-nama-lengkap border focus-ring border-0 bg-white rounded p-2 w-100">
-                            <span class="fw-700 d-block" style="font-size: .9rem">Admin</span>
+                            <input type="text" name="nama" form="edit-profile-form" value="Wasyn Sulaiman Siregar"
+                                class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            <inpu class="fw-700" style="font-size: .9rem">Mahasiswa</inpu>
                         </div>
                     </div>
-                    <form method="POST" id="edit-company-profile-form" class="profile__profile-more-info mt-4">
+                    <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-4">
                         <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
-                        <input type="text" name="asal-institusi" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Politeknik Negeri Batam">
 
+                        <label for="jurusan" style="font-size: .95rem">Jurusan</label>
+                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="Teknik Informatika">
+
+                        <label for="program-studi" style="font-size: .95rem">Program studi</label>
+                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="Teknologi Rekayasa Perangkat Lunak">
+
+                        <label for="keahlian" style="font-size: .95rem">Keahlian</label>
+                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="Hack website NASA">
+
                         <label for="alamat" style="font-size: .95rem">Alamat</label>
-                        <input type="text" name="alamat" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Batam, Nogsa">
 
                         <label for="kota" style="font-size: .95rem">Kota</label>
-                        <input type="text" name="kota" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="Kota Batam">
 
                         <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="kode-pos" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="12345">
 
                         <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" name="nomor-telepon" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="081234567890">
 
                         <label for="email" style="font-size: .95rem">Email</label>
-                        <input type="text" name="email" class="border border-0 focus-ring rounded p-1 px-2"
+                        <input type="text" name="email" class="border border-0 rounded p-1 px-2 focus-ring"
                             value="eric@laravel.com">
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
-                        <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                        <button class="border click-animation border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
-                            onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
+                            onclick="history.back()">Kembali</button>
                     </div>
                 </div>
                 <div class="profile__profile-description w-50">
-                    <div class="d-flex">
-                        <button class="border border-0 bni-blue text-white fw-700 rounded p-2 ms-auto"
-                            style="font-size: .8rem; width: 100px;" id="edit-profile-btn"
-                            onclick="editProfileCompanyData(1)">Edit Profil</button>
-                    </div>
                     <div class="h-100">
-                        <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Admin</span>
-                        <textarea form="edit-company-profile-form" name="description"
-                            class="bg-white shadow border border-0 w-100 px-3 py-2 focus-ring"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about your company</textarea>
+                        <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
+                        <textarea form="edit-profile-form" name="description"
+                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
                     </div>
                 </div>
-            </div>
-
-            {{-- pop up pesan notifikasi berhasil atau gagal edit --}}
-            <div id="edit-company-profile-notification">
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
@@ -132,13 +134,14 @@
         </main>
     </div>
 
+
     {{-- script jquery --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
+    {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
-    {{-- script js buat logika fitur pada halaman profile perusahaan --}}
+    {{-- script js buat logika fitur dashboard profile mahasiswa --}}
     <script defer src="{{ asset('js/admin/profile.js') }}"></script>
 
 </body>

@@ -451,7 +451,7 @@ button {
 .dashboard__add-vacancy-form {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 15px 2rem;
+    gap: 10px 2rem;
 }
 
 .dashboard__add-vacancy-company label {
@@ -554,7 +554,7 @@ button {
 .dashboard__manage-vacancy-input {
     display: grid;
     grid-template-columns: max-content 1fr;
-    gap: 15px 2rem;
+    gap: 10px 2rem;
 }
 
 .dashboard__manage-vacancy-input label {
@@ -622,4 +622,31 @@ button {
     width: 100px;
     border-radius: 7px;
     top: 4rem;
+}
+
+/* animasi klik tombol */
+.click-animation {
+    transform: scale(1);
+    opacity: 1;
+    transition: all 100ms ease;
+}
+
+.click-animation:active {
+    opacity: .9;
+    transform: scale(.95);
+}
+
+/* container informasi data tidak ditemukan */
+.dashboard__not-found-icon {
+    aspect-ratio: 1/1;
+    width: 65px;
+}
+
+.dashboard__not-found-container {
+    width: 400px;
+    margin-top: calc(100% - 12rem);
+}
+
+.dashboard__not-found-container p {
+    font-size: .9rem;
 }

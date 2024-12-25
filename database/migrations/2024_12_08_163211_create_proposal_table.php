@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('proposal', function (Blueprint $table) {
             $table->id('id_proposal')->primary()->autoIncrement();
             $table->unsignedBigInteger('id_vacancy');
-            $table->unsignedBigInteger('nim');
+            $table->string('nim');
             $table->string('resume', 50);
             $table->date('applied_date');
             $table->date('interview_date')->nullable(true);
