@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Prodi;
 use App\Models\Proposal;
 use App\Models\Vacancy;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Mockery\CountValidator\Exact;
 
 class DashboardCompanyController extends Controller
 {
@@ -206,6 +204,15 @@ class DashboardCompanyController extends Controller
     // method request ubah status lamaran
     public function updateStatusApplicantProposal(Request $request)
     {
+        $response = [
+            'success' => null,
+            'notification' => [
+                'title' => null,
+                'message' => null,
+                'icon' => null
+            ]
+        ];
+
         try {
             $validated = $request->validate([
                 'id_proposal' => ['required', 'integer', 'present', 'min:1'],
@@ -223,68 +230,85 @@ class DashboardCompanyController extends Controller
                 ->where('id_proposal', $validated['id_proposal'])
                 ->first();
 
+            // check apakah $proposal kosong
             if (empty($proposal) === true) {
-                return response()->json([
-                    'error' => true,
-                    'notification' => [
-                        'title' => 'Data tidak ditemukan!',
-                        'message' => 'Tidak dapat melakukan update, data tidak ditemukan',
-                        'icon' => asset('storage/svg/failed-x.svg')
-                    ]
-                ]);
+                $response['success'] = false;
+                $response['notification']['title'] = 'Data tidak ditemukan';
+                $response['notification']['message'] = 'Tidak dapat melakukan update, data tidak ditemukan';
+                $response['notification']['icon'] = asset('storage/svg/failed-x.svg');
+
+                return response()->json($response);
             }
 
-            if (empty($proposal->student->approved_datetime) === true && $validated['status'] === 'approved') {
+            if ($proposal->proposal_status !== 'approved' && $validated['status'] === 'approved') {
                 $proposal->student->approved_datetime = now();
-                $proposal->proposal_status = 'approved';
+                $proposal->proposal_status = $validated['status'];
+                $proposal->interview_status = 'waiting';
+                $proposal->final_status = 'waiting';
+
                 $proposal->save();
                 $proposal->student->save();
 
-                return response()->json([
-                    'success' => true,
-                    'notification' => [
-                        'title' => 'Status berhasil diperbarui!',
-                        'message' => 'Silahkan hubungi kontak pelamar untuk melakukan konfirmasi!',
-                        'icon' => asset('storage/svg/success-checkmark.svg')
-                    ]
-                ]);
+                $response['success'] = true;
+                $response['notification']['title'] = 'Status berhasil diperbarui!';
+                $response['notification']['message'] = 'Silahkan hubungi kontak pelamar untuk melakukan konfirmasi!';
+                $response['notification']['icon'] = asset('storage/svg/success-checkmark.svg');
+
+                // send an email afterward
+
+                return response()->json($response);
             }
 
-            if ($validated['status'] === 'rejected' || $validated['status'] === 'waiting') {
+            if ($validated['status'] === 'rejected') {
                 $proposal->student->approved_datetime = null;
+                $proposal->proposal_status = $validated['status'];
+                $proposal->interview_status = $validated['status'];
+                $proposal->final_status = $validated['status'];
+                $proposal->interview_date = null;
+
+                $proposal->student->save();
+                $proposal->save();
+
+                $response['success'] = true;
+                $response['notification']['title'] = 'Status berhasil diperbarui!';
+                $response['notification']['message'] = 'Silahkan hubungi kontak pelamar untuk konfirmasi!';
+                $response['notification']['icon'] = asset('storage/svg/success-checkmark.svg');
+
+                // send an email afterward
+
+                return response()->json($response);
+            }
+
+            if ($validated['status'] === 'waiting') {
                 $proposal->interview_date = null;
                 $proposal->proposal_status = $validated['status'];
-                $proposal->save();
-                $proposal->student->save();
+                $proposal->interview_status = $validated['status'];
+                $proposal->final_status = $validated['status'];
 
-                return response()->json([
-                    'success' => true,
-                    'notification' => [
-                        'title' => 'Status berhasil diperbarui!',
-                        'message' => 'Silahkan menghubungi kontak pelamar untuk konfirmasi!',
-                        'icon' => asset('storage/svg/success-checkmark.svg')
-                    ]
-                ]);
+                $proposal->save();
+
+                $response['success'] = true;
+                $response['notification']['title'] = 'Status berhasil diperbarui!';
+                $response['notification']['message'] = 'Silahkan hubungi kontak pelamar untuk konfirmasi!';
+                $response['notification']['icon'] = asset('storage/svg/success-checkmark.svg');
+
+                return response()->json($response);
             }
 
             // send an email afterward
 
-            return response()->json([
-                'success' => true,
-                'notification' => [
-                    'title' => 'Status tidak diperbarui!',
-                    'message' => 'Tidak ada status yang di update',
-                    'icon' => asset('storage/svg/success-checkmark.svg')
-                ]
-            ]);
+            $response['success'] = true;
+            $response['notification']['title'] = 'Status tidak diperbarui!';
+            $response['notification']['message'] = 'Tidak ada status yang diperbarui!';
+            $response['notification']['icon'] = asset('storage/svg/success-checkmark.svg');
+
+            return response()->json($response);
         } catch (\Throwable $e) {
-            return response()->json([
-                'error' => true,
-                'notification' => [
-                    'message' => 'Terjadi kesalahan saat melakukan update',
-                    'icon' => asset('storage/svg/failed-x.svg')
-                ]
-            ], 500);
+            $response['success'] = false;
+            $response['notification']['message'] = 'Terjadi kesalahaan saat melakukan update';
+            $response['notification']['icon'] = asset('storage/svg/failed-x.svg');
+
+            return response()->json($response, 500);
         }
     }
 
@@ -329,8 +353,8 @@ class DashboardCompanyController extends Controller
 
             // check apakah approved_datetime terisi, interview_date terisi, proposal_status adalah approved dan status approved
             if ($interview->student->approved_datetime == true && $interview->interview_date == true && $interview->proposal_status === 'approved' && $validated['status'] === 'approved') {
-                $interview->interview_status = 'approved';
-                $interview->final_status = 'approved';
+                $interview->interview_status = $validated['status'];
+                $interview->final_status = $validated['status'];
                 $interview->save();
 
                 $response['success'] = true;
@@ -345,14 +369,12 @@ class DashboardCompanyController extends Controller
 
             // check apakah status rejected
             if ($validated['status'] === 'rejected') {
-                // $interview->student->approved_datetime = null;
-                // $interview->student->save();
-                // $interview->delete();
-
                 $interview->student->approved_datetime = null;
-                $interview->interview_status = $interview->interview_status !== 'waiting' ? $validated['status'] : $interview->interview_status;
-                $interview->proposal_status = $interview->proposal_status !== 'waiting' ? $validated['status'] : $interview->proposal_status;
-                $interview->final_status = $interview->final_status !== 'waiting' ? $validated['status'] : $interview->final_status;
+                $interview->interview_date = null;
+                $interview->interview_status = $validated['status'];
+                $interview->proposal_status = $validated['status'];
+                $interview->final_status = $validated['status'];
+
                 $interview->save();
                 $interview->student->save();
 
@@ -368,9 +390,10 @@ class DashboardCompanyController extends Controller
 
             // check apakah status waiting
             if ($validated['status'] === 'waiting') {
-                $interview->interview_status = $interview->interview_status !== 'waiting' ? $validated['status'] : $interview->interview_status;
-                $interview->proposal_status = $interview->proposal_status !== 'waiting' ? $validated['status'] : $interview->proposal_status;
-                $interview->final_status = $interview->final_status !== 'waiting' ? $validated['status'] : $interview->final_status;
+                $interview->interview_date = null;
+                $interview->interview_status = $validated['status'];
+                $interview->final_status = $validated['status'];
+
                 $interview->save();
 
                 $response['success'] = true;
@@ -417,7 +440,7 @@ class DashboardCompanyController extends Controller
         // check apakah validasi gagal
         if ($validator->fails()) {
             $response['success'] = false;
-            $response['notification']['message'] = $validator->errors()->get('interview_date');
+            $response['notification']['message'] = "Format tanggal dan waktu salah, harap coba lagi!";
             $response['notification']['type'] = 'danger';
 
             return response()->json($response);
@@ -445,7 +468,7 @@ class DashboardCompanyController extends Controller
             return response()->json($response);
         }
 
-        // check apakah status interview adalah rejected atau approved
+        // check apakah status interview status adalah rejected atau approved
         if (in_array($proposal->interview_status, ['rejected', 'approved'])) {
             $response['success'] = false;
             $response['notification']['message'] = 'Gagal atur tanggal, status wawancara harus menunggu';
@@ -459,7 +482,7 @@ class DashboardCompanyController extends Controller
         $proposal->save();
 
         $response['success'] = true;
-        $response['notification']['message'] = 'Berhasil atur tanggal wawancara';
+        $response['notification']['message'] = 'Berhasil atur tanggal dan waktu wawancara';
         $response['notification']['type'] = 'primary';
 
         return response()->json($response);

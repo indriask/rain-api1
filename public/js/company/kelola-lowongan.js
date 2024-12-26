@@ -146,7 +146,7 @@ function showDetailManageVacancy(id = 0) {
                              onclick="showDetailManageVacancy()" type="button">Tutup</button>
                          <div class="d-flex gap-2">
                              <button id="manage-vacancy-submit" class="border border-0 click-animation bni-blue text-white fw-700"
-                                 onclick="deleteManageVacancy(${response.vacancy.id_vacancy}, '${response.vacancy.company.nib}')" type="button">Delete</button>
+                                 onclick="deleteManageVacancy(${response.vacancy.id_vacancy}, '${response.vacancy.company.nib}')" type="button">Hapus</button>
                              <button id="manage-vacancy-submit" class="border click-animation border-0 bni-blue text-white fw-700"
                                  onclick="editManageVacancy()" type="button">Edit</button>
                          </div>
