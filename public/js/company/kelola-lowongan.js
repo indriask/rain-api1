@@ -251,18 +251,22 @@ function editManageVacancy(id = 0) {
                 return false;
             }
 
-            showManageVacancyCardNotification(response.notification.message, response.notification.icon);
+            let response = response.notification;
+            showManageVacancyCardNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
+                let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
+                
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                
                 return;
             }
 
@@ -322,19 +326,22 @@ function deleteManageVacancy(id = 0, nib = "") {
         data: { 'id_vacancy': id, 'nib': nib },
         dataType: 'json',
         success: function (response) {
-            console.log(response);
-            showManageVacancyCardNotification(response.notification.message, response.notification.icon);
+            let response = response.notification;
+            showManageVacancyCardNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
+                let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+
                 return;
             }
 

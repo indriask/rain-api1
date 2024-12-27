@@ -383,6 +383,18 @@ function showUpdateOptionStatusProposal(id_proposal, type) {
                                 class="border click-animation border-0 text-white bg-success fw-500">TERIMA</button>
                             <button onclick="updateStatusProposal(${id_proposal}, 'rejected')" class="border click-animation border-0 text-white bg-danger fw-500">TOLAK</button>
                         </div>
+                        <div class="mt-3">
+                            <label class="form-label mb-1">Interview date</label>
+                            <div class="d-flex gap-3">
+                                <input type="datetime-local" name="interview-date" id="interview-date"
+                                    class="form-control border border-black">
+                                <input type="hidden" name="id_proposal" id="id_proposal"
+                                    class="form-control border border-black" value="${id_proposal}">
+                                <button type="button" class="btn btn-dark" onclick="setInterviewDate()">Set</button>
+                            </div>
+                            <div id="interview-date-notification">
+                            </div>
+                        </div>
                         <button class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
                             onclick="showUpdateOptionStatusProposal()">Tutup</button>
@@ -406,18 +418,6 @@ function showUpdateOptionStatusProposal(id_proposal, type) {
                             <button onclick="updateStatusInterview(${id_proposal}, 'rejected')"
                                 class="border click-animation border-0 text-white bg-danger fw-500">TOLAK</button>
                         </div>
-                        <div class="mt-3">
-                            <label class="form-label mb-1">Interview date</label>
-                            <div class="d-flex gap-3">
-                                <input type="datetime-local" name="interview-date" id="interview-date"
-                                    class="form-control border border-black">
-                                <input type="hidden" name="id_proposal" id="id_proposal"
-                                    class="form-control border border-black" value="${id_proposal}">
-                                <button type="button" class="btn btn-dark" onclick="setInterviewDate()">Set</button>
-                            </div>
-                            <div id="interview-date-notification">
-                            </div>
-                        </div>
                         <button
                             class="border border-0 click-animation text-white fw-500 bni-blue d-block mx-auto mt-4 rounded"
                             style="width: 100px; font-size: .9rem; padding: 5px;"
@@ -437,6 +437,7 @@ function updateStatusProposal(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
+            console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
@@ -482,10 +483,13 @@ function updateStatusInterview(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
+            console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
+            return;
             if (jqXHR.status === 500) {
                 const response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
@@ -645,25 +649,22 @@ function processDeleteApplicant(id_proposal) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal },
         success: function (response) {
-            console.log(response);
-            if (response.success) {
-                showDeleteApplicantNotification(response.notification.message, response.notification.icon);
-            }
-
-            if (response.error) {
-                showDeleteApplicantNotification(response.notification.message, response.notification.icon);
-            }
+            let notification = response.notification;
+            showDeleteApplicantNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
+                let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+
                 return;
             }
 

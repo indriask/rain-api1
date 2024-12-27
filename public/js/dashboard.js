@@ -555,18 +555,22 @@ function processAddVacancy() {
                 return false;
             }
 
-            showAddVacancyNotification(response.notification.message, response.notification.icon);
+            let response = response.notification;
+            showAddVacancyNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
+                let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
+                
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                
                 return;
             }
 

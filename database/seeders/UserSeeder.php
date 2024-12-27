@@ -80,8 +80,20 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now()
             ],
             [
+                'email' => 'janedoe@gail.com',
+                'password' => '$2y$12$pRC3y9jzMuO8A1Se62p.c.m6fVcC2zaUbiQ6UW43MOWi1EMXc1GB6',
+                'role' => 1,
+                'email_verified_at' => now()
+            ],
+            [
                 'email' => 'ptsukamaju@gmail.com',
                 'password' => '$2y$12$D/weWAHjZkRdcsdfLJZeBeSWLOegzUPUWA98Y63kZTye1clpZXNeK',
+                'role' => 2,
+                'email_verified_at' => now()
+            ],
+            [
+                'email' => 'ptcitracahaya@gmail.com',
+                'password' => '$2y$12$3lbb.oUyDx964U2N8QUlIeVwqlv37PKLTAHh.esuwnPp9ymH8qmou',
                 'role' => 2,
                 'email_verified_at' => now()
             ]
@@ -94,8 +106,20 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('profile')->insert([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+            'photo_profile' => 'default/profile.png',
+        ]);
+
+        DB::table('profile')->insert([
             'first_name' => 'PT',
             'last_name' => 'Suka Maju',
+            'photo_profile' => 'default/profile_company.jpg',
+        ]);
+
+        DB::table('profile')->insert([
+            'first_name' => 'PT',
+            'last_name' => 'Citra Cahaya',
             'photo_profile' => 'default/profile_company.jpg',
         ]);
 
@@ -108,10 +132,26 @@ class UserSeeder extends Seeder
             'institute' => 'Politenik Negeri Batam'
         ]);
 
-        DB::table('company')->insert([
-            'nib' => '8473829132',
+        DB::table('student')->insert([
+            'nim' => '4342401070',
             'id_user' => 2,
             'id_profile' => 2,
+            // 'id_major' => 3,
+            // 'id_study_program' => 2,
+            'institute' => 'Politenik Negeri Batam'
+        ]);
+
+        DB::table('company')->insert([
+            'nib' => '8473829132',
+            'id_user' => 3,
+            'id_profile' => 3,
+            'cooperation_file' => 'file.pdf'
+        ]);
+
+        DB::table('company')->insert([
+            'nib' => '3249018743',
+            'id_user' => 4,
+            'id_profile' => 4,
             'cooperation_file' => 'file.pdf'
         ]);
     }

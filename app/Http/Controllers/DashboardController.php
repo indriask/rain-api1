@@ -131,9 +131,13 @@ class DashboardController extends Controller
                             $query->select(['id_user', 'email']);
                         },
                         'vacancy' => function ($query) use ($user) {
-                            $query->select(['title', 'id_vacancy'])->where('nib', $user->company->nib);
+                            $query->select(['title', 'id_vacancy']);
                         }
-                    ])->get();
+                    ])
+                    ->whereHas('vacancy', function ($query) use ($user, $role) {
+                        $query->where('nib', $user->$role->nib);
+                    })
+                    ->get();
 
                 // ubah string file menjadi array
                 foreach ($applicants as $applicant) {
