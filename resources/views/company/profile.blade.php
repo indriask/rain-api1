@@ -53,7 +53,7 @@
                     <div class="d-flex align-items-center gap-1 mb-2">
                         <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
                             class="profile-img rounded-circle shadow">
-                        <span class="profile-name">{{ $profile->first_name . ' ' . $profile->last_name }}</span>
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,8 @@
                     </div>
                     <form method="POST" id="edit-company-profile-form" class="profile__profile-more-info mt-2"
                         enctype="multipart/form-data">
-                        <input type="file" hidden id="input-photo-profile" name="photo-profile" onchange="handleProfileFile()">
+                        <input type="file" hidden id="input-photo-profile" name="photo-profile"
+                            onchange="handleProfileFile()">
                         <input type="text" hidden id="input-old-photo-profile" name="old-photo-profile"
                             value="{{ $profile->photo_profile }}">
 
@@ -123,11 +124,11 @@
                             value="{{ $user->$role->status_verified_at ?? 'Unverified' }}">
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
-                        <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                        <button class="border border-0 bni-blue click-animation text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
                             onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
                         <button onclick="showDeleteAccountCard()"
-                            class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                            class="border border-0 bni-blue text-white fw-700 click-animation p-1 rounded"
                             style="font-size: .9rem; width: 100px;">Hapus akun</button>
                     </div>
                 </div>
@@ -151,24 +152,35 @@
             </div>
 
             {{-- pop up pesan notifikasi ingin menghapus akun --}}
-            <div id="delete-account-notification"
+            <div id="delete-account-card"
                 class="d-none position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="profile__profile-delete-account bg-white">
                     <div class="d-flex">
                         <button onclick="showDeleteAccountCard()"
-                            class="profile__profile-close-btn ms-auto bni-blue text-white border border-0">
+                            class="profile__profile-close-btn click-animation ms-auto bni-blue text-white border border-0">
                             <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
                     <div class="py-3 px-5">
                         <span class="fw-600">Apakah anda yakin ingin menghapus akun ini?</span>
                         <button onclick="processDeleteAccountRequest()"
-                            class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4 click-animation"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                     </div>
                 </div>
+            </div>
 
+            {{-- pop up notifikasi berhasil atau gagal hapus akun  --}}
+            <div id="delete-account-notification"
+                class="d-none position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="profile__profile-delete-account bg-white d-flex align-items-center justify-content-center flex-column"
+                    style="height: 100px;">
+                    <div class="">
+                        <span class="fw-600" id="delete-account-notification-message">Apakah anda yakin ingin menghapus akun ini?</span>
+                    </div>
+                </div>
             </div>
 
             {{-- pop up notifikasi custom --}}

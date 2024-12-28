@@ -1,7 +1,8 @@
 const editCompanyProfileForm = $("#edit-company-profile-form");
 const editCompanyProfileNotification = document.querySelector("#edit-company-profile-notification");
-const deleteAccountNotification = document.querySelector("#delete-account-notification");
+const deleteAccountCard = $("#delete-account-card");
 const daftarPelamarCustomNotification = $("#custom-notification");
+const deleteAccountNotification = $("#delete-account-notification");
 
 function editProfileCompanyData() {
     const form = new FormData(editCompanyProfileForm[0]);
@@ -16,10 +17,16 @@ function editProfileCompanyData() {
         success: function (response) {
             console.log(response);
 
-            let notification = response.notification;
-            showEditCompanyProfileNotification(notification.message, notification.icon);
+            if (response.success) {
+                let notification = response.notification;
+                showEditCompanyProfileNotification(notification.message, notification.icon);
+            }
+
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
+            return;
+
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
@@ -82,20 +89,43 @@ function showEditCompanyProfileNotification(message, image) {
 
 // function untuk menampilkan notifikasi ingin menghapus akun RAIN
 function showDeleteAccountCard() {
-    if (deleteAccountNotification.classList.contains("d-block")) {
-        deleteAccountNotification.classList.remove("d-block");
-        deleteAccountNotification.classList.add("d-none");
+    if (deleteAccountCard.hasClass("d-block")) {
+        deleteAccountCard.removeClass("d-block");
+        deleteAccountCard.addClass("d-none");
 
         return;
     }
 
-    deleteAccountNotification.classList.remove("d-none");
-    deleteAccountNotification.classList.add("d-block");
+    deleteAccountCard.removeClass("d-none");
+    deleteAccountCard.addClass("d-block");
 }
 
 // function untuk mengirim request hapus akun RAIN ke server
 function processDeleteAccountRequest() {
     // kode isi request untuk menghapus akun
+    $.ajax({
+        url: "/api/dashboard/perusahaan/profile/delete/account",
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        success: function (response) {
+            let notification = response.notification;
+            showDeleteAccountNotification(notification.message);
+
+            if (response.success) {
+                setTimeout(() => {
+                    window.location.replace('/index');
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    deleteAccountNotification.removeClass("d-block");
+                    deleteAccountNotification.addClass("d-none");
+                }, 1000);
+            }
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR)
+        }
+    });
 }
 
 function showCustomNotification(message, icon) {
@@ -126,4 +156,18 @@ function handleProfileFile() {
     reader.onload = event => {
         $("#user-profile")[0].src = event.target.result;
     }
+}
+
+function showDeleteAccountNotification(message) {
+    if (deleteAccountNotification.hasClass("d-block")) {
+        deleteAccountNotification.removeClass("d-block");
+        deleteAccountNotification.addClass("d-none");
+
+        return;
+    }
+
+    deleteAccountNotification.removeClass("d-none");
+    deleteAccountNotification.addClass("d-block");
+
+    $("#delete-account-notification-message").text(message);
 }

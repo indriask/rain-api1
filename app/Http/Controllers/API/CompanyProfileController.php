@@ -60,7 +60,10 @@ class CompanyProfileController extends Controller
                 }
             }
 
-            [$firstName, $lastName] = explode(' ', $validator->getValue('fullname'), 2);
+            $fullName = explode(' ', $validator->getValue('fullname', 2));
+            $firstName = $fullName[0] ?? 'Username';
+            $lastName = $fullName[1] ?? null;
+
             $photoProfile = null;
             $hasFile = $request->hasFile('photo-profile');
 
@@ -93,8 +96,8 @@ class CompanyProfileController extends Controller
 
             Profile::where('id_profile', $user->id_profile)
                 ->update([
-                    'first_name' => $firstName ?? 'Username',
-                    'last_name' => $lastName ?? null,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
                     'photo_profile' => ($hasFile) ? $file->storeAs('profile', $newFileName, 'public') : $photoProfile,
                     'location' => $validator->getValue('location') ?? null,
                     'city' => $validator->getValue('city') ?? null,
@@ -117,8 +120,7 @@ class CompanyProfileController extends Controller
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            // return response()->json($response, 500);
-            return response()->json($e->getMessage());
+            return response()->json($response);
         }
     }
 

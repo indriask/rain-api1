@@ -628,7 +628,7 @@ button {
 .click-animation {
     transform: scale(1);
     opacity: 1;
-    transition: all 100ms ease;
+    transition: all 50ms ease;
 }
 
 .click-animation:active {
