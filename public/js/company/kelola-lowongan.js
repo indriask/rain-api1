@@ -251,7 +251,7 @@ function editManageVacancy(id = 0) {
                 return false;
             }
 
-            let response = response.notification;
+            let notification = response.notification;
             showManageVacancyCardNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
@@ -326,7 +326,7 @@ function deleteManageVacancy(id = 0, nib = "") {
         data: { 'id_vacancy': id, 'nib': nib },
         dataType: 'json',
         success: function (response) {
-            let response = response.notification;
+            let notification = response.notification;
             showManageVacancyCardNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {

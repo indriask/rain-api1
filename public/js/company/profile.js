@@ -1,10 +1,66 @@
-const editCompanyProfileForm = document.querySelector("#edit-company-profile-form");
+$(document).ready(function () {
+
+});
+
+const editCompanyProfileForm = $("#edit-company-profile-form");
 const editCompanyProfileNotification = document.querySelector("#edit-company-profile-notification");
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
+const daftarPelamarCustomNotification = $("#custom-notification");
 
-function editProfileCompanyData(id) {
-    let form = new FormData(editCompanyProfileForm);
-    showEditCompanyProfileNotification("Profile berhasil diperbaharui!", "http://localhost:8000/storage/svg/success-checkmark.svg");
+function editProfileCompanyData() {
+    const form = new FormData(editCompanyProfileForm[0]);
+    console.log(form);
+    $.ajax({
+        url: "/api/dashboard/perusahaan/profile/edit",
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: form,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+
+            let notification = response.notification;
+            showEditCompanyProfileNotification(notification.message, notification.icon);
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR);
+            return;
+
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return;
+            }
+        }
+    });
 }
 
 function showEditCompanyProfileNotification(message, image) {
@@ -47,4 +103,20 @@ function showDeleteAccountCard() {
 // function untuk mengirim request hapus akun RAIN ke server
 function processDeleteAccountRequest() {
     // kode isi request untuk menghapus akun
+}
+
+function showCustomNotification(message, icon) {
+    if (daftarPelamarCustomNotification.hasClass("d-block")) {
+        daftarPelamarCustomNotification.removeClass("d-block");
+        daftarPelamarCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    console.log(icon);
+    daftarPelamarCustomNotification.removeClass("d-none");
+    daftarPelamarCustomNotification.addClass("d-block");
+
+    $("#custom-notification-message").text(message);
+    $("#custom-notification-icon").attr('src', icon);
 }

@@ -65,7 +65,7 @@ class DashboardCompanyController extends Controller
                 icon: asset('storage/svg/success-checkmark.svg')
             );
 
-            response()->json($response);
+            return response()->json($response);
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,

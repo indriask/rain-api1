@@ -20,7 +20,6 @@ class Company extends Model
         'business_fields',
         'founded_date',
         'cooperation_file',
-        'email_verified_at',
         'status_verified_at'
     ];
 

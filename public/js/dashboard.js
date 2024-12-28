@@ -555,7 +555,8 @@ function processAddVacancy() {
                 return false;
             }
 
-            let response = response.notification;
+            let notification = response.notification;
+            console.log(response);
             showAddVacancyNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {

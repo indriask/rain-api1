@@ -101,7 +101,6 @@ Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
 
 
 
-
 // akun user harus ter-autentikasi sebelum masuk ke route dibawah ini
 Route::middleware('auth')->group(function () {
     // Routing untuk halaman verifikasi email yang di daftarkan
