@@ -1,7 +1,3 @@
-$(document).ready(function () {
-
-});
-
 const editCompanyProfileForm = $("#edit-company-profile-form");
 const editCompanyProfileNotification = document.querySelector("#edit-company-profile-notification");
 const deleteAccountNotification = document.querySelector("#delete-account-notification");
@@ -24,9 +20,6 @@ function editProfileCompanyData() {
             showEditCompanyProfileNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
-            return;
-
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
@@ -119,4 +112,18 @@ function showCustomNotification(message, icon) {
 
     $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+}
+
+function handleProfileFile() {
+    const fileInput = $("#input-photo-profile")[0].files[0];
+    if (!fileInput.type.startsWith('image/')) {
+        return undefined;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(fileInput);
+
+    reader.onload = event => {
+        $("#user-profile")[0].src = event.target.result;
+    }
 }

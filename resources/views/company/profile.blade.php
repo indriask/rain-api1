@@ -64,7 +64,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <label for="input-photo-profile" class="cursor-pointer">
                             <img src="{{ asset('storage/' . $profile->photo_profile) }}" alt="Someone profile"
-                                class="profile__profile-img rounded">
+                                class="profile__profile-img rounded" id="user-profile">
                         </label>
                         <div class="w-100">
                             <input type="text" form="edit-company-profile-form" name="fullname" id="input-fullname"
@@ -75,7 +75,7 @@
                     </div>
                     <form method="POST" id="edit-company-profile-form" class="profile__profile-more-info mt-2"
                         enctype="multipart/form-data">
-                        <input type="file" hidden id="input-photo-profile" name="photo-profile">
+                        <input type="file" hidden id="input-photo-profile" name="photo-profile" onchange="handleProfileFile()">
                         <input type="text" hidden id="input-old-photo-profile" name="old-photo-profile"
                             value="{{ $profile->photo_profile }}">
 
@@ -202,10 +202,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman profile perusahaan --}}
-    <script defer src="{{ asset('js/company/profile.js') }}"></script>
+    <script src="{{ asset('js/company/profile.js') }}"></script>
 
 </body>
 
