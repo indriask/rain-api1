@@ -151,8 +151,9 @@ function showStudentProfile(id_profile, id_proposal) {
                         <div class="profile__profile-description w-50">
                             <div class="h-100">
                                 <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi ProfilMahasiswa</span>
-                                <div class="bg-white shadow overflow-x-hidden overflow-y-auto px-3 py-2 w-100"
-                                    style="font-size: .9rem; height: 500px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
+                                <div class="bg-white shadow overflow-x-hidden overflow-y-auto px-3 py-2 w-100 overflow-x-hidden overflow-y-auto"
+                                    style="font-size: .9rem; height: 500px; text-align: justify; line-height: 1.5rem; border-radius: 20px; word-wrap: break-word">
+                                    ${profile.description}
                                 </div>
                             </div>
                         </div>
@@ -465,7 +466,6 @@ function updateStatusProposal(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
-            console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
@@ -518,7 +518,6 @@ function updateStatusInterview(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
-            console.log(response);
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
@@ -768,7 +767,6 @@ function showCustomNotification(message, icon) {
         return;
     }
 
-    console.log(icon);
     daftarPelamarCustomNotification.removeClass("d-none");
     daftarPelamarCustomNotification.addClass("d-block");
 

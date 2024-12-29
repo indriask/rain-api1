@@ -131,9 +131,10 @@
                 <div class="profile__profile-description w-50">
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <div class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
-                            {{ $student->profile->description }}</div>
+                        <div class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100 overflow-x-hidden overflow-y-auto"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px; word-wrap: break-word">
+                            {{ $student->profile->description }}
+                        </div>
                     </div>
                 </div>
             </div>
