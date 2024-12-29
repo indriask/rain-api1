@@ -56,6 +56,13 @@ $(document).ready(function () {
                 console.error("Someting when wrong when accesing the page");
                 return false;
             }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
+            }
         }
     });
 });
@@ -182,6 +189,13 @@ function showStudentProfile(id_profile, id_proposal) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return false;
             }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
+            }
         }
     });
 }
@@ -275,6 +289,13 @@ function showStudentProposal(id_proposal) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
             }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
+            }
         }
     });
 }
@@ -332,6 +353,13 @@ function installProposalFiles(id_proposal) {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     })
@@ -471,6 +499,13 @@ function updateStatusProposal(id_proposal, status) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
             }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
+            }
         }
     })
 }
@@ -488,8 +523,6 @@ function updateStatusInterview(id_proposal, status) {
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
-            return;
             if (jqXHR.status === 500) {
                 const response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
@@ -518,6 +551,13 @@ function updateStatusInterview(id_proposal, status) {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     })
@@ -583,6 +623,13 @@ function setInterviewDate() {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     });
@@ -684,6 +731,13 @@ function processDeleteApplicant(id_proposal) {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     });

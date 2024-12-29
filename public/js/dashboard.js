@@ -563,7 +563,7 @@ function processAddVacancy() {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
-                
+
                 return;
             }
 
@@ -571,7 +571,7 @@ function processAddVacancy() {
             if (jqXHR.status === 419) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
-                
+
                 return;
             }
 
@@ -590,6 +590,13 @@ function processAddVacancy() {
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                return false;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
                 return false;
             }
         }

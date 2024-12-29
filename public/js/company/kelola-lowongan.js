@@ -258,7 +258,7 @@ function editManageVacancy(id = 0) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
-                
+
                 return;
             }
 
@@ -266,7 +266,7 @@ function editManageVacancy(id = 0) {
             if (jqXHR.status === 419) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.message, response.icon);
-                
+
                 return;
             }
 
@@ -286,6 +286,13 @@ function editManageVacancy(id = 0) {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     });
@@ -361,6 +368,13 @@ function deleteManageVacancy(id = 0, nib = "") {
             if (jqXHR.status === 403) {
                 showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
                 return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.message, response.icon);
+                return false;
             }
         }
     });
