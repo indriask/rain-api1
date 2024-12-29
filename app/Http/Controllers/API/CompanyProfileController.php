@@ -45,20 +45,20 @@ class CompanyProfileController extends Controller
                 return response()->json($response);
             }
 
-            if ($validator->getValue('nib') !== (string)$user->nib) {
-                $isExist = Company::where('nib', $validator->getValue('nib'))
-                    ->first();
+            // if ($validator->getValue('nib') !== (string)$user->nib) {
+            //     $isExist = Company::where('nib', $validator->getValue('nib'))
+            //         ->first();
 
-                if ($isExist) {
-                    $respone = $this->setResponse(
-                        success: false,
-                        message: 'NIB sudah terdaftar pada system',
-                        icon: asset('storage/svg/failed-x.svg')
-                    );
+            //     if ($isExist) {
+            //         $respone = $this->setResponse(
+            //             success: false,
+            //             message: 'NIB sudah terdaftar pada system',
+            //             icon: asset('storage/svg/failed-x.svg')
+            //         );
 
-                    return response()->json($respone);
-                }
-            }
+            //         return response()->json($respone);
+            //     }
+            // }
 
             $fullName = explode(' ', $validator->getValue('fullname'), 2);
             $firstName = $fullName[0] ?? 'Username';

@@ -102,6 +102,7 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
     Route::post('/dashboard/admin/profile/edit', [DashboardAdminController::class, 'editProfile'])
         ->middleware(IsRoleAdmin::class);
+        
     // Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
     // Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
 });

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Company;
+use App\Models\Profile;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use Mockery\CountValidator\Exact;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class DashboardAdminController extends Controller
@@ -84,9 +86,92 @@ class DashboardAdminController extends Controller
             "icon" => "svg/success-checkmark.svg"
         ]);
     }
-
     // method untuk proses edit data profile
-    public function editProfile(Request $request) {}
+    public function editProfile(Request $request)
+    {
+        $validator = Validator::make($request->input(), [
+            'fullname' => ['required', 'string', 'max:200', 'present'],
+            'photo_profile' => ['nullable', 'file', 'mimes:png,jpeg,jpg'],
+            'old_photo_profile' => ['required', 'string', 'present'],
+            'institute' => ['nullable', 'string', 'present', 'max:200'],
+            'location' => ['nullable', 'string', 'present', 'max:200'],
+            'city' => ['nullable', 'string', 'present', 'max:200'],
+            'postal_code' => ['nullable', 'numeric', 'present', 'max_digits:6', 'min_digits:6'],
+            'phone_number' => ['nullable', 'numeric', 'present', 'min_digits:1', 'max_digits:14'],
+            'description' => ['nullable', 'string', 'present', 'max:1500']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        try {
+            $user = auth('web')->user()->admin;
+
+            if (empty($user)) {
+                $response = $this->setResponse(
+                    success: false,
+                    message: 'Gagal melakukan update, data tidak ditemukan',
+                    icon: asset('storage/svg/failed-x.svg')
+                );
+
+                return response()->json($response);
+            }
+
+            $fullName = explode(' ', $validator->getValue('fullname'), 2);
+            $firstName = $fullName[0] ?? 'Username';
+            $lastName = $fullName[1] ?? null;
+
+            $photoProfile = null;
+            $hasFile = $request->hasFile('photo_profile');
+
+            // buat photo profile baru jika photo-profile ada
+            if ($hasFile) {
+                $file = $request->file('photo_profile');
+
+                if ($file->getSize() > 2000000) {
+                    $response = $this->setResponse(
+                        success: false,
+                        message: 'Ukuran gambar profile harus dibawah 2MB',
+                        icon: asset('storage/svg/failed-x.svg')
+                    );
+
+                    return response()->json($response);
+                }
+
+                $newFileName = time() . '_' . $file->getClientOriginalName();
+            } else {
+                $photoProfile = $validator->getValue('old_photo_profile');
+            }
+
+            Admin::where('id_admin', $user->id_admin)
+                ->update([
+                    'institute' => $validator->getValue('institute') ?? null,
+                ]);
+
+            Profile::where('id_profile', $user->id_profile)
+                ->update([
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'photo_profile' => ($hasFile) ? $file->storeAs('profile', $newFileName, 'public') : $photoProfile,
+                    'location' => $validator->getValue('location') ?? null,
+                    'city' => $validator->getValue('city') ?? null,
+                    'postal_code' => $validator->getValue('postal_code') ?? null,
+                    'phone_number' => $validator->getValue('phone_number') ?? null,
+                    'description' => $validator->getValue('description') ?? null
+                ]);
+
+            $response = $this->setResponse(
+                success: true,
+                message: 'Profile berhasil diperbarui!',
+                icon: asset('storage/svg/success-checkmark.svg'),
+            );
+
+            return response()->json($response, 200);
+        } catch (\Throwable $e) {
+            return response()->json($e->getMessage());
+        }
+    }
 
     private function setResponse(
         bool $success = true,

@@ -6,7 +6,6 @@ const deleteAccountNotification = $("#delete-account-notification");
 
 function editProfileCompanyData() {
     const form = new FormData(editCompanyProfileForm[0]);
-    console.log(form);
     $.ajax({
         url: "/api/dashboard/perusahaan/profile/edit",
         method: "POST",

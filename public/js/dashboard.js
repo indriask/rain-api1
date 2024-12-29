@@ -166,6 +166,7 @@ function showVacancyDetailCard(id = 0) {
 
             let vacancy = response.vacancy;
             let applyForm = "";
+            let deleteBtn = '';
             let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
 
             const formatter = new Intl.NumberFormat('en-us', {
@@ -185,6 +186,13 @@ function showVacancyDetailCard(id = 0) {
                             class="apply-vacancy-button click-animation border border-0 text-white fw-700 ms-auto"
                             onclick="showApplyVacancyFormContainer(1)">Daftar</button>
                         </div>
+                `;
+            }
+
+            if(response.role === 'admin') {
+                deleteBtn = `
+                    <button onclick="adminDeleteVacancy(${vacancy.id_vacancy})" type="button"
+                            class="close-apply-form text-white click-animation fw-700 border border-0 ms-1">Hapus</button>
                 `;
             }
 
@@ -236,6 +244,7 @@ function showVacancyDetailCard(id = 0) {
                         <div class="position-absolute bottom-0">
                             <button onclick="showVacancyDetailCard()" type="button"
                                 class="close-apply-form text-white click-animation fw-700 border border-0">Kembali</button>
+                            ${deleteBtn}
                         </div>
                     </div>
                     <div class="w-50">

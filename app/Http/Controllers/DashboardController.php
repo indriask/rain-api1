@@ -461,9 +461,18 @@ class DashboardController extends Controller
     // menampilkan halaman profile admin
     public function adminProfilePage()
     {
+        $role = $this->roles[auth('web')->user()->role - 1];    // mengambil nama role berdasarkan id role
+        $user = auth('web')->user()->load("$role.profile");
+        // $response = $this->handleCustomHeader(user: $user, role: $role);
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
 
         return response()->view('admin.profile', [
-            'role' => 'admin'
+            'role' => $role,
+            'fullName' => $fullName,
+            'user' => $user,
+            'profile' => $user->$role->profile
         ]);
     }
 
