@@ -132,7 +132,7 @@ class UserSeeder extends Seeder
         DB::table('profile')->insert([
             'first_name' => 'RAIN',
             'last_name' => 'POLIBATAM',
-            'photo_profile' => 'default/profile.jpg',
+            'photo_profile' => 'default/profile.pnog',
         ]);
 
         DB::table('student')->insert([
@@ -168,8 +168,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('admin')->insert([
-            'id_user' => 4,
-            'id_profile' => 4,
+            'id_user' => 5,
+            'id_profile' => 5,
             'institute' => 'Politeknik Negeri Batam',
             'privilege' => 'ALL:DELETE, SELECT, UPDATE'
         ]);

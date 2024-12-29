@@ -134,7 +134,7 @@ class AccountController extends Controller
 
         try {
             // Mencoba login dengan email dan password yang telah divalidasi
-            if (Auth::attempt(['email' => $validated['emal'], 'password' => $validated['password'], 'role' => 3], true)) {
+            if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password'], 'role' => 3], true)) {
                 // Regenerasi session dan token untuk meningkatkan keamanan
                 $request->session()->regenerate();
                 $request->session()->regenerateToken();
@@ -147,7 +147,7 @@ class AccountController extends Controller
             }
         } catch (\Throwable $error) {
             // Menangkap error yang terjadi dan menampilkan pesan error generik
-            return back()->withErrors(['error' => 'Terjadi kesalahan, silakan coba lagi.'])->onlyInput('email');
+            return back()->withErrors(['error' => $error->getMessage()])->onlyInput('email');
         }
     }
 

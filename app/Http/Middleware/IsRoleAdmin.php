@@ -22,6 +22,12 @@ class IsRoleAdmin
                 return response(status: 403);
             }
         }
+
+        if($this->validateRole()) {
+            return $next($request);
+        } else {
+            return back();
+        }
     }
 
     private function validateRole()

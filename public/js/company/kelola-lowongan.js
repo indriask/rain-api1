@@ -387,7 +387,6 @@ function showCustomNotification(message, icon) {
         return;
     }
 
-    console.log(icon);
     daftarPelamarCustomNotification.removeClass("d-none");
     daftarPelamarCustomNotification.addClass("d-block");
 

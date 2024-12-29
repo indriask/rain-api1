@@ -15,8 +15,6 @@ function editProfileCompanyData() {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response);
-
             if (response.success) {
                 let notification = response.notification;
                 showEditCompanyProfileNotification(notification.message, notification.icon);
@@ -178,7 +176,6 @@ function showCustomNotification(message, icon) {
         return;
     }
 
-    console.log(icon);
     daftarPelamarCustomNotification.removeClass("d-none");
     daftarPelamarCustomNotification.addClass("d-block");
 

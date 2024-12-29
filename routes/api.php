@@ -91,10 +91,14 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->middleware(IsRoleCompany::class);
 
     // Route khusus untuk system dashboard admin
-    Route::post('/dashboard/admin/kelola/lowongan/delete', [DashboardAdminController::class, 'deleteVacancy'])->name('api-admin-manage-vacnacy-edit');
+    Route::post('/dashboard/admin/kelola/lowongan/delete', [DashboardAdminController::class, 'deleteVacancy'])
+        ->middleware(IsRoleAdmin::class);
+
+    Route::post('/dashboard/admin/kelola/user/delete', [DashboardAdminController::class, 'deleteUser'])
+        ->middleware(IsRoleAdmin::class);
+
     Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
     Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
-    Route::post('/dashboard/admin/kelola/user/delete', [DashboardAdminController::class, 'deleteUser']);
 });
 
 Route::post('/dashboard/admin/kelola/user/perusahaan/verify', [DashboardAdminController::class, 'verifyCompany']);

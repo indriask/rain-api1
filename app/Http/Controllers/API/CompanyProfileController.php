@@ -60,7 +60,7 @@ class CompanyProfileController extends Controller
                 }
             }
 
-            $fullName = explode(' ', $validator->getValue('fullname', 2));
+            $fullName = explode(' ', $validator->getValue('fullname'), 2);
             $firstName = $fullName[0] ?? 'Username';
             $lastName = $fullName[1] ?? null;
 

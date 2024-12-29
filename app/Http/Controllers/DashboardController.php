@@ -9,6 +9,7 @@ use App\Models\Major;
 use App\Models\Profile;
 use App\Models\Proposal;
 use App\Models\StudyProgram;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
@@ -330,8 +331,23 @@ class DashboardController extends Controller
      */
     public function adminManageUserStudent()
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        // $value = $this->handleCustomHeader($id, $user, $role);
+
+        // if ($value['success'] === true) {
+        //     return response()->json($value);
+        // }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $students = User::with('student.profile')->where('role', 1)->get();
+
         return response()->view('admin.kelola-mahasiswa', [
-            'role' => 'admin'
+            'role' => $role,
+            'students' => $students,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
     }
 
