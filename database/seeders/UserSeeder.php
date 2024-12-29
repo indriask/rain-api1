@@ -96,6 +96,12 @@ class UserSeeder extends Seeder
                 'password' => '$2y$12$3lbb.oUyDx964U2N8QUlIeVwqlv37PKLTAHh.esuwnPp9ymH8qmou',
                 'role' => 2,
                 'email_verified_at' => now()
+            ],
+            [
+                'email' => 'rain@gmail.com',
+                'password' => '$2y$12$MwutUbK2Ztq9OtT9c7eCQuV02vpTjLrt36m/PzLr74qyhgGwbKyDS',
+                'role' => 3,
+                'email_verified_at' => now()
             ]
         ]);
 
@@ -121,6 +127,12 @@ class UserSeeder extends Seeder
             'first_name' => 'PT',
             'last_name' => 'Citra Cahaya',
             'photo_profile' => 'default/profile_company.jpg',
+        ]);
+
+        DB::table('profile')->insert([
+            'first_name' => 'RAIN',
+            'last_name' => 'POLIBATAM',
+            'photo_profile' => 'default/profile.jpg',
         ]);
 
         DB::table('student')->insert([
@@ -153,6 +165,13 @@ class UserSeeder extends Seeder
             'id_user' => 4,
             'id_profile' => 4,
             'cooperation_file' => 'file.pdf'
+        ]);
+
+        DB::table('admin')->insert([
+            'id_user' => 4,
+            'id_profile' => 4,
+            'institute' => 'Politeknik Negeri Batam',
+            'privilege' => 'ALL:DELETE, SELECT, UPDATE'
         ]);
     }
 }

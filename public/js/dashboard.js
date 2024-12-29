@@ -114,6 +114,7 @@ const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
 const vacancyCardList = document.querySelector("#vacancy-card-list");
 const logoutCard = document.querySelector("#logout-card");
+let selectHide = false;
 
 let addVacancy = document.querySelector("#add-vacancy");
 let addVacancyForm = null;
@@ -426,7 +427,7 @@ function showAddVacancyCard() {
                             <input type="text" id="vacancy-salary" style="width: 120px" class="focus-ring"
                                 name="salary">
                             <span class="mx-2">/</span>
-                            <input type="text" style="width: 120px;" class="focus-ring" value="bulan">
+                            <div class="d-inline-block">Bulan</div>
                         </div>
                         <div id="input-salary"></div>
                     </div>
@@ -494,13 +495,13 @@ function showAddVacancyCard() {
 
                     <label for="durasi" class="fw-600">Durasi</label>
                     <div class="w-100">
-                        <input type="text" name="duration" class="focus-ring">
+                        <input type="text" name="duration" class="focus-ring" style="width: 80px;">
                         <div id="input-duration"></div>
                     </div>
 
-                    <label for="pendaftar" class="fw-600">Pendaftar</label>
+                    <label for="pendaftar" class="fw-600">Quota</label>
                     <div>
-                        <input type="text" name="quota" id="" class="focus-ring">
+                        <input type="text" name="quota" id="" class="focus-ring" style="width: 80px;">
                         <div id="input-quota"></div>
                     </div>
                 </div>
@@ -641,4 +642,15 @@ function showCustomNotification(message, icon) {
 
     $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+}
+
+function closeFilter() {
+    $("div.select-container > div.select-container").toggle();
+    if(selectHide) {
+        selectHide = false;
+        $("#filter-btn-text").text("Hapus Filter");
+    } else {
+        selectHide = true;
+        $("#filter-btn-text").text("Buka Filter");
+    }
 }

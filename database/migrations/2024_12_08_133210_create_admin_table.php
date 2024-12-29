@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_admin')->primary()->autoIncrement();
             $table->unsignedBigInteger('id_profile');
             $table->unsignedBigInteger('id_user');
-            $table->string('institute', 100);
+            $table->string('institute', 100)->default('Politeknik Negeri Batam');
             $table->string('privilege', 100);
 
             $table->foreign('id_profile')

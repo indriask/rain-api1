@@ -67,13 +67,13 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                            <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
-                                class="profile-img rounded-circle shadow">
-                            <span class="profile-name">{{ $fullName }}</span>
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
-                            name="cari-perusahaan" placeholder="Cari perusahaan">
+                            name="cari-perusahaan" placeholder="Cari lowongan">
                         <i class="bi bi-search search-icon"></i>
                     </div>
                 </div>
@@ -84,13 +84,6 @@
                         </select>
                         <div class="select-bg"></div>
                     </div>
-                    <div class="select-container">
-                        <select name="prodi" id="prodi">
-                            <option value="">Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-
                     <div class="select-container">
                         <select name="mode_kerja" id="">
                             <option value="" selected>Pilih lowongan</option>
@@ -106,10 +99,12 @@
                         </select>
                         <div class="select-bg"></div>
                     </div>
-                    <button class="hapus-filter ms-auto">
-                        <i class="bi bi-x-square me-1"></i>
-                        Hapus filter
-                    </button>
+                    <div>
+                        <button class="hapus-filter" onclick="closeFilter()" style="height: 35px;">
+                            <i class="bi bi-x-square me-1"></i>
+                            <span id="filter-btn-text">Hapus filter</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -118,20 +113,20 @@
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
                         {{-- vacancy card --}}
-                        @foreach($lowongan as $lowong)
+                        @foreach ($lowongan as $lowong)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">
                                     <h5 class="salary-text">
                                         Rp. {{ number_format($lowong->salary, 0, ',', '.') }}/bulan
                                     </h5>
                                     <img class="company-photo rounded"
-                                        src="{{ asset('storage/' .  $lowong->company->profile->photo_profile) }}"
+                                        src="{{ asset('storage/' . $lowong->company->profile->photo_profile) }}"
                                         alt="Company photo">
                                 </div>
                                 <div>
                                     <h6 class="vacancy-role m-0">{{ $lowong->title }}</h6>
                                     <span class="vacancy-major-choice">{{ $lowong->major->name }}</span>
-    
+
                                     <ul class="vacancy-small-detail p-0 mt-3">
                                         <li><i class="bi bi-geo-alt me-3"></i>{{ $lowong->location }}</li>
                                         <li><i
@@ -140,14 +135,14 @@
                                         <li><i class="bi bi-bar-chart-line me-3"></i>{{ $lowong->quota }} Kuota
                                         </li>
                                     </ul>
-    
+
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
                                         <li class="bg-white rounded-pill text-center">{{ $lowong->time_type }}</li>
                                         <li class="bg-white rounded-pill text-center">{{ $lowong->type }}</li>
                                         <li class="bg-white rounded-pill text-center">{{ $lowong->duration }} Bulan
                                         </li>
                                     </ul>
-    
+
                                     <button onclick="showVacancyDetailCard({{ $lowong->id_vacancy }})"
                                         class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Detail</button>
                                 </div>

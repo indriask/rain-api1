@@ -139,6 +139,8 @@ button {
 }
 
 .select-container {
+    width: fit-content !important;
+    float: right;
     position: relative;
 }
 
@@ -157,6 +159,7 @@ button {
     border: none;
     padding: 7px 10px;
     width: var(--select-w);
+    height: 35px;
     color: var(--white);
     cursor: pointer;
     appearance: none;

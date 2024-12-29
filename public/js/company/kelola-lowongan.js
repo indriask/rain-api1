@@ -58,14 +58,14 @@ function showDetailManageVacancy(id = 0) {
                              </div>
 
                              <label for="judul" class="fw-600">Judul</label>
-                             <div>
-                                <input type="text" name="title" class="focus-ring" value="${response.vacancy.title}">
+                             <div class="w-100">
+                                <input type="text" name="title" class="focus-ring w-100" value="${response.vacancy.title}">
                                 <div id="input-title"></div>
                              </div>
 
                              <label for="jurusan" class="fw-600">Jurusan</label>
-                            <div>
-                                 <select id='manage-vacancy-major-list' name="id_major" id="jurusan"
+                            <div class="w-100">
+                                 <select id='manage-vacancy-major-list' class="w-100 focus-ring bg-white border border-0" name="id_major" id="jurusan"
                                     class="bg-white border border-0 cursor-pointer focus-ring">
                                     <option value="3">Teknik Informatika</option>
                                     <option value="2">Teknik Elekro</option>
@@ -76,8 +76,8 @@ function showDetailManageVacancy(id = 0) {
                             </div>
 
                              <label for="lokasi" class="fw-600">Lokasi</label>
-                             <div>
-                                <input type="text" name="location" class="focus-ring" value="${response.vacancy.location}">
+                             <div class="w-100">
+                                <input type="text" name="location" class="focus-ring w-100" value="${response.vacancy.location}">
                                 <div id="input-location"></div>
                              </div>
 
@@ -108,11 +108,12 @@ function showDetailManageVacancy(id = 0) {
                              </div>
 
                              <label for="jenis" class="fw-600">Jenis</label>
-                             <div>
-                                <select name="type" id="manage-vacancy-type-list"
+                             <div class="w-100">
+                                <select name="type" id="manage-vacancy-type-list" class="w-100 focus-ring bg-white border border-0"
                                  class="focus-ring bg-white border border-0 cursor-pointer">
                                  <option value="online">Online</option>
                                  <option value="offline">Offline</option>
+                                 <option value="hybrid">Hybrid</option>
                              </select>
                              <div id="input-type"></div>
                              </div>
@@ -121,7 +122,6 @@ function showDetailManageVacancy(id = 0) {
                              <div>
                                 <div>
                                      <input type="text" name="duration" style='width: 100px;' class="focus-ring me-2" value="${response.vacancy.duration}">
-                                 <span>/ Bulan</span>
                                 </div>
                                 <div id="input-duration"></div>
                              </div>
@@ -131,7 +131,6 @@ function showDetailManageVacancy(id = 0) {
                                  <div>
                                     <input type="text" name="quota" id="" value="${response.vacancy.quota}"
                                      class="focus-ring me-2" style="width: 100px;">
-                                 <span>/ Pelamar</span>
                                  </div>
                                  <div id="input-quota"></div>
                              </div>
