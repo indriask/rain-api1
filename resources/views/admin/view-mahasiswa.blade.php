@@ -56,9 +56,9 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Mahasiswa</span>
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                 </div>
             </div>
@@ -67,63 +67,73 @@
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="Someone profile" class="profile__profile-img rounded">
+                        <img src="{{ asset('storage/' . $student->profile->photo_profile) }}" alt="Someone profile"
+                            class="profile__profile-img rounded bg-white">
                         <div class="w-100">
-                            <input type="text" name="nama" form="edit-profile-form" value="Wasyn Sulaiman Siregar"
+                            <div
                                 class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
-                            <inpu class="fw-700" style="font-size: .9rem">Mahasiswa</inpu>
+                                {{ $student->profile->first_name . ' ' . $student->profile->last_name ?? null }}
+                            </div>
+                            <span class="fw-700" style="font-size: .9rem">Mahasiswa</span>
                         </div>
                     </div>
                     <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-4">
                         <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Politeknik Negeri Batam">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->institute }}
+                        </div>
 
                         <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Teknik Informatika">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->major->name ?? null }}
+                        </div>
 
                         <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Teknologi Rekayasa Perangkat Lunak">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->study_program ?? null }}
+                        </div>
 
                         <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Hack website NASA">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->skill ?? null }}
+                        </div>
 
                         <label for="alamat" style="font-size: .95rem">Alamat</label>
-                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Batam, Nogsa">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->location ?? null }}
+                        </div>
 
                         <label for="kota" style="font-size: .95rem">Kota</label>
-                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Kota Batam">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->city ?? null }}
+                        </div>
 
                         <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="12345">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->postal_code ?? null }}
+                        </div>
 
                         <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="081234567890">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->profile->phone_number ?? null }}
+                        </div>
 
                         <label for="email" style="font-size: .95rem">Email</label>
-                        <input type="text" name="email" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="eric@laravel.com">
+                        <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
+                            {{ $student->account->email }}
+                        </div>
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
                         <button class="border click-animation border-0 bni-blue text-white fw-700 p-1 rounded"
-                            style="font-size: .9rem; width: 100px;"
-                            onclick="history.back()">Kembali</button>
+                            style="font-size: .9rem; width: 100px;" onclick="history.back()">Kembali</button>
                     </div>
                 </div>
                 <div class="profile__profile-description w-50">
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <textarea form="edit-profile-form" name="description"
-                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
+                        <div class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
+                            {{ $student->profile->description }}</div>
                     </div>
                 </div>
             </div>
@@ -140,9 +150,6 @@
 
     {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
-
-    {{-- script js buat logika fitur dashboard profile mahasiswa --}}
-    <script defer src="{{ asset('js/admin/profile.js') }}"></script>
 
 </body>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -51,6 +52,33 @@ class DashboardAdminController extends Controller
     // method untuk verifikasi akun perusahaan
     public function verifyCompany(Request $request)
     {
+        try {
+            $validated = $request->validate([
+                'id_user' => ['required', 'present', 'integer', 'exists:users,id_user']
+            ]);
+
+            $company = Company::where('id_user', $validated['id_user'])->update([
+                'status_verified_at' => now()
+            ]);
+
+            $response = $this->setResponse(
+                success: true,
+                message: 'Berhasil verifikasi akun perusahaan',
+                icon: asset('storage/svg/success-checkmark.svg')
+            );
+
+            return response()->json($response);
+        } catch (\Throwable $e) {
+            $response = $this->setResponse(
+                success: false,
+                message: 'Terjadi kesahalaan saat melakukan verifikasi',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            // return response()->json($response);
+            return response()->json($e->getMessage(), 500);
+        }
+
         return response()->json([
             "message" => "Akun berhasil diverifikasi",
             "icon" => "svg/success-checkmark.svg"

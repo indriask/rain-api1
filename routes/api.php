@@ -97,12 +97,14 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::post('/dashboard/admin/kelola/user/delete', [DashboardAdminController::class, 'deleteUser'])
         ->middleware(IsRoleAdmin::class);
 
-    Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
-    Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
-});
+    Route::post('/dashboard/admin/kelola/user/perusahaan/verify', [DashboardAdminController::class, 'verifyCompany'])
+        ->middleware(IsRoleAdmin::class);
 
-Route::post('/dashboard/admin/kelola/user/perusahaan/verify', [DashboardAdminController::class, 'verifyCompany']);
-Route::post('/dashboard/admin/profile/edit', [DashboardAdminController::class, 'editProfile']);
+    Route::post('/dashboard/admin/profile/edit', [DashboardAdminController::class, 'editProfile'])
+        ->middleware(IsRoleAdmin::class);
+    // Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
+    // Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
+});
 
 
 Route::middleware('auth')->group(function () {

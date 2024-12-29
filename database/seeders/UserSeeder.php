@@ -132,7 +132,7 @@ class UserSeeder extends Seeder
         DB::table('profile')->insert([
             'first_name' => 'RAIN',
             'last_name' => 'POLIBATAM',
-            'photo_profile' => 'default/profile.pnog',
+            'photo_profile' => 'default/profile.png',
         ]);
 
         DB::table('student')->insert([
@@ -157,14 +157,14 @@ class UserSeeder extends Seeder
             'nib' => '8473829132',
             'id_user' => 3,
             'id_profile' => 3,
-            'cooperation_file' => 'file.pdf'
+            'cooperation_file' => 'cooperation_folder/file.pdf'
         ]);
 
         DB::table('company')->insert([
             'nib' => '3249018743',
             'id_user' => 4,
             'id_profile' => 4,
-            'cooperation_file' => 'file.pdf'
+            'cooperation_file' => 'cooperation_folder/file.pdf'
         ]);
 
         DB::table('admin')->insert([

@@ -57,15 +57,6 @@
         </div>
     </div>
 
-    {{-- notifikasi berhasil atau gagal akun user dihapus --}}
-    <div id="delete-user-notification" class="d-none position-absolute top-0 end-0 start-0 z-1 mt-4">
-        <div class="alert alert-success alert-dismissible mx-auto fade show" role="alert" style="width: fit-content;">
-            <i class="bi bi-trash-fill me-1"></i> <span id="delete-user-notification-message"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    </div>
-
-
     <div class="dashboard-layout">
 
         {{-- navigasi dashboard samping --}}
@@ -81,49 +72,15 @@
                         {{-- <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span> --}}
-                        <img src="{{ asset('storage/default/profile.png') }}" alt=""
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
                             class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Admin</span>
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
                             name="cari-perusahaan" placeholder="Cari perusahaan">
                         <i class="bi bi-search search-icon"></i>
                     </div>
-                </div>
-                <div class="select-container w-100 mt-2 d-flex gap-3">
-                    <div class="select-container">
-                        <select name="jurusan" id="jurusan">
-                            <option value="">Pilih jurusan</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="prodi" id="prodi">
-                            <option value="">Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-
-                    <div class="select-container">
-                        <select name="mode_kerja" id="">
-                            <option value="" selected>Pilih lowongan</option>
-                            <option value="offline">Offline</option>
-                            <option value="online">Online</option>
-                            <option value="hybrid">Hybrid</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="lokasi" id="lokasi">
-                            <option>Pilih lokasi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <button class="hapus-filter ms-auto">
-                        <i class="bi bi-x-square me-1"></i>
-                        Hapus filter
-                    </button>
                 </div>
             </div>
 
@@ -133,34 +90,34 @@
                     <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
                         {{-- vacancy card --}}
 
-                        @for ($i = 1; $i <= 12; $i++)
+                        @foreach($companies as $company)
                             <div class="daftar-pelamar__proposal-card bg-white p-4 position-relative">
                                 <div class="cursor-pointer">
                                     <div class="d-flex align-items-center gap-3 border-bottom border-black pb-2">
-                                        <img src="{{ asset('storage/default/profile_company.jpg') }}"
+                                        <img src="{{ asset('storage/' . $company->company->profile->photo_profile) }}"
                                             class="daftar-pelamar__proposal-card-profile rounded-pill" alt="">
                                         <div class="d-flex flex-column">
                                             <span class="daftar-pelamar__proposal-card-name fw-700"
-                                                style="font-size: .95rem" title="">PT Citra Mas</span>
+                                                style="font-size: .95rem" title="">{{ $company->company->profile->first_name . ' ' . $company->company->profile->last_name ?? null }}</span>
                                             <span class="daftar-pelamar__proposal-card-name"
                                                 style="font-size: .85rem;"
-                                                title="">ptcitramas@gmail.com</span>
+                                                title="">{{ $company->email }}</span>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mt-3">
                                         <button
-                                            onclick="window.location.href='{{ route('admin-view-user-company', $i) }}'"
+                                            onclick="window.location.href='{{ route('admin-view-user-company', $company->id_user) }}'"
                                             class="bni-blue click-animation border border-0 text-white mx-auto rounded p-2"
                                             style="width: 120px;">Lihat</button>
                                     </div>
                                 </div>
                                 <button id="delete-user-btn" type="button"
-                                    onclick="showDeleteUser({{ $i }})"
+                                    onclick="showDeleteUser({{ $company->id_user }})"
                                     class="daftar-pelamar__proposal-card-delete click-animation border border-0 cursor-pointer position-absolute top-0 end-0 bni-blue text-white">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -186,6 +143,48 @@
 
             </div>
 
+            {{-- pop up notifikasi berhail atau gagal hapus akun user --}}
+            <div id="delete-user-notification"
+                class="d-none position-absolute top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="profile__profile-delete-account bg-white">
+                    <div class="d-flex">
+                        <button onclick="showDeleteUserNotification()"
+                            class="profile__profile-close-btn click-animation ms-auto bni-blue text-white border border-0">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                    <div class="py-3 px-5">
+                        <div class="position-relatve d-flex align-items-center justify-content-center">
+                            <span class="fw-600 position-relative z-1" id="delete-user-notification-message"></span>
+                            <img src="" alt="" id="delete-user-notification-icon"
+                                class="position-absolute" style="aspect-ratio: 1/1; width: 60px; opacity: .4;">
+                        </div>
+                        <button id="delete-user-action-btn" onclick="showDeleteUserNotification()"
+                            class="border border-0 click-animation click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Tutup</button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="position-absolute"
+                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan
+                            saat
+                            penghapusan data</h6>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
+            </div>
+
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
 
@@ -199,7 +198,7 @@
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman admin kelola user mahsiswa --}}
-    <script defer src="{{ asset('js/admin/kelola-mahasiswa.js') }}"></script>
+    <script defer src="{{ asset('js/admin/kelola-perusahaan.js') }}"></script>
 
 </body>
 

@@ -540,7 +540,7 @@ class DashboardCompanyController extends Controller
             success: true,
             message: 'Berhasil atur tanggal dan waktu wawancaara',
             type: 'primary'
-        );
+        ); 
 
         return response()->json($response);
     }

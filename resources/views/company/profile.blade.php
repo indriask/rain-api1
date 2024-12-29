@@ -121,7 +121,7 @@
                         <label for="input-status" style="font-size: .95rem">Status</label>
                         <input type="text" disabled name="email"
                             class="border border-0 focus-ring rounded p-1 px-2"
-                            value="{{ $user->$role->status_verified_at ?? 'Unverified' }}">
+                            value="{{ $user->$role->status_verified_at === null ? 'Unverified' : $user->$role->status_verified_at . ' - ' . 'Verified' }}">
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
                         <button class="border border-0 bni-blue click-animation text-white fw-700 p-1 rounded"

@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Major;
 use App\Models\Profile;
 use App\Models\Proposal;
+use App\Models\Student;
 use App\Models\StudyProgram;
 use App\Models\User;
+use COM;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
@@ -287,16 +290,6 @@ class DashboardController extends Controller
         return response()->json(['url' => url('/download-proposal/' . $zipName)]);
     }
 
-    public function downloadProposal($filename)
-    {
-        $filePath = storage_path($filename);
-        if (!file_exists($filePath)) {
-            abort(404);
-        }
-
-        return response()->download($filePath)->deleteFileAfterSend(true);
-    }
-
     // method untk me-render halaman profile perusahaan
     public function companyProfilePage()
     {
@@ -354,18 +347,25 @@ class DashboardController extends Controller
     // menampilkan halaman mahasiswa tertentu
     public function adminViewUserStudent(int $id)
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        // $value = $this->handleCustomHeader($id, $user, $role);
+
+        // if ($value['success'] === true) {
+        //     return response()->json($value);
+        // }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $student = Student::with('profile', 'major', 'study_program', 'account')
+            ->where('id_user', $id)
+            ->firstOrFail();
+
         return view('admin.view-mahasiswa', [
-            'role' => 'admin',
-            'id_vacancy' => $id
-        ]);
-    }
-
-    // menampilkan halaman profile admin
-    public function adminProfilePage()
-    {
-
-        return response()->view('admin.profile', [
-            'role' => 'admin'
+            'role' => $role,
+            'student' => $student,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
     }
 
@@ -374,17 +374,96 @@ class DashboardController extends Controller
      */
     public function adminManageUserCompany()
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        // $value = $this->handleCustomHeader($id, $user, $role);
+
+        // if ($value['success'] === true) {
+        //     return response()->json($value);
+        // }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $companies = User::with('company.profile')->where('role', 2)->get();
+
         return response()->view('admin.kelola-perusahaan', [
-            'role' => 'admin'
+            'role' => $role,
+            'companies' => $companies,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
     }
 
     // menampilkan halaman perusahaan tertentu
     public function adminViewUserCompany(int $id)
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        // $value = $this->handleCustomHeader($id, $user, $role);
+
+        // if ($value['success'] === true) {
+        //     return response()->json($value);
+        // }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $company = Company::with('profile', 'account')
+            ->where('id_user', $id)
+            ->firstOrFail();
+
         return view('admin.view-perusahaan', [
-            'role' => 'admin',
-            'id_vacancy' => $id
+            'role' => $role,
+            'company' => $company,
+            'user' => $user,
+            'fullName' => $fullName
+        ]);
+    }
+
+    // donwload file kerja sama perusahaan
+    public function adminDownloadCooperationFile($id = 0)
+    {
+        $data = Company::select(['cooperation_file', 'nib'])->where('id_user', $id)->firstOrFail();
+        $filePath = storage_path('app/' . $data['cooperation_file']);
+        $fileName = basename($data['cooperation_file']);
+
+        if (!Storage::fileExists('cooperation_folder/' . $fileName)) {
+            $response = $this->setResponse(
+                success: false,
+                message: 'File tidak ditemukan',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response);
+        }
+
+        $zipName = $data['nib'] . '.zip';
+        $zipPath = storage_path($zipName);
+        $zip = new \ZipArchive();
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            $zip->addFile($filePath, $fileName);
+            $zip->close();
+        } else {
+            $response = $this->setResponse(
+                success: false,
+                message: 'Terjadi kesalahaan saat melakukan zip',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response);
+        }
+
+        $response = $this->setResponse(success: true);
+        $response['url'] = url('/download-cooperation-file/' . $zipName);
+        return response()->json($response);
+    }
+
+    // menampilkan halaman profile admin
+    public function adminProfilePage()
+    {
+
+        return response()->view('admin.profile', [
+            'role' => 'admin'
         ]);
     }
 
@@ -400,5 +479,46 @@ class DashboardController extends Controller
         $request->fulfill();
 
         return redirect()->route('signin');
+    }
+
+    // untuk download file kerja sama perusahaan
+    public function downloadCooperationFile($filename)
+    {
+        $filePath = storage_path($filename);
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
+    // untuk download file proposal mahasiswa
+    public function downloadProposal($filename)
+    {
+        $filePath = storage_path($filename);
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
+
+    private function setResponse(
+        bool $success = true,
+        string $title = '',
+        string $message = '',
+        string $type = '',
+        string $icon = ''
+    ): array {
+        return [
+            'success' => $success,
+            'notification' => [
+                'title' => $title,
+                'message' => $message,
+                'type' => $type,
+                'icon' => $icon
+            ]
+        ];
     }
 }

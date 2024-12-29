@@ -56,9 +56,9 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="{{ asset('storage/default/profile_company.jpg') }}" alt=""
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
                             class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Perusahaan</span>
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                 </div>
             </div>
@@ -67,44 +67,76 @@
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="{{ asset('storage/default/profile_company.jpg') }}" alt="Someone profile"
+                        <img src="{{ asset('storage/' . $company->profile->photo_profile) }}" alt="Someone profile"
                             class="profile__profile-img rounded">
                         <div class="w-100">
-                            <input type="text" name="nama" form="edit-profile-form" value="Wasyn Sulaiman Siregar"
+                            <div
                                 class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
-                            <inpu class="fw-700" style="font-size: .9rem">Perusahaan</inpu>
+                                {{ ($company->profile->first_name ?? 'Username') . ' ' . ($company->profile->last_name ?? null) }}
+                            </div>
+                            <span class="fw-700" style="font-size: .9rem">Perusahaan</span>
                         </div>
                     </div>
                     <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-2">
                         <label style="font-size: .95rem">NIB</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->nib }}
+                        </div>
 
                         <label style="font-size: .95rem">Jenis</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->type }}
+                        </div>
 
                         <label style="font-size: .95rem">Alamat</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->profile->location }}
+                        </div>
 
                         <label style="font-size: .95rem">Kota</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->profile->city }}
+                        </div>
 
                         <label style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->profile->postal_code }}
+                        </div>
 
                         <label style="font-size: .95rem">Tanggal Berdisi</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->founded_date }}
+                        </div>
 
                         <label style="font-size: .95rem">Bidang Usaha</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->business_fields }}
+                        </div>
 
                         <label style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->phone_number }}
+                        </div>
 
                         <label style="font-size: .95rem">Email</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->account->email }}
+                        </div>
 
                         <label style="font-size: .95rem">Status</label>
-                        <input type="text" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <div
+                            class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
+                            {{ $company->status_verified_at === null ? 'Unverified' : $company->status_verified_at . ' - Verified' }}
+                        </div>
 
                     </form>
                     <div class="position-absolute" style="bottom: 10px;">
@@ -112,15 +144,22 @@
                             style="font-size: .9rem; width: 100px;" onclick="history.back()">Kembali</button>
                         <button class="border click-animation border-0 bni-blue text-white fw-700 p-1 rounded"
                             style="font-size: .9rem; width: 100px;"
-                            onclick="showVerifyCompany({{ $id_vacancy }})">Verifikasi</button>
+                            onclick="showVerifyCompany({{ $company->id_user }})">Verifikasi</button>
                     </div>
                 </div>
                 <div class="profile__profile-description w-50">
                     <div class="h-100">
+                        <div class="d-flex">
+                            <button
+                                class="bni-blue border border-0 ms-auto text-white rounded p-1 fw-700 click-animation"
+                                style="font-size: .9rem; width: 120px;"
+                                onclick="installCooperationFile({{ $company->id_user }})">Download
+                                file</button>
+                        </div>
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Perusahaan</span>
-                        <textarea form="edit-profile-form" name="description"
-                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
+                        <div class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">
+                            {{ $company->profile->description }}</div>
                     </div>
                 </div>
             </div>
@@ -161,14 +200,36 @@
                         </button>
                     </div>
                     <div class="py-3 px-5 d-flex align-items-center flex-column position-relative gap-3">
-                        <span class="fw-700 text-center d-block position-relative z-1" style="font-size: 1.3rem" id="verify-notification-message" style="font-size: .9rem;">Akun berhasil diverifikasi!</span>
-                        <img id="verify-notification-icon" class="position-absolute" style="aspect-ratio: 1/1; width: 70px; bottom: 4.5rem; opacity: .5;" src="{{ asset('storage/svg/success-checkmark.svg') }}" alt="">
+                        <span class="fw-700 text-center d-block position-relative z-1" style="font-size: 1.3rem"
+                            id="verify-notification-message" style="font-size: .9rem;">Akun berhasil
+                            diverifikasi!</span>
+                        <img id="verify-notification-icon" class="position-absolute"
+                            style="aspect-ratio: 1/1; width: 70px; bottom: 4.5rem; opacity: .5;"
+                            src="{{ asset('storage/svg/success-checkmark.svg') }}" alt="">
                         <button id="verify-company-action-btn" onclick="showVerifyNotificationCard()"
                             class="border border-0 click-animation bni-blue text-white d-block mx-auto fw-700 mt-4"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Kembali</button>
                     </div>
                 </div>
 
+            </div>
+
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="position-absolute"
+                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
+                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan
+                            saat
+                            penghapusan data</h6>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
             </div>
 
             {{-- pop up notifikasi ingin logout --}}

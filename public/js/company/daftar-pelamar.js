@@ -316,7 +316,7 @@ function installProposalFiles(id_proposal) {
             if (response.url) {
                 const link = document.createElement('a');
                 link.href = response.url;
-                link.setAttribute('donwload', '');
+                link.setAttribute('download', '');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
