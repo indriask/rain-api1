@@ -607,6 +607,18 @@
                 </div>
             `;
 
+                    if (data.userHasApplied) {
+                        const statusContainer = document.createElement('div');
+                        statusContainer.classList.add('mt-3', 'alert', 'alert-info');
+                        statusContainer.innerHTML = `
+                <p>Status Proposal: <strong> ${data.proposal_status} </strong></p>
+                <p>Status Wawancara: <strong> ${data.interview_status} </strong></p>
+                <hr>
+                <p>Final Status: <strong> ${data.final_status} </strong></p>
+            `;
+                        modalBody.appendChild(statusContainer);
+                    }
+
                     // Show the modal
                     const modal = new bootstrap.Modal(document.getElementById('vacancyDetailModal'));
                     modal.show();

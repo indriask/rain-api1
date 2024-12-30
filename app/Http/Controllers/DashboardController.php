@@ -195,7 +195,7 @@ class DashboardController extends Controller
 
     // Check if the currently logged-in user has already applied for this vacancy
     $userHasApplied = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->exists();
-
+    $proposal = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->first();
     // Return the vacancy details along with application status
     return response()->json([
         'title' => $vacancy->title,
@@ -214,7 +214,10 @@ class DashboardController extends Controller
             'name' => $vacancy->company->profile->first_name . ' ' . $vacancy->company->profile->last_name,
             'photo' => $vacancy->company->profile->photo_profile
         ],
-        'userHasApplied' => $userHasApplied  // Return if the user has applied
+        'userHasApplied' => $userHasApplied,  // Return if the user has applied
+        'proposal_status' => $proposal->proposal_status,
+        'interview_status' => $proposal->interview_status,
+        'final_status' => $proposal->final_status,
     ]);
 }
 
