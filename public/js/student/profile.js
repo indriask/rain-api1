@@ -31,19 +31,19 @@ function setProfileData() {
 }
 
 // function untuk menampilkan notifikasi ingin menghapus akun RAIN
-function showDeleteAccountCard() {
-    if (deleteAccountNotification.classList.contains("d-block")) {
-        deleteAccountNotification.classList.remove("d-block");
-        deleteAccountNotification.classList.add("d-none");
+// function showDeleteAccountCard() {
+//     if (deleteAccountNotification.classList.contains("d-block")) {
+//         deleteAccountNotification.classList.remove("d-block");
+//         deleteAccountNotification.classList.add("d-none");
 
-        return;
-    }
+//         return;
+//     }
 
-    deleteAccountNotification.classList.remove("d-none");
-    deleteAccountNotification.classList.add("d-block");
-}
+//     deleteAccountNotification.classList.remove("d-none");
+//     deleteAccountNotification.classList.add("d-block");
+// }
 
 // function untuk mengirim request hapus akun RAIN ke server
-function processDeleteAccountRequest() {
-    // kode isi request untuk menghapus akun
-}
+// function processDeleteAccountRequest() {
+//     // kode isi request untuk menghapus akun
+// }

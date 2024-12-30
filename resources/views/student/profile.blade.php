@@ -53,10 +53,19 @@
                     <div class="d-flex align-items-center gap-1 mb-2">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
                             alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">Nama Mahasiswa</span>
+                        <span class="profile-name">{{ auth()->user()->student->profile->first_name }}
+                            {{ auth()->user()->student->profile->last_name }}</span>
                     </div>
                 </div>
             </div>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
 
             {{-- form edit profile mahasiswa --}}
             <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
@@ -64,71 +73,98 @@
                     <div class="d-flex align-items-center gap-3">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
                             alt="Someone profile" class="profile__profile-img rounded">
-                        <div class="w-100">
-                            <input type="text" name="nama" form="edit-profile-form" value="Wasyn Sulaiman Siregar"
-                                class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
-                            <inpu class="fw-700" style="font-size: .9rem">Mahasiswa</inpu>
-                        </div>
                     </div>
-                    <form method="POST" id="edit-profile-form" class="profile__profile-more-info mt-4">
+                    <form method="POST" action="{{ route('student.updateProfile') }}" id="edit-profile-form"
+                        class="profile__profile-more-info mt-4">
+                        @csrf
+                        <label for="asal-institusi" style="font-size: .95rem">First Name</label>
+                        <input type="text" name="first_name" value="{{ $profile->first_name ?? '' }}"
+                            class="profile__profile-nama-lengkap focus-ring border border-0 bg-white rounded p-2 w-100"
+                            placeholder="First Name">
+
+                        <label for="asal-institusi" style="font-size: .95rem">Last Name</label>
+                        <input type="text" name="last_name" value="{{ $profile->last_name ?? '' }}"
+                            class="profile__profile-nama-lengkap focus-ring border border-0 bg-white rounded p-2 w-100 "
+                            placeholder="Last Name">
+
                         <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
-                        <input type="text" name="asal-institusi" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Politeknik Negeri Batam">
+                        <input type="text" name="institute" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $student->institute ?? '' }}">
 
                         <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                        <input type="text" name="jurusan" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Teknik Informatika">
+                        <select name="major" id="major" class="border border-0 rounded p-1 px-2 focus-ring">
+                            <option value="">Pilih Jurusan</option>
+                            @foreach ($major as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ $student->id_major == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-                        <label for="program-studi" style="font-size: .95rem">Program studi</label>
-                        <input type="text" name="program-studi" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Teknologi Rekayasa Perangkat Lunak">
+                        <label for="jurusan" style="font-size: .95rem">Program Studi</label>
+                        <select name="study_program" id="study_program"
+                            class="border border-0 rounded p-1 px-2 focus-ring">
+                            <option value="">Pilih Program Studi</option>
+                            @foreach ($study_program as $item)
+                                <option value="{{ $item->id }}"
+                                    {{ $student->id_study_program == $item->id ? 'selected' : '' }}>
+                                    {{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
 
                         <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                        <input type="text" name="keahlian" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Hack website NASA">
+                        <input type="text" name="skill" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $student->skill ?? '' }}">
 
                         <label for="alamat" style="font-size: .95rem">Alamat</label>
-                        <input type="text" name="alamat" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Batam, Nogsa">
+                        <input type="text" name="location" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $profile->location ?? '' }}">
 
                         <label for="kota" style="font-size: .95rem">Kota</label>
-                        <input type="text" name="kota" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="Kota Batam">
+                        <input type="text" name="city" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $profile->city ?? '' }}">
 
                         <label for="kode-pos" style="font-size: .95rem">Kode Pos</label>
-                        <input type="text" name="kode-pos" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="12345">
+                        <input type="text" name="postal_code" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $profile->postal_code ?? '' }}">
 
                         <label for="nomor-telepon" style="font-size: .95rem">Nomor telepon</label>
-                        <input type="text" name="nomor-telepon" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="081234567890">
+                        <input type="text" name="phone_number" class="border border-0 rounded p-1 px-2 focus-ring"
+                            value="{{ $profile->phone_number ?? '' }}">
 
                         <label for="email" style="font-size: .95rem">Email</label>
                         <input type="text" name="email" class="border border-0 rounded p-1 px-2 focus-ring"
-                            value="eric@laravel.com">
-                    </form>
-                    <div class="position-absolute" style="bottom: 10px;">
-                        <button class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                            style="font-size: .9rem; width: 100px;"
-                            onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
-                        <button onclick="showDeleteAccountCard()"
-                            class="border border-0 bni-blue text-white fw-700 p-1 rounded"
-                            style="font-size: .9rem; width: 100px;">Hapus akun</button>
-                    </div>
+                            value="{{ $user->email ?? '' }}" readonly>
+
+
+                        <div class="position-absolute" style="bottom: 10px;">
+                            <button type="button" class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                style="font-size: .9rem; width: 100px;"
+                                onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
+                            <button type="button" onclick="showDeleteAccountCard()"
+                                class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                style="font-size: .9rem; width: 100px;">Hapus akun</button>
+                        </div>
                 </div>
                 <div class="profile__profile-description w-50">
                     <div class="d-flex">
-                        <button class="border border-0 bni-blue text-white fw-700 rounded p-2 ms-auto"
-                            style="font-size: .8rem; width: 100px;" id="edit-profile-btn"
-                            onclick="setProfileData()">Edit Profil</button>
+                        <button type="submit" class="border border-0 bni-blue text-white fw-700 rounded p-2 ms-auto"
+                            style="font-size: .8rem; width: 100px;" id="edit-profile-btn">
+                            Edit Profil
+                        </button>
+
                     </div>
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <textarea form="edit-profile-form" name="description"
-                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
-                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">A small description about yourself</textarea>
+                        <textarea name="description" class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                            style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">{{ $profile->description ?? '' }}</textarea>
+
                     </div>
                 </div>
+                </form>
             </div>
 
             {{-- pop up pesan notifikasi berhasil atau gagal edit --}}
@@ -143,8 +179,8 @@
                         <button onclick="showEditProfileNotification()"
                             class="profile__profile-edit-notification-btn border border-0 bni-blue fw-700 text-white d-block mx-auto mt-4">Kembali</button>
                     </div>
-                    <img id="profile-edit-notification-img" src="{{ asset('storage/svg/success-checkmark.svg') }}" alt=""
-                        class="profile__profile-success-edit-icon position-absolute">
+                    <img id="profile-edit-notification-img" src="{{ asset('storage/svg/success-checkmark.svg') }}"
+                        alt="" class="profile__profile-success-edit-icon position-absolute">
                 </div>
             </div>
 
@@ -184,6 +220,88 @@
 
     {{-- script js buat logika fitur dashboard profile mahasiswa --}}
     <script defer src="{{ asset('js/student/profile.js') }}"></script>
+
+    <script>
+        function processDeleteAccountRequest() {
+            const confirmed = confirm("Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan.");
+            if (confirmed) {
+                $.ajax({
+                    url: '/delete-account', // Ganti dengan route yang sesuai
+                    type: 'POST',
+                    data: {
+                        _token: window.laravel.csrf_token // Ambil CSRF token dari meta/script di template
+                    },
+                    success: function(response) {
+                        alert("Akun berhasil dihapus.");
+                        window.location.href = '/'; // Redirect ke halaman utama setelah penghapusan
+                    },
+                    error: function(error) {
+                        alert("Gagal menghapus akun. Silakan coba lagi.");
+                        console.error(error);
+                    }
+                });
+            }
+        }
+
+        function showDeleteAccountCard() {
+            const deleteAccountNotification = document.getElementById('delete-account-notification');
+
+            // Toggle visibility
+            if (deleteAccountNotification.classList.contains('d-none')) {
+                deleteAccountNotification.classList.remove('d-none');
+            } else {
+                deleteAccountNotification.classList.add('d-none');
+            }
+        }
+    </script>
+
+    <script>
+        // Event listener for the major dropdown
+        document.getElementById('major').addEventListener('change', function() {
+            const majorId = this.value; // Get the selected major ID
+
+            // If no major is selected, clear the study program dropdown
+            if (!majorId) {
+                document.getElementById('study_program').innerHTML =
+                    '<option value="">Pilih Program Studi</option>';
+                return;
+            }
+
+            // Fetch the study programs based on the selected major
+            fetch(`/get-study-programs/${majorId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const studyProgramDropdown = document.getElementById('study_program');
+                    studyProgramDropdown.innerHTML =
+                        '<option value="">Pilih Program Studi</option>'; // Reset the dropdown
+
+                    // Populate the study program dropdown with the fetched data
+                    data.forEach(program => {
+                        const option = document.createElement('option');
+                        option.value = program.id;
+                        option.textContent = program.name;
+                        studyProgramDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching study programs:', error);
+                });
+        });
+    </script>
+
+    @if (session('profile_updated'))
+        <script>
+            window.onload = function() {
+                // Set profile edit notification title and image
+                profileEditNotificationTitle.textContent = "Profil berhasil diperbarui!";
+                profileEditNotificationImg.src = "{{ asset('storage/svg/success-checkmark.svg') }}";
+
+                // Show the success notification
+                showEditProfileNotification();
+            };
+        </script>
+    @endif
+
 
 </body>
 

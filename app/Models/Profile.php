@@ -20,13 +20,20 @@ class Profile extends Model
         'postal_code',
         'city',
         'phone_number',
-        'descriptin'
+        'description'
     ];
 
     // method one-to-one pada profile ke student
-    public function student() {
-        return $this->hasOne(Student::class, 'id_profile', 'id_profile');
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'id_profile', 'id_profile'); // Relasi ke student
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    }
+
 
     public function company() {
         return $this->hasOne(Company::class, 'id_profile', 'id_profile');

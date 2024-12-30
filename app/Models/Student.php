@@ -47,4 +47,10 @@ class Student extends Model
     public function study_program() {
         return $this->belongsTo(StudyProgram::class, 'id_study_program', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id_user'); // Relasi ke user
+    }
+
 }
