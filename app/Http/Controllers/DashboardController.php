@@ -215,9 +215,9 @@ class DashboardController extends Controller
             'photo' => $vacancy->company->profile->photo_profile
         ],
         'userHasApplied' => $userHasApplied,  // Return if the user has applied
-        'proposal_status' => $proposal->proposal_status,
-        'interview_status' => $proposal->interview_status,
-        'final_status' => $proposal->final_status,
+        'proposal_status' => $proposal->proposal_status ?? "",
+        'interview_status' => $proposal->interview_status ?? "",
+        'final_status' => $proposal->final_status ?? "",
     ]);
 }
 
