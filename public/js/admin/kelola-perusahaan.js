@@ -2,7 +2,7 @@ const deleteUserBtn = $("#delete-user-btn");
 const deleteUserVerify = $("#delete-user-verify");
 const verifyCompanyAccount = $("#verify-company-account");
 const deleteUserNotification = $("#delete-user-notification");
-const daftarPelamarCustomNotification = $("#custom-notification");
+const adminKelolaCustomNotification = $("#custom-notification");
 
 function showDeleteUser(id = 0) {
     if (deleteUserVerify.hasClass("d-block")) {
@@ -94,7 +94,6 @@ function verifyCompany(id_user) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_user: id_user },
         success: function (response) {
-            console.log(response);
             let notification = response.notification;
             verifyCompanyAccount.removeClass("d-block");
             verifyCompanyAccount.addClass("d-none");
@@ -102,17 +101,15 @@ function verifyCompany(id_user) {
             showVerifyNotificationCard(notification.message, notification.icon);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
-
             if (jqXHR.status === 500) {
                 const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
                 return;
             }
 
@@ -125,20 +122,22 @@ function verifyCompany(id_user) {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
                 return;
             }
 
             // error jika akun perusahaan tidak terverifikasi
             if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+                return;
             }
         }
     })
@@ -237,17 +236,18 @@ function installCooperationFile(id_user) {
     })
 }
 
-function showCustomNotification(message, icon) {
-    if (daftarPelamarCustomNotification.hasClass("d-block")) {
-        daftarPelamarCustomNotification.removeClass("d-block");
-        daftarPelamarCustomNotification.addClass("d-none");
+function showCustomNotification(title, message, icon) {
+    if (adminKelolaCustomNotification.hasClass("d-block")) {
+        adminKelolaCustomNotification.removeClass("d-block");
+        adminKelolaCustomNotification.addClass("d-none");
 
         return;
     }
 
-    daftarPelamarCustomNotification.removeClass("d-none");
-    daftarPelamarCustomNotification.addClass("d-block");
+    adminKelolaCustomNotification.removeClass("d-none");
+    adminKelolaCustomNotification.addClass("d-block");
 
-    $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }

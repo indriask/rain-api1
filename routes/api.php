@@ -12,6 +12,7 @@ use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
+use App\Http\Middleware\isCompanyVerified;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
@@ -60,32 +61,32 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route khusus system dashboard perusahaan
     Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardCompanyController::class, 'addVacancy'])
         ->name('api-add-vacancy-page')
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/kelola/lowongan/edit', [DashboardCompanyController::class, 'editVacancy'])
         ->name('api-company-edit-vacancy')
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/kelola/lowongan/delete', [DashboardCompanyController::class, 'deleteVacancy'])
         ->name('api-company-delete-vacancy')
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/daftar/pelamar/delete', [DashboardCompanyController::class, 'deleteApplicant'])
         ->name('api-company-delete-applicant')
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/daftar/pelamar/update-status/proposal', [DashboardCompanyController::class, 'updateStatusApplicantProposal'])
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/daftar/pelamar/update-status/interview', [DashboardCompanyController::class, 'updateStatusApplicantInterview'])
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/daftar/pelamar/interview-date', [DashboardCompanyController::class, 'setInterviewDate'])
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
 
     Route::post('/dashboard/perusahaan/profile/edit', [CompanyProfileController::class, 'editProfile'])
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])
         ->middleware(IsRoleCompany::class);

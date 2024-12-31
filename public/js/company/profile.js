@@ -1,7 +1,7 @@
 const editCompanyProfileForm = $("#edit-company-profile-form");
 const editCompanyProfileNotification = document.querySelector("#edit-company-profile-notification");
 const deleteAccountCard = $("#delete-account-card");
-const daftarPelamarCustomNotification = $("#custom-notification");
+const profileCompanyCustomNotification = $("#custom-notification");
 const deleteAccountNotification = $("#delete-account-notification");
 
 function editProfileCompanyData() {
@@ -23,15 +23,14 @@ function editProfileCompanyData() {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -45,20 +44,24 @@ function editProfileCompanyData() {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error jika akun perusahaan tidak terverifikasi
             if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     });
@@ -126,15 +129,14 @@ function processDeleteAccountRequest() {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -148,38 +150,35 @@ function processDeleteAccountRequest() {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return;
-            }
-
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     });
 }
 
-function showCustomNotification(message, icon) {
-    if (daftarPelamarCustomNotification.hasClass("d-block")) {
-        daftarPelamarCustomNotification.removeClass("d-block");
-        daftarPelamarCustomNotification.addClass("d-none");
+function showCustomNotification(title, message, icon) {
+    if (profileCompanyCustomNotification.hasClass("d-block")) {
+        profileCompanyCustomNotification.removeClass("d-block");
+        profileCompanyCustomNotification.addClass("d-none");
 
         return;
     }
 
-    daftarPelamarCustomNotification.removeClass("d-none");
-    daftarPelamarCustomNotification.addClass("d-block");
+    profileCompanyCustomNotification.removeClass("d-none");
+    profileCompanyCustomNotification.addClass("d-block");
 
-    $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }
 
 function handleProfileFile() {

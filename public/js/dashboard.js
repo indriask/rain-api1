@@ -114,6 +114,7 @@ const applyFormNotifcation = document.querySelector("#apply-form-notification");
 const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
 const vacancyCardList = document.querySelector("#vacancy-card-list");
 const logoutCard = document.querySelector("#logout-card");
+const dashboardCustomNotification = $("#custom-notification");
 let selectHide = false;
 
 let addVacancy = document.querySelector("#add-vacancy");
@@ -189,7 +190,7 @@ function showVacancyDetailCard(id = 0) {
                 `;
             }
 
-            if(response.role === 'admin') {
+            if (response.role === 'admin') {
                 deleteBtn = `
                     <button onclick="adminDeleteVacancy(${vacancy.id_vacancy})" type="button"
                             class="close-apply-form text-white click-animation fw-700 border border-0 ms-1">Hapus</button>
@@ -384,14 +385,16 @@ function processLogoutRequest() {
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -404,13 +407,8 @@ function processLogoutRequest() {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
-            }
 
-            // check apakah response code nya 403 (akses tidak diizinkan)
-            if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return false;
+                return;
             }
         }
     });
@@ -566,21 +564,19 @@ function processAddVacancy() {
             }
 
             let notification = response.notification;
-            console.log(response);
             showAddVacancyNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -594,20 +590,23 @@ function processAddVacancy() {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return false;
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                return;
             }
 
             // error jika akun perusahaan tidak terverifikasi
             if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     })
@@ -637,25 +636,25 @@ function closeAddVacancyForm() {
     return;
 }
 
-function showCustomNotification(message, icon) {
-    if (daftarPelamarCustomNotification.hasClass("d-block")) {
-        daftarPelamarCustomNotification.removeClass("d-block");
-        daftarPelamarCustomNotification.addClass("d-none");
+function showCustomNotification(title, message, icon) {
+    if (dashboardCustomNotification.hasClass("d-block")) {
+        dashboardCustomNotification.removeClass("d-block");
+        dashboardCustomNotification.addClass("d-none");
 
         return;
     }
 
-    console.log(icon);
-    daftarPelamarCustomNotification.removeClass("d-none");
-    daftarPelamarCustomNotification.addClass("d-block");
+    dashboardCustomNotification.removeClass("d-none");
+    dashboardCustomNotification.addClass("d-block");
 
-    $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }
 
 function closeFilter() {
     $("div.select-container > div.select-container").toggle();
-    if(selectHide) {
+    if (selectHide) {
         selectHide = false;
         $("#filter-btn-text").text("Hapus Filter");
     } else {

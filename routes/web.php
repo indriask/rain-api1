@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
@@ -60,7 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/perusahaan/daftar/pelamar/download/{id?}', [DashboardController::class, 'companyDownloadProposal'])
         ->whereNumber('id')
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
         ->name('company-profile');
@@ -93,7 +92,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route untuk download file
     Route::get('/download-proposal/{name}', [DashboardController::class, 'downloadProposal'])
-        ->middleware(IsRoleCompany::class);
+        ->middleware(IsRoleCompany::class, isCompanyVerified::class);
 
     Route::get('/download-cooperation-file/{name}', [DashboardController::class, 'downloadCooperationFile'])
         ->middleware(IsRoleAdmin::class);

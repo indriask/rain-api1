@@ -117,7 +117,8 @@ class DashboardCompanyController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
-                message: 'Terjadi kesalahaan saat edit lowongan!',
+                title: 'Request dihentikan',
+                message: 'Terjadi kesalhaan saat melakukan request edit lowongan',
                 icon: asset('storage/svg/failed-x.svg')
             );
 

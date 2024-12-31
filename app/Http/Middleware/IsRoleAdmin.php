@@ -16,17 +16,24 @@ class IsRoleAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->ajax()) {
-            if($this->validateRole() === true) {
+            if ($this->validateRole() === true) {
                 return $next($request);
             } else {
-                return response(status: 403);
+                $response = $this->setResponse(
+                    success: false,
+                    title: 'Akses ditolak',
+                    message: 'Anda tidak memiliki izin yang diperlukan untuk mengakses endpoint ini',
+                    icon: asset('storage/svg/failed-x.svg')
+                );
+
+                return response($response, 403);
             }
         }
 
-        if($this->validateRole()) {
+        if ($this->validateRole()) {
             return $next($request);
         } else {
-            return back();
+            return abort(403);
         }
     }
 
@@ -37,5 +44,23 @@ class IsRoleAdmin
         }
 
         return false;
+    }
+
+    private function setResponse(
+        bool $success = true,
+        string $title = '',
+        string $message = '',
+        string $type = '',
+        string $icon = ''
+    ): array {
+        return [
+            'success' => $success,
+            'notification' => [
+                'title' => $title,
+                'message' => $message,
+                'type' => $type,
+                'icon' => $icon
+            ]
+        ];
     }
 }

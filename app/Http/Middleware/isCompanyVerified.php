@@ -22,7 +22,8 @@ class isCompanyVerified
             } else {
                 $response = $this->setResponse(
                     success: false,
-                    message: 'Akses ditolak, akun tidak terverifikasi',
+                    title: 'Akses ditolak',
+                    message: 'Akun anda belum diverifikasi, silahkan hubungi admin untuk konfirmasi',
                     icon: asset('storage/svg/failed-x.svg')
                 );
 
@@ -33,7 +34,7 @@ class isCompanyVerified
         if (auth('web')->user()->company->status_verified_at !== null) {
             return $next($request);
         } else {
-            return back();
+            return abort(404);
         }
     }
 

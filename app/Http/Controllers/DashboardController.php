@@ -12,7 +12,6 @@ use App\Models\Proposal;
 use App\Models\Student;
 use App\Models\StudyProgram;
 use App\Models\User;
-use COM;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
@@ -95,6 +94,7 @@ class DashboardController extends Controller
         ]);
     }
 
+    // handle custom request dari ajax
     private function handleCustomHeader($id = 0, $user, $role)
     {
         if (request()->hasHeader('x-get-data')) {
@@ -250,8 +250,8 @@ class DashboardController extends Controller
 
         if ($value['success'] === true) {
             return response()->json($value);
-        }
-
+        } 
+        
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
         $fullName = trim($fullName) === "" ? "Username" : $fullName;
 

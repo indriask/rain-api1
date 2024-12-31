@@ -1,7 +1,7 @@
 const manageVacancyDetail = $("#manage-vacancy-detail");
 let manageVacancyForm = null;
 let manageVacancyNotification = null;
-const daftarPelamarCustomNotification = $("#custom-notification");
+const kelolaLowonganCustomNotification = $("#custom-notification");
 
 // function untuk menampilkan detail lowongan yang di publish
 function showDetailManageVacancy(id = 0) {
@@ -256,15 +256,14 @@ function editManageVacancy(id = 0) {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -278,20 +277,24 @@ function editManageVacancy(id = 0) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                
                 return;
             }
 
             // error jika akun perusahaan tidak terverifikasi
             if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     });
@@ -338,15 +341,14 @@ function deleteManageVacancy(id = 0, nib = "") {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -360,36 +362,41 @@ function deleteManageVacancy(id = 0, nib = "") {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error jika akun perusahaan tidak terverifikasi
             if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     });
 }
 
-function showCustomNotification(message, icon) {
-    if (daftarPelamarCustomNotification.hasClass("d-block")) {
-        daftarPelamarCustomNotification.removeClass("d-block");
-        daftarPelamarCustomNotification.addClass("d-none");
+function showCustomNotification(title, message, icon) {
+    if (kelolaLowonganCustomNotification.hasClass("d-block")) {
+        kelolaLowonganCustomNotification.removeClass("d-block");
+        kelolaLowonganCustomNotification.addClass("d-none");
 
         return;
     }
 
-    daftarPelamarCustomNotification.removeClass("d-none");
-    daftarPelamarCustomNotification.addClass("d-block");
+    kelolaLowonganCustomNotification.removeClass("d-none");
+    kelolaLowonganCustomNotification.addClass("d-block");
 
-    $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }
