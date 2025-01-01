@@ -109,7 +109,7 @@ class DashboardCompanyController extends Controller
 
             $response = $this->setResponse(
                 success: true,
-                message:'Lowongan anda berhasil di edit!',
+                message: 'Lowongan anda berhasil di edit!',
                 icon: asset('storage/svg/success-checkmark.svg')
             );
 
@@ -232,7 +232,7 @@ class DashboardCompanyController extends Controller
                     message: "Tidak dapat melakukan update, data tidak ditemukan",
                     icon: asset('storage/svg/failed-x.svg')
                 );
-                
+
                 return response()->json($response);
             }
 
@@ -541,7 +541,7 @@ class DashboardCompanyController extends Controller
             success: true,
             message: 'Berhasil atur tanggal dan waktu wawancaara',
             type: 'primary'
-        ); 
+        );
 
         return response()->json($response);
     }

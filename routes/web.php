@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\DashboardAdminController;
 use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
@@ -47,8 +48,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
 
+    Route::get('/vacancy/{id}', [DashboardController::class, 'getVacancyDetail']);
+
+
+    Route::get('/filter-vacancies-by-major', [DashboardController::class, 'filterVacanciesByMajor'])->name('filter.vacancies.by.major');
+    Route::get('/filter-vacancies-by-title', [DashboardController::class, 'filterVacanciesByTitle'])->name('filter.vacancies.by.title');
+    Route::get('/filter-vacancies-by-location', [DashboardController::class, 'filterVacanciesByLocation'])->name('filter.vacancies.by.location');
+    Route::get('/filter-vacancies-clear', [DashboardController::class, 'clearFilters'])->name('filter.vacancies.clear');
+    Route::post('/student/update-profile', [DashboardController::class, 'updateProfile'])->name('student.updateProfile');
+    Route::post('/delete-account', [DashboardController::class, 'destroy'])->name('account.destroy');
+    Route::post('/apply', [DashboardController::class, 'apply'])->name('apply');
+    Route::get('/get-study-programs/{majorId}', [DashboardController::class, 'getStudyProgramsByMajor']);
+
     Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
         ->name('student-profile');
+    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])->name('mahasiswa.updateProfile');
 
     /**
      * Routing khusus role perusahaan
