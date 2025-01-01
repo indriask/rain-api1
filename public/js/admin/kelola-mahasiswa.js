@@ -1,7 +1,7 @@
 const deleteUserBtn = $("#delete-user-btn");
 const deleteUserVerify = $("#delete-user-verify");
 const deleteUserNotification = $("#delete-user-notification");
-const daftarPelamarCustomNotification = $("#custom-notification");
+const kelolaMahasiswaCustomNotification = $("#custom-notification");
 
 function showDeleteUser(id = 0) {
     if (deleteUserVerify.hasClass("d-block")) {
@@ -32,15 +32,14 @@ function deleteUserAccount(id) {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -54,20 +53,16 @@ function deleteUserAccount(id) {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return;
-            }
-
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     })
@@ -88,17 +83,18 @@ function showDeleteUserNotification(message, icon) {
     $("#delete-user-notification-icon").attr('src', icon);
 }
 
-function showCustomNotification(message, icon) {
-    if (daftarPelamarCustomNotification.hasClass("d-block")) {
-        daftarPelamarCustomNotification.removeClass("d-block");
-        daftarPelamarCustomNotification.addClass("d-none");
+function showCustomNotification(title, message, icon) {
+    if (kelolaMahasiswaCustomNotification.hasClass("d-block")) {
+        kelolaMahasiswaCustomNotification.removeClass("d-block");
+        kelolaMahasiswaCustomNotification.addClass("d-none");
 
         return;
     }
 
-    daftarPelamarCustomNotification.removeClass("d-none");
-    daftarPelamarCustomNotification.addClass("d-block");
+    kelolaMahasiswaCustomNotification.removeClass("d-none");
+    kelolaMahasiswaCustomNotification.addClass("d-block");
 
-    $("#custom-notification-message").text(message);
     $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }

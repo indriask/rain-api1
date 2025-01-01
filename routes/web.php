@@ -34,11 +34,15 @@ Route::middleware('guest')->group(function () {
 
 // akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Routing ke halaman dashboard mahasiswa, perusahaan dan admin
+    /**
+     * Routing untuk render halaman dashboard mahasiswa, perusahaan dan admin
+     */
     Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Routing khusus role mahasiswa
+    /**
+     * Routing khusus role mahasiswa
+     */
     Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
         ->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
@@ -46,7 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
         ->name('student-profile');
 
-    // Routing khusus role perusahaan
+    /**
+     * Routing khusus role perusahaan
+     */
     Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])
         ->name('company-manage-vacancy')
         ->whereNumber('id')
@@ -64,7 +70,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
         ->name('company-profile');
 
-    // Routing khusus role admin
+    /**
+     * Routing khsusus role admin
+     */
     Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])
         ->name('admin-manage-user-student')
         ->middleware(IsRoleAdmin::class);

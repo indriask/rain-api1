@@ -2,8 +2,9 @@ const deleteUserBtn = $("#delete-user-btn");
 const deleteUserVerify = $("#delete-user-verify");
 const verifyCompanyAccount = $("#verify-company-account");
 const deleteUserNotification = $("#delete-user-notification");
-const adminKelolaCustomNotification = $("#custom-notification");
+const kelolaPerusahaanCustomNotification = $("#custom-notification");
 
+// function untuk render halaman hapus user
 function showDeleteUser(id = 0) {
     if (deleteUserVerify.hasClass("d-block")) {
         deleteUserVerify.removeClass("d-block");
@@ -17,6 +18,7 @@ function showDeleteUser(id = 0) {
     $("#delete-user-action-btn").attr("onclick", `deleteUserAccount(${id})`);
 }
 
+// function untuk request hapus user
 function deleteUserAccount(id) {
     $.ajax({
         url: "/api/dashboard/admin/kelola/user/delete",
@@ -33,15 +35,14 @@ function deleteUserAccount(id) {
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
 
                 return;
             }
@@ -55,25 +56,22 @@ function deleteUserAccount(id) {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return;
-            }
-
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     })
 }
 
+// function untuk render halaman verifikasi perusahaan
 function showVerifyCompany(id) {
     if (verifyCompanyAccount.hasClass("d-block")) {
         verifyCompanyAccount.removeClass("d-block");
@@ -87,6 +85,7 @@ function showVerifyCompany(id) {
     $("#verify-company-action-btn").attr("onclick", `verifyCompany(${id})`);
 }
 
+// function untuk request verifikasi perusahaan
 function verifyCompany(id_user) {
     $.ajax({
         url: "/api/dashboard/admin/kelola/user/perusahaan/verify",
@@ -102,14 +101,16 @@ function verifyCompany(id_user) {
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
+                let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
                 showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -130,19 +131,14 @@ function verifyCompany(id_user) {
             if (jqXHR.status === 403) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);
-                return;
-            }
 
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
-                let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.title, response.message, response.icon);
                 return;
             }
         }
     })
 }
 
+// fucntion untuk render notifikasi berhasil atau gagal verifikasi
 function showVerifyNotificationCard(message, icon) {
     const verifyNotificationCard = $("#verify-notification-card");
     if (verifyNotificationCard.hasClass("d-block")) {
@@ -159,6 +155,7 @@ function showVerifyNotificationCard(message, icon) {
     $("#verify-notification-message").get(0).src += icon;
 }
 
+// function untuk render notifikai berhasil atau gagal hapus user
 function showDeleteUserNotification(message, icon) {
     if (deleteUserNotification.hasClass("d-block")) {
         deleteUserNotification.removeClass("d-block");
@@ -191,20 +188,22 @@ function installCooperationFile(id_user) {
                 return;
             } else {
                 let notification = response.notification;
-                showCustomNotification(notification.message, notification.icon);
+                showCustomNotification(notification.title, notification.message, notification.icon);
                 return;
             }
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -217,35 +216,32 @@ function installCooperationFile(id_user) {
 
                 url = url.join('/');
                 window.location.replace(url);
+
                 return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return;
-            }
-
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     })
 }
 
+// function untuk view custom notificatio
 function showCustomNotification(title, message, icon) {
-    if (adminKelolaCustomNotification.hasClass("d-block")) {
-        adminKelolaCustomNotification.removeClass("d-block");
-        adminKelolaCustomNotification.addClass("d-none");
+    if (kelolaPerusahaanCustomNotification.hasClass("d-block")) {
+        kelolaPerusahaanCustomNotification.removeClass("d-block");
+        kelolaPerusahaanCustomNotification.addClass("d-none");
 
         return;
     }
 
-    adminKelolaCustomNotification.removeClass("d-none");
-    adminKelolaCustomNotification.addClass("d-block");
+    kelolaPerusahaanCustomNotification.removeClass("d-none");
+    kelolaPerusahaanCustomNotification.addClass("d-block");
 
     $("#custom-notification-icon").attr('src', icon);
     $("#custom-notification-title").text(title);

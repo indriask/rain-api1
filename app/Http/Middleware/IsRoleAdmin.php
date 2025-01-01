@@ -16,7 +16,7 @@ class IsRoleAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->ajax()) {
-            if ($this->validateRole() === true) {
+            if ($this->validateRole() === false) {
                 return $next($request);
             } else {
                 $response = $this->setResponse(

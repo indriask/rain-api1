@@ -115,7 +115,7 @@
                                 </button>
                             </div>
                         @endforeach
-                        
+
                     </div>
                 </div>
             </div>
@@ -166,19 +166,19 @@
 
             {{-- pop up notifikasi custom --}}
             <div id="custom-notification"
-                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="bg-white py-5 px-3 rounded">
                     <div class="position-relative d-flex flex-column align-items-center">
-                        <img id="custom-notification-icon" class="position-absolute"
-                            style="width: 60px; opacity: .3; top: -1.1rem;" alt="">
-                        <h6 class="position-relative z-1 fw-700" id="custom-notification-message">Terjadi kesalahan
-                            saat
-                            penghapusan data</h6>
+                        <img id="custom-notification-icon" class="" src="" style="width: 60px;"
+                            alt="">
+                        <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title"></h6>
+                        <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                            id="custom-notification-message"></span>
                     </div>
                     <button
                         class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
-                        onclick="showCustomNotification()">Tutup</button>
+                        onclick="showCustomNotification()" style="font-size: .85rem;">Tutup</button>
                 </div>
             </div>
 
@@ -192,10 +192,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur pada halaman admin kelola user mahsiswa --}}
-    <script defer src="{{ asset('js/admin/kelola-mahasiswa.js') }}"></script>
+    <script src="{{ asset('js/admin/kelola-mahasiswa.js') }}"></script>
 
 </body>
 

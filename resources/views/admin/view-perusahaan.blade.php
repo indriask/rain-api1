@@ -226,7 +226,6 @@
                         <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title"></h6>
                         <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
                             id="custom-notification-message"></span>
-
                     </div>
                     <button
                         class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"

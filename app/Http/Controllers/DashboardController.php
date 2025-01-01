@@ -250,8 +250,8 @@ class DashboardController extends Controller
 
         if ($value['success'] === true) {
             return response()->json($value);
-        } 
-        
+        }
+
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
         $fullName = trim($fullName) === "" ? "Username" : $fullName;
 
@@ -429,13 +429,14 @@ class DashboardController extends Controller
         if (!Storage::fileExists('cooperation_folder/' . $fileName)) {
             $response = $this->setResponse(
                 success: false,
-                message: 'File tidak ditemukan',
+                title: 'File tidak ditemukan',
+                message: 'File yang ingin di download tidak ada',
                 icon: asset('storage/svg/failed-x.svg')
             );
 
             return response()->json($response);
         }
-
+        
         $zipName = $data['nib'] . '.zip';
         $zipPath = storage_path($zipName);
         $zip = new \ZipArchive();
@@ -446,7 +447,8 @@ class DashboardController extends Controller
         } else {
             $response = $this->setResponse(
                 success: false,
-                message: 'Terjadi kesalahaan saat melakukan zip',
+                title: 'Gagal membuat zip',
+                message: 'Terjadi kesalahaan saat membuat zip',
                 icon: asset('storage/svg/failed-x.svg')
             );
 

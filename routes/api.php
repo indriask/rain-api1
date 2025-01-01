@@ -37,7 +37,9 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route signout mahasiswa, perusahaan dan admin
     Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
 
-    // Route khusus system dashboard mahasiswa
+    /**
+     * Route untuk syste dashboard mahasiswa
+     */
     Route::post('/dashboard/mahasiswa/daftar/lamaran', [DashboardStudentController::class, 'applyVacancy'])
         ->name('api-student-apply-vacancy')
         ->middleware(IsRoleStudent::class);
@@ -58,7 +60,9 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->name('api-delete-account')
         ->middleware(IsRoleStudent::class);
 
-    // Route khusus system dashboard perusahaan
+    /**
+     * Route untuk system dashboard perusahaan
+     */
     Route::post('/dashboard/perusahaan/tambah/lowongan', [DashboardCompanyController::class, 'addVacancy'])
         ->name('api-add-vacancy-page')
         ->middleware(IsRoleCompany::class, isCompanyVerified::class);
@@ -91,7 +95,9 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     Route::post('/dashboard/perusahaan/profile/delete/account', [AccountController::class, 'deleteAccount'])
         ->middleware(IsRoleCompany::class);
 
-    // Route khusus untuk system dashboard admin
+    /**
+     * Route untuk system dashboard admin
+     */
     Route::post('/dashboard/admin/kelola/lowongan/delete', [DashboardAdminController::class, 'deleteVacancy'])
         ->middleware(IsRoleAdmin::class);
 
