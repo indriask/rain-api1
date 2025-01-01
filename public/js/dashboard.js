@@ -662,3 +662,66 @@ function closeFilter() {
         $("#filter-btn-text").text("Buka Filter");
     }
 }
+
+function adminDeleteVacancy(id_vacancy) {
+    $.ajax({
+        url: '/api/dashboard/admin/kelola/lowongan/delete',
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: { id_vacancy: id_vacancy },
+        success: function (response) {
+            if (response.success) {
+                let notification = response.notification;
+                showCustomNotification('', notification.message, notification.icon);
+                return;
+            } else {
+                let notification = response.notification;
+                showCustomNotification(notification.title, notification.message, notification.icon);
+                return;
+            }
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                return;
+            }
+
+            // error jika akun perusahaan tidak terverifikasi
+            if (jqXHR.status === 400) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+        }
+    })
+} 

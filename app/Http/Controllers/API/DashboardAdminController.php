@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\Vacancy;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,32 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 class DashboardAdminController extends Controller
 {
     // Method untuk mem-proses logika delete lowongan
-    public function deleteVacancy(Request $request) {}
+    public function deleteVacancy(Request $request) {
+        try {
+            $validated = $request->validate([
+                'id_vacancy' => ['required', 'present', 'integer', 'min:1', 'exists:vacancy,id_vacancy']
+            ]);
+
+            Vacancy::find($validated['id_vacancy'])->delete();
+
+            $response = $this->setResponse(
+                success: false,
+                message: 'Berhasil hapus lowongan',
+                icon: asset('storage/svg/success-checkmark.svg')
+            );
+
+            return response()->json($response, 200);
+        } catch(\Throwable $e) {
+            $response = $this->setResponse(
+                success: false,
+                title: 'Gagal hapus lowongan',
+                message: 'Terjadi kesalhaan saat penghapusan data, harap check input anda',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response, 500);
+        }
+    }
 
     // Method untuk mem-proses logika kelola user mahasiswa
     public function manageUserStudent(Request $request) {}
@@ -111,7 +137,8 @@ class DashboardAdminController extends Controller
             if (empty($user)) {
                 $response = $this->setResponse(
                     success: false,
-                    message: 'Gagal melakukan update, data tidak ditemukan',
+                    title: 'Data tidak ada',
+                    message: 'Gagal melakukan update profile, data tidak ada',
                     icon: asset('storage/svg/failed-x.svg')
                 );
 
@@ -132,6 +159,7 @@ class DashboardAdminController extends Controller
                 if ($file->getSize() > 2000000) {
                     $response = $this->setResponse(
                         success: false,
+                        title: 'Ukuran profile',
                         message: 'Ukuran gambar profile harus dibawah 2MB',
                         icon: asset('storage/svg/failed-x.svg')
                     );
@@ -169,7 +197,14 @@ class DashboardAdminController extends Controller
 
             return response()->json($response, 200);
         } catch (\Throwable $e) {
-            return response()->json($e->getMessage());
+            $response = $this->setResponse(
+                success: false,
+                title: 'Gagal request update',
+                message: 'Terjadi kesalhaan saat melakukan request profile, silahkan coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response, 500);
         }
     }
 
