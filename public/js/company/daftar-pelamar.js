@@ -307,6 +307,7 @@ function installProposalFiles(id_proposal) {
         method: "GET",
         data: { id_proposal },
         success: function (response) {
+            console.log(response);
             if (response.file_error) {
                 console.error(response.file_error);
 

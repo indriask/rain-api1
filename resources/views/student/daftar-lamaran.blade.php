@@ -48,10 +48,9 @@
             <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">{{ auth()->user()->student->profile->first_name }}
-                            {{ auth()->user()->student->profile->last_name }}</span>
+                        <img src="{{ asset('storage/' . $user->$role->profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                     <div class="position-relative">
                         <input type="text" id="search-lowongan"
@@ -111,15 +110,14 @@
                                 <h5 class="salary-text">Rp. {{ number_format($vacancy->salary, 0, ',', '.') }}/bulan
                                 </h5>
                                 <img class="company-photo rounded"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s"
-                                    alt="Company photo">
+                                    src="{{ asset('storage/' . $vacancy->photo_profile) }}" alt="Company photo">
                             </div>
                             <div>
                                 <h6 class="vacancy-role m-0">{{ $vacancy->title }}</h6>
                                 <span class="vacancy-major-choice">{{ $vacancy->major_name }}</span>
 
                                 <ul class="vacancy-small-detail p-0 mt-3">
-                                    <li><i class="bi bi-geo-alt me-3"></i>{{ $vacancy->location }}</li>
+                                    <li><i class="bi bi-geo-alt me-3"></i>{{ $vacancy->vacancy_location }}</li>
                                     <li><i
                                             class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($vacancy->date_created)->format('d F Y') }}
                                     </li>
@@ -127,13 +125,13 @@
                                 </ul>
 
                                 <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                    <li class="bg-white rounded-pill text-center">{{ $vacancy->type }}</li>
+                                    <li class="bg-white rounded-pill text-center">{{ $vacancy->vacancy_type }}</li>
                                     <li class="bg-white rounded-pill text-center">{{ $vacancy->time_type }}</li>
-                                    <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }}</li>
+                                    <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }} Bulan</li>
                                 </ul>
 
-                                <button onclick="showVacancyDetailModal('{{ $vacancy->id_vacancy }}')"
-                                    class="vacancy-detail border border-0 text-white mx-auto d-block mt">Lihat</button>
+                                <button onclick="showAppliedVacancyDetail('{{ $vacancy->id_vacancy }}')"
+                                    class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Lihat</button>
 
                             </div>
                         </div>
@@ -142,78 +140,16 @@
             </div>
 
 
-            {{-- bagian menampilkan detail lowongan yang dilamar --}}
+            {{-- menampilkan detail lowongan yang dilamar --}}
             <div id="student-applied-vacancy-detail"
-                class="d-none pe-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
-                <div class="apply-form bg-white p-4 d-flex gap-4 mt-3">
-                    <div class="position-relative w-50">
-                        <h1 class="apply-form-title">Frontend Developer</h1>
-                        <div class="d-flex mt-3">
-                            <img class="apply-vacancy-img object-fit-cover object-fit-position me-2"
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK3CAhjRZ4esxRs2HBnf9qKoF6PAy4063vvA&s"
-                                alt="">
-                            <div style="width: 250px">
-                                <div class="apply-company-title d-flex justify-content-between">
-                                    <span class="fw-500" style="width: 100px;">Perusahaan</span>
-                                    <span class="fw-500">Batam, Indonesia</span>
-                                </div>
-                                <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
-                                    <span class="bg-white rounded-pill p-1">Penuh Waktu</span>
-                                    <span class="bg-white rounded-pill p-1">Offline</span>
-                                    <span class="bg-white rounded-pill p-1">6 Bulan</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-input-container mt-4">
-                            <label class="fw-500">Gaji</label>
-                            <div class="input-group">
-                                <div class="box" style="width: 50px;">2.500.000</div>
-                                <span class="mx-3">/</span>
-                                <div class="box" style="width: 30px;"></div>
-                            </div>
-
-                            <label class="fw-500">Jurusan</label>
-                            <div class="box">Teknik Jaringan komunikasi</div>
-
-                            <label class="fw-500">Dibuka</label>
-                            <div class="input-group">
-                                <div class="box">23 Sep 2024</div>
-                                <span class="mx-3">-</span>
-                                <div class="box">23 Sep 2024</div>
-                            </div>
-
-                            <label class="fw-500">Kuota</label>
-                            <div class="box">30</div>
-
-                            <label class="fw-500">Status</label>
-                            <div class="box">Dibuka</div>
-
-                            <label class="fw-500">Pelamar</label>
-                            <div class="box">18</div>
-                        </div>
-                        <div class="position-absolute bottom-0">
-                            <button onclick="showVacancyDetailModal()" type="button"
-                                class="close-apply-form text-white fw-700 border border-0 me-2">Kembali</button>
-                            <button class="close-apply-form border border-0 text-white bni-blue fw-700" type="button"
-                                onclick="showStudentVacancyStatus(1)">Cek Status</button>
-                        </div>
-                    </div>
-                    <div class="w-50">
-                        <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                        <div class="apply-vacancy-detail overflow-auto">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae itaque nesciunt
-                            inventore consectetur obcaecati quas atque a deserunt laudantium! Pariatur ratione eaque
-                            enim tenetur est esse quam dignissimos minus eveniet!
-                        </div>
-                    </div>
-                </div>
+                class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
             </div>
 
             {{-- check status lamaran mahasiswa --}}
             <div id="applied-vacancy-status">
             </div>
 
+            {{-- pilih opsi ccheck status --}}
             <div id="apply-status-info">
             </div>
 
@@ -528,7 +464,7 @@
     <script defer src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur dashboard daftar lamaran mahasiswa --}}
-    {{-- <script defer src="{{ asset('js/student/daftar-lamaran.js') }}"></script> --}}
+    <script defer src="{{ asset('js/student/daftar-lamaran.js') }}"></script>
 
     <script>
         function showVacancyDetailModal(vacancyId) {

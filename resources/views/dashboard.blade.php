@@ -136,15 +136,14 @@
                                     <h5 class="salary-text">Rp.
                                         {{ number_format($vacancy->salary, 0, ',', '.') }}/bulan</h5>
                                     <img class="company-photo rounded"
-                                        src="{{ $vacancy->company->profile->photo_profile }}"
-                                        alt="Company photo">
+                                        src="{{ asset('storage/' . $vacancy->photo_profile) }}" alt="Company photo">
                                 </div>
                                 <div>
                                     <h6 class="vacancy-role m-0">{{ $vacancy->title }}</h6>
                                     <span class="vacancy-major-choice">{{ $vacancy->major_name }}</span>
 
                                     <ul class="vacancy-small-detail p-0 mt-3">
-                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $vacancy->location }}</li>
+                                        <li><i class="bi bi-geo-alt me-3"></i>{{ $vacancy->vacancy_location }}</li>
                                         <li><i
                                                 class="bi bi-calendar3 me-3"></i>{{ \Carbon\Carbon::parse($vacancy->date_created)->format('d F Y') }}
                                         </li>
@@ -152,13 +151,14 @@
                                     </ul>
 
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->vacancy_type }}</li>
                                         <li class="bg-white rounded-pill text-center">{{ $vacancy->time_type }}</li>
-                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }} Bulan
+                                        </li>
                                     </ul>
 
-                                    <button onclick="showAppliedVacancyDetail('{{ $vacancy->id_vacancy }}')"
-                                        class="vacancy-detail border border-0 text-white mx-auto d-block mt">Lihat</button>
+                                    <button onclick="showVacancyDetailCard('{{ $vacancy->id_vacancy }}')"
+                                        class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Lihat</button>
                                 </div>
                             </div>
                         @endforeach
@@ -176,8 +176,9 @@
                 class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
                 {{-- form input isi data diri mahasiswa --}}
-                <form id="vacancy-apply-form" action="{{ route('api-student-apply-vacancy') }}" method="POST"
-                    class="vacancy-apply-form-card bg-white p-4">
+                <form id="vacancy-apply-form" action="{{ route('apply') }}" method="POST"
+                    class="vacancy-apply-form-card bg-white p-4" enctype="multipart/form-data">
+                    @csrf
                     <div class="d-flex justify-content-between">
                         <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
                         <button type="button" class="border border-0 bg-transparent click-animation"
@@ -214,9 +215,11 @@
                     <label for="upload-file"
                         class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
                         <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
-                    <input type="file" name="files" multiple id="upload-file" hidden>
+                    <input type="file" name="resume" id="upload-file" multiple hidden>
 
-                    <button type="button" onclick="processAddProposal(1)"
+                    <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
+
+                    <button type="submit"
                         class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                 </form>
 
@@ -260,7 +263,7 @@
         </main>
     </div>
 
-    <div class="modal fade" id="vacancyDetailModal" tabindex="-1" aria-labelledby="vacancyDetailModalLabel"
+    {{-- <div class="modal fade" id="vacancyDetailModal" tabindex="-1" aria-labelledby="vacancyDetailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -276,12 +279,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -558,7 +558,7 @@
     </script>
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
     <script>
         function showAppliedVacancyDetail(vacancyId) {
             // Example of AJAX call to get the vacancy data

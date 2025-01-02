@@ -7,6 +7,7 @@ use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Major;
+use App\Models\Prodi;
 use App\Models\Profile;
 use App\Models\Student;
 use App\Models\User;
@@ -17,7 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -80,8 +82,13 @@ class DashboardController extends Controller
     public function index($id = 0)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
-        $user = auth('web')->user();
+        $user = auth('web')->user()->load("$role.profile");
         $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return response()->json($value, 200);
+        }
 
         // jika fullname kosong, isi dengan data username
         if (trim($fullName) === '') {
@@ -90,17 +97,20 @@ class DashboardController extends Controller
 
         // $lowongan = Vacancy::with('company.profile')->get();
         $lowongan = DB::table('vacancy')
+            ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
             ->get();
         $major = Major::all();
         // dd($major);
+        // dd($lowongan);
 
         return response()->view('dashboard', [
             'role' => $role,
             'vacancies' => $lowongan,
             'majors' => $major,
-            'user' => auth('web')->user(),
+            'user' => $user,
             'fullName' => $fullName
         ]);
     }
@@ -236,29 +246,37 @@ class DashboardController extends Controller
         // Validate the form input
         $request->validate([
             'resume' => 'required|mimes:pdf,doc,docx|max:10240', // Validate resume file
-            'vacancy_id' => 'required|exists:vacancy,id_vacancy',
+            'id_vacancy' => 'required|exists:vacancy,id_vacancy',
         ]);
+
+        $isProposed = Proposal::where('id_vacancy', $request->id_vacancy)
+            ->where('nim', auth('web')->user()->student->nim)
+            ->first();
+        
+        if($isProposed == true) {
+            return back()->withErrors(['error', 'Anda sudah melamar di lowongan ini']);
+        }
 
         // Save the resume file
         $file = $request->file('resume');
         $extension = $file->getClientOriginalExtension();  // Get the file extension (e.g., 'pdf', 'docx')
-        
+
         // Get the current user's first name
-        $firstName = auth()->user()->student->profile->first_name;
-        
+        $firstName = auth('web')->user()->student->profile->first_name;
+
         // Get the current timestamp
         $timestamp = now()->timestamp;
-        
+
         // Combine the first name and timestamp to create the filename
         $fileName = strtolower($firstName) . '_' . $timestamp . '.' . $extension;
-        
-        $filePath = $file->storeAs('resumes', $fileName, 'public');
-        
+
+        $filePath = $file->storeAs('resume/' . uniqid(), $fileName, 'local');
+
 
         // Store the application data in the database
         Proposal::create([
-            'id_vacancy' => $request->vacancy_id,
-            'nim' => auth()->user()->student->nim, // Assuming the user is authenticated
+            'id_vacancy' => $request->id_vacancy,
+            'nim' => auth('web')->user()->student->nim, // Assuming the user is authenticated
             'resume' => $filePath,
             'applied_date' => now(),
             'final_status' => 'waiting', // default status
@@ -271,68 +289,127 @@ class DashboardController extends Controller
 
     public function studentProposalListPage()
     {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+
+        // jika fullname kosong, isi dengan data username
+        if (trim($fullName) === '') {
+            $fullName = 'Username';
+        }
+
         // Left join antara tabel vacancy dan major
         $vacancy = DB::table('vacancy')
+            ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
+            ->leftJoin('proposal', 'proposal.id_vacancy', '=', 'vacancy.id_vacancy')
+            ->where('proposal.nim', auth('web')->user()->student->nim)
             ->get();
+
         $major = Major::all();
-
-
-        // dd($vacancy);
 
         return response()->view('student.daftar-lamaran', [
             'vacancies' => $vacancy,
             'majors' => $major,
-            'role' => 'student'
+            'role' => $role,
+            'user' => $user,
+            'fullName' => $fullName
         ]);
     }
 
-    public function getVacancyDetail($id) {
-    // Fetch the vacancy data along with related company and major data
-    $vacancy = Vacancy::with('company', 'major')->find($id);
+    public function getStudentProposalList($id, Request $request)
+    {
+        $header = $request->header('get-data', null);
+        if (is_null($header) && $header !== 'student-proposal') {
+            $response = $this->setResponse(
+                success: false,
+                title: 'Request expire',
+                message: 'Terjadi kesalhaan saat melakukan request, harap coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            );
 
-    // Check if vacancy exists
-    if (!$vacancy) {
-        return response()->json(['error' => 'Vacancy not found'], 404);
+            return response()->json($response, 500);
+        }
+
+        $validator = Validator::make(['id_proposal' => $id], ['id_proposal' => ['required', 'integer', 'present']]);
+        if ($validator->fails()) {
+            $response = $this->setResponse(
+                success: false,
+                message: 'Data tidak ditemukan',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response);
+        }
+
+        try {
+            $proposal = Proposal::with('vacancy.company.profile', 'vacancy.major')
+                ->where('id_proposal', $validator->getValue('id_proposal'))
+                ->where('nim', auth('web')->user()->student->nim)
+                ->firstOrFail();
+
+            return response()->json($proposal);
+        } catch (\Throwable $e) {
+            $response = $this->setResponse(
+                success: false,
+                title: 'Request error',
+                message: 'Terjadi kesalahaan saat melakukan request, harap coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            // return response()->json($response, 500);
+            return response()->json($e->getMessage(), 500);
+        }
     }
 
-    // Check if the currently logged-in user has already applied for this vacancy
-    $userHasApplied = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->exists();
-    $proposal = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->first();
-    // Return the vacancy details along with application status
-    return response()->json([
-        'title' => $vacancy->title,
-        'salary' => $vacancy->salary,
-        'major' => $vacancy->major->name,
-        'location' => $vacancy->location,
-        'type' => $vacancy->type,
-        'time_type' => $vacancy->time_type,
-        'duration' => $vacancy->duration,
-        'quota' => $vacancy->quota,
-        'applied' => $vacancy->proposals->count(),
-        'date_created' => Carbon::parse($vacancy->date_created)->format('d F Y'),
-        'date_ended' => Carbon::parse($vacancy->date_ended)->format('d F Y'),
-        'description' => $vacancy->description,
-        'company' => [
-            'name' => $vacancy->company->profile->first_name . ' ' . $vacancy->company->profile->last_name,
-            'photo' => $vacancy->company->profile->photo_profile
-        ],
-        'userHasApplied' => $userHasApplied,  // Return if the user has applied
-        'proposal_status' => $proposal->proposal_status ?? "",
-        'interview_status' => $proposal->interview_status ?? "",
-        'final_status' => $proposal->final_status ?? "",
-    ]);
-}
+    public function getVacancyDetail($id)
+    {
+        // Fetch the vacancy data along with related company and major data
+        $vacancy = Vacancy::with('company', 'major')->find($id);
 
-public function getStudyProgramsByMajor($majorId)
-{
-    // Fetch study programs based on the selected major
-    $studyPrograms = StudyProgram::where('id_major', $majorId)->get();
+        // Check if vacancy exists
+        if (!$vacancy) {
+            return response()->json(['error' => 'Vacancy not found'], 404);
+        }
 
-    // Return the study programs as JSON
-    return response()->json($studyPrograms);
-}
+        // Check if the currently logged-in user has already applied for this vacancy
+        $userHasApplied = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->exists();
+        $proposal = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->first();
+        // Return the vacancy details along with application status
+        return response()->json([
+            'title' => $vacancy->title,
+            'salary' => $vacancy->salary,
+            'major' => $vacancy->major->name,
+            'location' => $vacancy->location,
+            'type' => $vacancy->type,
+            'time_type' => $vacancy->time_type,
+            'duration' => $vacancy->duration,
+            'quota' => $vacancy->quota,
+            'applied' => $vacancy->proposals->count(),
+            'date_created' => Carbon::parse($vacancy->date_created)->format('d F Y'),
+            'date_ended' => Carbon::parse($vacancy->date_ended)->format('d F Y'),
+            'description' => $vacancy->description,
+            'company' => [
+                'name' => $vacancy->company->profile->first_name . ' ' . $vacancy->company->profile->last_name,
+                'photo' => $vacancy->company->profile->photo_profile
+            ],
+            'userHasApplied' => $userHasApplied,  // Return if the user has applied
+            'proposal_status' => $proposal->proposal_status ?? "",
+            'interview_status' => $proposal->interview_status ?? "",
+            'final_status' => $proposal->final_status ?? "",
+        ]);
+    }
+
+    public function getStudyProgramsByMajor($majorId)
+    {
+        // Fetch study programs based on the selected major
+        $studyPrograms = StudyProgram::where('id_major', $majorId)->get();
+
+        // Return the study programs as JSON
+        return response()->json($studyPrograms);
+    }
 
     public function filterVacanciesByMajor(Request $request)
     {
@@ -394,15 +471,22 @@ public function getStudyProgramsByMajor($majorId)
         $major = Major::all();
         $study_program = StudyProgram::all();
 
-        // dd($student);
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+
+        // jika fullname kosong, isi dengan data username
+        if (trim($fullName) === '') {
+            $fullName = 'Username';
+        }
 
         return response()->view('student.profile', [
-            'role' => 'student',
+            'role' => $role,
             'student' => $student,
             'user' => $user,
             'profile' => $profile,
             'major' => $major,
             'study_program' => $study_program,
+            'fullName' => $fullName
         ]);
     }
 
@@ -461,15 +545,29 @@ public function getStudyProgramsByMajor($majorId)
             'phone_number' => 'nullable|string|max:15',
             'description' => 'nullable|string',
             'major' => 'required',
+            'old-photo-profile' => 'required|string',
         ]);
 
         $user = Auth::user();
         $student = $user->student;
         // dd($student);
         $profile = $student->profile;
+        $oldProfile = $request->input('old-photo-profile');
+        $hasFile = $request->has('photo-profile');
+
+        if ($hasFile) {
+            $file = $request->file('photo-profile');
+
+            if ($file->getSize() > 2000000) {
+                dd('file harus kurang dari 2mb');
+            }
+
+            $newFileName = time() . '_' . $file->getClientOriginalName();
+        }
 
         // Update profile data
         $profile->update([
+            'photo_profile' => ($hasFile) ? $file->storeAs('profile', $newFileName, 'public') : $oldProfile,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'location' => $request->location,
@@ -489,7 +587,6 @@ public function getStudyProgramsByMajor($majorId)
 
         // return redirect()->back()->with('success', 'Profile berhasil diperbarui!');
         return redirect()->back()->with('profile_updated', true);
-
     }
 
 
@@ -500,42 +597,52 @@ public function getStudyProgramsByMajor($majorId)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return $value;
+        }
+
         $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
-
-        if (request()->hasHeader('x-get-data')) {
-            $vacancies = Vacancy::with('company.profile')->where('nib', $user->company->nib)
-                ->get();
-
-            return response()->json(['data' => $vacancies]);
-        }
-
-        if (request()->hasHeader('x-get-specific')) {
-            $vacancy = Vacancy::with('company.profile')->where('id_vacancy', $id)
-                ->where('nib', $user->company->nib)
-                ->first();
-
-            return response()->json(['data' => $vacancy]);
-        }
-
-
-        if (trim($fullName) === "") {
-            $fullName = "Username";
-        }
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+        $lowongan = Vacancy::with('company.profile', 'major')->where('nib', $user->company->nib)->get();
 
         return response()->view('company.kelola-lowongan', [
             'role' => $role,
             'user' => $user,
-            'fullName' => $fullName
+            'fullName' => $fullName,
+            'lowongan' => $lowongan
         ]);
     }
 
     /**
      * Method untuk me-render halaman daftar pelamar lowongan perusahaan
      */
-    public function companyApplicantPage()
+    public function companyApplicantPage($id = 0)
+    {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $user = auth('web')->user()->load("$role.profile");
+        $value = $this->handleCustomHeader($id, $user, $role);
+
+        if ($value['success'] === true) {
+            return response()->json($value);
+        }
+
+        $fullName = "{$user->$role->profile->first_name} {$user->$role->profile->last_name}";
+        $fullName = trim($fullName) === "" ? "Username" : $fullName;
+
+        return response()->view('company.daftar-pelamar', [
+            'role' => $role,
+            'user' => $user,
+            'fullName' => $fullName
+        ]);
+    }
+
+    // method untuk download file resume mahasiswa
+    public function companyDownloadProposal($id = 0)
     {
         $data = Proposal::select(['nim', 'resume'])->where('id_proposal', $id)->first();
-        $files = Storage::files($data['resume']);
+        $files = Storage::disk('local')->files($data['resume']);
 
         if (empty($files)) {
             return response()->json(['file_error' => 'File tidak ada']);
@@ -705,7 +812,7 @@ public function getStudyProgramsByMajor($majorId)
 
             return response()->json($response);
         }
-        
+
         $zipName = $data['nib'] . '.zip';
         $zipPath = storage_path($zipName);
         $zip = new \ZipArchive();
@@ -818,4 +925,4 @@ public function getStudyProgramsByMajor($majorId)
             return response()->json(['message' => 'Gagal menghapus akun.'], 500);
         }
     }
-
+}

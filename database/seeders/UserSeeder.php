@@ -139,8 +139,8 @@ class UserSeeder extends Seeder
             'nim' => '4342401090',
             'id_user' => 1,
             'id_profile' => 1,
-            // 'id_major' => 3,
-            // 'id_study_program' => 2,
+            'id_major' => 3,
+            'id_study_program' => 2,
             'institute' => 'Politenik Negeri Batam'
         ]);
 
@@ -148,8 +148,8 @@ class UserSeeder extends Seeder
             'nim' => '4342401070',
             'id_user' => 2,
             'id_profile' => 2,
-            // 'id_major' => 3,
-            // 'id_study_program' => 2,
+            'id_major' => 3,
+            'id_study_program' => 2,
             'institute' => 'Politenik Negeri Batam'
         ]);
 

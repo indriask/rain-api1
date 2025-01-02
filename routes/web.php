@@ -48,8 +48,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
 
-    Route::get('/vacancy/{id}', [DashboardController::class, 'getVacancyDetail']);
+    Route::get('/dashboard/mahasiswa/list/lamaran/{id}', [DashboardController::class, 'getStudentProposalList'])
+        ->whereNumber('id')
+        ->middleware(IsRoleStudent::class);
 
+    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
+        ->name('student-profile');
+    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])
+        ->name('mahasiswa.updateProfile')
+        ->middleware(IsRoleStudent::class);
+
+
+    Route::get('/vacancy/{id}', [DashboardController::class, 'getVacancyDetail']);
 
     Route::get('/filter-vacancies-by-major', [DashboardController::class, 'filterVacanciesByMajor'])->name('filter.vacancies.by.major');
     Route::get('/filter-vacancies-by-title', [DashboardController::class, 'filterVacanciesByTitle'])->name('filter.vacancies.by.title');
@@ -59,10 +69,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/delete-account', [DashboardController::class, 'destroy'])->name('account.destroy');
     Route::post('/apply', [DashboardController::class, 'apply'])->name('apply');
     Route::get('/get-study-programs/{majorId}', [DashboardController::class, 'getStudyProgramsByMajor']);
-
-    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
-        ->name('student-profile');
-    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])->name('mahasiswa.updateProfile');
 
     /**
      * Routing khusus role perusahaan

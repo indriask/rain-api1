@@ -197,6 +197,9 @@ function showVacancyDetailCard(id = 0) {
                 `;
             }
 
+            $("#daftar-lowongan-id-vacancy").val(vacancy.id_vacancy);
+            // console.log($("#daftar-lowongan-id-vacancy"));
+
             $("#vacancy-detail-card").append(`
                 <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">

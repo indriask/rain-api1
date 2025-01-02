@@ -45,20 +45,20 @@
         <x-dashboard-navbar :role="$role" />
 
         {{-- content dashboard utama --}}
-        <main class="dashboard-main position-relative">
+        <main class="dashboard-main position-relative p-4">
 
             {{-- photo profile dan nama mahasiswa --}}
-            <div class="dashboard-main-nav border-bottom border-black px-5 py-3">
+            <div class="dashboard-main-nav border-bottom border-black px-5 py-2">
                 <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="d-flex align-items-center gap-1 mb-2">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="" class="profile-img rounded-circle shadow">
-                        <span class="profile-name">{{ auth()->user()->student->profile->first_name }}
-                            {{ auth()->user()->student->profile->last_name }}</span>
+                        <img src="{{ asset('storage/' . $profile->photo_profile) }}" alt=""
+                            class="profile-img rounded-circle shadow">
+                        <span class="profile-name">{{ $fullName }}</span>
                     </div>
                 </div>
             </div>
 
+            {{-- notifikasi sukses edit profile --}}
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
@@ -68,15 +68,29 @@
 
 
             {{-- form edit profile mahasiswa --}}
-            <div class="mx-auto mt-4 d-flex h-100 gap-5" style="width: calc(100% - 50px)">
+            <div class="mx-auto d-flex h-100 gap-5 mt-4" style="width: calc(100% - 50px)">
                 <div class="profile-info w-50 position-relative">
                     <div class="d-flex align-items-center gap-3">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE6-KsNGUoKgyIAATW1CNPeVSHhZzS_FN0Zg&s"
-                            alt="Someone profile" class="profile__profile-img rounded">
+                        <label for="input-photo-profile" class="cursor-pointer">
+                            <img src="{{ asset('storage/' . $profile->photo_profile) }}" alt="Someone profile"
+                                class="profile__profile-img rounded">
+                        </label>
+                        <div class="w-100">
+                            <input type="text" form="edit-profile-form" value="{{ $fullName }}" readonly
+                                class="profile__profile-nama-lengkap border focus-ring border-0 bg-white rounded p-2 w-100">
+                            <span class="fw-700 d-block" style="font-size: .9rem">Mahasiswa</span>
+                        </div>
                     </div>
                     <form method="POST" action="{{ route('student.updateProfile') }}" id="edit-profile-form"
-                        class="profile__profile-more-info mt-4">
+                        class="profile__profile-more-info mt-3 p-2 overflow-y-auto" style="height: 360px;"
+                        enctype="multipart/form-data">
                         @csrf
+
+                        <input type="file" hidden id="input-photo-profile" name="photo-profile"
+                            onchange="handleProfileFile()">
+                        <input type="text" hidden id="input-old-photo-profile" name="old-photo-profile"
+                            value="{{ $profile->photo_profile }}">
+
                         <label for="asal-institusi" style="font-size: .95rem">First Name</label>
                         <input type="text" name="first_name" value="{{ $profile->first_name ?? '' }}"
                             class="profile__profile-nama-lengkap focus-ring border border-0 bg-white rounded p-2 w-100"
@@ -92,7 +106,8 @@
                             value="{{ $student->institute ?? '' }}">
 
                         <label for="jurusan" style="font-size: .95rem">Jurusan</label>
-                        <select name="major" id="major" class="border border-0 rounded p-1 px-2 focus-ring">
+                        <select name="major" id="major"
+                            class="border border-0 rounded p-1 px-2 focus-ring bg-white">
                             <option value="">Pilih Jurusan</option>
                             @foreach ($major as $item)
                                 <option value="{{ $item->id }}"
@@ -104,7 +119,7 @@
 
                         <label for="jurusan" style="font-size: .95rem">Program Studi</label>
                         <select name="study_program" id="study_program"
-                            class="border border-0 rounded p-1 px-2 focus-ring">
+                            class="border border-0 rounded p-1 px-2 focus-ring bg-white">
                             <option value="">Pilih Program Studi</option>
                             @foreach ($study_program as $item)
                                 <option value="{{ $item->id }}"
@@ -140,18 +155,18 @@
                             value="{{ $user->email ?? '' }}" readonly>
 
 
-                        <div class="position-absolute" style="bottom: 10px;">
-                            <button type="button" class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                        <div class="position-absolute gap-2" style="bottom: 10px;">
+                            <button type="button" class="border border-0 bni-blue click-animation text-white fw-700 p-1 rounded"
                                 style="font-size: .9rem; width: 100px;"
                                 onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
                             <button type="button" onclick="showDeleteAccountCard()"
-                                class="border border-0 bni-blue text-white fw-700 p-1 rounded"
+                                class="border border-0 bni-blue text-white click-animation fw-700 p-1 rounded"
                                 style="font-size: .9rem; width: 100px;">Hapus akun</button>
                         </div>
                 </div>
                 <div class="profile__profile-description w-50">
                     <div class="d-flex">
-                        <button type="submit" class="border border-0 bni-blue text-white fw-700 rounded p-2 ms-auto"
+                        <button type="submit" class="border border-0 bni-blue text-white click-animation fw-700 rounded p-2 ms-auto"
                             style="font-size: .8rem; width: 100px;" id="edit-profile-btn">
                             Edit Profil
                         </button>
@@ -159,9 +174,9 @@
                     </div>
                     <div class="h-100">
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Mahasiswa</span>
-                        <textarea name="description" class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
+                        <textarea name="description" form="edit-profile-form"
+                            class="bg-white shadow overflow-auto px-3 py-2 focus-ring border border-0 w-100"
                             style="font-size: .9rem; height: 435px; text-align: justify; line-height: 1.5rem; border-radius: 20px;">{{ $profile->description ?? '' }}</textarea>
-
                     </div>
                 </div>
                 </form>
