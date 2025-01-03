@@ -116,6 +116,9 @@ function showStudentProfile(id_profile, id_proposal) {
                                 </div>
                             </div>
                             <div class="profile__profile-more-info mt-4">
+                                <label for="" style="font-size: .95rem">NIM</label>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.nim ?? ""}</div>
+
                                 <label for="asal-institusi" style="font-size: .95rem">Asal institusi</label>
                                 <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.institute ?? ""}</div>
     

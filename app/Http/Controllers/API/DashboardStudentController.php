@@ -108,7 +108,7 @@ class DashboardStudentController extends Controller
             if ($status->interview_status === 'approved') {
                 $response = $this->setResponse(
                     success: true,
-                    title: 'Lamaranmu diterima!',
+                    title: 'Wawancaramu diterima!',
                     message: 'Silahkan menunggu konfirmasi selanjutnya ya',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
@@ -120,7 +120,7 @@ class DashboardStudentController extends Controller
             if ($status->interview_status === 'waiting') {
                 $response = $this->setResponse(
                     success: true,
-                    title: 'Lamaranmu sedang di proses!',
+                    title: 'Wawancaramu sedang di proses!',
                     message: 'Silahkan menunggu konfirmasi selanjutnya ya',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
@@ -132,7 +132,7 @@ class DashboardStudentController extends Controller
             if ($status->interview_status === 'rejected') {
                 $response = $this->setResponse(
                     success: true,
-                    title: 'Lamaranmu ditolak:(',
+                    title: 'Wawancaramu ditolak:(',
                     message: 'Tetap semangat dan coba lagi di lain waktu ya!',
                     icon: asset('storage/svg/failed-x.svg')
                 );

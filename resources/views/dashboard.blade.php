@@ -56,6 +56,46 @@
         </div>
     </div>
 
+    @error('error')
+        <div id="custom-notification"
+            class="d-block position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
+            style="background-color: rgba(0, 0, 0, .4)">
+            <div class="bg-white py-5 px-3 rounded">
+                <div class="position-relative d-flex flex-column align-items-center">
+                    <img id="custom-notification-icon" class="" src="{{ asset('storage/svg/failed-x.svg') }}"
+                        style="width: 60px;" alt="">
+                    <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title">Gagal mengirim lamaran
+                    </h6>
+                    <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                        id="custom-notification-message">{{ $message }}</span>
+                </div>
+                <button
+                    class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                    onclick="showCustomNotification()" style="font-size: .85rem;">Tutup</button>
+            </div>
+        </div>
+    @enderror
+
+    @if (session()->has('success'))
+        <div id="custom-notification"
+            class="d-block position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
+            style="background-color: rgba(0, 0, 0, .4)">
+            <div class="bg-white py-5 px-3 rounded">
+                <div class="position-relative d-flex flex-column align-items-center">
+                    <img id="custom-notification-icon" class="" src="{{ asset('storage/svg/success-checkmark.svg') }}"
+                        style="width: 60px;" alt="">
+                    <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title">Berhasil mengirim lamaran
+                    </h6>
+                    <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                        id="custom-notification-message">{{ session('success') }}</span>
+                </div>
+                <button
+                    class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                    onclick="showCustomNotification()" style="font-size: .85rem;">Tutup</button>
+            </div>
+        </div>
+    @endif
+
     <div class="dashboard-layout">
 
         {{-- navigasi dashboard samping --}}
@@ -151,7 +191,8 @@
                                     </ul>
 
                                     <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->vacancy_type }}</li>
+                                        <li class="bg-white rounded-pill text-center">{{ $vacancy->vacancy_type }}
+                                        </li>
                                         <li class="bg-white rounded-pill text-center">{{ $vacancy->time_type }}</li>
                                         <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }} Bulan
                                         </li>

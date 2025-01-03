@@ -76,6 +76,78 @@ class DashboardController extends Controller
         return response()->json($query->get());
     }
 
+    public function filterVacancies(Request $request)
+    {
+        $query = DB::table('vacancy')
+            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
+            ->select('vacancy.*', 'major.name as major_name');
+
+        if ($request->has('jurusan') && $request->jurusan) {
+            $query->where('major.id', $request->jurusan);
+        }
+
+        if ($request->has('lowongan') && $request->lowongan) {
+            $query->where('vacancy.id_vacancy', $request->lowongan);
+        }
+
+        if ($request->has('lokasi') && $request->lokasi) {
+            $query->where('vacancy.location', $request->lokasi);
+        }
+
+        $vacancies = $query->get();
+
+        return response()->json($vacancies);
+    }
+
+    public function filterVacanciesByMajor(Request $request)
+    {
+        $major = $request->input('major'); // Ambil parameter jurusan dari request
+
+        $vacancies = DB::table('vacancy')
+            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
+            ->select('vacancy.*', 'major.name as major_name')
+            ->where('major.name', $major) // Filter berdasarkan jurusan
+            ->get();
+
+        return response()->json($vacancies); // Kembalikan data dalam format JSON
+    }
+
+    public function filterVacanciesByTitle(Request $request)
+    {
+        $title = $request->input('title'); // Ambil parameter title dari request
+
+        $vacancies = DB::table('vacancy')
+            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
+            ->select('vacancy.*', 'major.name as major_name')
+            ->where('vacancy.title', $title) // Filter berdasarkan title
+            ->get();
+
+        return response()->json($vacancies); // Kembalikan data dalam format JSON
+    }
+
+    public function filterVacanciesByLocation(Request $request)
+    {
+        $location = $request->input('location'); // Ambil parameter lokasi dari request
+
+        $vacancies = DB::table('vacancy')
+            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
+            ->select('vacancy.*', 'major.name as major_name')
+            ->where('vacancy.location', $location) // Filter berdasarkan lokasi
+            ->get();
+
+        return response()->json($vacancies); // Kembalikan data dalam format JSON
+    }
+
+    public function clearFilters()
+    {
+        $vacancies = DB::table('vacancy')
+            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
+            ->select('vacancy.*', 'major.name as major_name')
+            ->get();
+
+        return response()->json($vacancies); // Kembalikan semua data dalam format JSON
+    }
+
     /**
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
@@ -115,7 +187,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    // handle custom request dari ajax
     private function handleCustomHeader($id = 0, $user, $role)
     {
         if (request()->hasHeader('x-get-data')) {
@@ -216,31 +287,8 @@ class DashboardController extends Controller
     }
 
     /**
-     * Method untuk me-render halaman daftar lamaran mahasiswa
+     * Method untuk mahasiswa
      */
-    public function filterVacancies(Request $request)
-    {
-        $query = DB::table('vacancy')
-            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name');
-
-        if ($request->has('jurusan') && $request->jurusan) {
-            $query->where('major.id', $request->jurusan);
-        }
-
-        if ($request->has('lowongan') && $request->lowongan) {
-            $query->where('vacancy.id_vacancy', $request->lowongan);
-        }
-
-        if ($request->has('lokasi') && $request->lokasi) {
-            $query->where('vacancy.location', $request->lokasi);
-        }
-
-        $vacancies = $query->get();
-
-        return response()->json($vacancies);
-    }
-
     public function apply(Request $request)
     {
         // Validate the form input
@@ -252,9 +300,17 @@ class DashboardController extends Controller
         $isProposed = Proposal::where('id_vacancy', $request->id_vacancy)
             ->where('nim', auth('web')->user()->student->nim)
             ->first();
-        
-        if($isProposed == true) {
-            return back()->withErrors(['error', 'Anda sudah melamar di lowongan ini']);
+
+        if ($isProposed == true) {
+            return back()->withErrors(['error' => 'Anda sudah melamar lowongan ini']);
+        }
+
+        $dateEnded = Vacancy::select('date_ended')
+            ->where('id_vacancy', $request->id_vacancy)
+            ->first();
+
+        if (time() > strtotime($dateEnded->date_ended)) {
+            return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah tutup']);
         }
 
         // Save the resume file
@@ -272,19 +328,26 @@ class DashboardController extends Controller
 
         $filePath = $file->storeAs('resume/' . uniqid(), $fileName, 'local');
 
+        $revertedFilePath = strrev($filePath);
+        $explode = explode('/', $revertedFilePath, 2);
+        $newFilePath = strrev($explode[1]);
 
         // Store the application data in the database
         Proposal::create([
             'id_vacancy' => $request->id_vacancy,
             'nim' => auth('web')->user()->student->nim, // Assuming the user is authenticated
-            'resume' => $filePath,
+            'resume' => $newFilePath,
             'applied_date' => now(),
             'final_status' => 'waiting', // default status
             'proposal_status' => 'waiting',
             'interview_status' => 'waiting',
         ]);
 
-        return response()->json(['success' => true]);
+        $vacancy = Vacancy::where('id_vacancy', $request->id_vacancy)->first();
+        $vacancy->applied += 1;
+        $vacancy->save();
+
+        return back()->with(['success' => 'Silahkan mengunggu konfirmasi dari lowongan']);
     }
 
     public function studentProposalListPage()
@@ -300,7 +363,7 @@ class DashboardController extends Controller
 
         // Left join antara tabel vacancy dan major
         $vacancy = DB::table('vacancy')
-            ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
+            ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location', 'proposal.*')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
             ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
             ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
@@ -411,58 +474,6 @@ class DashboardController extends Controller
         return response()->json($studyPrograms);
     }
 
-    public function filterVacanciesByMajor(Request $request)
-    {
-        $major = $request->input('major'); // Ambil parameter jurusan dari request
-
-        $vacancies = DB::table('vacancy')
-            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('major.name', $major) // Filter berdasarkan jurusan
-            ->get();
-
-        return response()->json($vacancies); // Kembalikan data dalam format JSON
-    }
-
-    public function filterVacanciesByTitle(Request $request)
-    {
-        $title = $request->input('title'); // Ambil parameter title dari request
-
-        $vacancies = DB::table('vacancy')
-            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('vacancy.title', $title) // Filter berdasarkan title
-            ->get();
-
-        return response()->json($vacancies); // Kembalikan data dalam format JSON
-    }
-
-    public function filterVacanciesByLocation(Request $request)
-    {
-        $location = $request->input('location'); // Ambil parameter lokasi dari request
-
-        $vacancies = DB::table('vacancy')
-            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('vacancy.location', $location) // Filter berdasarkan lokasi
-            ->get();
-
-        return response()->json($vacancies); // Kembalikan data dalam format JSON
-    }
-
-    public function clearFilters()
-    {
-        $vacancies = DB::table('vacancy')
-            ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->get();
-
-        return response()->json($vacancies); // Kembalikan semua data dalam format JSON
-    }
-
-    /**
-     * Mehod untuk me-render halaman profile mahasiswa
-     */
     public function studentProfilePage()
     {
         $user = Auth::user(); // Mendapatkan data user yang sedang login
@@ -489,48 +500,6 @@ class DashboardController extends Controller
             'fullName' => $fullName
         ]);
     }
-
-    // public function updateProfile(Request $request)
-    // {
-    //     $user = auth()->user(); // Mendapatkan data user yang login
-
-    //     // Validasi data
-    //     $request->validate([
-    //         'first_name' => 'required|string|max:255',
-    //         'last_name' => 'required|string|max:255',
-    //         'location' => 'nullable|string|max:255',
-    //         'postal_code' => 'nullable|string|max:10',
-    //         'city' => 'nullable|string|max:255',
-    //         'phone_number' => 'nullable|string|max:15',
-    //         'description' => 'nullable|string',
-    //         'institute' => 'nullable|string|max:255',
-    //         'skill' => 'nullable|string|max:255',
-    //     ]);
-
-    //     // Update profile
-    //     DB::table('profile')
-    //         ->where('id_profile', $user->id_profile)
-    //         ->update([
-    //             'first_name' => $request->first_name,
-    //             'last_name' => $request->last_name,
-    //             'location' => $request->location,
-    //             'postal_code' => $request->postal_code,
-    //             'city' => $request->city,
-    //             'phone_number' => $request->phone_number,
-    //             'description' => $request->description,
-    //         ]);
-
-    //     // Update student data
-    //     DB::table('student')
-    //         ->where('id_user', $user->id_user)
-    //         ->update([
-    //             'institute' => $request->institute,
-    //             'skill' => $request->skill,
-    //         ]);
-
-    //     return redirect()->route('student-profile')->with('success', 'Profil berhasil diperbarui.');
-    // }
-
 
     public function updateProfile(Request $request)
     {
@@ -589,9 +558,8 @@ class DashboardController extends Controller
         return redirect()->back()->with('profile_updated', true);
     }
 
-
     /**
-     * Method untuk me-render halaman kelola lowongan perusahaan
+     * Method untuk perusahaan
      */
     public function companyManageVacancyPage($id = 0)
     {
@@ -615,9 +583,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Method untuk me-render halaman daftar pelamar lowongan perusahaan
-     */
     public function companyApplicantPage($id = 0)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -638,7 +603,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    // method untuk download file resume mahasiswa
     public function companyDownloadProposal($id = 0)
     {
         $data = Proposal::select(['nim', 'resume'])->where('id_proposal', $id)->first();
@@ -666,7 +630,6 @@ class DashboardController extends Controller
         return response()->json(['url' => url('/download-proposal/' . $zipName)]);
     }
 
-    // method untk me-render halaman profile perusahaan
     public function companyProfilePage()
     {
         $role = $this->roles[auth('web')->user()->role - 1];    // mengambil nama role berdasarkan id role
@@ -686,7 +649,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Method untuk me-render halaman kelola lowongan admin
+     * Method untuk admin
      */
     public function adminManageVacancyPage()
     {
@@ -695,9 +658,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Method untuk me-render halaman kelola akun mahasiswa
-     */
     public function adminManageUserStudent()
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -720,7 +680,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    // menampilkan halaman mahasiswa tertentu
     public function adminViewUserStudent(int $id)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -745,9 +704,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Method untuk me-render halaman kelola akun perusahaan
-     */
     public function adminManageUserCompany()
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -770,7 +726,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    // menampilkan halaman perusahaan tertentu
     public function adminViewUserCompany(int $id)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -795,7 +750,6 @@ class DashboardController extends Controller
         ]);
     }
 
-    // donwload file kerja sama perusahaan
     public function adminDownloadCooperationFile($id = 0)
     {
         $data = Company::select(['cooperation_file', 'nib'])->where('id_user', $id)->firstOrFail();
@@ -836,7 +790,6 @@ class DashboardController extends Controller
         return response()->json($response);
     }
 
-    // menampilkan halaman profile admin
     public function adminProfilePage()
     {
         $role = $this->roles[auth('web')->user()->role - 1];    // mengambil nama role berdasarkan id role
@@ -854,13 +807,14 @@ class DashboardController extends Controller
         ]);
     }
 
-    // Method untuk menampilkan halaman notifikasi email verifikasi sudah terkirim
+    /**
+     * Method verifikasi email
+     */
     public function verifyRegisteredEmailPage()
     {
         return response()->view('auth.verify-email');
     }
 
-    // Method untuk melakukan verifikasi email user
     public function verifyRegisteredEmail(EmailVerificationRequest $request)
     {
         $request->fulfill();
@@ -868,7 +822,9 @@ class DashboardController extends Controller
         return redirect()->route('signin');
     }
 
-    // untuk download file kerja sama perusahaan
+    /**
+     * Method untukd download file
+     */
     public function downloadCooperationFile($filename)
     {
         $filePath = storage_path($filename);
@@ -879,7 +835,6 @@ class DashboardController extends Controller
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
-    // untuk download file proposal mahasiswa
     public function downloadProposal($filename)
     {
         $filePath = storage_path($filename);
@@ -891,6 +846,9 @@ class DashboardController extends Controller
     }
 
 
+    /**
+     * Method untuk set response ajax
+     */
     private function setResponse(
         bool $success = true,
         string $title = '',
@@ -909,6 +867,9 @@ class DashboardController extends Controller
         ];
     }
 
+    /**
+     * Method untuk hapus akun
+     */
     public function destroy(Request $request)
     {
         try {

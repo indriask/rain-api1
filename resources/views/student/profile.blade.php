@@ -91,6 +91,11 @@
                         <input type="text" hidden id="input-old-photo-profile" name="old-photo-profile"
                             value="{{ $profile->photo_profile }}">
 
+                        <label for="asal-institusi" style="font-size: .95rem">NIM</label>
+                        <input type="text" readonly disabled value="{{ auth('web')->user()->student->nim ?? '' }}"
+                            class="profile__profile-nama-lengkap focus-ring border border-0 bg-white rounded p-2 w-100"
+                            placeholder="NIM">
+
                         <label for="asal-institusi" style="font-size: .95rem">First Name</label>
                         <input type="text" name="first_name" value="{{ $profile->first_name ?? '' }}"
                             class="profile__profile-nama-lengkap focus-ring border border-0 bg-white rounded p-2 w-100"

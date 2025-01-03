@@ -9,6 +9,7 @@ use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
 use Illuminate\Http\Request;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -67,7 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/filter-vacancies-clear', [DashboardController::class, 'clearFilters'])->name('filter.vacancies.clear');
     Route::post('/student/update-profile', [DashboardController::class, 'updateProfile'])->name('student.updateProfile');
     Route::post('/delete-account', [DashboardController::class, 'destroy'])->name('account.destroy');
-    Route::post('/apply', [DashboardController::class, 'apply'])->name('apply');
+    Route::post('/apply', [DashboardController::class, 'apply'])->name('apply')->middleware(StartSession::class);
     Route::get('/get-study-programs/{majorId}', [DashboardController::class, 'getStudyProgramsByMajor']);
 
     /**
@@ -178,6 +179,11 @@ Route::get('/login-perusahaan', function () {
 
 Route::get('/login-mahasiswa', function () {
     Auth::attempt(['email' => 'johndoe@gmail.com', 'password' => 'password123']);
+    return redirect()->route('dashboard');
+});
+
+Route::get('/login-admin', function () {
+    Auth::attempt(['email' => 'rain@gmail.com', 'password' => 'password123']);
     return redirect()->route('dashboard');
 });
 

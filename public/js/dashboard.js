@@ -169,7 +169,6 @@ function showVacancyDetailCard(id = 0) {
             let applyForm = "";
             let deleteBtn = '';
             let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
-
             const formatter = new Intl.NumberFormat('en-us', {
                 style: "currency",
                 currency: "IDR",
@@ -197,8 +196,21 @@ function showVacancyDetailCard(id = 0) {
                 `;
             }
 
+            const dateCreated = new Date(vacancy.date_created);
+            const formattedDateCreated = `${dateCreated.getDate()} ${dateCreated.toLocaleString('en-US', { month: 'short' })} ${dateCreated.getFullYear()}`;
+            const dateEnded = new Date(vacancy.date_ended);
+            const formattedDateEnded = `${dateEnded.getDate()} ${dateEnded.toLocaleString('en-US', { month: 'short' })} ${dateEnded.getFullYear()}`;
+            const endedDateTime = dateEnded.getTime();
+            const currentDate = Date.now();
+            let status = '';
+
+            if (currentDate > endedDateTime) {
+                status = 'Ditutup';
+            } else {
+                status = 'Dibuka';
+            }
+
             $("#daftar-lowongan-id-vacancy").val(vacancy.id_vacancy);
-            // console.log($("#daftar-lowongan-id-vacancy"));
 
             $("#vacancy-detail-card").append(`
                 <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
@@ -234,10 +246,13 @@ function showVacancyDetailCard(id = 0) {
 
                             <label class="fw-500">Dibuka</label>
                             <div class="input-group">
-                                <div class="box">${vacancy.date_created}</div>
+                                <div class="box">${formattedDateCreated}</div>
                                 <span class="mx-3">-</span>
-                                <div class="box">${vacancy.date_ended}</div>
+                                <div class="box">${formattedDateEnded}</div>
                             </div>
+
+                            <label class="fw-500">Status</label>
+                            <div class="box">${status}</div>
 
                             <label class="fw-500">Kuota</label>
                             <div class="box">${vacancy.quota}</div>

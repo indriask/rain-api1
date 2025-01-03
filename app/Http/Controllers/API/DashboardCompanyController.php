@@ -7,6 +7,8 @@ use App\Models\Proposal;
 use App\Models\Vacancy;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -166,7 +168,7 @@ class DashboardCompanyController extends Controller
     {
         try {
             $validated = $request->validate(['id_proposal' => ['required', 'integer', 'present', 'min:1']]);
-            $proposal = Proposal::select('id_proposal')->where('id_proposal', $validated['id_proposal'])
+            $proposal = Proposal::select('id_proposal', 'id_vacancy', 'resume')->where('id_proposal', $validated['id_proposal'])
                 ->whereHas('vacancy', function ($query) {
                     $query->where('nib', auth('web')->user()->company->nib);
                 })
@@ -182,7 +184,18 @@ class DashboardCompanyController extends Controller
                 return response()->json($response);
             }
 
+            $idVacancy = $proposal->id_vacancy;
+            $resume = storage_path('app/' . $proposal->resume);
             $proposal->delete();
+
+            $vacancy = Vacancy::where('id_vacancy', $idVacancy)->first();
+            $vacancy->applied -= 1;
+            $vacancy->save();
+
+            if (file_exists($resume)) {
+                File::deleteDirectory($resume);
+            }
+
             $response = $this->setResponse(
                 success: true,
                 message: 'Data berhasil di hapus!',
@@ -193,6 +206,7 @@ class DashboardCompanyController extends Controller
         } catch (\Throwable $e) {
             $resposne = $this->setResponse(
                 success: false,
+                title: 'Reqeust error',
                 message: 'Terjadi kesalahan saat penghapusan data',
                 icon: asset('storage/svg/failed-x.svg')
             );

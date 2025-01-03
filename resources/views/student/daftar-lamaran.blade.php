@@ -130,7 +130,7 @@
                                     <li class="bg-white rounded-pill text-center">{{ $vacancy->duration }} Bulan</li>
                                 </ul>
 
-                                <button onclick="showAppliedVacancyDetail('{{ $vacancy->id_vacancy }}')"
+                                <button onclick="showAppliedVacancyDetail('{{ $vacancy->id_proposal }}')"
                                     class="vacancy-detail border border-0 text-white mx-auto d-block click-animation">Lihat</button>
 
                             </div>
