@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ApprovedProposal;
 use App\Models\Proposal;
 use App\Models\Vacancy;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -251,16 +254,16 @@ class DashboardCompanyController extends Controller
             }
 
             if ($validated['status'] === 'approved') {
-                if ($proposal->student->approved_datetime == true) {
-                    $response = $this->setResponse(
-                        success: false,
-                        title: 'Status tidak diperbarui!',
-                        message: 'Pelamar sudah diterima oleh lowongan lain',
-                        icon: asset('storage/svg/failed-x.svg')
-                    );
+                // if ($proposal->student->approved_datetime == true) {
+                //     $response = $this->setResponse(
+                //         success: false,
+                //         title: 'Status tidak diperbarui!',
+                //         message: 'Pelamar sudah diterima oleh lowongan lain',
+                //         icon: asset('storage/svg/failed-x.svg')
+                //     );
 
-                    return response()->json($response);
-                }
+                //     return response()->json($response);
+                // }
 
                 $proposal->student->approved_datetime = now();
                 $proposal->proposal_status = $validated['status'];
@@ -278,6 +281,7 @@ class DashboardCompanyController extends Controller
                 );
 
                 // send an email afterward
+                // Mail::to($proposal->student->account->email)->send(new ApprovedProposal());
 
                 return response()->json($response);
             }

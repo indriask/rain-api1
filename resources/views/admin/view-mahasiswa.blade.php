@@ -85,17 +85,17 @@
 
                         <label for="jurusan" style="font-size: .95rem">Jurusan</label>
                         <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
-                            {{ $student->profile->major->name ?? null }}
+                            {{ $student->major->name ?? null }}
                         </div>
 
                         <label for="program-studi" style="font-size: .95rem">Program studi</label>
                         <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
-                            {{ $student->profile->study_program ?? null }}
+                            {{ $student->study_program->name ?? null }}
                         </div>
 
                         <label for="keahlian" style="font-size: .95rem">Keahlian</label>
                         <div class="border border-0 rounded p-1 px-2 focus-ring bg-white">
-                            {{ $student->profile->skill ?? null }}
+                            {{ $student->skill ?? null }}
                         </div>
 
                         <label for="alamat" style="font-size: .95rem">Alamat</label>
