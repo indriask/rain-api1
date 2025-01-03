@@ -28,10 +28,10 @@ class StudentSignupController extends Controller
         try {
             // Hash password
             $validated['password'] = bcrypt($validated['password']);
-            $validated['name'] = explode(' ', $validated['name']);
+            $validated['name'] = explode(' ', $validated['name'], 2);
             $validated['created_at'] = date('Y-m-d', time());
 
-            $first_name = $validated['name'][0] ?? '';
+            $first_name = $validated['name'][0] ?? 'Username';
             $last_name = $validated['name'][1] ?? '';
             $validated['role'] = 1;
 
@@ -48,8 +48,6 @@ class StudentSignupController extends Controller
                 'nim' => $validated['nim'],
                 'id_user' => $user->id_user,
                 'id_profile' => $profile->id_profile,
-                // 'id_major' => 3,
-                // 'id_study_program' => 2,
             ]);
 
             // mark user as authenticated but not verified

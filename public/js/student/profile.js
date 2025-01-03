@@ -3,7 +3,8 @@ const editProfileBtn = document.querySelector("#edit-profile-btn");
 const editProfileNotification = document.querySelector("#edit-profile-notification");
 const profileEditNotificationTitle = document.querySelector("#profile-edit-notification-title");
 const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
-const deleteAccountNotification = document.querySelector("#delete-account-notification");
+const deleteAccountNotification = $("#delete-account-notification");
+const profileStudentCustomNotification = $("#custom-notification");
 
 // function menampilkan notifikasi berhasil atau tidak update profile
 function showEditProfileNotification() {
@@ -31,19 +32,90 @@ function setProfileData() {
 }
 
 // function untuk menampilkan notifikasi ingin menghapus akun RAIN
-// function showDeleteAccountCard() {
-//     if (deleteAccountNotification.classList.contains("d-block")) {
-//         deleteAccountNotification.classList.remove("d-block");
-//         deleteAccountNotification.classList.add("d-none");
+function showDeleteAccountCard() {
+    if (deleteAccountNotification.hasClass("d-block")) {
+        deleteAccountNotification.removeClass("d-block");
+        deleteAccountNotification.addClass("d-none");
 
-//         return;
-//     }
+        return;
+    }
 
-//     deleteAccountNotification.classList.remove("d-none");
-//     deleteAccountNotification.classList.add("d-block");
-// }
+    deleteAccountNotification.removeClass("d-none");
+    deleteAccountNotification.addClass("d-block");
+}
 
 // function untuk mengirim request hapus akun RAIN ke server
-// function processDeleteAccountRequest() {
-//     // kode isi request untuk menghapus akun
-// }
+function processDeleteAccountRequest() {
+    $.ajax({
+        url: "/api/dashboard/mahasiswa/profile/delete/account",
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        success: function (response) {
+            let notification = response.notification;
+            showCustomNotification(notification.title, notification.message, notification.icon);
+
+            if (response.success) {
+                setTimeout(() => {
+                    window.location.replace('/index');
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    deleteAccountNotification.removeClass("d-block");
+                    deleteAccountNotification.addClass("d-none");
+                }, 1000);
+            }
+        },
+        error: function (jqXHR) {
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+        }
+    });
+}
+
+function showCustomNotification(title, message, icon) {
+    if (profileStudentCustomNotification.hasClass("d-block")) {
+        profileStudentCustomNotification.removeClass("d-block");
+        profileStudentCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    profileStudentCustomNotification.removeClass("d-none");
+    profileStudentCustomNotification.addClass("d-block");
+
+    $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
+}

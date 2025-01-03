@@ -153,10 +153,12 @@ class DashboardController extends Controller
      */
     public function index($id = 0)
     {
+        // dd(auth('web')->user()->id_user);s
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
         $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
         $value = $this->handleCustomHeader($id, $user, $role);
+
 
         if ($value['success'] === true) {
             return response()->json($value, 200);

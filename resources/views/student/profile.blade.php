@@ -161,7 +161,8 @@
 
 
                         <div class="position-absolute gap-2" style="bottom: 10px;">
-                            <button type="button" class="border border-0 bni-blue click-animation text-white fw-700 p-1 rounded"
+                            <button type="button"
+                                class="border border-0 bni-blue click-animation text-white fw-700 p-1 rounded"
                                 style="font-size: .9rem; width: 100px;"
                                 onclick="window.location.href='{{ route('dashboard') }}'">Kembali</button>
                             <button type="button" onclick="showDeleteAccountCard()"
@@ -171,7 +172,8 @@
                 </div>
                 <div class="profile__profile-description w-50">
                     <div class="d-flex">
-                        <button type="submit" class="border border-0 bni-blue text-white click-animation fw-700 rounded p-2 ms-auto"
+                        <button type="submit"
+                            class="border border-0 bni-blue text-white click-animation fw-700 rounded p-2 ms-auto"
                             style="font-size: .8rem; width: 100px;" id="edit-profile-btn">
                             Edit Profil
                         </button>
@@ -211,18 +213,36 @@
                 <div class="profile__profile-delete-account bg-white">
                     <div class="d-flex">
                         <button onclick="showDeleteAccountCard()"
-                            class="profile__profile-close-btn ms-auto bni-blue text-white border border-0">
+                            class="profile__profile-close-btn click-animation ms-auto bni-blue text-white border border-0">
                             <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
                     <div class="py-3 px-5">
                         <span class="fw-600">Apakah anda yakin ingin menghapus akun ini?</span>
                         <button onclick="processDeleteAccountRequest()"
-                            class="border border-0 bni-blue text-white d-block mx-auto fw-700 mt-4"
+                            class="border border-0 bni-blue text-white d-block click-animation mx-auto fw-700 mt-4"
                             style="width: 120px; padding: 6px 10px; border-radius: 10px; font-size: .9rem">Hapus</button>
                     </div>
                 </div>
 
+            </div>
+
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 z-1 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="" src="" style="width: 60px;"
+                            alt="">
+                        <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title"></h6>
+                        <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                            id="custom-notification-message"></span>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
             </div>
 
             {{-- pop up notifikasi ingin logout --}}
@@ -236,12 +256,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js buat logika fitur dashboard profile mahasiswa --}}
-    <script defer src="{{ asset('js/student/profile.js') }}"></script>
+    <script src="{{ asset('js/student/profile.js') }}"></script>
 
-    <script>
+    {{-- <script>
         function processDeleteAccountRequest() {
             const confirmed = confirm("Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan.");
             if (confirmed) {
@@ -273,7 +293,7 @@
                 deleteAccountNotification.classList.add('d-none');
             }
         }
-    </script>
+    </script> --}}
 
     <script>
         // Event listener for the major dropdown

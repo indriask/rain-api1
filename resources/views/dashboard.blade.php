@@ -82,9 +82,10 @@
             style="background-color: rgba(0, 0, 0, .4)">
             <div class="bg-white py-5 px-3 rounded">
                 <div class="position-relative d-flex flex-column align-items-center">
-                    <img id="custom-notification-icon" class="" src="{{ asset('storage/svg/success-checkmark.svg') }}"
-                        style="width: 60px;" alt="">
-                    <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title">Berhasil mengirim lamaran
+                    <img id="custom-notification-icon" class=""
+                        src="{{ asset('storage/svg/success-checkmark.svg') }}" style="width: 60px;" alt="">
+                    <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title">Berhasil mengirim
+                        lamaran
                     </h6>
                     <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
                         id="custom-notification-message">{{ session('success') }}</span>
@@ -600,6 +601,7 @@
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    
     <script>
         function showAppliedVacancyDetail(vacancyId) {
             // Example of AJAX call to get the vacancy data

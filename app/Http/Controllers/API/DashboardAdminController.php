@@ -34,7 +34,7 @@ class DashboardAdminController extends Controller
         } catch(\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
-                title: 'Gagal hapus lowongan',
+                title: 'Request error',
                 message: 'Terjadi kesalhaan saat penghapusan data, harap check input anda',
                 icon: asset('storage/svg/failed-x.svg')
             );
@@ -42,12 +42,6 @@ class DashboardAdminController extends Controller
             return response()->json($response, 500);
         }
     }
-
-    // Method untuk mem-proses logika kelola user mahasiswa
-    public function manageUserStudent(Request $request) {}
-
-    // Method untuk mem-proses logika kelola user perusahaan
-    public function manageUserVacancy(Request $request) {}
 
     // method untuk menghapus akun user secara permanen
     public function deleteUser(Request $request)
@@ -59,6 +53,8 @@ class DashboardAdminController extends Controller
             ]);
 
             User::find($validated['id_user'])->delete();
+            Profile::where('id_profile', $validated['id_user'])->delete();
+
             $response = $this->setResponse(
                 success: true,
                 message: 'Berhasil hapus akun user',
@@ -69,6 +65,7 @@ class DashboardAdminController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
+                title: 'Request error',
                 message: 'Terjadi kesalahan saat melakukan request, silahkan coba lagi',
                 icon: asset('storage/svg/failed-x.svg')
             );
@@ -99,6 +96,7 @@ class DashboardAdminController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
+                title: 'Request error',
                 message: 'Terjadi kesahalaan saat melakukan verifikasi',
                 icon: asset('storage/svg/failed-x.svg')
             );
@@ -106,11 +104,6 @@ class DashboardAdminController extends Controller
             // return response()->json($response);
             return response()->json($e->getMessage(), 500);
         }
-
-        return response()->json([
-            "message" => "Akun berhasil diverifikasi",
-            "icon" => "svg/success-checkmark.svg"
-        ]);
     }
     // method untuk proses edit data profile
     public function editProfile(Request $request)
@@ -199,7 +192,7 @@ class DashboardAdminController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
-                title: 'Gagal request update',
+                title: 'Request error',
                 message: 'Terjadi kesalhaan saat melakukan request profile, silahkan coba lagi',
                 icon: asset('storage/svg/failed-x.svg')
             );

@@ -106,10 +106,12 @@ class AccountController extends Controller
 
             $response = $this->setResponse(
                 success: true,
-                message: 'Berhasil menghapus akun'
+                title: 'Berhasil hapus akun',
+                message: 'Akun anda berhasil di hapus dari system RAIN',
+                icon: asset('storage/svg/success-checkmark.svg')
             );
 
-            return response()->json($response);
+            return response()->json($response, 200);
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
