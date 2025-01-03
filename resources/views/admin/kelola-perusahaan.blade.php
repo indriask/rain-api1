@@ -99,7 +99,7 @@
                                         <div class="d-flex flex-column">
                                             <span class="daftar-pelamar__proposal-card-name fw-700"
                                                 style="font-size: .95rem"
-                                                title="">{{ $company->company->profile->first_name . ' ' . $company->company->profile->last_name ?? null }}</span>
+                                                title="">{{ ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? null }}</span>
                                             <span class="daftar-pelamar__proposal-card-name" style="font-size: .85rem;"
                                                 title="">{{ $company->email }}</span>
                                         </div>

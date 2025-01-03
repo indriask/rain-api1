@@ -129,7 +129,7 @@ function showStudentProfile(id_profile, id_proposal) {
                                 <div class="border border-0 rounded px-2 shadow" style="font-size: .9rem;">${profile.student?.study_program?.name ?? ""}</div>
     
                                 <label for="keahlian" style="font-size: .95rem">Keahlian</label>
-                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.skill ?? ""}</div>
+                                <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.student.skill ?? ""}</div>
     
                                 <label for="alamat" style="font-size: .95rem">Alamat</label>
                                 <div class="border border-0 rounded p-1 px-2 shadow" style="font-size: .9rem;">${profile.location ?? ""}</div>

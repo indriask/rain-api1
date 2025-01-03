@@ -82,14 +82,17 @@ function showAppliedVacancyDetail(id_proposal) {
                                 <div class="box">${formattedDateEnded}</div>
                             </div>
 
+                            <label class="fw-500">Durasi</label>
+                            <div class="box">${vacancy.duration} Bulan</div>
+
                             <label class="fw-500">Kuota</label>
-                            <div class="box">${vacancy.quota}</div>
+                            <div class="box">${vacancy.quota} Pelamar</div>
+
+                            <label class="fw-500">Pendaftar</label>
+                            <div class="box">${vacancy.applied} Pelamar</div>
 
                             <label class="fw-500">Status</label>
                             <div class="box">${status}</div>
-
-                            <label class="fw-500">Pelamar</label>
-                            <div class="box">${vacancy.duration}</div>
                         </div>
                         <div class="position-absolute bottom-0">
                             <button onclick="showAppliedVacancyDetail()" type="button"

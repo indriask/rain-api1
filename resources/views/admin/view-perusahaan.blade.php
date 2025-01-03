@@ -123,7 +123,7 @@
                         <label style="font-size: .95rem">Nomor telepon</label>
                         <div
                             class="profile__profile-nama-lengkap focus-ring border border-0  bg-white rounded p-2 w-100">
-                            {{ $company->phone_number }}
+                            {{ $company->profile->phone_number }}
                         </div>
 
                         <label style="font-size: .95rem">Email</label>
