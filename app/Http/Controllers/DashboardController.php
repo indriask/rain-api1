@@ -117,9 +117,11 @@ class DashboardController extends Controller
         $title = $request->input('title'); // Ambil parameter title dari request
 
         $vacancies = DB::table('vacancy')
+            ->select('vacancy.*', 'major.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('vacancy.title', $title) // Filter berdasarkan title
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
+            ->where('vacancy.title', $title)
             ->get();
 
         return response()->json($vacancies); // Kembalikan data dalam format JSON
@@ -311,7 +313,7 @@ class DashboardController extends Controller
             ->where('id_vacancy', $request->id_vacancy)
             ->first();
 
-        if(time() < strtotime($proposal->date_created)) {
+        if (time() < strtotime($proposal->date_created)) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamara belum dibuka']);
         }
 
@@ -319,7 +321,7 @@ class DashboardController extends Controller
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah tutup']);
         }
 
-        if($proposal->applied >= $proposal->quota) {
+        if ($proposal->applied >= $proposal->quota) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah penuh']);
         }
 

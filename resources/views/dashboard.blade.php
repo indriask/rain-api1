@@ -330,6 +330,7 @@
             // Event listener ketika select lowongan berubah
             $('#mode_kerja').on('change', function() {
                 const selectedTitle = $(this).val(); // Ambil lowongan yang dipilih
+                $('#data-lowongan').empty();
 
                 // Lakukan request ke backend dengan lowongan yang dipilih
                 $.ajax({
@@ -340,37 +341,37 @@
                     },
                     success: function(response) {
                         // Bersihkan container lowongan sebelum menampilkan data baru
-                        $('#data-lowongan').empty();
 
                         // Periksa apakah ada data lowongan
                         if (response.length > 0) {
+                            console.log('kerenabng');
                             response.forEach(function(vacancy) {
                                 const card = `
-                                    <div class="vacancy-card bg-white py-3 px-4">
-                                        <div class="d-flex justify-content-between">
-                                            <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
-                                            <img class="company-photo rounded"
-                                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK3CAhjRZ4esxRs2HBnf9qKoF6PAy4063vvA&s"
-                                                alt="Company photo">
-                                        </div>
-                                        <div>
-                                            <h6 class="vacancy-role m-0">${vacancy.title}</h6>
-                                            <span class="vacancy-major-choice">${vacancy.major_name}</span>
-                                            <ul class="vacancy-small-detail p-0 mt-3">
-                                                <li><i class="bi bi-geo-alt me-3"></i>${vacancy.location}</li>
-                                                <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
-                                                <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
-                                            </ul>
-                                            <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                                                <li class="bg-white rounded-pill text-center">${vacancy.type}</li>
-                                                <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
-                                                <li class="bg-white rounded-pill text-center">${vacancy.duration}</li>
-                                            </ul>
-                                            <button onclick="showAppliedVacancyDetail('${vacancy.id_vacancy}')"
-                                                class="vacancy-detail border border-0 text-white mx-auto d-block mt">Lihat</button>
-                                        </div>
+                                <div class="vacancy-card bg-white py-3 px-4">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
+                                        <img class="company-photo rounded"
+                                            src="${window.storage_path.path + vacancy.photo_profile}"
+                                            alt="Company photo">
                                     </div>
-                                `;
+                                    <div>
+                                        <h6 class="vacancy-role m-0">${vacancy.title}</h6>
+                                        <span class="vacancy-major-choice">${vacancy.major_name}</span>
+                                        <ul class="vacancy-small-detail p-0 mt-3">
+                                            <li><i class="bi bi-geo-alt me-3"></i>${vacancy.vacancy_location}</li>
+                                            <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                            <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
+                                        </ul>
+                                        <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                            <li class="bg-white rounded-pill text-center">${vacancy.type}</li>
+                                            <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
+                                            <li class="bg-white rounded-pill text-center">${vacancy.duration} Bulan</li>
+                                        </ul>
+                                        <button onclick="showVacancyDetailCard('${vacancy.id_vacancy}')"
+                                            class="vacancy-detail border border-0 click-animation text-white mx-auto d-block mt">Lihat</button>
+                                    </div>
+                                </div>
+                            `;
                                 $('#data-lowongan').append(card);
                             });
                         } else {
@@ -386,7 +387,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Event listener ketika select jurusan berubah
             $('#jurusan2').on('change', function() {
@@ -597,11 +598,11 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 
     {{-- script js buat logika fitur pada halaman beranda dashboard mahasiswa, perusahaan dan admin --}}
     <script src="{{ asset('js/dashboard.js') }}"></script>
-    
+
     <script>
         function showAppliedVacancyDetail(vacancyId) {
             // Example of AJAX call to get the vacancy data

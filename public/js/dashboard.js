@@ -94,18 +94,18 @@ function fetchLowongan() {
     });
 }
 
-$('#jurusan, #prodi, select[name="mode_kerja"], #lokasi, input[name="cari-perusahaan"]').on('change keyup',
-    fetchLowongan);
+// $('#jurusan, #prodi, select[name="mode_kerja"], #lokasi, input[name="cari-perusahaan"]').on('change keyup',
+//     fetchLowongan);
 
-$('.hapus-filter').on('click', function () {
-    $('#jurusan').val('');
-    $('#prodi').val('');
-    $('#prodi').find('option').not(':first').remove();
-    $('select[name="mode_kerja"]').val('');
-    $('#lokasi').val('');
-    $('input[name="cari-perusahaan"]').val('');
-    fetchLowongan();
-});
+// $('.hapus-filter').on('click', function () {
+//     $('#jurusan').val('');
+//     $('#prodi').val('');
+//     $('#prodi').find('option').not(':first').remove();
+//     $('select[name="mode_kerja"]').val('');
+//     $('#lokasi').val('');
+//     $('input[name="cari-perusahaan"]').val('');
+//     fetchLowongan();
+// });
 
 const vacancyCardListContainer = document.querySelector("#vacancy-card-list-container");
 const vacancyDetailCard = $("#vacancy-detail-card");
