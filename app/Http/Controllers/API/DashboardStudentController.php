@@ -41,6 +41,7 @@ class DashboardStudentController extends Controller
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
                 $response['status'] = 'approved';
+                $response['interview_date'] = $status->interview_date;
 
                 return response()->json($response, 200);
             }

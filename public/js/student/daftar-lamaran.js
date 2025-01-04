@@ -152,15 +152,48 @@ function getApplyStatusInfo(id_proposal) {
         data: { id_proposal: id_proposal },
         success: function (response) {
             let notification = response.notification;
+            let interviewDate = response.interview_date ?? null;
+            let interviewDateNotify = ``;
+
+            if (interviewDate !== null) {
+                const date = new Date(interviewDate);
+
+                // Array nama bulan dalam bahasa Indonesia
+                const bulanIndonesia = [
+                    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+
+                // Ambil bagian tanggal, bulan, tahun, jam, dan menit
+                const tanggal = date.getDate();
+                const bulan = bulanIndonesia[date.getMonth()];
+                const tahun = date.getFullYear();
+                const jam = String(date.getHours()).padStart(2, '0');
+                const menit = String(date.getMinutes()).padStart(2, '0');
+
+                // Format akhir
+                const formattedDate = `${tanggal} ${bulan} ${tahun}, ${jam}:${menit}`;
+
+                interviewDateNotify = `
+                <div style="font-size: .9rem;" class="mt-3">
+                    <p >Tanggal wawancara : ${formattedDate}</p>
+                </div>
+                `;
+            }
+
             studentAppliedVacancyStatusInfo.html(`
-                <div class="position-absolute top-0 start-0 bottom-0 end-0 d-flex align-items-center justify-content-center"
+               <div class="position-absolute top-0 start-0 bottom-0 end-0 d-flex align-items-center justify-content-center"
                     style="background-color: rgba(0, 0, 0, .4)">
                     <div class="bg-white rounded d-flex align-items-center justify-content-center flex-column p-5 position-relative"
                         style="width: 500px; border-radius: 15px;">
-                        <img src="${notification.icon}" alt="" class="position-absolute" style="width: 60px; aspect-ratio: 1/1; opacity: .5; top: 3rem;">
-                        <h5 class="fw-700 position-relative z-1">${notification.title}</h5>
-                        <span class="text-center position-relative z-1" style="font-size: .8rem">${notification.message}</span>
-
+                        <div class="d-flex align-items-center justify-content-center flex-column position-reltive">
+                            <img src="${notification.icon}" alt="" class="position-absolute"
+                                style="width: 60px; aspect-ratio: 1/1; opacity: .5; top: 3rem;">
+                            <h5 class="fw-700 position-relative z-1">${notification.title}</h5>
+                            <span class="text-center position-relative z-1"
+                                style="font-size: .8rem">${notification.message}</span>
+                        </div> 
+                        ${interviewDateNotify}
                         <button class="border border-0 text-white bni-blue fw-700 rounded mt-4"
                             style="width: 100px; padding: 5px; font-size: .9rem"
                             onclick="closeStatusInfo()">Kembali</button>
