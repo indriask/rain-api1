@@ -176,7 +176,7 @@ function getApplyStatusInfo(id_proposal) {
 
                 interviewDateNotify = `
                 <div style="font-size: .9rem;" class="mt-3">
-                    <p >Tanggal wawancara : ${formattedDate}</p>
+                    <strong >Tanggal wawancara : ${formattedDate}</strong>
                 </div>
                 `;
             }
