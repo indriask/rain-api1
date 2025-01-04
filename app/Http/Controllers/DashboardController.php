@@ -307,12 +307,20 @@ class DashboardController extends Controller
             return back()->withErrors(['error' => 'Anda sudah melamar lowongan ini']);
         }
 
-        $dateEnded = Vacancy::select('date_ended')
+        $proposal = Vacancy::select('date_created', 'date_ended', 'quota', 'applied')
             ->where('id_vacancy', $request->id_vacancy)
             ->first();
 
-        if (time() > strtotime($dateEnded->date_ended)) {
+        if(time() < strtotime($proposal->date_created)) {
+            return back()->withErrors(['error' => 'Lowongan yang anda lamara belum dibuka']);
+        }
+
+        if (time() > strtotime($proposal->date_ended)) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah tutup']);
+        }
+
+        if($proposal->applied >= $proposal->quota) {
+            return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah penuh']);
         }
 
         // Save the resume file

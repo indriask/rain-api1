@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Utils\ResponseController as Response;
 use App\Models\Profile;
+use App\Models\Proposal;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -115,11 +116,12 @@ class AccountController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
+                title: 'Request error',
                 message: 'Terjadi kesalahaan saat melakukan request',
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            return response()->json($response);
+            return response()->json($response, 500);
         }
     }
 
