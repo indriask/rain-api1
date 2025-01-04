@@ -25,12 +25,12 @@ $(document).ready(function () {
     });
 
     $.getJSON('/lokasi', function (data) {
-        let lokasiSelect = $('#lokasi');
+        let lokasiSelect = $('#lokasipekerjaan');
         lokasiSelect.empty().append('<option value="">Pilih Lokasi</option>');
 
         data.forEach(function (lokasi) {
             lokasiSelect.append(
-                `<option value="${lokasi.lokasi}">${lokasi.lokasi}</option>`);
+                `<option value="${lokasi.location}">${lokasi.location}</option>`);
         });
     });
 });

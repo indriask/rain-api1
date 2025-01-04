@@ -7,7 +7,6 @@ use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Models\Major;
-use App\Models\Prodi;
 use App\Models\Profile;
 use App\Models\Student;
 use App\Models\User;
@@ -15,10 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\StudyProgram;
 use App\Models\Proposal;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -104,9 +101,11 @@ class DashboardController extends Controller
         $major = $request->input('major'); // Ambil parameter jurusan dari request
 
         $vacancies = DB::table('vacancy')
+            ->select('vacancy.*', 'major.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('major.name', $major) // Filter berdasarkan jurusan
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
+            ->where('major.name', $major)
             ->get();
 
         return response()->json($vacancies); // Kembalikan data dalam format JSON
@@ -132,9 +131,11 @@ class DashboardController extends Controller
         $location = $request->input('location'); // Ambil parameter lokasi dari request
 
         $vacancies = DB::table('vacancy')
+            ->select('vacancy.*', 'major.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
-            ->where('vacancy.location', $location) // Filter berdasarkan lokasi
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
+            ->where('vacancy.location', $location)
             ->get();
 
         return response()->json($vacancies); // Kembalikan data dalam format JSON
@@ -143,8 +144,10 @@ class DashboardController extends Controller
     public function clearFilters()
     {
         $vacancies = DB::table('vacancy')
+            ->select('vacancy.*', 'major.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
-            ->select('vacancy.*', 'major.name as major_name')
+            ->leftJoin('company', 'vacancy.nib', '=', 'company.nib')
+            ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
             ->get();
 
         return response()->json($vacancies); // Kembalikan semua data dalam format JSON
