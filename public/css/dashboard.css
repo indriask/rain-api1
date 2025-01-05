@@ -354,9 +354,11 @@ button {
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     height: calc(100% - 3rem);
-    padding: 20px;
+    padding: 10px;
     font-size: .9rem;
     border-radius: 7px;
+    border: none;
+    resize: none;
 }
 
 .vacancy-apply-form-container {

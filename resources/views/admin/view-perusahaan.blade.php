@@ -157,10 +157,8 @@
                                 file</button>
                         </div>
                         <span class="fw-700 mb-2 d-block" style="font-size: .9rem">Deskripsi Profil Perusahaan</span>
-                        <div class="bg-white shadow px-3 py-2 focus-ring border border-0 w-100 overflow-x-hidden overflow-y-auto"
-                            style="font-size: .9rem; height: 435px; line-height: 1.5rem; border-radius: 20px; word-wrap: break-word">
-                            {{ $company->profile->description }}
-                        </div>
+                        <textarea readonly class="bg-white shadow px-3 py-2 focus-ring border border-0 w-100 overflow-x-hidden overflow-y-auto"
+                            style="font-size: .9rem; height: 435px; line-height: 1.5rem; border-radius: 20px; word-wrap: break-word">{{ $company->profile->description }}</textarea>
                     </div>
                 </div>
             </div>

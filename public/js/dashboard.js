@@ -269,7 +269,7 @@ function showVacancyDetailCard(id = 0) {
                     <div class="w-50">
                         ${applyForm}
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                        <div class="apply-vacancy-detail overflow-auto">${vacancy.description}</div>
+                        <textarea readonly class="apply-vacancy-detail w-100">${vacancy.description}</textarea>
                     </div>
                 </div>    
             
@@ -533,7 +533,7 @@ function showAddVacancyCard() {
             </div>
             <div id="add-vacancy-detail" class="w-50 d-block">
                 <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
-                <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, natus numquam. Deserunt debitis sequi fugiat unde, natus non corporis dicta! Repudiandae temporibus sapiente hic iste, eaque eveniet a laboriosam iusto impedit totam. Excepturi, quae nesciunt!</textarea>
+                <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3" style="text-align: initial;"></textarea>
             </div>
             <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
                 <button class="border border-0 bni-blue click-animation text-white fw-700" onclick="showAddVacancyCard()"

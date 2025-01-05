@@ -34,7 +34,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', 'present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['present', 'string', 'max:1000']
+            'description' => ['present', 'string']
         ]);
 
         if ($validated->fails()) {
@@ -98,7 +98,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['present', 'string', 'max:1000'],
+            'description' => ['present', 'string', 'nullable'],
             'id_vacancy' => ['required', 'present', 'integer'],
             'nib' => ['required', 'present', 'string'],
         ]);
@@ -230,12 +230,15 @@ class DashboardCompanyController extends Controller
             $proposal = Proposal::select('proposal_status', 'nim', 'id_proposal', 'interview_date', 'id_vacancy')
                 ->with([
                     'student' => function ($query) {
-                        $query->select('nim', 'id_user', 'approved_datetime')->with(['account' => function ($query) {
+                        $query->select('nim', 'id_user', 'approved_datetime', 'id_profile')->with(['account' => function ($query) {
                             $query->select('id_user', 'email');
                         }]);
                     },
+                    'student.profile' => function ($query) {
+                        $query->select('first_name', 'last_name', 'id_profile');
+                    },
                     'vacancy' => function ($query) {
-                        $query->select('id_vacancy', 'nib');
+                        $query->select('id_vacancy', 'nib', 'title');
                     }
                 ])
                 ->where('id_proposal', $validated['id_proposal'])
@@ -274,15 +277,19 @@ class DashboardCompanyController extends Controller
                 $proposal->student->save();
 
                 $response = $this->setResponse(
-                    success: false,
+                    success: true,
                     title: 'Status berhasil diperbarui!',
                     message: 'Silahkan hubungi kontak pelamar untuk melakukan konfirmasi',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
 
                 // send an email afterward
-                // Mail::to($proposal->student->account->email)->send(new ApprovedProposal());
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
+                $vacancyTitle = $proposal->vacancy->title;
 
+                Mail::to($proposal->student->account)->send(new ApprovedProposal($companyFullName, $studentFullName, $vacancyTitle));
                 return response()->json($response);
             }
 
@@ -359,7 +366,8 @@ class DashboardCompanyController extends Controller
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            return response()->json($response, 500);
+            return response()->json($e->getMessage());
+            // return response()->json($response, 500);
         }
     }
 
@@ -499,7 +507,7 @@ class DashboardCompanyController extends Controller
     public function setInterviewDate(Request $request)
     {
         $validator = Validator::make($request->input(), [
-            'interview_date' => ['required', 'present', 'date_format:Y-m-d\TH:i', 'after:tomorrow'],
+            'interview_date' => ['nullable', 'present', 'date_format:Y-m-d\TH:i', 'after:tomorrow'],
             'id_proposal' => ['required', 'present', 'integer', 'min:1']
         ]);
 
@@ -551,7 +559,7 @@ class DashboardCompanyController extends Controller
             return response()->json($response);
         }
 
-        $proposal->interview_date = date('Y-m-d H:i:s', strtotime($validator->getValue('interview_date')));
+        $proposal->interview_date = $validator->getValue('interview_date') === null ? null : date('Y-m-d H:i:s', strtotime($validator->getValue('interview_date')));
         $proposal->id_proposal = $validator->getValue('id_proposal');
         $proposal->save();
 
