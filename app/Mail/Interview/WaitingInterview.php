@@ -16,7 +16,7 @@ class WaitingInterview extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(protected $companyFullName, protected $studentFullName, protected $vacancyTitle)
     {
         //
     }
@@ -27,7 +27,7 @@ class WaitingInterview extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Waiting Interview',
+            subject: 'Waiting Vacancy Interview',
         );
     }
 
@@ -37,7 +37,12 @@ class WaitingInterview extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.interview.waiting',
+            with: [
+                'companyFullName' => $this->companyFullName,
+                'studentFullName' => $this->studentFullName,
+                'vacancyTitle' => $this->vacancyTitle
+            ]
         );
     }
 

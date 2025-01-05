@@ -4,6 +4,8 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\Interview\ApprovedInterview;
+use App\Mail\Interview\RejectedInterview;
+use App\Mail\Interview\WaitingInterview;
 use App\Mail\Proposal\ApprovedProposal;
 use App\Mail\Proposal\RejectedProposal;
 use App\Mail\Proposal\WaitingProposal;
@@ -431,23 +433,6 @@ class DashboardCompanyController extends Controller
 
             // check apakah status rejected
             if ($validated['status'] === 'rejected') {
-                // if ($interview->student->approved_datetime == true && $interview->proposal_status !== 'approved') {
-                //     $response = $this->setResponse(
-                //         success: true,
-                //         title: 'Status berhasil diperbarui',
-                //         message: 'Silahkan hubungi kontak pelamar untuk konfirmas!',
-                //         icon: asset('storage/svg/success-checkmark.svg')
-                //     );
-                //     $interview->proposal_status = $validated['status'];
-                //     $interview->interview_status = $validated['status'];
-                //     $interview->final_status = $validated['status'];
-                //     $interview->interview_date = null;
-
-                //     $interview->save();
-
-                //     return response()->json($response);
-                // }
-
                 $interview->interview_date = null;
                 $interview->interview_status = $validated['status'];
                 $interview->proposal_status = $validated['status'];
@@ -457,14 +442,20 @@ class DashboardCompanyController extends Controller
                 $interview->save();
                 $interview->student->save();
 
+                // send an email afterward
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
+                $vacancyTitle = $interview->vacancy->title;
+
+                Mail::to($interview->student->account)->send(new RejectedInterview($companyFullName, $studentFullName, $vacancyTitle));
+
                 $response = $this->setResponse(
                     success: true,
                     title: 'Status berhasil diperbarui!',
                     message: 'Silahkan hubungi kontak pelamar untuk konfirmasi',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
-
-                // send an email afterward
 
                 return response()->json($response);
             }
@@ -477,14 +468,20 @@ class DashboardCompanyController extends Controller
 
                 $interview->save();
 
+                // send an email afterward
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
+                $vacancyTitle = $interview->vacancy->title;
+
+                Mail::to($interview->student->account)->send(new WaitingInterview($companyFullName, $studentFullName, $vacancyTitle));
+
                 $response = $this->setResponse(
                     success: true,
                     title: 'Status berhasil diperbarui!',
                     message: 'Silahkan hubungi kontak pelamar untuk konfirmasi!',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
-
-                // send an email afterward
 
                 return response()->json($response);
             }
