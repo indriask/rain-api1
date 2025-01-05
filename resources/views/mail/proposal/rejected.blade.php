@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halo, Lamaran lowongan mu telah diterima</title>
+    <title>Maaf, lamaran anda telah ditolak</title>
 
     <!-- google fonts plus jakarta sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,20 +51,29 @@
 
     <div class="notification-container bg-white px-3 py-4">
         <div class="d-flex align-items-center">
-            <img class="rain-logo" src="{{ $message->embed(storage_path('app/public/2d-logo.png')) }}"
-                alt="RAIN logo">
+            <img class="rain-logo" src="{{ $message->embed(storage_path('app/public/2d-logo.png')) }}" alt="RAIN logo">
             <span class="rain-title">RAIN POLIBATAM</span>
         </div>
         <div class="mt-4">
-            <img src="{{ $message->embed(storage_path('app/public/svg/success-checkmark.svg')) }}" class="success-icon d-block mx-auto"
-                alt="">
+            <img src="{{ $message->embed(storage_path('app/public/svg/failed-x.svg')) }}"
+                class="success-icon d-block mx-auto" alt="">
             <div class="message-container mt-3 px-2">
                 <p class="text-body-secondary my-0 mb-1" style="font-size: 1rem;">Halo {{ $studentFullName }}</p>
                 <p class="text-body-secondary my-0">
-                    Selamat 🎉🥳🥳, Lamaran anda telah <strong>diterima</strong> untuk program magang oleh
-                    <strong>{{ $companyFullName }}</strong> dengan posisi sebagai <strong>{{ $vacancyTitle }}</strong>
+                    Kami ingin memberitahukan bahwa lamaran magang Anda di <strong>{{ $companyFullName }}</strong> untuk
+                    posisi
+                    <strong>{{ $vacancyTitle }}</strong>
+                    telah <strong>ditolak</strong>
+                    <br>
+                    <br>
+                    Kami menghargai usaha dan waktu yang Anda investasikan dalam proses ini. Jangan ragu untuk mencari
+                    peluang magang lainnya melalui aplikasi kami.
                 </p>
-                <p class="text-body-secondary mt-3">Untuk informasi selanjutnya, silahkan hubungi perusahaan terkait</p>
+                <p class="text-body-secondary my-2">Terima kasih atas partisipasi Anda.</p>
+                <p class="text-body-secondary my-2">
+                    Salam <br>
+                    teamrainpolibatam@gmail.com
+                </p>
                 <a href="http://rain.test/dashboard/mahasiswa/list/lamaran"
                     class="btn btn-primary underline-none d-block mx-auto mt-4" style="width: fit-content;">Lihat daftar
                     lamaran</a>

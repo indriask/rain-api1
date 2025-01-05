@@ -1,21 +1,17 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Proposal;
 
-use App\Models\Company;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ApprovedProposal extends Mailable
+class WaitingProposal extends Mailable
 {
     use Queueable, SerializesModels;
-
-    private $status = 'Approved';
 
     /**
      * Create a new message instance.
@@ -31,7 +27,7 @@ class ApprovedProposal extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Approved Vacancy Proposal',
+            subject: 'Waiting Vacancy Proposal',
         );
     }
 
@@ -41,10 +37,10 @@ class ApprovedProposal extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.proposal.approved',
+            view: 'mail.proposal.waiting',
             with: [
-                'studentFullName' => $this->studentFullName,
                 'companyFullName' => $this->companyFullName,
+                'studentFullName' => $this->studentFullName,
                 'vacancyTitle' => $this->vacancyTitle
             ]
         );
@@ -57,7 +53,6 @@ class ApprovedProposal extends Mailable
      */
     public function attachments(): array
     {
-        return [
-        ];
+        return [];
     }
 }

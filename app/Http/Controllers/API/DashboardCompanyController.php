@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ApprovedProposal;
+use App\Mail\Proposal\ApprovedProposal;
+use App\Mail\Proposal\RejectedProposal;
+use App\Mail\Proposal\WaitingProposal;
 use App\Models\Proposal;
 use App\Models\Vacancy;
 use Exception;
@@ -235,11 +237,15 @@ class DashboardCompanyController extends Controller
                         }]);
                     },
                     'student.profile' => function ($query) {
-                        $query->select('first_name', 'last_name', 'id_profile');
+                        $query->select('id_profile', 'first_name', 'last_name');
                     },
                     'vacancy' => function ($query) {
-                        $query->select('id_vacancy', 'nib', 'title');
-                    }
+                        $query->select('id_vacancy', 'nib', 'title')->with(['company' => function ($query) {
+                            $query->select('nib', 'id_profile')->with(['profile' => function ($query) {
+                                $query->select('id_profile', 'first_name', 'last_name');
+                            }]);
+                        }]);
+                    },
                 ])
                 ->where('id_proposal', $validated['id_proposal'])
                 ->first();
@@ -257,17 +263,6 @@ class DashboardCompanyController extends Controller
             }
 
             if ($validated['status'] === 'approved') {
-                // if ($proposal->student->approved_datetime == true) {
-                //     $response = $this->setResponse(
-                //         success: false,
-                //         title: 'Status tidak diperbarui!',
-                //         message: 'Pelamar sudah diterima oleh lowongan lain',
-                //         icon: asset('storage/svg/failed-x.svg')
-                //     );
-
-                //     return response()->json($response);
-                // }
-
                 $proposal->student->approved_datetime = now();
                 $proposal->proposal_status = $validated['status'];
                 $proposal->interview_status = 'waiting';
@@ -294,23 +289,6 @@ class DashboardCompanyController extends Controller
             }
 
             if ($validated['status'] === 'rejected') {
-                // if ($proposal->student->approved_datetime == true && $proposal->proposal_status !== 'approved') {
-                //     $response = $this->setResponse(
-                //         success: true,
-                //         title: 'Status berhasil diperbarui',
-                //         message: 'Silahkan hubungi kontak pelamar untuk konfirmas!',
-                //         icon: asset('storage/svg/success-checkmark.svg')
-                //     );
-                //     $proposal->proposal_status = $validated['status'];
-                //     $proposal->interview_status = $validated['status'];
-                //     $proposal->final_status = $validated['status'];
-                //     $proposal->interview_date = null;
-
-                //     $proposal->save();
-
-                //     return response()->json($response);
-                // }
-
                 $proposal->proposal_status = $validated['status'];
                 $proposal->interview_status = $validated['status'];
                 $proposal->final_status = $validated['status'];
@@ -327,7 +305,12 @@ class DashboardCompanyController extends Controller
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
                 // send an email afterward
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
+                $vacancyTitle = $proposal->vacancy->title;
 
+                Mail::to($proposal->student->account)->send(new RejectedProposal($companyFullName, $studentFullName, $vacancyTitle));
                 return response()->json($response);
             }
 
@@ -345,6 +328,14 @@ class DashboardCompanyController extends Controller
                     message: 'Silahkan hubungi kontak pelamar untuk konfirmasi!',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
+
+                // send an email aferward
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
+                $vacancyTitle = $proposal->vacancy->title;
+
+                Mail::to($proposal->student->account)->send(new WaitingProposal($companyFullName, $studentFullName, $vacancyTitle));
 
                 return response()->json($response);
             }
