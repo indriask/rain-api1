@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Interview\ApprovedInterview;
 use App\Mail\Proposal\ApprovedProposal;
 use App\Mail\Proposal\RejectedProposal;
 use App\Mail\Proposal\WaitingProposal;
@@ -374,12 +375,19 @@ class DashboardCompanyController extends Controller
             $interview = Proposal::select('proposal_status', 'nim', 'id_proposal', 'interview_date', 'interview_status', 'final_status', 'id_vacancy')
                 ->with([
                     'student' => function ($query) {
-                        $query->select('nim', 'id_user', 'approved_datetime')->with(['account' => function ($query) {
+                        $query->select('nim', 'id_user', 'approved_datetime', 'id_profile')->with(['account' => function ($query) {
                             $query->select('id_user', 'email');
                         }]);
                     },
+                    'student.profile' => function ($query) {
+                        $query->select('id_profile', 'first_name', 'last_name');
+                    },
                     'vacancy' => function ($query) {
-                        $query->select('id_vacancy', 'nib');
+                        $query->select('id_vacancy', 'nib', 'title')->with(['company' => function ($query) {
+                            $query->select('nib', 'id_profile')->with(['profile' => function ($query) {
+                                $query->select('id_profile', 'first_name', 'last_name');
+                            }]);
+                        }]);
                     }
                 ])
                 ->where('id_proposal', $validated['id_proposal'])
@@ -403,14 +411,20 @@ class DashboardCompanyController extends Controller
                 $interview->final_status = $validated['status'];
                 $interview->save();
 
+                // send an email afterward
+                $company = auth('web')->user()->load('company.profile');
+                $companyFullName = ($company->company->profile->first_name ?? 'Username') . ' ' . $company->company->profile->last_name ?? '';
+                $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
+                $vacancyTitle = $interview->vacancy->title;
+
+                Mail::to($interview->student->account)->send(new ApprovedInterview($companyFullName, $studentFullName, $vacancyTitle));
+
                 $response = $this->setResponse(
                     success: true,
                     title: 'Status berhasil diperbarui!',
                     message: 'Silahkan hubungi kontak pelamar untuk melakukan konfirmasi',
                     icon: asset('storage/svg/success-checkmark.svg')
                 );
-
-                // send an email afterward
 
                 return response()->json($response);
             }
@@ -486,9 +500,11 @@ class DashboardCompanyController extends Controller
         } catch (\Throwable $e) {
             $response = $this->setResponse(
                 success: false,
+                title: 'Request error',
                 message: 'Terjadi kesalahan saat melakukan update',
                 icon: 'storage/svg/failed-x.svg'
             );
+            return response()->json($e->getMessage());
 
             return response()->json($response, 500);
         }

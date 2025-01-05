@@ -533,10 +533,16 @@ function updateStatusInterview(id_proposal, status) {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         data: { id_proposal: id_proposal, status: status },
         success: function (response) {
+            console.log(response);
+            return;
+
             let notification = response.notification;
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
+            return;
+
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);

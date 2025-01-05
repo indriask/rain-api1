@@ -16,7 +16,7 @@ class ApprovedInterview extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(protected $companyFullName, protected $studentFullName, protected $vacancyTitle)
     {
         //
     }
@@ -27,7 +27,7 @@ class ApprovedInterview extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Approved Interview',
+            subject: 'Approved vacancy interview',
         );
     }
 
@@ -37,7 +37,12 @@ class ApprovedInterview extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.interview.approved',
+            with: [
+                'companyFullName' => $this->companyFullName,
+                'studentFullName' => $this->studentFullName,
+                'vacancyTitle' => $this->vacancyTitle
+            ]
         );
     }
 
