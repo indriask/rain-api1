@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessEmailSending;
 use App\Mail\Interview\ApprovedInterview;
 use App\Mail\Interview\RejectedInterview;
 use App\Mail\Interview\WaitingInterview;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+
+use function PHPUnit\Framework\onConsecutiveCalls;
 
 class DashboardCompanyController extends Controller
 {
@@ -287,7 +290,13 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
                 $vacancyTitle = $proposal->vacancy->title;
 
-                Mail::to($proposal->student->account)->send(new ApprovedProposal($companyFullName, $studentFullName, $vacancyTitle));
+                // Mail::to($proposal->student->account)->send(new ApprovedProposal($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new ApprovedProposal($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+
+                Mail::to($proposal->student->account)->queue($mail);
+
                 return response()->json($response);
             }
 
@@ -313,7 +322,11 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
                 $vacancyTitle = $proposal->vacancy->title;
 
-                Mail::to($proposal->student->account)->send(new RejectedProposal($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new RejectedProposal($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+                Mail::to($proposal->student->account)->queue($mail);
+
                 return response()->json($response);
             }
 
@@ -338,7 +351,10 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($proposal->student->profile->first_name ?? 'Username') . ' ' . $proposal->student->profile->last_name ?? '';
                 $vacancyTitle = $proposal->vacancy->title;
 
-                Mail::to($proposal->student->account)->send(new WaitingProposal($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new WaitingProposal($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+                Mail::to($proposal->student->account)->queue($mail);
 
                 return response()->json($response);
             }
@@ -360,8 +376,8 @@ class DashboardCompanyController extends Controller
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            return response()->json($e->getMessage());
-            // return response()->json($response, 500);
+            // return response()->json($e->getMessage());
+            return response()->json($response, 500);
         }
     }
 
@@ -419,7 +435,10 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
                 $vacancyTitle = $interview->vacancy->title;
 
-                Mail::to($interview->student->account)->send(new ApprovedInterview($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new ApprovedInterview($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+                Mail::to($interview->student->account)->queue($mail);
 
                 $response = $this->setResponse(
                     success: true,
@@ -448,7 +467,10 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
                 $vacancyTitle = $interview->vacancy->title;
 
-                Mail::to($interview->student->account)->send(new RejectedInterview($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new RejectedInterview($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+                Mail::to($interview->student->account)->queue($mail);
 
                 $response = $this->setResponse(
                     success: true,
@@ -474,7 +496,10 @@ class DashboardCompanyController extends Controller
                 $studentFullName = ($interview->student->profile->first_name ?? 'Username') . ' ' . $interview->student->profile->last_name ?? '';
                 $vacancyTitle = $interview->vacancy->title;
 
-                Mail::to($interview->student->account)->send(new WaitingInterview($companyFullName, $studentFullName, $vacancyTitle));
+                $mail = (new WaitingInterview($companyFullName, $studentFullName, $vacancyTitle))
+                    ->onConnection('database')
+                    ->onQueue('default');
+                Mail::to($interview->student->account)->queue($mail);
 
                 $response = $this->setResponse(
                     success: true,
@@ -501,8 +526,6 @@ class DashboardCompanyController extends Controller
                 message: 'Terjadi kesalahan saat melakukan update',
                 icon: 'storage/svg/failed-x.svg'
             );
-            return response()->json($e->getMessage());
-
             return response()->json($response, 500);
         }
     }

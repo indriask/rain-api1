@@ -479,6 +479,9 @@ function updateStatusProposal(id_proposal, status) {
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
+            return;
+
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);

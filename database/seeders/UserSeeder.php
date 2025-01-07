@@ -80,7 +80,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now()
             ],
             [
-                'email' => 'janedoe@gail.com',
+                'email' => 'janedoe@gmail.com',
                 'password' => '$2y$12$pRC3y9jzMuO8A1Se62p.c.m6fVcC2zaUbiQ6UW43MOWi1EMXc1GB6',
                 'role' => 1,
                 'email_verified_at' => now()
