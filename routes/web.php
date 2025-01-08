@@ -185,3 +185,8 @@ Route::get('/login-admin', function () {
 Route::get('/hash', function () {
     return Hash::make('password123');
 });
+
+Route::get('/url', function () {
+    dd(url(route('home')));
+    // dd(route('home'));
+});
