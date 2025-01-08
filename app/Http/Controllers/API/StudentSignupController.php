@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailVerification;
 use App\Models\Profile;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 
 class StudentSignupController extends Controller
 {
@@ -22,7 +22,7 @@ class StudentSignupController extends Controller
             'email' => 'required|email:dns|present|unique:users,email',
             'name' => 'required|string|max:255|present',
             'password' => 'required|string|min:8|confirmed|present',
-            'nim' => 'required|min:9|max:10'
+            'nim' => 'required|min:9|max:10|unique:student,nim'
         ]);
 
         try {
@@ -57,7 +57,7 @@ class StudentSignupController extends Controller
             event(new Registered($user));
             return redirect()->route('verification.notice');
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => $e->getMessage()])
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat melakukan proses signup, silahkan coba lagi!'])
                 ->onlyInput('email', 'name', 'nim');
         }
     }

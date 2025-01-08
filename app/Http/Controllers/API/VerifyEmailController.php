@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
+    // mengirim uland email
     public function sendRegisteredEmailVerification(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\SendVerificationEmail;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,5 +65,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     // metod one-to-one pada user ke admin
     public function admin() {
         return $this->hasOne(Admin::class, 'id_user', 'id_user');
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new SendVerificationEmail);
     }
 }
