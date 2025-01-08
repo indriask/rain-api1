@@ -51,20 +51,31 @@
 
     <div class="notification-container bg-white px-3 py-4">
         <div class="d-flex align-items-center">
-            <img class="rain-logo" src="{{ $message->embed(storage_path('app/public/2d-logo.png')) }}"
-                alt="RAIN logo">
+            <img class="rain-logo" src="{{ $message->embed(storage_path('app/public/2d-logo.png')) }}" alt="RAIN logo">
             <span class="rain-title">RAIN POLIBATAM</span>
         </div>
         <div class="mt-4">
-            <img src="{{ $message->embed(storage_path('app/public/svg/success-checkmark.svg')) }}" class="success-icon d-block mx-auto"
-                alt="">
+            <img src="{{ $message->embed(storage_path('app/public/svg/success-checkmark.svg')) }}"
+                class="success-icon d-block mx-auto" alt="">
             <div class="message-container mt-3 px-2">
-                <p class="text-body-secondary my-0 mb-1" style="font-size: 1rem;">Halo {{ $studentFullName }}</p>
+                <p class="text-body-secondary my-0 mb-1" style="font-size: 1rem;">Kepada {{ $companyFullName }}</p>
                 <p class="text-body-secondary my-0">
-                    Selamat 🎉🥳🥳, Lamaran anda telah <strong>diterima</strong> untuk program magang oleh
-                    <strong>{{ $companyFullName }}</strong> dengan posisi sebagai <strong>{{ $vacancyTitle }}</strong>
+                    Kami ingin memberitahukan bahwa telah ada pelamar yang melamar untuk posisi
+                    magang yang Anda pasang di sistem kami. Berikut adalah detail pelamar:
+                <ul>
+                    <li>Nama : {{ $applicantName }}</li>
+                    <li>Email : {{ $applicantEmail }}</li>
+                    <li>Posisi yang dilamar : {{ $proposalTitle }}</li>
+                </ul>
                 </p>
-                <p class="text-body-secondary mt-3">Untuk informasi selanjutnya, silahkan hubungi perusahaan terkait</p>
+                <p class="text-body-secondary mt-3">Anda bisa melihat detail lengkap nya dengan mengklik <a
+                        href="{{ route('company-applicant-list') }}">tautan ini</a></p>
+                <p>
+                    Terima kasih atas kepercayaan Anda menggunakan sistem kami.
+                    <br>
+                    <br>
+                    Salam, teamrainpolibatam@gmail.com
+                </p>
                 <a href="http://rain.test/dashboard/mahasiswa/list/lamaran"
                     class="btn btn-primary underline-none d-block mx-auto mt-4" style="width: fit-content;">Lihat daftar
                     lamaran</a>

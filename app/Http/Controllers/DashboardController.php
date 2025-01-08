@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ApplyVacancy;
 use App\Models\Company;
 use App\Models\Vacancy;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -16,6 +17,7 @@ use App\Models\Proposal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -312,19 +314,19 @@ class DashboardController extends Controller
             return back()->withErrors(['error' => 'Anda sudah melamar lowongan ini']);
         }
 
-        $proposal = Vacancy::select('date_created', 'date_ended', 'quota', 'applied')
+        $vacancy = Vacancy::with('company.profile')->select('date_created', 'date_ended', 'quota', 'applied', 'nib', 'title')
             ->where('id_vacancy', $request->id_vacancy)
             ->first();
 
-        if (time() < strtotime($proposal->date_created)) {
+        if (time() < strtotime($vacancy->date_created)) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamara belum dibuka']);
         }
 
-        if (time() > strtotime($proposal->date_ended)) {
+        if (time() > strtotime($vacancy->date_ended)) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah tutup']);
         }
 
-        if ($proposal->applied >= $proposal->quota) {
+        if ($vacancy->applied >= $vacancy->quota) {
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah penuh']);
         }
 
@@ -361,6 +363,16 @@ class DashboardController extends Controller
         $vacancy = Vacancy::where('id_vacancy', $request->id_vacancy)->first();
         $vacancy->applied += 1;
         $vacancy->save();
+
+        $company = $vacancy->company->profile;
+        $companyFullName = ($company->first_name ?? 'Username') . ' ' . $company->last_name ?? '';
+        $applicant = auth('web')->user()->load('student.profile');
+
+        $mail = (new ApplyVacancy($companyFullName, $applicant, $vacancy))
+            ->onConnection('database')
+            ->onQueue('default');
+
+        Mail::to(auth('web')->user())->queue($mail);
 
         return back()->with(['success' => 'Silahkan mengunggu konfirmasi dari lowongan']);
     }

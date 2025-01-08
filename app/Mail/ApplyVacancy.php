@@ -13,12 +13,18 @@ class ApplyVacancy extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $companyFullName;
+    protected $applicant;
+    protected $proposal;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($companyFullName, $applicant, $proposal)
     {
-        //
+        $this->companyFullName = $companyFullName;
+        $this->applicant = $applicant;
+        $this->proposal = $proposal;
     }
 
     /**
@@ -27,7 +33,7 @@ class ApplyVacancy extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Applied Vacancy',
+            subject: 'Pemberitahuan Pelamar Baru Untuk Lowongan Magang',
         );
     }
 
@@ -38,6 +44,12 @@ class ApplyVacancy extends Mailable
     {
         return new Content(
             view: 'mail.apply-vacancy',
+            with: [
+                'companyFullName' => $this->companyFullName,
+                'applicantName' => ($this->applicant->student->profile->first_name ?? 'Username') . ' ' . $this->applicant->student->profile->last_name ?? '',
+                'applicantEmail' => $this->applicant->email,
+                'proposalTitle' => $this->proposal->title,
+            ]
         );
     }
 

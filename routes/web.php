@@ -8,6 +8,7 @@ use App\Http\Middleware\isCompanyVerified;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
+use App\Mail\ApplyVacancy;
 use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
@@ -180,13 +181,4 @@ Route::get('/login-mahasiswa', function () {
 Route::get('/login-admin', function () {
     Auth::attempt(['email' => 'rain@gmail.com', 'password' => 'password123']);
     return redirect()->route('dashboard');
-});
-
-Route::get('/hash', function () {
-    return Hash::make('password123');
-});
-
-Route::get('/url', function () {
-    dd(url(route('home')));
-    // dd(route('home'));
 });
