@@ -33,6 +33,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])->name('company-signup');
 });
 
+// Routing untuk system forgot password
+Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])->name('password.request');
+Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password.reset');
+
 
 // akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -147,15 +151,6 @@ Route::middleware('auth')->group(function () {
         ->name('verification.verify');
 });
 
-
-
-
-
-
-
-// Routing untuk system forgot password
-Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])->name('password.request');
-Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password.reset');
 
 
 

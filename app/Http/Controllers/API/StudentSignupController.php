@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmailVerification;
 use App\Models\Profile;
 use App\Models\Student;
 use App\Models\User;
