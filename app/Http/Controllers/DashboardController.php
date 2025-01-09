@@ -306,7 +306,7 @@ class DashboardController extends Controller
             'id_vacancy' => 'required|exists:vacancy,id_vacancy',
         ]);
 
-        if(count($request->file('resume')) > 6) {
+        if (count($request->file('resume')) > 6) {
             return back()->withErrors(['error' => 'Maksimum upload file adalah 6']);
         }
 
@@ -588,6 +588,12 @@ class DashboardController extends Controller
 
         // return redirect()->back()->with('success', 'Profile berhasil diperbarui!');
         return redirect()->back()->with('profile_updated', true);
+    }
+
+    public function getStudentProfileData()
+    {
+        return response()->json(auth('web')->user()
+            ->load('student.profile', 'student.major', 'student.study_program'));
     }
 
     /**

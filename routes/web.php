@@ -8,6 +8,7 @@ use App\Http\Middleware\isCompanyVerified;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
+use App\Http\Middleware\ValidateHeader;
 use App\Mail\ApplyVacancy;
 use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
@@ -75,6 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/delete-account', [DashboardController::class, 'destroy'])->name('account.destroy');
     Route::post('/apply', [DashboardController::class, 'apply'])->name('apply')->middleware(StartSession::class);
     Route::get('/get-study-programs/{majorId}', [DashboardController::class, 'getStudyProgramsByMajor']);
+    Route::get('/get-student-profile', [DashboardController::class, 'getStudentProfileData'])
+        ->middleware(ValidateHeader::class);
 
     /**
      * Routing khusus role perusahaan

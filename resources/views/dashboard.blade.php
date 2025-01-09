@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
-        
+
     {{-- bootstrap icon web font link --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -215,52 +215,8 @@
                 class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
                 {{-- form input isi data diri mahasiswa --}}
-                <form id="vacancy-apply-form" action="{{ route('apply') }}" method="POST"
-                    class="vacancy-apply-form-card bg-white p-4" enctype="multipart/form-data">
-                    @csrf
-                    <div class="d-flex justify-content-between">
-                        <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                        <button type="button" class="border border-0 bg-transparent click-animation"
-                            onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
-                    </div>
-                    <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
-                        ketentuan berikut</span>
-
-                    <div class="apply-form-common-info mt-4">
-                        <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
-                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nama Lengkap"
-                            name="nama">
-                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" name="">
-                        <select name="" id="" class="w-100 border focus-ring mb-3">
-                            <option selected>Jurusan</option>
-                            <option value="teknik informatika">Teknik Informatika</option>
-                            <option value="manajemen bisnis">Manajemen Bisnis</option>
-                            <option value="teknik elektro">Teknik Elektro</option>
-                            <option value="teknik mesin">Teknik Mesin</option>
-                        </select>
-                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Program Studi"
-                            name="program-studi">
-                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email"
-                            name="email">
-                        <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon"
-                            name="nomor-telepon">
-                    </div>
-
-                    <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
-                    <div class="apply-form-upload-file-info d-flex justify-content-between">
-                        <span>Dapat berupa CV atau dokumen lainnya</span>
-                        <span>Maks. 6 Dokumen</span>
-                    </div>
-                    <label for="upload-file"
-                        class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
-                        <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
-                    <input type="file" name="resume[]" multiple="true" id="upload-file" hidden>
-
-                    <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
-
-                    <button type="submit"
-                        class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
-                </form>
+                <div id="vacancy-apply-form">
+                </div>
 
                 {{-- notifikasi gagal atau sukses daftar lowongan mahasiswa --}}
                 <div id="apply-form-notification" class="d-none pe-none vacancy-apply-form-card bg-white p-5 rounded">

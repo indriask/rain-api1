@@ -111,7 +111,7 @@ const vacancyCardListContainer = document.querySelector("#vacancy-card-list-cont
 const vacancyDetailCard = $("#vacancy-detail-card");
 const vacancyApplyFormContainer = document.querySelector("#vacancy-apply-form-container")
 const applyFormNotifcation = document.querySelector("#apply-form-notification");
-const vacancyApplyForm = document.querySelector("#vacancy-apply-form");
+const vacancyApplyForm = $("#vacancy-apply-form");
 const vacancyCardList = document.querySelector("#vacancy-card-list");
 const logoutCard = document.querySelector("#logout-card");
 const dashboardCustomNotification = $("#custom-notification");
@@ -316,11 +316,64 @@ function showApplyVacancyFormContainer(id) {
     if (vacancyApplyFormContainer.classList.contains("d-block")) {
         vacancyApplyFormContainer.classList.remove("d-block");
         vacancyApplyFormContainer.classList.add("d-none", "pe-none");
+
+        vacancyApplyForm.html('');
         return 1;
     }
 
     vacancyApplyFormContainer.classList.remove("d-none", "pe-none");
     vacancyApplyFormContainer.classList.add("d-block");
+
+    $.ajax({
+        url: '/get-student-profile',
+        method: "GET",
+        headers: { "X-GET-DATA": 'get-student-profile-data' },
+        success: function (response) {
+            let fullName = (response.student.profile.first_name ?? 'Username') + ' ' + response.student.profile.last_name;;
+
+            vacancyApplyForm.html(`
+                <form action="/apply" method="POST" class="vacancy-apply-form-card bg-white p-4"
+                        enctype="multipart/form-data">
+                        <input type="hidden" name="_token" value="${window.laravel.csrf_token}">
+                        <div class="d-flex justify-content-between">
+                            <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
+                            <button type="button" class="border border-0 bg-transparent click-animation"
+                                onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
+                        </div>
+                        <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
+                            ketentuan berikut</span>
+
+                        <div class="apply-form-common-info mt-4">
+                            <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Username" readonly value="${fullName}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" readonly value="${response.student.nim ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Jurusan" readonly value="${response.student?.major?.name ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3"  placeholder="Program Studi" readonly value="${response.student?.study_program?.name ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email" readonly value="${response.email}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon" readonly value="${response.student.profile.phone_number ?? ''}">
+                        </div>
+
+                        <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
+                        <div class="apply-form-upload-file-info d-flex justify-content-between">
+                            <span>Dapat berupa CV atau dokumen lainnya</span>
+                            <span>Maks. 6 Dokumen</span>
+                        </div>
+                        <label for="upload-file"
+                            class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
+                            <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
+                        <input type="file" name="resume[]" multiple="true" id="upload-file" hidden>
+
+                        <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
+
+                        <button type="submit"
+                            class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
+                    </form>    
+            `);
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR);
+        }
+    });
 }
 
 // function untuk mengirim data diri mahasiswa ke server
