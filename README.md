@@ -52,7 +52,7 @@ RAIN (Ready For An Internship) adalah platform berbasis web yang dirancang khusu
 
 1. **Clone repository**:
    ```bash
-   git clone https://github.com/username/RAIN.git
+   git clone https://github.com/indriask/ran-api.git
    cd RAIN
    ```
 
@@ -73,21 +73,6 @@ RAIN (Ready For An Internship) adalah platform berbasis web yang dirancang khusu
 
 5. **Akses aplikasi**:
    Buka browser dan akses `http://localhost:8000`.
-
-## Struktur Folder
-```
-RAIN/
-├── public/            # File static (CSS, JavaScript, images)
-├── src/
-│   ├── controllers/   # Logika aplikasi
-│   ├── models/        # Model database
-│   ├── routes/        # Definisi rute API
-│   ├── views/         # Template halaman HTML
-├── database/          # File SQL untuk inisialisasi database
-├── .env               # Konfigurasi lingkungan
-├── package.json       # Dependencies proyek
-└── README.md          # Dokumentasi proyek
-```
 
 ## Kontributor
 1. **Eric Marchelino Hutbarat**
