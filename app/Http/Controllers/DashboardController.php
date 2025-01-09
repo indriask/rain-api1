@@ -302,9 +302,13 @@ class DashboardController extends Controller
     {
         // Validate the form input
         $request->validate([
-            'resume' => 'required|mimes:pdf,doc,docx|max:10240', // Validate resume file
+            'resume' => 'required', // Validate resume file
             'id_vacancy' => 'required|exists:vacancy,id_vacancy',
         ]);
+
+        if(count($request->file('resume')) > 6) {
+            return back()->withErrors(['error' => 'Maksimum upload file adalah 6']);
+        }
 
         $isProposed = Proposal::where('id_vacancy', $request->id_vacancy)
             ->where('nim', auth('web')->user()->student->nim)
@@ -314,7 +318,9 @@ class DashboardController extends Controller
             return back()->withErrors(['error' => 'Anda sudah melamar lowongan ini']);
         }
 
-        $vacancy = Vacancy::with('company.profile')->select('date_created', 'date_ended', 'quota', 'applied', 'nib', 'title')
+        $vacancy = Vacancy::with('company.profile')
+            ->with('company.account')
+            ->select('date_created', 'date_ended', 'quota', 'applied', 'nib', 'title')
             ->where('id_vacancy', $request->id_vacancy)
             ->first();
 
@@ -330,51 +336,50 @@ class DashboardController extends Controller
             return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah penuh']);
         }
 
-        // Save the resume file
-        $file = $request->file('resume');
-        $extension = $file->getClientOriginalExtension();  // Get the file extension (e.g., 'pdf', 'docx')
+        try {
+            // Save the resume file
+            $files = $request->file('resume');
+            $dirPath = 'resume/' . uniqid();
 
-        // Get the current user's first name
-        $firstName = auth('web')->user()->student->profile->first_name;
+            foreach ($files as $file) {
+                $fileName = $file->getClientOriginalName();
 
-        // Get the current timestamp
-        $timestamp = now()->timestamp;
+                if (!in_array(strtolower($file->getClientOriginalExtension()), ['pdf', 'docx']) || $file->getSize() > 2000000) {
+                    continue;
+                }
 
-        // Combine the first name and timestamp to create the filename
-        $fileName = strtolower($firstName) . '_' . $timestamp . '.' . $extension;
+                $file->storeAs($dirPath, $fileName, 'local');
+            }
 
-        $filePath = $file->storeAs('resume/' . uniqid(), $fileName, 'local');
+            // Store the application data in the database
+            Proposal::create([
+                'id_vacancy' => $request->id_vacancy,
+                'nim' => auth('web')->user()->student->nim, // Assuming the user is authenticated
+                'resume' => $dirPath,
+                'applied_date' => now(),
+                'final_status' => 'waiting', // default status
+                'proposal_status' => 'waiting',
+                'interview_status' => 'waiting',
+            ]);
 
-        $revertedFilePath = strrev($filePath);
-        $explode = explode('/', $revertedFilePath, 2);
-        $newFilePath = strrev($explode[1]);
+            $vacancy = Vacancy::where('id_vacancy', $request->id_vacancy)->first();
+            $vacancy->applied += 1;
+            $vacancy->save();
 
-        // Store the application data in the database
-        Proposal::create([
-            'id_vacancy' => $request->id_vacancy,
-            'nim' => auth('web')->user()->student->nim, // Assuming the user is authenticated
-            'resume' => $newFilePath,
-            'applied_date' => now(),
-            'final_status' => 'waiting', // default status
-            'proposal_status' => 'waiting',
-            'interview_status' => 'waiting',
-        ]);
+            $company = $vacancy->company->profile;
+            $companyFullName = ($company->first_name ?? 'Username') . ' ' . $company->last_name ?? '';
+            $applicant = auth('web')->user()->load('student.profile');
 
-        $vacancy = Vacancy::where('id_vacancy', $request->id_vacancy)->first();
-        $vacancy->applied += 1;
-        $vacancy->save();
+            $mail = (new ApplyVacancy($companyFullName, $applicant, $vacancy))
+                ->onConnection('database')
+                ->onQueue('default');
 
-        $company = $vacancy->company->profile;
-        $companyFullName = ($company->first_name ?? 'Username') . ' ' . $company->last_name ?? '';
-        $applicant = auth('web')->user()->load('student.profile');
+            Mail::to($vacancy->company->account)->queue($mail);
 
-        $mail = (new ApplyVacancy($companyFullName, $applicant, $vacancy))
-            ->onConnection('database')
-            ->onQueue('default');
-
-        Mail::to(auth('web')->user())->queue($mail);
-
-        return back()->with(['success' => 'Silahkan mengunggu konfirmasi dari lowongan']);
+            return back()->with(['success' => 'Silahkan mengunggu konfirmasi dari lowongan']);
+        } catch (\Throwable $e) {
+            return back()->withErrors(['error' => 'Terjadi kesalahaan saat melakukan request']);
+        }
     }
 
     public function studentProposalListPage()

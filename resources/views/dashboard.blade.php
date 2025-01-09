@@ -254,7 +254,7 @@
                     <label for="upload-file"
                         class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
                         <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
-                    <input type="file" name="resume" id="upload-file" multiple hidden>
+                    <input type="file" name="resume[]" multiple="true" id="upload-file" hidden>
 
                     <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
 

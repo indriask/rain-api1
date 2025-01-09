@@ -76,9 +76,8 @@
                     <br>
                     Salam, teamrainpolibatam@gmail.com
                 </p>
-                <a href="http://rain.test/dashboard/mahasiswa/list/lamaran"
-                    class="btn btn-primary underline-none d-block mx-auto mt-4" style="width: fit-content;">Lihat daftar
-                    lamaran</a>
+                <a href="{{ route('company-applicant-list') }}"
+                    class="btn btn-primary underline-none d-block mx-auto mt-4" style="width: fit-content;">Lihat daftar pelamar</a>
             </div>
         </div>
     </div>
