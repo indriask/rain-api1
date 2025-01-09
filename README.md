@@ -5,31 +5,34 @@ RAIN (Ready For An Internship) adalah platform berbasis web yang dirancang khusu
 ## Fitur Utama
 
 ### 1. Untuk Mahasiswa
-- **Pendaftaran dan Login**: Mahasiswa Politeknik Negeri Batam dapat mendaftar menggunakan akun kampus mereka.
+- **Pendaftaran dan Login**: Mahasiswa Politeknik Negeri Batam dapat mendaftar menggunakan email.
 - **Pencarian Lowongan**: Menampilkan daftar lowongan magang dari perusahaan mitra.
 - **Pengajuan Lamaran**: Mahasiswa dapat langsung melamar ke lowongan yang tersedia.
 - **Riwayat Lamaran**: Melacak status lamaran (Diterima, Ditolak, atau Dalam Proses).
+- **Profile Pengguna**: Mahasiswa bisa menambahkan dan mengelola profile diri mereka sendiri.
 
 ### 2. Untuk Perusahaan
 - **Pendaftaran dan Login**: Perusahaan mitra dapat mendaftar dan mengelola akun mereka.
 - **Posting Lowongan**: Perusahaan dapat menambahkan lowongan magang baru.
 - **Pengelolaan Pelamar**: Memantau daftar pelamar, melakukan seleksi, dan memberikan keputusan.
+- **Profile Pengguna**: Perusahaan bisa menambahkan dan mengelola profile diri mereka sendiri.
 
 ### 3. Untuk Admin
-- **Validasi Lowongan**: Admin memverifikasi lowongan yang diunggah oleh perusahaan.
+- **Validasi Perusahaan**: Admin memverifikasi akun perusahaan.
 - **Manajemen Data Pengguna**: Mengelola data mahasiswa dan perusahaan.
+- **Mengelola Lowongan**: Mengelola lowongan yang telah di unggah.
+- **Profile Pengguna**: Admin bisa menambahkan dan mengelola profile diri mereka sendiri.
 
 ## Teknologi yang Digunakan
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap.
-- **Backend**: Node.js dengan Express.
+- **Backend**: Laravel, PHP.
 - **Database**: MySQL.
-- **Authentication**: JWT (JSON Web Token).
-- **Deployment**: Platform seperti Vercel atau Heroku.
+- **Deployment**: Local.
 
 ## Alur Pengguna
 
 ### Mahasiswa:
-1. Login menggunakan email kampus.
+1. Login menggunakan email.
 2. Mencari lowongan berdasarkan kategori atau perusahaan.
 3. Melamar ke lowongan yang diinginkan.
 4. Memantau status lamaran melalui dashboard.
@@ -37,11 +40,13 @@ RAIN (Ready For An Internship) adalah platform berbasis web yang dirancang khusu
 ### Perusahaan:
 1. Login atau mendaftar sebagai mitra perusahaan.
 2. Mengunggah lowongan baru.
-3. Meninjau daftar pelamar dan mengambil keputusan.
+3. Mengelola lowongan yang telah di unggah.
+4. Meninjau daftar pelamar dan mengambil keputusan.
 
 ### Admin:
-1. Memvalidasi lowongan yang diunggah oleh perusahaan.
-2. Mengelola data mahasiswa dan perusahaan.
+1. Mengelola akun mahasiswa dan perusahaan.
+2. Mengelola lowongan yang telah di unggah.
+2. Melakukan verifikasi pada akun perusahaan.
 
 ## Cara Menjalankan Proyek Secara Lokal
 
