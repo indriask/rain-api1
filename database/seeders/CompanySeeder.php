@@ -45,7 +45,7 @@ class CompanySeeder extends Seeder
                 'status_verified_at' => date('Y-m-d', time())
             ],
             [
-                'nib' => '0983214321',
+                'nib' => '1983214321',
                 'id_profile' => 13,
                 'id_user' => 13,
                 'type' => 'LPK',
@@ -85,7 +85,7 @@ class CompanySeeder extends Seeder
                 'status_verified_at' => date('Y-m-d', time())
             ],
             [
-                'nib' => '0983647321',
+                'nib' => '1983647321',
                 'id_profile' => 17,
                 'id_user' => 17,
                 'type' => 'PT',

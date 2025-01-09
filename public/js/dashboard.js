@@ -620,6 +620,7 @@ function processAddVacancy() {
         processData: false,
         contentType: false,
         success: function (response) {
+            console.log(response);
             if (response.validation_error) {
                 (response.validation_error.salary !== undefined) ? $("#input-salary").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.salary}</div>`) : "";
                 (response.validation_error.title !== undefined) ? $("#input-title").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.title}</div>`) : "";
@@ -638,6 +639,8 @@ function processAddVacancy() {
             showAddVacancyNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
+
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);

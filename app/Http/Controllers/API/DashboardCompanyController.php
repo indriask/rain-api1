@@ -20,8 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-use function PHPUnit\Framework\onConsecutiveCalls;
+use PhpParser\Node\Stmt\Echo_;
 
 class DashboardCompanyController extends Controller
 {
@@ -42,7 +41,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', 'present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['present', 'string']
+            'description' => ['string']
         ]);
 
         if ($validated->fails()) {
@@ -51,7 +50,7 @@ class DashboardCompanyController extends Controller
 
         try {
             $validated->setValue('applied', 0);
-            $validated->setValue('nib', auth('web')->user()->company->nib);
+            $validated->setValue('nib', (string) auth('web')->user()->company->nib);
             $dateCreated = $validated->getValue('date_created');
             $dateEnded = $validated->getValue('date_ended');
 
@@ -86,7 +85,8 @@ class DashboardCompanyController extends Controller
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            return response()->json($response, 500);
+            // return response()->json($response, 500);
+            return response()->json($e->getMessage());
         }
     }
 

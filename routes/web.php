@@ -154,3 +154,7 @@ Route::middleware('auth')->group(function () {
         ->middleware('signed')
         ->name('verification.verify');
 });
+
+Route::get('/clear-session', function() {
+    request()->session()->flush();
+});
