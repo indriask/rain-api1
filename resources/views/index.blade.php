@@ -159,8 +159,8 @@
             <div class="row row-gap-5" style="margin-bottom: 5rem;">
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Wasyn-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle  bg-white position-absolute">
                         <h2 class="profile-name">Wasyn Sulaiman Siregar</h2>
                         <span class="profile-role">Frontend Developer</span>
@@ -172,8 +172,8 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Aidil-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Muhammad Aidil Jupriadi Saleh</h2>
                         <span class="profile-role">Data dan Sistem Analis</span>
@@ -185,8 +185,8 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Indria-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Indria Bintani Askia</h2>
                         <span class="profile-role">Backend Developer</span>
@@ -200,8 +200,8 @@
             <div class="row row-gap-5">
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Fito-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Fito Desta Fabiansyah</h2>
                         <span class="profile-role">Backend Developer</span>
@@ -213,8 +213,8 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Winda-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Winda Tri Wulandari</h2>
                         <span class="profile-role">Designer</span>
@@ -226,8 +226,8 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="https://plus.unsplash.com/premium_photo-1666739086992-ce91cfac4666?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWluZWNyYWZ0fGVufDB8fDB8fHww"
-                            alt="Wasyn Sulaiman Siregar profile"
+                        <img src="{{ asset('storage/profile/Eric-removebg-preview.png') }}"
+                            alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Eric Marcelino Hutabarat</h2>
                         <span class="profile-role">Data dan Sistem Analis</span>
