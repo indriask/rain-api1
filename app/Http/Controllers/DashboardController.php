@@ -904,24 +904,4 @@ class DashboardController extends Controller
             ]
         ];
     }
-
-    /**
-     * Method untuk hapus akun
-     */
-    public function destroy(Request $request)
-    {
-        try {
-            $user = Auth::user();
-
-            // Hapus data terkait user jika diperlukan
-            $user->delete(); // Hapus akun pengguna
-
-            // Logout setelah akun dihapus
-            Auth::logout();
-
-            return response()->json(['message' => 'Akun berhasil dihapus.'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Gagal menghapus akun.'], 500);
-        }
-    }
 }

@@ -158,10 +158,3 @@ class AccountController extends Controller
         ];
     }
 }
-
-
-class makanbang {
-    public function helloWorld() {
-        return 'makanbang';
-    }
-}
