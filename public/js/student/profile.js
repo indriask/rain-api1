@@ -1,32 +1,30 @@
-const editProfileForm = document.querySelector("#edit-profile-form");
-const editProfileBtn = document.querySelector("#edit-profile-btn");
-const editProfileNotification = document.querySelector("#edit-profile-notification");
-const profileEditNotificationTitle = document.querySelector("#profile-edit-notification-title");
-const profileEditNotificationImg = document.querySelector("#profile-edit-notification-img");
+const editProfileForm = $("#edit-profile-form");
+const editProfileNotification = $("#edit-profile-notification");
+const profileEditNotificationTitle = $("#profile-edit-notification-title");
+const profileEditNotificationImg = $("#profile-edit-notification-img");
 const deleteAccountNotification = $("#delete-account-notification");
 const profileStudentCustomNotification = $("#custom-notification");
 
 // function menampilkan notifikasi berhasil atau tidak update profile
 function showEditProfileNotification() {
-    if (editProfileNotification.classList.contains("d-block")) {
-        editProfileNotification.classList.remove("d-block");
-        editProfileNotification.classList.add("d-none");
+    if (editProfileNotification.hasClass("d-block")) {
+        editProfileNotification.removeClass("d-block");
+        editProfileNotification.addClass("d-none");
 
         return;
     }
 
-    editProfileNotification.classList.remove("d-none");
-    editProfileNotification.classList.add("d-block");
+    editProfileNotification.removeClass("d-none");
+    editProfileNotification.addClass("d-block");
 }
 
 // function untuk mengirim data profile baru ke server
 function setProfileData() {
-    let form = new FormData(editProfileForm);
-    console.log(form);
+    let form = new FormData(editProfileForm[0]);
 
     // the value of this variabel come from fetch result
-    profileEditNotificationTitle.textContent = "Profil berhasil diperbarui!";
-    profileEditNotificationImg.src = "http://localhost:8000/storage/svg/success-checkmark.svg";
+    profileEditNotificationTitle.text("Profil berhasil diperbarui!");
+    profileEditNotificationImg.attr("src", "http://localhost:8000/storage/svg/success-checkmark.svg");
 
     showEditProfileNotification();
 }

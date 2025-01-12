@@ -18,6 +18,7 @@ use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
 use App\Http\Middleware\ValidateAjax;
+use Illuminate\Session\Middleware\StartSession;
 
 // route untuk handle pengiriman feedback
 Route::post('/send-feedback', [IndexController::class, 'sendFeedback'])
@@ -36,8 +37,6 @@ Route::middleware(['guest', 'web'])->group(function () {
     // Route untuk system signup admin
     Route::post('/admin/signin', [AccountController::class, 'adminSignin'])->name('api-admin-validate-signin');
 });
-
-
 
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route signout mahasiswa, perusahaan dan admin
@@ -115,9 +114,6 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 
     Route::post('/dashboard/admin/profile/edit', [DashboardAdminController::class, 'editProfile'])
         ->middleware(IsRoleAdmin::class);
-
-    // Route::post('/dashboard/admin/kelola/user/mahasiswa', [DashboardAdminController::class, 'manageUserStudent'])->name('api-admin-manage-student');
-    // Route::post('/dashboard/admin/kelola/user/perusahaan', [DashboardAdminController::class, 'manageUserVacancy'])->name('api-admin-manage-company');
 });
 
 

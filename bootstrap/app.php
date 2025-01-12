@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Middleware\IsRoleStudent;
+use App\Http\Middleware\ValidateAjax;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Session\Middleware\StartSession;
 
 return Application::configure(basePath: dirname(__DIR__))

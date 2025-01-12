@@ -73,7 +73,7 @@ class IndexController extends Controller
     {
         $validator = Validator::make($request->input(), [
             'email' => ['required', 'present', 'email:dns'],
-            'feedback' => ['required', 'present', 'max:5000']
+            'feedback' => ['required', 'present']
         ]);
 
         if ($validator->fails()) {

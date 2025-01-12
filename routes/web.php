@@ -13,27 +13,16 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
 // Routing ke halaman branding RAIN
-Route::get('/', [IndexController::class, 'index'])
-    ->name('home');
-
+Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::redirect('/index', '/', 302);
 
 // user tidak harus login untuk masuk ke route ini
 Route::middleware('guest')->group(function () {
-    Route::get('/signin', [IndexController::class, 'signinPage'])
-        ->name('login');
-
-    Route::get('/signin', [IndexController::class, 'signinPage'])
-        ->name('signin');
-
-    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])
-        ->name('admin-singin');
-
-    Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])
-        ->name('student-signup');
-        
-    Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])
-        ->name('company-signup');
+    Route::get('/signin', [IndexController::class, 'signinPage'])->name('login');
+    Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
+    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])->name('admin-singin');
+    Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])->name('student-signup');
+    Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])->name('company-signup');
 });
 
 // Routng untuk system forgot password
@@ -157,4 +146,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])
         ->middleware('signed')
         ->name('verification.verify');
+});
+
+Route::get('/test', function () {
+    return auth('web');
 });

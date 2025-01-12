@@ -82,26 +82,10 @@ class AccountController extends Controller
     public function deleteAccount(Request $request)
     {
         try {
-            $role = $this->roles[auth('web')->user()->role - 1];
-            $user = auth('web')->user()->$role;
+            $user = auth('web')->user();
+            Profile::where('id_profile', $user->id_user)->delete();
+            $user->delete();
 
-            $id_user = $user->id_user;
-            $id_profile = $user->id_profile;
-
-            $userModel = User::find($id_user);
-            $profileModel = Profile::find($id_profile);
-
-            if (empty($userModel) || empty($profileModel)) {
-                $response = $this->setResponse(
-                    success: false,
-                    message: 'Gagal menghapus akun, pengguna tidak ditemukan',
-                );
-
-                return response()->json($response);
-            }
-
-            $userModel->delete();
-            $profileModel->delete();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
@@ -172,5 +156,12 @@ class AccountController extends Controller
                 'icon' => $icon
             ]
         ];
+    }
+}
+
+
+class makanbang {
+    public function helloWorld() {
+        return 'makanbang';
     }
 }
