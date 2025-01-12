@@ -12,13 +12,17 @@ use Illuminate\Queue\SerializesModels;
 class SendFeedback extends Mailable
 {
     use Queueable, SerializesModels;
+    
+    protected $feedback;
+    protected $sender;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($sender, $feedback)
     {
-        //
+        $this->sender = $sender;
+        $this->feedback = $feedback;
     }
 
     /**
@@ -27,7 +31,7 @@ class SendFeedback extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Feedback',
+            subject: 'Feedback Mengenai Website RAIN',
         );
     }
 
@@ -37,7 +41,11 @@ class SendFeedback extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'mail.feedback',
+            with: [
+                'sender' => $this->sender,
+                'feedback' => $this->feedback
+            ]
         );
     }
 

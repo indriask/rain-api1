@@ -88,7 +88,7 @@ class IndexController extends Controller
         }
 
         try {
-            $mail = (new SendFeedback())
+            $mail = (new SendFeedback($request->input('email'), $request->input('feedback')))
                 ->onConnection('database')
                 ->onQueue('default');
 
