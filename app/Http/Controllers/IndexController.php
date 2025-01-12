@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendFeedback;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class IndexController extends Controller
 {
@@ -18,7 +22,8 @@ class IndexController extends Controller
     /**
      * Method untuk menampilkan halaman signin mahasiswa dan perusahaan
      */
-    public function signinpage() {
+    public function signinpage()
+    {
         return response()->view('signin', [
             'title' => 'Signin | RAIN'
         ]);
@@ -27,7 +32,8 @@ class IndexController extends Controller
     /**
      * Method untuk menampilkan halaman signin admim
      */
-    public function signinAdminPage() {
+    public function signinAdminPage()
+    {
         return response()->view('admin.signin', [
             'title' => 'Signin Admin | RAIN'
         ]);
@@ -36,7 +42,8 @@ class IndexController extends Controller
     /**
      * Method untuk menampilkan halaman signup mahasiswa
      */
-    public function signupStudentPage() {
+    public function signupStudentPage()
+    {
         return response()->view('student.signup', [
             'title' => 'Signup Student | RAIN'
         ]);
@@ -45,17 +52,85 @@ class IndexController extends Controller
     /**
      * Method untuk menampilkan halaman signup perusahaan
      */
-    public function signupCompanyPage() {
+    public function signupCompanyPage()
+    {
         return response()->view('company.signup', [
             'title' => 'Signup Company | RAIN'
         ]);
     }
-    
+
     /**
      * Method untuk menampilkan halaman forget password mahasiswa dan
      * perusahaan
      */
-    public function forgetPasswordPage() {
+    public function forgetPasswordPage()
+    {
         return response()->view('forget-password');
+    }
+
+    // handle data feedback dari user
+    public function sendFeedback(Request $request)
+    {
+        $validator = Validator::make($request->input(), [
+            'email' => ['required', 'present', 'email:dns'],
+            'feedback' => ['required', 'present', 'max:5000']
+        ]);
+
+        if ($validator->fails()) {
+            $response = $this->setResponse(
+                success: false,
+                title: 'Request denied',
+                message: $validator->messages(),
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response);
+        }
+
+        try {
+            $mail = (new SendFeedback())
+                ->onConnection('database')
+                ->onQueue('default');
+
+            Mail::to('rainpolibatam@gmail.com')
+                ->queue($mail);
+
+            $response = $this->setResponse(
+                success: true,
+                title: 'Berhasil mengirim feedback',
+                message: 'Terima kasih atas feedback yang anda berikan kepada website kami',
+                icon: asset('storage/svg/success-checkmark.svg')
+            );
+
+            return response()->json($response, 200);
+        } catch (\Throwable $e) {
+            $response = $this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Terjadi kesalahaan saat melakukan request',
+                icon: asset('storage/svg/failed-x.svg')
+            );
+
+            return response()->json($response, 500);
+        }
+    }
+
+    // untuk set response pesan ajax
+    private function setResponse(
+        bool $success = true,
+        string $title = '',
+        string $message = '',
+        string $type = '',
+        string $icon = ''
+    ): array {
+        return [
+            'success' => $success,
+            'notification' => [
+                'title' => $title,
+                'message' => $message,
+                'type' => $type,
+                'icon' => $icon
+            ]
+        ];
     }
 }

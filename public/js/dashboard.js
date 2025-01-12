@@ -639,8 +639,6 @@ function processAddVacancy() {
             showAddVacancyNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
-
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);

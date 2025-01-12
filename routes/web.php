@@ -9,38 +9,40 @@ use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
 use App\Http\Middleware\ValidateHeader;
-use App\Mail\ApplyVacancy;
-use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 // Routing ke halaman branding RAIN
-Route::get('/', [IndexController::class, 'index'])->name('home');
+Route::get('/', [IndexController::class, 'index'])
+    ->name('home');
+
 Route::redirect('/index', '/', 302);
 
-
-
-
-
-
-// akun user tidak perlu ter-authentikasi dan email terverifikasi kalau mau masuk
-// route dibawah ini
+// user tidak harus login untuk masuk ke route ini
 Route::middleware('guest')->group(function () {
-    Route::get('/signin', [IndexController::class, 'signinPage'])->name('login');
-    Route::get('/signin', [IndexController::class, 'signinPage'])->name('signin');
-    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])->name('admin-singin');
-    Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])->name('student-signup');
-    Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])->name('company-signup');
+    Route::get('/signin', [IndexController::class, 'signinPage'])
+        ->name('login');
+
+    Route::get('/signin', [IndexController::class, 'signinPage'])
+        ->name('signin');
+
+    Route::get('/admin/signin', [IndexController::class, 'signinAdminPage'])
+        ->name('admin-singin');
+
+    Route::get('/mahasiswa/signup', [IndexController::class, 'signupStudentPage'])
+        ->name('student-signup');
+        
+    Route::get('/perusahaan/signup', [IndexController::class, 'signupCompanyPage'])
+        ->name('company-signup');
 });
 
-// Routing untuk system forgot password
+// Routng untuk system forgot password
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])->name('password.request');
 Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password.reset');
 
 
-// akun user harus ter-authtntikasi dan email sudah diverifikasi kalau mau masuk ke route dibawah ini
+// user harus login dan email terverifikasi untuk masuk
+// ke route ini
 Route::middleware(['auth', 'verified'])->group(function () {
     /**
      * Routing untuk render halaman dashboard mahasiswa, perusahaan dan admin
@@ -146,15 +148,13 @@ Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
 
 
 
-// akun user harus ter-autentikasi sebelum masuk ke route dibawah ini
+// user harus login untuk masuk ke route ini
 Route::middleware('auth')->group(function () {
     // Routing untuk halaman verifikasi email yang di daftarkan
-    Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->name('verification.notice');
+    Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])
+        ->name('verification.notice');
+
     Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])
         ->middleware('signed')
         ->name('verification.verify');
-});
-
-Route::get('/clear-session', function() {
-    request()->session()->flush();
 });

@@ -21,6 +21,12 @@
 
     <!-- css link -->
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <script>
+        window.laravel = {
+            csrf_token: '{{ csrf_token() }}'
+        };
+        
+    </script>
 </head>
 
 <body>
@@ -159,8 +165,7 @@
             <div class="row row-gap-5" style="margin-bottom: 5rem;">
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Wasyn-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Wasyn-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle  bg-white position-absolute">
                         <h2 class="profile-name">Wasyn Sulaiman Siregar</h2>
                         <span class="profile-role">Frontend Developer</span>
@@ -172,8 +177,7 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Aidil-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Aidil-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Muhammad Aidil Jupriadi Saleh</h2>
                         <span class="profile-role">Data dan Sistem Analis</span>
@@ -185,8 +189,7 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Indria-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Indria-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Indria Bintani Askia</h2>
                         <span class="profile-role">Backend Developer</span>
@@ -200,8 +203,7 @@
             <div class="row row-gap-5">
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Fito-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Fito-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Fito Desta Fabiansyah</h2>
                         <span class="profile-role">Backend Developer</span>
@@ -213,8 +215,7 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Winda-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Winda-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Winda Tri Wulandari</h2>
                         <span class="profile-role">Designer</span>
@@ -226,8 +227,7 @@
                 </div>
                 <div class="col-12 col-md-4 col-lg-4">
                     <div class="profile-card mx-auto d-flex flex-column align-items-center position-relative">
-                        <img src="{{ asset('storage/profile/Eric-removebg-preview.png') }}"
-                            alt=""
+                        <img src="{{ asset('storage/profile/Eric-removebg-preview.png') }}" alt=""
                             class="profile rounded-circle bg-white position-absolute">
                         <h2 class="profile-name">Eric Marcelino Hutabarat</h2>
                         <span class="profile-role">Data dan Sistem Analis</span>
@@ -259,11 +259,12 @@
             <div class="container d-flex align-items-center justify-content-center contact-container">
                 <img src="{{ asset('storage/svg/contact-ilustration.svg') }}" alt="Contact us ilustration">
                 <div>
-                    <form action="" method="POST" class="form-contact mx-auto p-4">
+                    <form id="contact-us-form" method="POST" class="form-contact mx-auto p-4">
                         <input type="email" name="email" class="rounded-pill" id="email"
                             placeholder="email">
-                        <textarea name="pesan" id="pesan" class="input-pesan" placeholder="Kirim pesan anda disini"></textarea>
-                        <button type="submit" class="rounded-pill" name="kirim-pesan">Kirim Pesan</button>
+                        <textarea name="feedback" id="feedback" class="input-pesan" placeholder="Kirim pesan anda disini"></textarea>
+                        <button onclick="sendFeedback()" type="button" class="rounded-pill"
+                            name="kirim-pesan">Kirim Pesan</button>
                     </form>
                 </div>
             </div>
@@ -290,6 +291,24 @@
     {{-- footer section end --}}
 
 
+    {{-- pop up notifikasi custom --}}
+    <div id="custom-notification"
+        class="d-none position-fixed top-0 end-0 start-0 bottom-0 d-flex align-items-center justify-content-center z-1 min-vh-100"
+        style="background-color: rgba(0, 0, 0, .4)">
+        <div class="bg-white py-5 px-3 rounded">
+            <div class="position-relative d-flex flex-column align-items-center">
+                <img id="custom-notification-icon" class="" src="" style="width: 60px;"
+                    alt="">
+                <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title"></h6>
+                <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                    id="custom-notification-message"></span>
+            </div>
+            <button
+                class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                onclick="showCustomNotification()" style="font-size: .85rem;">Tutup</button>
+        </div>
+    </div>
+
     <!-- link boottrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
@@ -298,7 +317,7 @@
     {{-- jqeury --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    {{-- <script src="{{ asset('js/index.js') }}"></script> --}}
+    <script src="{{ asset('js/index.js') }}"></script>
 
 </body>
 

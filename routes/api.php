@@ -12,10 +12,16 @@ use App\Http\Controllers\API\SearchController;
 use App\Http\Controllers\api\StudentProfileController;
 use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
+use App\Http\Controllers\IndexController;
 use App\Http\Middleware\isCompanyVerified;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
+use App\Http\Middleware\ValidateAjax;
+
+// route untuk handle pengiriman feedback
+Route::post('/send-feedback', [IndexController::class, 'sendFeedback'])
+    ->middleware(ValidateAjax::class);
 
 Route::middleware(['guest', 'web'])->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan

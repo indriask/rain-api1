@@ -258,24 +258,6 @@
         </main>
     </div>
 
-    {{-- <div class="modal fade" id="vacancyDetailModal" tabindex="-1" aria-labelledby="vacancyDetailModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="vacancyDetailModalLabel">Vacancy Detail</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Vacancy detail content will be injected here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
