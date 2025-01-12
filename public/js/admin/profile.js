@@ -1,6 +1,5 @@
 const editAdminProfileForm = $("#edit-admin-profile-form");
 const editAdminProfileNotification = $("#edit-admin-profile-notification");
-const deleteAccountNotification = document.querySelector("#delete-account-notification");
 const profileAdminCustomNotification = $("#custom-notification");
 
 function editProfileAdminData() {
@@ -101,4 +100,20 @@ function handleProfileFile() {
     reader.onload = event => {
         $("#user-profile")[0].src = event.target.result;
     }
+}
+
+function showCustomNotification(title, message, icon) {
+    if (profileAdminCustomNotification.hasClass("d-block")) {
+        profileAdminCustomNotification.removeClass("d-block");
+        profileAdminCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    profileAdminCustomNotification.removeClass("d-none");
+    profileAdminCustomNotification.addClass("d-block");
+
+    $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }

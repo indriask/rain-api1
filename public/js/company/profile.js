@@ -1,5 +1,5 @@
 const editCompanyProfileForm = $("#edit-company-profile-form");
-const editCompanyProfileNotification = document.querySelector("#edit-company-profile-notification");
+const editCompanyProfileNotification = $("#edit-company-profile-notification");
 const deleteAccountCard = $("#delete-account-card");
 const profileCompanyCustomNotification = $("#custom-notification");
 const deleteAccountNotification = $("#delete-account-notification");
@@ -68,12 +68,12 @@ function editProfileCompanyData() {
 }
 
 function showEditCompanyProfileNotification(message, image) {
-    if (editCompanyProfileNotification.textContent.trim() !== "") {
-        editCompanyProfileNotification.textContent = "";
+    if (editCompanyProfileNotification.html().trim() !== "") {
+        editCompanyProfileNotification.html("");
         return;
     }
 
-    editCompanyProfileNotification.innerHTML = `
+    editCompanyProfileNotification.html(`
          <div class="position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
                     style="background-color: rgba(0, 0, 0, .4)">
                     <div
@@ -88,7 +88,7 @@ function showEditCompanyProfileNotification(message, image) {
                     </div>
                 </div>
     
-    `;
+    `);
 }
 
 // function untuk menampilkan notifikasi ingin menghapus akun RAIN

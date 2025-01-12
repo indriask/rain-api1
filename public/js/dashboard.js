@@ -11,7 +11,6 @@ $(document).ready(function () {
     // Ketika jurusan dipilih, ambil daftar prodi
     $('#jurusan').on('change', function () {
         let idJurusan = $(this).val();
-        console.log(idJurusan);
         let prodiSelect = $('#prodi');
         prodiSelect.empty().append('<option value="">Pilih prodi</option>');
         if (idJurusan) {
@@ -33,99 +32,282 @@ $(document).ready(function () {
                 `<option value="${lokasi.location}">${lokasi.location}</option>`);
         });
     });
+
+    // mengambil data filter pada filter berbasis mode kerja
+    $('#mode_kerja').on('change', function () {
+        const selectedTitle = $(this).val(); // Ambil lowongan yang dipilih
+
+        // Lakukan request ke backend dengan lowongan yang dipilih
+        $.ajax({
+            url: '/filter-vacancies-by-title', // URL endpoint untuk filter
+            type: 'GET',
+            data: {
+                title: selectedTitle
+            },
+            success: function (response) {
+                // Bersihkan container lowongan sebelum menampilkan data baru
+                $('#data-lowongan').empty();
+
+                // Periksa apakah ada data lowongan
+                if (response.length > 0) {
+                    response.forEach(function (vacancy) {
+                        const card = `
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="${window.storage_path.path + vacancy.photo_profile}"
+                                    alt="Company photo">
+                            </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">${vacancy.title}</h6>
+                                <span class="vacancy-major-choice">${vacancy.major_name}</span>
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>${vacancy.vacancy_location}</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
+                                </ul>
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">${vacancy.vacancy_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.duration} Bulan</li>
+                                </ul>
+                                <button onclick="showVacancyDetailCard('${vacancy.id_vacancy}')"
+                                    class="vacancy-detail border border-0 click-animation text-white mx-auto d-block mt">Lihat</button>
+                            </div>
+                        </div>
+                    `;
+                        $('#data-lowongan').append(card);
+                    });
+                } else {
+                    $('#data-lowongan').html(
+                        '<p class="text-center">Tidak ada lowongan ditemukan.</p>');
+                }
+            },
+            error: function () {
+                console.error('Terjadi kesalahan saat memuat data.');
+            }
+        });
+    });
+
+    // mengambil data filter pada filter berbasis jurusan
+    $('#jurusan2').on('change', function () {
+        const selectedMajor = $(this).val(); // Ambil jurusan yang dipilih
+
+        // Lakukan request ke backend dengan jurusan yang dipilih
+        $.ajax({
+            url: '/filter-vacancies-by-major', // URL endpoint untuk filter
+            type: 'GET',
+            data: {
+                major: selectedMajor
+            },
+            success: function (response) {
+                // Bersihkan container lowongan sebelum menampilkan data baru
+                $('#data-lowongan').empty();
+
+                // Periksa apakah ada data lowongan
+                if (response.length > 0) {
+                    response.forEach(function (vacancy) {
+                        const card = `
+                            <div class="vacancy-card bg-white py-3 px-4">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
+                                    <img class="company-photo rounded"
+                                        src="${window.storage_path.path + vacancy.photo_profile}"
+                                        alt="Company photo">
+                                </div>
+                                <div>
+                                    <h6 class="vacancy-role m-0">${vacancy.title}</h6>
+                                    <span class="vacancy-major-choice">${vacancy.major_name}</span>
+                                    <ul class="vacancy-small-detail p-0 mt-3">
+                                        <li><i class="bi bi-geo-alt me-3"></i>${vacancy.vacancy_location}</li>
+                                        <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                        <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
+                                    </ul>
+                                    <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                        <li class="bg-white rounded-pill text-center">${vacancy.vacancy_type}</li>
+                                        <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
+                                        <li class="bg-white rounded-pill text-center">${vacancy.duration} Bulan</li>
+                                    </ul>
+                                    <button onclick="showVacancyDetailCard('${vacancy.id_vacancy}')"
+                                        class="vacancy-detail border click-animation border-0 text-white mx-auto d-block mt">Lihat</button>
+                                </div>
+                            </div>
+                        `;
+                        $('#data-lowongan').append(card);
+                    });
+                } else {
+                    $('#data-lowongan').html(
+                        '<p class="text-center">Tidak ada lowongan ditemukan untuk jurusan ini.</p>'
+                    );
+                }
+            },
+            error: function () {
+                console.error('Terjadi kesalahan saat memuat data.');
+            }
+        });
+    });
+
+    // mengambil data filter pada filter berbasis lokasi magang
+    $('#lokasipekerjaan').on('change', function () {
+        const selectedLocation = $(this).val(); // Ambil lokasi yang dipilih
+
+        // Lakukan request ke backend dengan lokasi yang dipilih
+        $.ajax({
+            url: '/filter-vacancies-by-location', // Endpoint filter
+            type: 'GET',
+            data: {
+                location: selectedLocation
+            },
+            success: function (response) {
+                // Bersihkan container lowongan sebelum menampilkan data baru
+                $('#data-lowongan').empty();
+
+                // Periksa apakah ada data lowongan
+                if (response.length > 0) {
+                    response.forEach(function (vacancy) {
+                        const card = `
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="${window.storage_path.path + vacancy.photo_profile}"
+                                    alt="Company photo">
+                            </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">${vacancy.title}</h6>
+                                <span class="vacancy-major-choice">${vacancy.major_name}</span>
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>${vacancy.vacancy_location}</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
+                                </ul>
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">${vacancy.vacancy_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.duration} Bulan</li>
+                                </ul>
+                                <button onclick="showVacancyDetailCard('${vacancy.id_vacancy}')"
+                                    class="vacancy-detail border border-0 click-animation text-white mx-auto d-block mt">Lihat</button>
+                            </div>
+                        </div>
+                    `;
+                        $('#data-lowongan').append(card);
+                    });
+                } else {
+                    $('#data-lowongan').html(
+                        '<p class="text-center">Tidak ada lowongan ditemukan untuk lokasi ini.</p>'
+                    );
+                }
+            },
+            error: function () {
+                console.error('Terjadi kesalahan saat memuat data.');
+            }
+        });
+    });
+
+    // menghapus filter aktif pada lowongan
+    $('.hapus-filter').on('click', function () {
+        // Reset semua select dropdown ke default
+        $('#lokasipekerjaan').val(''); // Reset lokasi
+        $('#mode_kerja').val(''); // Reset lowongan
+        $('#jurusan2').val(''); // Reset jurusan (jika ada)
+
+        // Panggil kembali semua data vacancy tanpa filter
+        $.ajax({
+            url: '/filter-vacancies-clear', // Endpoint untuk mengambil semua data
+            type: 'GET',
+            success: function (response) {
+                // Bersihkan container lowongan sebelum menampilkan data baru
+                $('#data-lowongan').empty();
+
+                // Periksa apakah ada data lowongan
+                if (response.length > 0) {
+                    response.forEach(function (vacancy) {
+                        const card = `
+                        <div class="vacancy-card bg-white py-3 px-4">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="salary-text">Rp. ${new Intl.NumberFormat('id-ID').format(vacancy.salary)}/bulan</h5>
+                                <img class="company-photo rounded"
+                                    src="${window.storage_path.path + vacancy.photo_profile}"
+                                    alt="Company photo">
+                            </div>
+                            <div>
+                                <h6 class="vacancy-role m-0">${vacancy.title}</h6>
+                                <span class="vacancy-major-choice">${vacancy.major_name}</span>
+                                <ul class="vacancy-small-detail p-0 mt-3">
+                                    <li><i class="bi bi-geo-alt me-3"></i>${vacancy.vacancy_location}</li>
+                                    <li><i class="bi bi-calendar3 me-3"></i>${new Date(vacancy.date_created).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                    <li><i class="bi bi-bar-chart-line me-3"></i>${vacancy.quota} Kuota</li>
+                                </ul>
+                                <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
+                                    <li class="bg-white rounded-pill text-center">${vacancy.vacancy_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.time_type}</li>
+                                    <li class="bg-white rounded-pill text-center">${vacancy.duration} Bulan</li>
+                                </ul>
+                                <button onclick="showVacancyDetailCard('${vacancy.id_vacancy}')"
+                                    class="vacancy-detail border click-animation border-0 text-white mx-auto d-block mt">Lihat</button>
+                            </div>
+                        </div>
+                    `;
+                        $('#data-lowongan').append(card);
+                    });
+                } else {
+                    $('#data-lowongan').html(
+                        '<p class="text-center">Tidak ada lowongan tersedia.</p>');
+                }
+            },
+            error: function () {
+                console.error('Terjadi kesalahan saat memuat data.');
+            }
+        });
+    });
+
+    // request search data ke backend route
+    $('#search-lowongan').on('input', function () {
+        console.log($('#search-lowongan')); // Memastikan elemen input ditemukan
+        console.log($('#data-lowongan .vacancy-card')); // Memastikan elemen lowongan ditemukan
+
+
+        var searchText = $(this).val()
+            .toLowerCase(); // Ambil teks pencarian dan ubah menjadi huruf kecil
+
+        // Iterasi melalui setiap lowongan
+        $('#data-lowongan .vacancy-card').each(function () {
+            var title = $(this).find('.vacancy-role').text()
+                .toLowerCase(); // Ambil teks dari title
+
+            // Periksa apakah teks pencarian ada dalam title
+            if (title.includes(searchText)) {
+                $(this).show(); // Tampilkan elemen jika cocok
+            } else {
+                $(this).hide(); // Sembunyikan elemen jika tidak cocok
+            }
+        });
+    });
 });
 
-function fetchLowongan() {
-    const jurusan = $('#jurusan').val();
-    const prodi = $('#prodi').val();
-    const modeKerja = $('select[name="mode_kerja"]').val();
-    const lokasi = $('#lokasi').val();
-    const search = $('input[name="cari-perusahaan"]').val();
-
-    $.ajax({
-        url: '/lowongan/filter',
-        method: 'GET',
-        data: {
-            jurusan,
-            prodi,
-            mode_kerja: modeKerja,
-            lokasi,
-            search,
-        },
-        success: function (data) {
-            const container = $('#data-lowongan');
-            container.empty();
-            data.forEach((lowong) => {
-                // Memformat tanggal
-                const tanggal = new Date(lowong.tanggal_pendaftaran);
-                const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
-                    "Agustus", "September", "Oktober", "November", "Desember"
-                ];
-                const tanggalFormat = ("0" + tanggal.getDate()).slice(-2) + "-" + bulan[tanggal
-                    .getMonth()] + "-" + tanggal.getFullYear();
-
-                container.append(`
-    <div class="vacancy-card bg-white py-3 px-4">
-        <div class="d-flex justify-content-between">
-            <h5 class="salary-text">Rp. ${lowong.gaji_perbulan.toLocaleString('id-ID')}/bulan</h5>
-            <img class="company-photo rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbgAzqz4kY3Lte8GPpOfYnINyvZhPxXl5uSw&s" alt="Company photo">
-        </div>
-        <div>
-            <h6 class="vacancy-role m-0">${lowong.nama_pekerjaan}</h6>
-            <span class="vacancy-major-choice">${lowong.jurusan.name}</span>
-            <ul class="vacancy-small-detail p-0 mt-3">
-                <li><i class="bi bi-geo-alt me-3"></i>${lowong.lokasi}</li>
-                <li><i class="bi bi-calendar3 me-3"></i>${tanggalFormat}</li> <!-- Tanggal yang diformat -->
-                <li><i class="bi bi-bar-chart-line me-3"></i>${lowong.jumlah_kouta} Kuota</li>
-            </ul>
-            <ul class="vacancy-small-info mt-4 d-flex justify-content-between">
-                <li class="bg-white rounded-pill text-center">${lowong.jenis_kerja}</li>
-                <li class="bg-white rounded-pill text-center">${lowong.mode_kerja}</li>
-                <li class="bg-white rounded-pill text-center">${lowong.lama_magang} Bulan</li>
-            </ul>
-            <button onclick="showVacancyDetail('1')"
-                class="vacancy-detail border border-0 text-white mx-auto d-block mt">Detail</button>
-        </div>
-    </div>
-`);
-            });
-        },
-
-    });
-}
-
-// $('#jurusan, #prodi, select[name="mode_kerja"], #lokasi, input[name="cari-perusahaan"]').on('change keyup',
-//     fetchLowongan);
-
-// $('.hapus-filter').on('click', function () {
-//     $('#jurusan').val('');
-//     $('#prodi').val('');
-//     $('#prodi').find('option').not(':first').remove();
-//     $('select[name="mode_kerja"]').val('');
-//     $('#lokasi').val('');
-//     $('input[name="cari-perusahaan"]').val('');
-//     fetchLowongan();
-// });
-
-const vacancyCardListContainer = document.querySelector("#vacancy-card-list-container");
 const vacancyDetailCard = $("#vacancy-detail-card");
-const vacancyApplyFormContainer = document.querySelector("#vacancy-apply-form-container")
-const applyFormNotifcation = document.querySelector("#apply-form-notification");
+const vacancyApplyFormContainer = $("#vacancy-apply-form-container")
+const applyFormNotifcation = $("#apply-form-notification");
 const vacancyApplyForm = $("#vacancy-apply-form");
-const vacancyCardList = document.querySelector("#vacancy-card-list");
-const logoutCard = document.querySelector("#logout-card");
+const logoutCard = $("#logout-card");
 const dashboardCustomNotification = $("#custom-notification");
 let selectHide = false;
 
-let addVacancy = document.querySelector("#add-vacancy");
-let addVacancyForm = null;
-let addVacancyNotification = null;
-
+function closeFilter() {
+    $("div.select-container > div.select-container").toggle();
+    if (selectHide) {
+        selectHide = false;
+        $("#filter-btn-text").text("Hapus Filter");
+    } else {
+        selectHide = true;
+        $("#filter-btn-text").text("Buka Filter");
+    }
+}
 
 // function untuk mengambil data lowongan dan menampilkannya
 function showVacancyDetailCard(id = 0) {
-    const vacancyDetailCard = $("#vacancy-detail-card");
-
     if (vacancyDetailCard.hasClass("d-block")) {
         vacancyDetailCard.removeClass("d-block");
         vacancyDetailCard.addClass("d-none");
@@ -133,10 +315,10 @@ function showVacancyDetailCard(id = 0) {
         $("#vacancy-detail-card-info").remove();
         $("#dashboard__not-found-container").remove();
         return 1;
-    } else {
-        vacancyDetailCard.addClass("d-block");
-        vacancyDetailCard.removeClass("d-none");
     }
+
+    vacancyDetailCard.addClass("d-block");
+    vacancyDetailCard.removeClass("d-none");
 
     $.ajax({
         url: `/dashboard/${id}`,
@@ -272,10 +454,7 @@ function showVacancyDetailCard(id = 0) {
                         <textarea readonly class="apply-vacancy-detail w-100">${vacancy.description}</textarea>
                     </div>
                 </div>    
-            
-            
             `);
-
         },
         error: function (jqXHR) {
             if (jqXHR.status === 500) {
@@ -313,16 +492,16 @@ function showVacancyDetailCard(id = 0) {
 
 // function untuk meng-aktifkan dan non-aktifkan form daftar lowongan mahasiswa
 function showApplyVacancyFormContainer(id) {
-    if (vacancyApplyFormContainer.classList.contains("d-block")) {
-        vacancyApplyFormContainer.classList.remove("d-block");
-        vacancyApplyFormContainer.classList.add("d-none", "pe-none");
+    if (vacancyApplyFormContainer.hasClass("d-block")) {
+        vacancyApplyFormContainer.removeClass("d-block");
+        vacancyApplyFormContainer.addClass("d-none", "pe-none");
 
         vacancyApplyForm.html('');
         return 1;
     }
 
-    vacancyApplyFormContainer.classList.remove("d-none", "pe-none");
-    vacancyApplyFormContainer.classList.add("d-block");
+    vacancyApplyFormContainer.removeClass("d-none", "pe-none");
+    vacancyApplyFormContainer.addClass("d-block");
 
     $.ajax({
         url: '/get-student-profile',
@@ -383,20 +562,20 @@ function processAddProposal(id) {
 
 // function untuk menampilkan notifikasi berhasil atau tidaknya pengirim data diri mahasiswa
 function showNotification() {
-    applyFormNotifcation.classList.remove("d-none", "pe-none");
-    applyFormNotifcation.classList.add("d-block");
+    applyFormNotifcation.removeClass("d-none", "pe-none");
+    applyFormNotifcation.addClass("d-block");
 
-    vacancyApplyForm.classList.add("d-none", "pe-none");
+    vacancyApplyForm.addClass("d-none", "pe-none");
 
     return 1;
 }
 
 // menutup semua tampilan form daftar lowongan mahasiswa, notifikasi, dan detail lowongan
 function closeAllFormCard() {
-    applyFormNotifcation.classList.remove("d-block");
-    applyFormNotifcation.classList.add("d-none", "pe-none");
+    applyFormNotifcation.removeClass("d-block");
+    applyFormNotifcation.addClass("d-none", "pe-none");
 
-    vacancyApplyForm.classList.remove("d-none", "pe-none");
+    vacancyApplyForm.removeClass("d-none", "pe-none");
 
     showApplyVacancyFormContainer();
     showVacancyDetail();
@@ -406,15 +585,15 @@ function closeAllFormCard() {
 
 // function untuk menampilkan pesan ingin logout
 function showLogoutCard() {
-    if (logoutCard.classList.contains("d-block")) {
-        logoutCard.classList.remove("d-block");
-        logoutCard.classList.add("d-none");
+    if (logoutCard.hasClass("d-block")) {
+        logoutCard.removeClass("d-block");
+        logoutCard.addClass("d-none");
 
         return;
     }
 
-    logoutCard.classList.remove("d-none");
-    logoutCard.classList.add("d-block");
+    logoutCard.removeClass("d-none");
+    logoutCard.addClass("d-block");
 }
 
 // function untuk request logout ke server
@@ -708,33 +887,6 @@ function closeAddVacancyForm() {
     return;
 }
 
-function showCustomNotification(title, message, icon) {
-    if (dashboardCustomNotification.hasClass("d-block")) {
-        dashboardCustomNotification.removeClass("d-block");
-        dashboardCustomNotification.addClass("d-none");
-
-        return;
-    }
-
-    dashboardCustomNotification.removeClass("d-none");
-    dashboardCustomNotification.addClass("d-block");
-
-    $("#custom-notification-icon").attr('src', icon);
-    $("#custom-notification-title").text(title);
-    $("#custom-notification-message").text(message);
-}
-
-function closeFilter() {
-    $("div.select-container > div.select-container").toggle();
-    if (selectHide) {
-        selectHide = false;
-        $("#filter-btn-text").text("Hapus Filter");
-    } else {
-        selectHide = true;
-        $("#filter-btn-text").text("Buka Filter");
-    }
-}
-
 function adminDeleteVacancy(id_vacancy) {
     $.ajax({
         url: '/api/dashboard/admin/kelola/lowongan/delete',
@@ -796,4 +948,20 @@ function adminDeleteVacancy(id_vacancy) {
             }
         }
     })
-} 
+}
+
+function showCustomNotification(title, message, icon) {
+    if (dashboardCustomNotification.hasClass("d-block")) {
+        dashboardCustomNotification.removeClass("d-block");
+        dashboardCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    dashboardCustomNotification.removeClass("d-none");
+    dashboardCustomNotification.addClass("d-block");
+
+    $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
+}
