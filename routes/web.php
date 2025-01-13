@@ -5,6 +5,7 @@ use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
 use App\Http\Middleware\isCompanyVerified;
+use App\Http\Middleware\IsRequestAjax;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
@@ -29,35 +30,23 @@ Route::middleware('guest')->group(function () {
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])->name('password.request');
 Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password.reset');
 
-
 // user harus login dan email terverifikasi untuk masuk
 // ke route ini
 Route::middleware(['auth', 'verified'])->group(function () {
-    /**
-     * Routing untuk render halaman dashboard mahasiswa, perusahaan dan admin
-     */
-    Route::get('/dashboard/{id?}', [DashboardController::class, 'index'])
-        ->name('dashboard');
-
-    /**
-     * Routing khusus role mahasiswa
-     */
-    Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
-        ->name('student-proposal-list')
-        ->middleware(IsRoleStudent::class);
-
-    Route::get('/dashboard/mahasiswa/list/lamaran/{id}', [DashboardController::class, 'getStudentProposalList'])
+    // Routing untuk hadnle dashboard mahasiswa, perusahaan dan admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{id}', [DashboardController::class, 'getVacancyDetail'])->name('dashboard.view')
         ->whereNumber('id')
+        ->middleware(IsRequestAjax::class);
+
+    // Routing digunakan untuk handle dashboard mahasiswa
+    Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])->name('student-proposal-list')
         ->middleware(IsRoleStudent::class);
-
-    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
-        ->name('student-profile');
-    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])
-        ->name('mahasiswa.updateProfile')
+    Route::get('/dashboard/mahasiswa/list/lamaran/{id}', [DashboardController::class, 'getProposalDetail'])->whereNumber('id')
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
+    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])->name('student-profile');
+    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])->name('mahasiswa.updateProfile')
         ->middleware(IsRoleStudent::class);
-
-
-    Route::get('/vacancy/{id}', [DashboardController::class, 'getVacancyDetail']);
 
     Route::get('/filter-vacancies-by-major', [DashboardController::class, 'filterVacanciesByMajor'])->name('filter.vacancies.by.major');
     Route::get('/filter-vacancies-by-title', [DashboardController::class, 'filterVacanciesByTitle'])->name('filter.vacancies.by.title');
@@ -70,9 +59,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-student-profile', [DashboardController::class, 'getStudentProfileData'])
         ->middleware(ValidateHeader::class);
 
-    /**
-     * Routing khusus role perusahaan
-     */
+    // Routing digunakan untuk handle dashboard mahasiswa
     Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])
         ->name('company-manage-vacancy')
         ->whereNumber('id')
@@ -90,9 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/perusahaan/profile', [DashboardController::class, 'companyProfilePage'])
         ->name('company-profile');
 
-    /**
-     * Routing khsusus role admin
-     */
+    // Routing digunakan untuk handle dashboard admin
     Route::get('/dashboard/admin/kelola/user/mahasiswa', [DashboardController::class, 'adminManageUserStudent'])
         ->name('admin-manage-user-student')
         ->middleware(IsRoleAdmin::class);
@@ -126,28 +111,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(IsRoleAdmin::class);
 });
 
-
-
 Route::get('/lowongan', [DashboardController::class, 'getLowongan']);
 Route::get('/lowongan/filter', [DashboardController::class, 'filterLowongan']);
 Route::get('/jurusan', [DashboardController::class, 'getJurusan']);
 Route::get('/prodi', [DashboardController::class, 'getProdi']);
 Route::get('/lokasi', [DashboardController::class, 'getLokasi']);
 
-
-
-
-// user harus login untuk masuk ke route ini
+// Route untuk handle halaman verifikasi email
 Route::middleware('auth')->group(function () {
-    // Routing untuk halaman verifikasi email yang di daftarkan
-    Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])
-        ->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])
-        ->middleware('signed')
-        ->name('verification.verify');
+    Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])->name('verification.verify')
+        ->middleware('signed');
 });
 
+// Route untuk testing
 Route::get('/test', function () {
-    return auth('web');
+    dd(request()->session()->all());
 });

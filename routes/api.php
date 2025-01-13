@@ -14,15 +14,14 @@ use App\Http\Controllers\api\StudentSignupController;
 use App\Http\Controllers\api\VerifyEmailController;
 use App\Http\Controllers\IndexController;
 use App\Http\Middleware\isCompanyVerified;
+use App\Http\Middleware\IsRequestAjax;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
-use App\Http\Middleware\ValidateAjax;
-use Illuminate\Session\Middleware\StartSession;
 
 // route untuk handle pengiriman feedback
 Route::post('/send-feedback', [IndexController::class, 'sendFeedback'])
-    ->middleware(ValidateAjax::class);
+    ->middleware(IsRequestAjax::class);
 
 Route::middleware(['guest', 'web'])->group(function () {
     // Route untuk system signin mahasiswa dan perusahaan
@@ -42,15 +41,11 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route signout mahasiswa, perusahaan dan admin
     Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
 
-    /**
-     * Route untuk syste dashboard mahasiswa
-     */
-    Route::post('/dashboard/mahasiswa/daftar/lamaran', [DashboardStudentController::class, 'applyVacancy'])
-        ->name('api-student-apply-vacancy')
+    // Route digunakan untuk handle dashboad mahasiswa
+    Route::post('/dashboard/mahasiswa/daftar/lamaran', [DashboardStudentController::class, 'applyVacancy'])->name('api-student-apply-vacancy')
         ->middleware(IsRoleStudent::class);
 
-    Route::post('/dashboard/mahasiswa/list/lamaran/status/lamaran', [DashboardStudentController::class, 'getProposalStatus'])
-        ->name('api-student-get-proposal-status')
+    Route::post('/dashboard/mahasiswa/list/lamaran/status/lamaran', [DashboardStudentController::class, 'getProposalStatus'])->name('api-student-get-proposal-status')
         ->middleware(IsRoleStudent::class);
 
     Route::post('/dashboard/mahasiswa/list/lamaran/status/wawancara', [DashboardStudentController::class, 'getInterviewStatus'])

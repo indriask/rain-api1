@@ -158,25 +158,13 @@ class DashboardController extends Controller
     /**
      * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
      */
-    public function index($id = 0)
+    public function index()
     {
-        // dd(auth('web')->user()->id_user);s
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
         $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
-        $value = $this->handleCustomHeader($id, $user, $role);
+        $fullName = trim($fullName) === '' ? 'Username' : $fullName;
 
-
-        if ($value['success'] === true) {
-            return response()->json($value, 200);
-        }
-
-        // jika fullname kosong, isi dengan data username
-        if (trim($fullName) === '') {
-            $fullName = 'Username';
-        }
-
-        // $lowongan = Vacancy::with('company.profile')->get();
         $lowongan = DB::table('vacancy')
             ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
@@ -184,8 +172,6 @@ class DashboardController extends Controller
             ->leftJoin('profile', 'company.id_profile', '=', 'profile.id_profile')
             ->get();
         $major = Major::all();
-        // dd($major);
-        // dd($lowongan);
 
         return response()->view('dashboard', [
             'role' => $role,
@@ -194,6 +180,28 @@ class DashboardController extends Controller
             'user' => $user,
             'fullName' => $fullName
         ]);
+    }
+
+    public function getVacancyDetail($id)
+    {
+        $role = $this->roles[auth('web')->user()->role - 1];
+        $vacancy = Vacancy::with('company.profile', 'major')
+            ->where('id_vacancy', $id)
+            ->first();
+
+        if (empty($vacancy)) {
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Data tidak ditemukan',
+                message: 'Data yang anda cari tidak ada',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
+        }
+
+        return response()->json($this->setResponse(
+            success: true,
+            additional: ['vacancy' => $vacancy, 'role' => $role]
+        ), 200);
     }
 
     private function handleCustomHeader($id = 0, $user, $role)
@@ -206,10 +214,23 @@ class DashboardController extends Controller
                     ->where('id_vacancy', $id)
                     ->first();
 
+                if (empty($vacancy)) {
+                    $response = $this->setResponse(
+                        success: true,
+                        title: 'Data tidak ditemukan',
+                        message: 'Data yang anda pilih tidak ada',
+                        icon: asset('storage/svg/failed-x.svg')
+                    );
+                    $response['code'] = 500;
+
+                    return $response;
+                }
+
                 return [
                     'vacancy' => $vacancy,
                     'role' => $role,
-                    'success' => true
+                    'success' => true,
+                    'code' => 200
                 ];
             }
 
@@ -295,14 +316,11 @@ class DashboardController extends Controller
         return ['success' => false];
     }
 
-    /**
-     * Method untuk mahasiswa
-     */
+    // bagian logic mahasiswa
     public function apply(Request $request)
     {
-        // Validate the form input
         $request->validate([
-            'resume' => 'required', // Validate resume file
+            'resume' => 'required',
             'id_vacancy' => 'required|exists:vacancy,id_vacancy',
         ]);
 
@@ -387,13 +405,8 @@ class DashboardController extends Controller
         $role = $this->roles[auth('web')->user()->role - 1];
         $user = auth('web')->user()->load("$role.profile");
         $fullName = $user->$role->profile->first_name . ' ' . $user->$role->profile->last_name;
+        $fullName = trim($fullName) === '' ? 'Username' : $fullName;
 
-        // jika fullname kosong, isi dengan data username
-        if (trim($fullName) === '') {
-            $fullName = 'Username';
-        }
-
-        // Left join antara tabel vacancy dan major
         $vacancy = DB::table('vacancy')
             ->select('vacancy.*', 'major.name as major_name', 'company.*', 'profile.*', 'vacancy.type as vacancy_type', 'vacancy.location as vacancy_location', 'proposal.*')
             ->leftJoin('major', 'vacancy.id_major', '=', 'major.id')
@@ -414,29 +427,16 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function getStudentProposalList($id, Request $request)
+    public function getProposalDetail($id)
     {
-        $header = $request->header('get-data', null);
-        if (is_null($header) && $header !== 'student-proposal') {
-            $response = $this->setResponse(
-                success: false,
-                title: 'Request expire',
-                message: 'Terjadi kesalhaan saat melakukan request, harap coba lagi',
-                icon: asset('storage/svg/failed-x.svg')
-            );
-
-            return response()->json($response, 500);
-        }
-
         $validator = Validator::make(['id_proposal' => $id], ['id_proposal' => ['required', 'integer', 'present']]);
         if ($validator->fails()) {
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: false,
-                message: 'Data tidak ditemukan',
+                title: 'Data tidak ditemukan',
+                message: 'Data yang anda cari tidak ditemukan',
                 icon: asset('storage/svg/failed-x.svg')
-            );
-
-            return response()->json($response);
+            ), 500);
         }
 
         try {
@@ -445,56 +445,15 @@ class DashboardController extends Controller
                 ->where('nim', auth('web')->user()->student->nim)
                 ->firstOrFail();
 
-            return response()->json($proposal);
+            return response()->json($proposal, 200);
         } catch (\Throwable $e) {
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: false,
                 title: 'Request error',
-                message: 'Terjadi kesalahaan saat melakukan request, harap coba lagi',
+                message: 'Terjadi kesalhaan saat melakukan request, harap coba lagi',
                 icon: asset('storage/svg/failed-x.svg')
-            );
-
-            // return response()->json($response, 500);
-            return response()->json($e->getMessage(), 500);
+            ), 500);
         }
-    }
-
-    public function getVacancyDetail($id)
-    {
-        // Fetch the vacancy data along with related company and major data
-        $vacancy = Vacancy::with('company', 'major')->find($id);
-
-        // Check if vacancy exists
-        if (!$vacancy) {
-            return response()->json(['error' => 'Vacancy not found'], 404);
-        }
-
-        // Check if the currently logged-in user has already applied for this vacancy
-        $userHasApplied = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->exists();
-        $proposal = $vacancy->proposals()->where('nim', auth()->user()->student->nim)->first();
-        // Return the vacancy details along with application status
-        return response()->json([
-            'title' => $vacancy->title,
-            'salary' => $vacancy->salary,
-            'major' => $vacancy->major->name,
-            'location' => $vacancy->location,
-            'type' => $vacancy->type,
-            'time_type' => $vacancy->time_type,
-            'duration' => $vacancy->duration,
-            'quota' => $vacancy->quota,
-            'applied' => $vacancy->proposals->count(),
-            'date_created' => Carbon::parse($vacancy->date_created)->format('d F Y'),
-            'date_ended' => Carbon::parse($vacancy->date_ended)->format('d F Y'),
-            'description' => $vacancy->description,
-            'company' => [
-                'name' => $vacancy->company->profile->first_name . ' ' . $vacancy->company->profile->last_name,
-                'photo' => $vacancy->company->profile->photo_profile
-            ],
-            'userHasApplied' => $userHasApplied,  // Return if the user has applied
-            'proposal_status' => $proposal->proposal_status ?? "",
-            'interview_status' => $proposal->interview_status ?? "",
-            'final_status' => $proposal->final_status ?? "",
-        ]);
     }
 
     public function getStudyProgramsByMajor($majorId)
@@ -592,8 +551,7 @@ class DashboardController extends Controller
 
     public function getStudentProfileData()
     {
-        return response()->json(auth('web')->user()
-            ->load('student.profile', 'student.major', 'student.study_program'));
+        return response()->json(auth('web')->user()->load('student.profile', 'student.major', 'student.study_program'));
     }
 
     /**
@@ -883,18 +841,16 @@ class DashboardController extends Controller
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
-
-    /**
-     * Method untuk set response ajax
-     */
+    // untuk set response ajax
     private function setResponse(
         bool $success = true,
         string $title = '',
         string $message = '',
         string $type = '',
-        string $icon = ''
+        string $icon = '',
+        array $additional = []
     ): array {
-        return [
+        $response = [
             'success' => $success,
             'notification' => [
                 'title' => $title,
@@ -903,5 +859,11 @@ class DashboardController extends Controller
                 'icon' => $icon
             ]
         ];
+
+        if ($additional !== []) {
+            $response['additional'] = $additional;
+        }
+
+        return $response;
     }
 }

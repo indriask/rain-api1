@@ -1,6 +1,7 @@
-const studentAppliedVacancyStatus = document.querySelector("#applied-vacancy-status");
+const studentAppliedVacancyStatus = $("#applied-vacancy-status");
 const studentAppliedVacancyStatusInfo = $("#apply-status-info");
 const studentAppliedVacancyDetail = $("#student-applied-vacancy-detail");
+const daftarLamaranCustomNotification = $("#custom-notification");
 
 // function untuk menampilkan detail lowongan yand dilamar
 function showAppliedVacancyDetail(id_proposal) {
@@ -17,7 +18,6 @@ function showAppliedVacancyDetail(id_proposal) {
     $.ajax({
         url: `/dashboard/mahasiswa/list/lamaran/${id_proposal}`,
         method: 'GET',
-        headers: { "GET-DATA": "student-proposal" },
         success: function (response) {
             let vacancy = response.vacancy;
             let firstName = vacancy.company.profile.first_name ?? 'Username';
@@ -35,13 +35,7 @@ function showAppliedVacancyDetail(id_proposal) {
             const formattedDateEnded = `${dateEnded.getDate()} ${dateEnded.toLocaleString('en-US', { month: 'short' })} ${dateEnded.getFullYear()}`;
             const endedDateTime = dateEnded.getTime();
             const currentDate = Date.now();
-            let status = '';
-
-            if (currentDate > endedDateTime) {
-                status = 'Ditutup';
-            } else {
-                status = 'Dibuka';
-            }
+            let status = currentDate > endedDateTime ? "Ditutup" : "Dibuka";
 
             studentAppliedVacancyDetail.html(`
                 <div class="apply-form bg-white p-4 d-flex gap-4 mt-3">
@@ -83,13 +77,20 @@ function showAppliedVacancyDetail(id_proposal) {
                             </div>
 
                             <label class="fw-500">Durasi</label>
-                            <div class="box">${vacancy.duration} Bulan</div>
+                            <div>
+                                <div class="box d-inline-block" style="width: 50px;">${vacancy.duration}</div>
+                                <span class="ms-2 d-inline-block align-middle" style="width: fit-content; font-size: .9rem;">Bulan</span>
+                            </div>
 
                             <label class="fw-500">Kuota</label>
-                            <div class="box">${vacancy.quota} Pelamar</div>
+                            <div>
+                                <div class="box d-inline-block" style="width: 50px;">${vacancy.quota}</div>
+                            </div>
 
                             <label class="fw-500">Pendaftar</label>
-                            <div class="box">${vacancy.applied} Pelamar</div>
+                            <div>
+                                <div class="box d-inline-block" style="width: 50px;">${vacancy.applied}</div>
+                            </div>
 
                             <label class="fw-500">Status</label>
                             <div class="box">${status}</div>
@@ -111,7 +112,47 @@ function showAppliedVacancyDetail(id_proposal) {
             `);
         },
         error: function (jqXHR) {
-            console.log(jqXHR)
+            // error untuk kesalahaan server
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                studentAppliedVacancyDetail.removeClass("d-block");
+                studentAppliedVacancyDetail.addClass("d-none");
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+                studentAppliedVacancyDetail.removeClass("d-block");
+                studentAppliedVacancyDetail.addClass("d-none");
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                studentAppliedVacancyDetail.removeClass("d-block");
+                studentAppliedVacancyDetail.addClass("d-none");
+
+                return;
+            }
         }
     });
 }
@@ -120,7 +161,7 @@ function showAppliedVacancyDetail(id_proposal) {
 function showStudentVacancyStatus(id_proposal) {
     let template = ''
 
-    if (studentAppliedVacancyStatus.textContent.trim() === "") {
+    if (studentAppliedVacancyStatus.html().trim() === "") {
         template = `
                 <div
                     class="applied-vacancy-status position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center">
@@ -139,7 +180,7 @@ function showStudentVacancyStatus(id_proposal) {
     `;
     }
 
-    studentAppliedVacancyStatus.innerHTML = template;
+    studentAppliedVacancyStatus.html(template);
     return 1;
 }
 
@@ -148,11 +189,11 @@ function getApplyStatusInfo(id_proposal) {
     $.ajax({
         url: "/api/dashboard/mahasiswa/list/lamaran/status/lamaran",
         method: "POST",
-        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        headers: {"X-CSRF-TOKEN": window.laravel.csrf_token},
         data: { id_proposal: id_proposal },
         success: function (response) {
             let notification = response.notification;
-            let interviewDate = response.interview_date ?? null;
+            let interviewDate = response.additional.interview_date ?? null;
             let interviewDateNotify = ``;
 
             if (interviewDate !== null) {
@@ -202,15 +243,18 @@ function getApplyStatusInfo(id_proposal) {
             `);
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -223,12 +267,15 @@ function getApplyStatusInfo(id_proposal) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
         }
@@ -261,15 +308,18 @@ function getInterviewStatusInfo(id_proposal) {
             `);
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -282,12 +332,15 @@ function getInterviewStatusInfo(id_proposal) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
         }
@@ -297,4 +350,20 @@ function getInterviewStatusInfo(id_proposal) {
 // fucntion untuk menutup semua tampilan
 function closeStatusInfo() {
     studentAppliedVacancyStatusInfo.html(``);
+}
+
+function showCustomNotification(title, message, icon) {
+    if (daftarLamaranCustomNotification.hasClass("d-block")) {
+        daftarLamaranCustomNotification.removeClass("d-block");
+        daftarLamaranCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    daftarLamaranCustomNotification.removeClass("d-none");
+    daftarLamaranCustomNotification.addClass("d-block");
+
+    $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }

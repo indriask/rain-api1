@@ -12,9 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
 
-    <!-- box icons cdn link -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     {{-- bootstrap icon web font link --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -52,14 +49,14 @@
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    <div class="position-relative">
+                    {{-- <div class="position-relative">
                         <input type="text" id="search-lowongan"
                             class="search-company bg-white border border-0 focus-ring shadow"
                             placeholder="Cari berdasarkan judul lowongan">
                         <i class="bi bi-search search-icon"></i>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="select-container w-100 mt-2 d-flex gap-3">
+                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
                     <div class="select-container">
                         <select name="jurusan2" id="jurusan2">
                             <option value="" disabled selected>Pilih Jurusan</option>
@@ -69,12 +66,6 @@
                         </select>
                         <div class="select-bg"></div>
                     </div>
-                    {{-- <div class="select-container">
-                        <select name="prodi" id="prodi">
-                            <option>Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div> --}}
                     <div class="select-container">
                         <select name="mode_kerja" id="mode_kerja">
                             <option value="" disabled selected>Pilih lowongan</option>
@@ -97,7 +88,7 @@
                         <i class="bi bi-x-square me-1"></i>
                         Hapus filter
                     </button>
-                </div>
+                </div> --}}
             </div>
 
             {{-- bagian menampilkan semua lowngan yang dilamar --}}
@@ -139,7 +130,6 @@
                 </div>
             </div>
 
-
             {{-- menampilkan detail lowongan yang dilamar --}}
             <div id="student-applied-vacancy-detail"
                 class="d-none position-absolute vacancy-apply-form top-0 start-0 bottom-0 end-0 d-flex justify-content-center overflow-auto">
@@ -153,39 +143,39 @@
             <div id="apply-status-info">
             </div>
 
+            {{-- pop up notifikasi custom --}}
+            <div id="custom-notification"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                style="background-color: rgba(0, 0, 0, .4)">
+                <div class="bg-white py-5 px-3 rounded">
+                    <div class="position-relative d-flex flex-column align-items-center">
+                        <img id="custom-notification-icon" class="" src="" style="width: 60px;"
+                            alt="">
+                        <h6 class="position-relative z-1 fw-700 mb-0 mt-1" id="custom-notification-title"></h6>
+                        <span class="text-body-secondary text-center" style="font-size: .85rem; width: 400px;"
+                            id="custom-notification-message"></span>
+                    </div>
+                    <button
+                        class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
+                        onclick="showCustomNotification()">Tutup</button>
+                </div>
+            </div>
+
             {{-- pop up notifikasi ingin logout --}}
             <x-logout-card />
         </main>
     </div>
 
-    <!-- Vacancy Detail Modal -->
-    <div class="modal fade" id="vacancyDetailModal" tabindex="-1" aria-labelledby="vacancyDetailModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="vacancyDetailModalLabel">Vacancy Detail</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Vacancy detail content will be injected here -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     {{-- script jquery --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap JS (required for modal) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
 
-    <script>
+    {{-- script js fitur dashboard mahasiswa, perusahaan dan admins --}}
+    {{-- <script src="{{ asset('js/dashboard.js') }}"></script> --}}
+
+    {{-- script js fitu daftar lamaran mahasiswa --}}
+    <script src="{{ asset('js/student/daftar-lamaran.js') }}"></script>
+
+    {{-- <script>
         $(document).ready(function() {
             // Event listener ketika select lowongan berubah
             $('#mode_kerja').on('change', function() {
@@ -457,146 +447,7 @@
                 });
             });
         });
-    </script>
-
-
-    {{-- script js buat logika fitur umum pada dashboard mahasiswa, perusahaan dan admin --}}
-    <script defer src="{{ asset('js/dashboard.js') }}"></script>
-
-    {{-- script js buat logika fitur dashboard daftar lamaran mahasiswa --}}
-    <script defer src="{{ asset('js/student/daftar-lamaran.js') }}"></script>
-
-    <script>
-        function showVacancyDetailModal(vacancyId) {
-            // Example of AJAX call to get the vacancy data
-            fetch(`/vacancy/${vacancyId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Prepare the modal content
-                    const modalBody = document.querySelector('#vacancyDetailModal .modal-body');
-                    modalBody.innerHTML = `
-                <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
-                    <div class="position-relative w-50">
-                        <h1 class="apply-form-title">${data.title}</h1>
-                        <div class="d-flex mt-3">
-                            <img class="apply-vacancy-img object-fit-cover object-fit-position me-2" src="{{ asset('${data.company.photo}') }}" alt="Company photo">
-                            <div style="width: 250px">
-                                <div class="apply-company-title d-flex justify-content-between">
-                                    <span class="fw-500" style="width: 100px;">${data.company.name}</span>
-                                    <span class="fw-500">${data.location}</span>
-                                </div>
-                                <div class="apply-vacancy-small-detail d-flex gap-2 mt-1">
-                                    <span class="bg-white rounded-pill p-1">${data.time_type}</span>
-                                    <span class="bg-white rounded-pill p-1">${data.type}</span>
-                                    <span class="bg-white rounded-pill p-1">${data.duration}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-input-container mt-4">
-                            <label class="fw-500">Gaji</label>
-                            <div class="input-group">
-                                <div class="box" style="width: 50px;">${data.salary}</div>
-                                <span class="mx-3">/</span>
-                                <div class="box" style="width: 30px;">${data.salary === 0 ? "-" : "bulan"}</div>
-                            </div>
-
-                            <label class="fw-500">Jurusan</label>
-                            <div class="box">${data.major}</div>
-
-                            <label class="fw-500">Dibuka</label>
-                            <div class="input-group">
-                                <div class="box">${data.date_created}</div>
-                                <span class="mx-3">-</span>
-                                <div class="box">${data.date_ended}</div>
-                            </div>
-
-                            <label class="fw-500">Kuota</label>
-                            <div class="box">${data.quota}</div>
-
-                            <label class="fw-500">Pendaftar</label>
-                            <div class="box">${data.applied}</div>
-                        </div>
-                    </div>
-                    <div class="w-50">
-                        <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                        <div class="apply-vacancy-detail overflow-auto">${data.description}</div>
-                    </div>
-                </div>
-                
-                <!-- Lamar Pekerjaan Button -->
-                <button class="btn btn-primary mt-4" id="applyButton" ${data.userHasApplied ? 'disabled' : ''}>
-                    ${data.userHasApplied ? 'Sudah Dilamar' : 'Lamar Pekerjaan'}
-                </button>
-    
-                <!-- Resume Form -->
-                <div id="resumeForm" class="mt-4" style="display:none;">
-                    <h5>Unggah Resume</h5>
-                    <form id="applyForm" enctype="multipart/form-data">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <div class="form-group">
-                            <label for="resume">Pilih Resume:</label>
-                            <input type="file" id="resume" name="resume" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-success mt-2">Kirim Lamaran</button>
-                    </form>
-                </div>
-            `;
-
-                    if (data.userHasApplied) {
-                        const statusContainer = document.createElement('div');
-                        statusContainer.classList.add('mt-3', 'alert', 'alert-info');
-                        statusContainer.innerHTML = `
-                <p>Status Proposal: <strong> ${data.proposal_status} </strong></p>
-                <p>Status Wawancara: <strong> ${data.interview_status} </strong></p>
-                <hr>
-                <p>Final Status: <strong> ${data.final_status} </strong></p>
-            `;
-                        modalBody.appendChild(statusContainer);
-                    }
-
-                    // Show the modal
-                    const modal = new bootstrap.Modal(document.getElementById('vacancyDetailModal'));
-                    modal.show();
-
-                    // Handle "Lamar Pekerjaan" button click
-                    document.getElementById('applyButton').addEventListener('click', function() {
-                        document.getElementById('resumeForm').style.display = 'block';
-                        document.getElementById('applyButton').style.display = 'none';
-                    });
-
-                    // Handle form submission
-                    document.getElementById('applyForm').addEventListener('submit', function(e) {
-                        e.preventDefault();
-
-                        const formData = new FormData(this);
-                        formData.append('vacancy_id', vacancyId);
-
-                        fetch('/apply', {
-                                method: 'POST',
-                                body: formData,
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Lamaran berhasil dikirim!');
-                                    // Close the modal or clear the form if needed
-                                    modal.hide();
-                                } else {
-                                    alert('Gagal mengirim lamaran!');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error submitting application:', error);
-                            });
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching vacancy details:', error);
-                });
-        }
-    </script>
-
+    </script> --}}
 
 </body>
 

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ValidateAjax
+class IsRequestAjax
 {
     /**
      * Handle an incoming request.
@@ -15,6 +15,10 @@ class ValidateAjax
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if($request->ajax()) {
+            return $next($request);
+        }
+
+        abort(403);
     }
 }

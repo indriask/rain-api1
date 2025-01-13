@@ -159,7 +159,6 @@
             <div id="card-container" class="overflow-auto">
                 <div id="vacancy-card-list-container" class="overflow-auto position-relative h-100">
                     <div id="data-lowongan" class="vacancy-card-list px-3 gap-3 mt-4">
-                        {{-- Iterasi data vacancies --}}
                         @foreach ($vacancies as $vacancy)
                             <div class="vacancy-card bg-white py-3 px-4">
                                 <div class="d-flex justify-content-between">
@@ -204,7 +203,7 @@
 
             {{-- form daftar lowongan mahasiswa --}}
             <div id="vacancy-apply-form-container"
-                class="d-none pe-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
+                class="d-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
 
                 {{-- form input isi data diri mahasiswa --}}
                 <div id="vacancy-apply-form">
@@ -226,7 +225,7 @@
 
             {{-- pop up notifikasi custom --}}
             <div id="custom-notification"
-                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex align-items-center justify-content-center"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="bg-white py-5 px-3 rounded">
                     <div class="position-relative d-flex flex-column align-items-center">
@@ -238,7 +237,7 @@
                     </div>
                     <button
                         class="bni-blue text-white fw-700 rounded border border-0 d-block mx-auto mt-4 px-4 py-2 click-animation"
-                        onclick="showCustomNotification()" style="font-size: .85rem;">Tutup</button>
+                        onclick="showCustomNotification()">Tutup</button>
                 </div>
             </div>
 

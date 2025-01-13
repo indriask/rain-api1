@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // Ambil daftar jurusan dari server
+    // Ambil daftar jurusan dari lowongan yang tersedia
     $.getJSON('/jurusan', function (data) {
         let jurusanSelect = $('#jurusan');
         jurusanSelect.empty().append('<option value="">Pilih jurusan</option>');
@@ -8,21 +8,7 @@ $(document).ready(function () {
         });
     });
 
-    // Ketika jurusan dipilih, ambil daftar prodi
-    $('#jurusan').on('change', function () {
-        let idJurusan = $(this).val();
-        let prodiSelect = $('#prodi');
-        prodiSelect.empty().append('<option value="">Pilih prodi</option>');
-        if (idJurusan) {
-            $.getJSON(`/prodi/${idJurusan}`, function (data) {
-                data.forEach(function (prodi) {
-                    prodiSelect.append(
-                        `<option value="${prodi.id}">${prodi.name}</option>`);
-                });
-            });
-        }
-    });
-
+    // ambil data lokasi dari lowongan yang tersedia
     $.getJSON('/lokasi', function (data) {
         let lokasiSelect = $('#lokasipekerjaan');
         lokasiSelect.empty().append('<option value="">Pilih Lokasi</option>');
@@ -35,20 +21,17 @@ $(document).ready(function () {
 
     // mengambil data filter pada filter berbasis mode kerja
     $('#mode_kerja').on('change', function () {
-        const selectedTitle = $(this).val(); // Ambil lowongan yang dipilih
+        const selectedTitle = $(this).val();
 
-        // Lakukan request ke backend dengan lowongan yang dipilih
         $.ajax({
-            url: '/filter-vacancies-by-title', // URL endpoint untuk filter
+            url: '/filter-vacancies-by-title',
             type: 'GET',
             data: {
                 title: selectedTitle
             },
             success: function (response) {
-                // Bersihkan container lowongan sebelum menampilkan data baru
                 $('#data-lowongan').empty();
 
-                // Periksa apakah ada data lowongan
                 if (response.length > 0) {
                     response.forEach(function (vacancy) {
                         const card = `
@@ -92,20 +75,17 @@ $(document).ready(function () {
 
     // mengambil data filter pada filter berbasis jurusan
     $('#jurusan2').on('change', function () {
-        const selectedMajor = $(this).val(); // Ambil jurusan yang dipilih
+        const selectedMajor = $(this).val();
 
-        // Lakukan request ke backend dengan jurusan yang dipilih
         $.ajax({
-            url: '/filter-vacancies-by-major', // URL endpoint untuk filter
+            url: '/filter-vacancies-by-major',
             type: 'GET',
             data: {
                 major: selectedMajor
             },
             success: function (response) {
-                // Bersihkan container lowongan sebelum menampilkan data baru
                 $('#data-lowongan').empty();
 
-                // Periksa apakah ada data lowongan
                 if (response.length > 0) {
                     response.forEach(function (vacancy) {
                         const card = `
@@ -150,20 +130,17 @@ $(document).ready(function () {
 
     // mengambil data filter pada filter berbasis lokasi magang
     $('#lokasipekerjaan').on('change', function () {
-        const selectedLocation = $(this).val(); // Ambil lokasi yang dipilih
+        const selectedLocation = $(this).val();
 
-        // Lakukan request ke backend dengan lokasi yang dipilih
         $.ajax({
-            url: '/filter-vacancies-by-location', // Endpoint filter
+            url: '/filter-vacancies-by-location',
             type: 'GET',
             data: {
                 location: selectedLocation
             },
             success: function (response) {
-                // Bersihkan container lowongan sebelum menampilkan data baru
                 $('#data-lowongan').empty();
 
-                // Periksa apakah ada data lowongan
                 if (response.length > 0) {
                     response.forEach(function (vacancy) {
                         const card = `
@@ -208,20 +185,16 @@ $(document).ready(function () {
 
     // menghapus filter aktif pada lowongan
     $('.hapus-filter').on('click', function () {
-        // Reset semua select dropdown ke default
-        $('#lokasipekerjaan').val(''); // Reset lokasi
-        $('#mode_kerja').val(''); // Reset lowongan
-        $('#jurusan2').val(''); // Reset jurusan (jika ada)
+        $('#lokasipekerjaan').val('');
+        $('#mode_kerja').val('');
+        $('#jurusan2').val('');
 
-        // Panggil kembali semua data vacancy tanpa filter
         $.ajax({
-            url: '/filter-vacancies-clear', // Endpoint untuk mengambil semua data
+            url: '/filter-vacancies-clear',
             type: 'GET',
             success: function (response) {
-                // Bersihkan container lowongan sebelum menampilkan data baru
                 $('#data-lowongan').empty();
 
-                // Periksa apakah ada data lowongan
                 if (response.length > 0) {
                     response.forEach(function (vacancy) {
                         const card = `
@@ -265,23 +238,21 @@ $(document).ready(function () {
 
     // request search data ke backend route
     $('#search-lowongan').on('input', function () {
-        console.log($('#search-lowongan')); // Memastikan elemen input ditemukan
-        console.log($('#data-lowongan .vacancy-card')); // Memastikan elemen lowongan ditemukan
+        console.log($('#search-lowongan'));
+        console.log($('#data-lowongan .vacancy-card'));
 
 
         var searchText = $(this).val()
-            .toLowerCase(); // Ambil teks pencarian dan ubah menjadi huruf kecil
+            .toLowerCase();
 
-        // Iterasi melalui setiap lowongan
         $('#data-lowongan .vacancy-card').each(function () {
             var title = $(this).find('.vacancy-role').text()
-                .toLowerCase(); // Ambil teks dari title
+                .toLowerCase();
 
-            // Periksa apakah teks pencarian ada dalam title
             if (title.includes(searchText)) {
-                $(this).show(); // Tampilkan elemen jika cocok
+                $(this).show();
             } else {
-                $(this).hide(); // Sembunyikan elemen jika tidak cocok
+                $(this).hide();
             }
         });
     });
@@ -313,7 +284,6 @@ function showVacancyDetailCard(id = 0) {
         vacancyDetailCard.addClass("d-none");
 
         $("#vacancy-detail-card-info").remove();
-        $("#dashboard__not-found-container").remove();
         return 1;
     }
 
@@ -323,60 +293,18 @@ function showVacancyDetailCard(id = 0) {
     $.ajax({
         url: `/dashboard/${id}`,
         method: "GET",
-        headers: {
-            "X-GET-DATA": "specific-data",
-        },
         success: function (response) {
-            if (response.vacancy === null || response.vacancy === undefined) {
-                vacancyDetailCard.html(`
-                     <div id="dashboard__not-found-container">
-                    <div class="dashboard__not-found-container rounded border py-3 px-4 bg-white">
-                        <div class="mx-auto">
-                            <img class="dashboard__not-found-icon d-block mx-auto mb-1"
-                                src="${window.storage_path.path}svg/failed-x.svg" alt="">
-                            <h4 class="text-center fw-700" style="font-size: 1.35rem;">Oops</h4>
-                        </div>
-                        <p class="text-center text-body-secondary mb-0">Data tidak ditemukan dengan kriteria ini.</p>
-                        <p class="text-center text-body-secondary">Silahkan coba lagi nanti</p>
-                        <button
-                            class="bni-blue border border-0 text-white rounded click-animation d-block mx-auto p-1 click-animation cursor-pointer"
-                            style="width: 90px;" onclick="showVacancyDetailCard()">Tutup</button>
-                    </div>
-                </div>
-                `);
-                return false;
-            }
-
-            let vacancy = response.vacancy;
+            const vacancy = response.additional.vacancy;
             let applyForm = "";
-            let deleteBtn = '';
+            let deleteBtn = "";
             let fullName = `${vacancy.company.profile.first_name ?? ""} ${vacancy.company.profile.last_name ?? ""}`;
+            fullName = fullName.trim() === "" ? "Username" : fullName;
+
             const formatter = new Intl.NumberFormat('en-us', {
                 style: "currency",
                 currency: "IDR",
                 minimumFractionDigits: 0
             });
-
-            if (fullName.trim() === "") {
-                fullName = "Username";
-            }
-
-            if (response.role === 'student') {
-                applyForm = `
-                    <div class="d-flex">
-                            <button type="button"
-                            class="apply-vacancy-button click-animation border border-0 text-white fw-700 ms-auto"
-                            onclick="showApplyVacancyFormContainer(1)">Daftar</button>
-                        </div>
-                `;
-            }
-
-            if (response.role === 'admin') {
-                deleteBtn = `
-                    <button onclick="adminDeleteVacancy(${vacancy.id_vacancy})" type="button"
-                            class="close-apply-form text-white click-animation fw-700 border border-0 ms-1">Hapus</button>
-                `;
-            }
 
             const dateCreated = new Date(vacancy.date_created);
             const formattedDateCreated = `${dateCreated.getDate()} ${dateCreated.toLocaleString('en-US', { month: 'short' })} ${dateCreated.getFullYear()}`;
@@ -384,17 +312,28 @@ function showVacancyDetailCard(id = 0) {
             const formattedDateEnded = `${dateEnded.getDate()} ${dateEnded.toLocaleString('en-US', { month: 'short' })} ${dateEnded.getFullYear()}`;
             const endedDateTime = dateEnded.getTime();
             const currentDate = Date.now();
-            let status = '';
+            const status = currentDate > endedDateTime ? "Ditutup" : "Dibuka";
 
-            if (currentDate > endedDateTime) {
-                status = 'Ditutup';
-            } else {
-                status = 'Dibuka';
+            switch (response.additional.role) {
+                case "student":
+                    applyForm = `
+                    <div class="d-flex">
+                            <button type="button"
+                            class="apply-vacancy-button click-animation border border-0 text-white fw-700 ms-auto"
+                            onclick="showApplyVacancyFormContainer(${vacancy.id_vacancy})">Daftar</button>
+                    </div>
+                `;
+                    break;
+
+                case "admin":
+                    deleteBtn = `
+                        <button onclick="adminDeleteVacancy(${vacancy.id_vacancy})" type="button"
+                            class="close-apply-form text-white click-animation fw-700 border border-0 ms-1">Hapus</button>
+                        `;
+                    break;
             }
 
-            $("#daftar-lowongan-id-vacancy").val(vacancy.id_vacancy);
-
-            $("#vacancy-detail-card").append(`
+            $("#vacancy-detail-card").html(`
                 <div id="vacancy-detail-card-info" class="apply-form bg-white p-4 d-flex gap-4 mt-3">
                     <div class="position-relative w-50">
                         <h1 class="apply-form-title">${vacancy.title}</h1>
@@ -457,15 +396,22 @@ function showVacancyDetailCard(id = 0) {
             `);
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                vacancyDetailCard.removeClass("d-block");
+                vacancyDetailCard.addClass("d-none");
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+                vacancyDetailCard.removeClass("d-block");
+                vacancyDetailCard.addClass("d-none");
+
                 return;
             }
 
@@ -478,12 +424,17 @@ function showVacancyDetailCard(id = 0) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                vacancyDetailCard.removeClass("d-block");
+                vacancyDetailCard.addClass("d-none");
+
                 return;
             }
         }
@@ -494,13 +445,13 @@ function showVacancyDetailCard(id = 0) {
 function showApplyVacancyFormContainer(id) {
     if (vacancyApplyFormContainer.hasClass("d-block")) {
         vacancyApplyFormContainer.removeClass("d-block");
-        vacancyApplyFormContainer.addClass("d-none", "pe-none");
+        vacancyApplyFormContainer.addClass("d-none");
 
         vacancyApplyForm.html('');
         return 1;
     }
 
-    vacancyApplyFormContainer.removeClass("d-none", "pe-none");
+    vacancyApplyFormContainer.removeClass("d-none");
     vacancyApplyFormContainer.addClass("d-block");
 
     $.ajax({
@@ -516,7 +467,7 @@ function showApplyVacancyFormContainer(id) {
                         <input type="hidden" name="_token" value="${window.laravel.csrf_token}">
                         <div class="d-flex justify-content-between">
                             <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                            <button type="button" class="border border-0 bg-transparent click-animation"
+                            <button type="button" class="border border-0 bg-transparent click-animation cursor-pointer"
                                 onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                         </div>
                         <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
@@ -548,6 +499,8 @@ function showApplyVacancyFormContainer(id) {
                             class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                     </form>    
             `);
+
+            $("#daftar-lowongan-id-vacancy").val(id);
         },
         error: function (jqXHR) {
             console.log(jqXHR);
