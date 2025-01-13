@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\api\DashboardAdminController;
 use App\Http\Controllers\api\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
@@ -9,9 +8,10 @@ use App\Http\Middleware\IsRequestAjax;
 use App\Http\Middleware\IsRoleAdmin;
 use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
-use App\Http\Middleware\ValidateHeader;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
+
+use function PHPUnit\Framework\isReadable;
 
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
@@ -34,32 +34,50 @@ Route::get('/forgot-password/{token}', [ResetPasswordController::class, 'passwor
 // ke route ini
 Route::middleware(['auth', 'verified'])->group(function () {
     // Routing untuk hadnle dashboard mahasiswa, perusahaan dan admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/{id}', [DashboardController::class, 'getVacancyDetail'])->name('dashboard.view')
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/dashboard/{id}', [DashboardController::class, 'getVacancyDetail'])
+        ->name('dashboard.view')
         ->whereNumber('id')
         ->middleware(IsRequestAjax::class);
-
-    // Routing digunakan untuk handle dashboard mahasiswa
-    Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])->name('student-proposal-list')
-        ->middleware(IsRoleStudent::class);
-    Route::get('/dashboard/mahasiswa/list/lamaran/{id}', [DashboardController::class, 'getProposalDetail'])->whereNumber('id')
-        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
-    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])->name('student-profile');
-    Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])->name('mahasiswa.updateProfile')
-        ->middleware(IsRoleStudent::class);
 
     Route::get('/filter-vacancies-by-major', [DashboardController::class, 'filterVacanciesByMajor'])->name('filter.vacancies.by.major');
     Route::get('/filter-vacancies-by-title', [DashboardController::class, 'filterVacanciesByTitle'])->name('filter.vacancies.by.title');
     Route::get('/filter-vacancies-by-location', [DashboardController::class, 'filterVacanciesByLocation'])->name('filter.vacancies.by.location');
     Route::get('/filter-vacancies-clear', [DashboardController::class, 'clearFilters'])->name('filter.vacancies.clear');
-    Route::post('/student/update-profile', [DashboardController::class, 'updateProfile'])->name('student.updateProfile');
-    Route::post('/delete-account', [DashboardController::class, 'destroy'])->name('account.destroy');
-    Route::post('/apply', [DashboardController::class, 'apply'])->name('apply')->middleware(StartSession::class);
     Route::get('/get-study-programs/{majorId}', [DashboardController::class, 'getStudyProgramsByMajor']);
-    Route::get('/get-student-profile', [DashboardController::class, 'getStudentProfileData'])
-        ->middleware(ValidateHeader::class);
+
 
     // Routing digunakan untuk handle dashboard mahasiswa
+    Route::get('/dashboard/mahasiswa/list/lamaran', [DashboardController::class, 'studentProposalListPage'])
+        ->name('student-proposal-list')
+        ->middleware(IsRoleStudent::class);
+
+    Route::get('/dashboard/mahasiswa/list/lamaran/{id}', [DashboardController::class, 'getProposalDetail'])
+        ->whereNumber('id')
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
+
+    Route::get('/dashboard/mahasiswa/profile', [DashboardController::class, 'studentProfilePage'])
+        ->name('student-profile');
+
+    // Route::post('dashboard/mahasiswa/update-profile', [DashboardAdminController::class, 'updateProfile'])
+    //     ->name('mahasiswa.updateProfile')
+    //     ->middleware(IsRoleStudent::class);
+
+    Route::post('/apply', [DashboardController::class, 'apply'])
+        ->name('apply')
+        ->middleware(StartSession::class, IsRoleStudent::class);
+
+    Route::get('/get-student-profile', [DashboardController::class, 'getStudentProfileData'])
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
+
+    Route::post('/student/update-profile', [DashboardController::class, 'updateProfile'])
+        ->name('student.updateProfile')
+        ->middleware(IsRoleStudent::class);
+
+
+    // Routing digunakan untuk handle dashboard perusahaan
     Route::get('/dashboard/perusahaan/kelola/lowongan/{id?}', [DashboardController::class, 'companyManageVacancyPage'])
         ->name('company-manage-vacancy')
         ->whereNumber('id')

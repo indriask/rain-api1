@@ -61,8 +61,6 @@
                    {{ $feedback }}
                 </p>
                 <p class="text-body-secondary mt-3">Hormat saya, {{ $sender }}</p>
-                <a href="{{ route('company-applicant-list') }}"
-                    class="btn btn-primary underline-none d-block mx-auto mt-4" style="width: fit-content;">Lihat daftar pelamar</a>
             </div>
         </div>
     </div>

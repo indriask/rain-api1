@@ -503,7 +503,47 @@ function showApplyVacancyFormContainer(id) {
             $("#daftar-lowongan-id-vacancy").val(id);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
+            // error untuk kesalahaan server
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                vacancyApplyFormContainer.removeClass("d-block");
+                vacancyApplyFormContainer.addClass("d-none");
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+                vacancyApplyFormContainer.removeClass("d-block");
+                vacancyApplyFormContainer.addClass("d-none");
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+                vacancyApplyFormContainer.removeClass("d-block");
+                vacancyApplyFormContainer.addClass("d-none");
+
+                return;
+            }
         }
     });
 }

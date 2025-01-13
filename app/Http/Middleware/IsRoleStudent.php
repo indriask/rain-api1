@@ -53,9 +53,10 @@ class IsRoleStudent
         string $title = '',
         string $message = '',
         string $type = '',
-        string $icon = ''
+        string $icon = '',
+        array $additional = []
     ): array {
-        return [
+        $response = [
             'success' => $success,
             'notification' => [
                 'title' => $title,
@@ -64,5 +65,11 @@ class IsRoleStudent
                 'icon' => $icon
             ]
         ];
+
+        if($additional !== []) {
+            $response['additional'] = $additional;
+        }
+
+        return $response;
     }
 }

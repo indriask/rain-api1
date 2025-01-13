@@ -39,26 +39,30 @@ Route::middleware(['guest', 'web'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'web'])->group(function () {
     // Route signout mahasiswa, perusahaan dan admin
-    Route::post('/signout', [AccountController::class, 'signout'])->name('api-signout');
+    Route::post('/signout', [AccountController::class, 'signout'])
+        ->name('api-signout')
+        ->middleware(IsRequestAjax::class);
 
-    // Route digunakan untuk handle dashboad mahasiswa
-    Route::post('/dashboard/mahasiswa/daftar/lamaran', [DashboardStudentController::class, 'applyVacancy'])->name('api-student-apply-vacancy')
-        ->middleware(IsRoleStudent::class);
+    // Route digunakan untuk handle dashboard mahasiswa
+    Route::post('/dashboard/mahasiswa/daftar/lamaran', [DashboardStudentController::class, 'applyVacancy'])
+        ->name('api-student-apply-vacancy')
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
-    Route::post('/dashboard/mahasiswa/list/lamaran/status/lamaran', [DashboardStudentController::class, 'getProposalStatus'])->name('api-student-get-proposal-status')
-        ->middleware(IsRoleStudent::class);
+    Route::post('/dashboard/mahasiswa/list/lamaran/status/lamaran', [DashboardStudentController::class, 'getProposalStatus'])
+        ->name('api-student-get-proposal-status')
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
     Route::post('/dashboard/mahasiswa/list/lamaran/status/wawancara', [DashboardStudentController::class, 'getInterviewStatus'])
         ->name('api-student-get-interview-status')
-        ->middleware(IsRoleStudent::class);
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
     Route::post('/dashboard/mahasiswa/profile/edit', [StudentProfileController::class, 'editProfile'])
         ->name('api-student-edit-profile')
-        ->middleware(IsRoleStudent::class);
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
     Route::post('/dashboard/mahasiswa/profile/delete/account', [AccountController::class, 'deleteAccount'])
         ->name('api-delete-account')
-        ->middleware(IsRoleStudent::class);
+        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
     /**
      * Route untuk system dashboard perusahaan

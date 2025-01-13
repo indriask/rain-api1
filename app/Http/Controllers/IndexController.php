@@ -77,14 +77,12 @@ class IndexController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: false,
                 title: 'Request denied',
                 message: $validator->messages(),
                 icon: asset('storage/svg/failed-x.svg')
-            );
-
-            return response()->json($response);
+            ), 500);
         }
 
         try {
@@ -95,23 +93,19 @@ class IndexController extends Controller
             Mail::to('rainpolibatam@gmail.com')
                 ->queue($mail);
 
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: true,
                 title: 'Berhasil mengirim feedback',
                 message: 'Terima kasih atas feedback yang anda berikan kepada website kami',
                 icon: asset('storage/svg/success-checkmark.svg')
-            );
-
-            return response()->json($response, 200);
+            ), 200);
         } catch (\Throwable $e) {
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: false,
                 title: 'Request ditolak',
                 message: 'Terjadi kesalahaan saat melakukan request',
                 icon: asset('storage/svg/failed-x.svg')
-            );
-
-            return response()->json($response, 500);
+            ), 500);
         }
     }
 

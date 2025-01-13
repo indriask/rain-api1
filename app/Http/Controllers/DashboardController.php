@@ -155,9 +155,7 @@ class DashboardController extends Controller
         return response()->json($vacancies); // Kembalikan semua data dalam format JSON
     }
 
-    /**
-     * Method untuk me-render halaman dashboard mahasiswa, perusahaan dan admin
-     */
+    // bagian method untuk render halaman dashboard
     public function index()
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -204,119 +202,7 @@ class DashboardController extends Controller
         ), 200);
     }
 
-    private function handleCustomHeader($id = 0, $user, $role)
-    {
-        if (request()->hasHeader('x-get-data')) {
-            $value = request()->header('x-get-data');
-
-            if ($value === 'specific-data') {
-                $vacancy = Vacancy::with('company.profile', 'major')
-                    ->where('id_vacancy', $id)
-                    ->first();
-
-                if (empty($vacancy)) {
-                    $response = $this->setResponse(
-                        success: true,
-                        title: 'Data tidak ditemukan',
-                        message: 'Data yang anda pilih tidak ada',
-                        icon: asset('storage/svg/failed-x.svg')
-                    );
-                    $response['code'] = 500;
-
-                    return $response;
-                }
-
-                return [
-                    'vacancy' => $vacancy,
-                    'role' => $role,
-                    'success' => true,
-                    'code' => 200
-                ];
-            }
-
-            if ($value === 'specific-data-company') {
-                $vacancy = Vacancy::with('company.profile', 'major')
-                    ->where('id_vacancy', $id)
-                    ->where('nib', $user->$role->nib)
-                    ->first();
-
-                return [
-                    'vacancy' => $vacancy,
-                    'role' => $role,
-                    'success' => true
-                ];
-            }
-
-            if ($value === 'get-applicants') {
-                $applicants = Proposal::select(['id_proposal', 'nim', 'id_vacancy', 'resume'])
-                    ->with([
-                        'student.profile' => function ($query) {
-                            $query->select(['id_profile', 'photo_profile', 'first_name', 'last_name']);
-                        },
-                        'student.account' => function ($query) {
-                            $query->select(['id_user', 'email']);
-                        },
-                        'vacancy' => function ($query) use ($user) {
-                            $query->select(['title', 'id_vacancy']);
-                        }
-                    ])
-                    ->whereHas('vacancy', function ($query) use ($user, $role) {
-                        $query->where('nib', $user->$role->nib);
-                    })
-                    ->get();
-
-                // ubah string file menjadi array
-                foreach ($applicants as $applicant) {
-                    $applicant->resume = Storage::allFiles($applicant->resume);
-                }
-
-                return [
-                    'success' => true,
-                    'applicants' => $applicants,
-                ];
-            }
-
-            if ($value === 'get-applicant-profile') {
-                $profile = Profile::with('student.account', 'student.major', 'student.study_program')
-                    ->where('id_profile', $id)
-                    ->first();
-
-                return [
-                    'success' => true,
-                    'profile' => $profile
-                ];
-            }
-
-            if ($value === 'get-applicant-proposal') {
-                $proposal = Proposal::select('resume', 'nim')->with([
-                    'student.profile' => function ($query) {
-                        $query->select(['first_name', 'last_name', 'phone_number', 'id_profile']);
-                    },
-                    'student.account' => function ($query) {
-                        $query->select(['email', 'id_user']);
-                    },
-                    'student.major' => function ($query) {
-                        $query->select(['name', 'id']);
-                    },
-                    'student.study_program' => function ($query) {
-                        $query->select(['name', 'id']);
-                    }
-                ])->where('id_proposal', $id)->first();
-
-                return [
-                    'success' => true,
-                    'proposal' => $proposal
-                ];
-            }
-
-            if ($value === 'get-company-profile') {
-            }
-        }
-
-        return ['success' => false];
-    }
-
-    // bagian logic mahasiswa
+    // bagian method untuk logika dashboard mahasiswa
     public function apply(Request $request)
     {
         $request->validate([
@@ -554,9 +440,7 @@ class DashboardController extends Controller
         return response()->json(auth('web')->user()->load('student.profile', 'student.major', 'student.study_program'));
     }
 
-    /**
-     * Method untuk perusahaan
-     */
+    // bagian method untuk logika dashboard perusahaan
     public function companyManageVacancyPage($id = 0)
     {
         $role = $this->roles[auth('web')->user()->role - 1];
@@ -644,9 +528,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Method untuk admin
-     */
+    // bagian method unutk logika dashboard admin
     public function adminManageVacancyPage()
     {
         return response()->view('admin.kelola-lowongan', [
@@ -803,9 +685,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Method verifikasi email
-     */
+    // bagian method untuk verifikasi email
     public function verifyRegisteredEmailPage()
     {
         return response()->view('auth.verify-email');
@@ -865,5 +745,117 @@ class DashboardController extends Controller
         }
 
         return $response;
+    }
+
+    private function handleCustomHeader($id = 0, $user, $role)
+    {
+        if (request()->hasHeader('x-get-data')) {
+            $value = request()->header('x-get-data');
+
+            if ($value === 'specific-data') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('id_vacancy', $id)
+                    ->first();
+
+                if (empty($vacancy)) {
+                    $response = $this->setResponse(
+                        success: true,
+                        title: 'Data tidak ditemukan',
+                        message: 'Data yang anda pilih tidak ada',
+                        icon: asset('storage/svg/failed-x.svg')
+                    );
+                    $response['code'] = 500;
+
+                    return $response;
+                }
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $role,
+                    'success' => true,
+                    'code' => 200
+                ];
+            }
+
+            if ($value === 'specific-data-company') {
+                $vacancy = Vacancy::with('company.profile', 'major')
+                    ->where('id_vacancy', $id)
+                    ->where('nib', $user->$role->nib)
+                    ->first();
+
+                return [
+                    'vacancy' => $vacancy,
+                    'role' => $role,
+                    'success' => true
+                ];
+            }
+
+            if ($value === 'get-applicants') {
+                $applicants = Proposal::select(['id_proposal', 'nim', 'id_vacancy', 'resume'])
+                    ->with([
+                        'student.profile' => function ($query) {
+                            $query->select(['id_profile', 'photo_profile', 'first_name', 'last_name']);
+                        },
+                        'student.account' => function ($query) {
+                            $query->select(['id_user', 'email']);
+                        },
+                        'vacancy' => function ($query) use ($user) {
+                            $query->select(['title', 'id_vacancy']);
+                        }
+                    ])
+                    ->whereHas('vacancy', function ($query) use ($user, $role) {
+                        $query->where('nib', $user->$role->nib);
+                    })
+                    ->get();
+
+                // ubah string file menjadi array
+                foreach ($applicants as $applicant) {
+                    $applicant->resume = Storage::allFiles($applicant->resume);
+                }
+
+                return [
+                    'success' => true,
+                    'applicants' => $applicants,
+                ];
+            }
+
+            if ($value === 'get-applicant-profile') {
+                $profile = Profile::with('student.account', 'student.major', 'student.study_program')
+                    ->where('id_profile', $id)
+                    ->first();
+
+                return [
+                    'success' => true,
+                    'profile' => $profile
+                ];
+            }
+
+            if ($value === 'get-applicant-proposal') {
+                $proposal = Proposal::select('resume', 'nim')->with([
+                    'student.profile' => function ($query) {
+                        $query->select(['first_name', 'last_name', 'phone_number', 'id_profile']);
+                    },
+                    'student.account' => function ($query) {
+                        $query->select(['email', 'id_user']);
+                    },
+                    'student.major' => function ($query) {
+                        $query->select(['name', 'id']);
+                    },
+                    'student.study_program' => function ($query) {
+                        $query->select(['name', 'id']);
+                    }
+                ])->where('id_proposal', $id)->first();
+
+                return [
+                    'success' => true,
+                    'proposal' => $proposal
+                ];
+            }
+
+            if ($value === 'get-company-profile') {
+            }
+        }
+
+        return ['success' => false];
     }
 }
