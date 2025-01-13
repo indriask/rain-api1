@@ -14,9 +14,7 @@ class AccountController extends Controller
 {
     protected $roles = ['student', 'company', 'admin'];
 
-    /**
-     * Method untuk mem-proses logika signin mahasiswa dan perusahaan
-     */
+    // proses signin mahasiswa dan perusahaan
     public static function signin(Request $request)
     {
         // Memvalidasi request apakah email dan password sudah diisi
@@ -46,33 +44,29 @@ class AccountController extends Controller
         }
     }
 
-
-    /**
-     * Method untuk mem-proses logika signout mahasiswa, perusahaan dan admin
-     */
-    public static function signout(Request $request)
+    // proses logout mahasiswa, perusahaan dan admin
+    public function signout(Request $request)
     {
-        $data = [
-            'code' => '',
-            'message' => '',
-            'data' => ''
-        ];
-
         try {
             Auth::logout();
 
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            $data['code'] = 302;
-            $data['message'] = 'Berhasil logout!';
-
-            return response()->json($data, 200);
+            return response()->json($this->setResponse(
+                success: true,
+                title: 'Berhasil logout',
+                message: 'Anda berhasil logout dari aplikasi',
+                icon: asset('storage/svg/success-checkmark.svg'),
+                additional: ['code' => 302]
+            ), 200);
         } catch (\Throwable $e) {
-            $data['code'] = 500;
-            $data['message'] = "Terjadi kesalahan saat proses logout";
-
-            return response()->json($data, 200);
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Reqeust ditolak',
+                message: 'Terjadi kesalahaan saat proses logout, harap coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
     }
 
@@ -145,9 +139,10 @@ class AccountController extends Controller
         string $title = '',
         string $message = '',
         string $type = '',
-        string $icon = ''
+        string $icon = '',
+        array $additional = []
     ): array {
-        return [
+        $response = [
             'success' => $success,
             'notification' => [
                 'title' => $title,
@@ -156,5 +151,11 @@ class AccountController extends Controller
                 'icon' => $icon
             ]
         ];
+
+        if ($additional !== []) {
+            $response['additional'] = $additional;
+        }
+
+        return $response;
     }
 }

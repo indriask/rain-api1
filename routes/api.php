@@ -56,9 +56,9 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
         ->name('api-student-get-interview-status')
         ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
-    Route::post('/dashboard/mahasiswa/profile/edit', [StudentProfileController::class, 'editProfile'])
-        ->name('api-student-edit-profile')
-        ->middleware(IsRoleStudent::class, IsRequestAjax::class);
+    // Route::post('/dashboard/mahasiswa/profile/edit', [StudentProfileController::class, 'editProfile'])
+    //     ->name('api-student-edit-profile')
+    //     ->middleware(IsRoleStudent::class, IsRequestAjax::class);
 
     Route::post('/dashboard/mahasiswa/profile/delete/account', [AccountController::class, 'deleteAccount'])
         ->name('api-delete-account')

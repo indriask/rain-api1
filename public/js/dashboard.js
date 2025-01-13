@@ -596,11 +596,13 @@ function processLogoutRequest() {
         type: "POST",
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         success: function (response) {
-            if (response.code === 302) {
-                $("#logout-card-message").text(response.message);
-                $("#logout-card-close-btn").remove();
-                $("#logout-card-btn").remove();
+            if (response.additional.code === 302) {
+                // $("#logout-card-message").text(response.message);
+                // $("#logout-card-close-btn").remove();
+                // $("#logout-card-btn").remove();
 
+                const notification = response.notification;
+                showCustomNotification(notification.title, notification.message, notification.icon);
                 setTimeout(() => window.location.replace('/index'), 500);
             } else {
                 $("#logout-card-message").text(response.message);
@@ -627,6 +629,7 @@ function processLogoutRequest() {
             }
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);
@@ -650,6 +653,14 @@ function processLogoutRequest() {
 
                 url = url.join('/');
                 window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
 
                 return;
             }
