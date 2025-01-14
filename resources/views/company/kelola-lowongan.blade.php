@@ -63,44 +63,7 @@
                             class="profile-img rounded-circle shadow">
                         <span class="profile-name">{{ $fullName }}</span>
                     </div>
-                    {{-- <div class="position-relative">
-                        <input type="search" class="search-company bg-white border border-0 focus-ring shadow"
-                            name="cari-perusahaan" placeholder="Cari perusahaan">
-                        <i class="bi bi-search search-icon"></i>
-                    </div> --}}
                 </div>
-                {{-- <div class="select-container w-100 mt-2 d-flex gap-3">
-                    <div class="select-container">
-                        <select name="jurusan" id="jurusan">
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="prodi" id="prodi">
-                            <option>Pilih prodi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="mode_kerja" id="mode_kerja">
-                            <option value="" selected>Pilih lowongan</option>
-                            <option value="offline">Offline</option>
-                            <option value="online">Online</option>
-                            <option value="hybrid">Hybrid</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <div class="select-container">
-                        <select name="lokasi" id="lokasi">
-                            <option>Pilih lokasi</option>
-                        </select>
-                        <div class="select-bg"></div>
-                    </div>
-                    <button class="hapus-filter ms-auto">
-                        <i class="bi bi-x-square me-1"></i>
-                        Hapus filter
-                    </button>
-                </div> --}}
             </div>
 
             {{-- menampilkan list lowongan yang sudah di publish --}}
@@ -155,7 +118,7 @@
 
             {{-- pop up notifikasi custom --}}
             <div id="custom-notification"
-                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex z-1 align-items-center justify-content-center"
+                class="d-none position-absolute top-0 end-0 bottom-0 start-0 d-flex z-1 align-items-center justify-content-center z-1"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="bg-white py-5 px-3 rounded">
                     <div class="position-relative d-flex flex-column align-items-center">

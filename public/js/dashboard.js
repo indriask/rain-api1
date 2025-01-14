@@ -407,7 +407,7 @@ function showVacancyDetailCard(id = 0) {
                     <div class="w-50">
                         ${applyForm}
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
-                        <textarea readonly class="apply-vacancy-detail w-100">${vacancy.description}</textarea>
+                        <textarea readonly class="apply-vacancy-detail w-100">${vacancy.description ?? ''}</textarea>
                     </div>
                 </div>    
             `);
@@ -796,6 +796,7 @@ function showAddVacancyCard() {
             <div id="add-vacancy-detail" class="w-50 d-block">
                 <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
                 <textarea name="description" id="" class="dashboard__add-vacancy-textarea border border-0 focus-ring p-3" style="text-align: initial;"></textarea>
+                <div id="input-description"></div>
             </div>
             <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
                 <button class="border border-0 bni-blue click-animation text-white fw-700" onclick="showAddVacancyCard()"
@@ -829,7 +830,6 @@ function processAddVacancy() {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response);
             if (response.validation_error) {
                 (response.validation_error.salary !== undefined) ? $("#input-salary").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.salary}</div>`) : "";
                 (response.validation_error.title !== undefined) ? $("#input-title").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.title}</div>`) : "";
@@ -840,6 +840,7 @@ function processAddVacancy() {
                 (response.validation_error.type !== undefined) ? $("#input-type").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.type}</div>`) : "";
                 (response.validation_error.duration !== undefined) ? $("#input-duration").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.duration}</div>`) : "";
                 (response.validation_error.quota !== undefined) ? $("#input-quota").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.quota}</div>`) : "";
+                (response.validation_error.description !== undefined) ? $("#input-description").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.description}</div>`) : "";
 
                 return false;
             }
@@ -980,22 +981,6 @@ function adminDeleteVacancy(id_vacancy) {
     })
 }
 
-function showCustomNotification(title, message, icon) {
-    if (dashboardCustomNotification.hasClass("d-block")) {
-        dashboardCustomNotification.removeClass("d-block");
-        dashboardCustomNotification.addClass("d-none");
-
-        return;
-    }
-
-    dashboardCustomNotification.removeClass("d-none");
-    dashboardCustomNotification.addClass("d-block");
-
-    $("#custom-notification-icon").attr('src', icon);
-    $("#custom-notification-title").text(title);
-    $("#custom-notification-message").text(message);
-}
-
 function displayResumeFile() {
     const files = uploadResumeInput[0].files;
     uploadedFiles = Array.from(files);
@@ -1111,4 +1096,20 @@ function applyVacancy() {
             }
         }
     })
+}
+
+function showCustomNotification(title, message, icon) {
+    if (dashboardCustomNotification.hasClass("d-block")) {
+        dashboardCustomNotification.removeClass("d-block");
+        dashboardCustomNotification.addClass("d-none");
+
+        return;
+    }
+
+    dashboardCustomNotification.removeClass("d-none");
+    dashboardCustomNotification.addClass("d-block");
+
+    $("#custom-notification-icon").attr('src', icon);
+    $("#custom-notification-title").text(title);
+    $("#custom-notification-message").text(message);
 }

@@ -167,15 +167,18 @@ function showStudentProfile(id_profile, id_proposal) {
             `);
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -188,20 +191,16 @@ function showStudentProfile(id_profile, id_proposal) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
-                return false;
-            }
-
-            // error jika akun perusahaan tidak terverifikasi
-            if (jqXHR.status === 400) {
                 let response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
-                return false;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
             }
         }
     });
@@ -479,9 +478,6 @@ function updateStatusProposal(id_proposal, status) {
             updateProposalStatusNotification(notification.title, notification.message, notification.icon);
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
-            return;
-
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);

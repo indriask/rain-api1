@@ -19,7 +19,7 @@
         <h3><strong>Confirm Your Email Address</strong></h3>
         <p class="text-secondary" style="font-size: .9rem;">Verify your email address by checking your inbox. Didn’t receive it? Click the button below to resend.</p>
         <form class="mt-4" action="{{ route('verification.send') }}" method="POST">
-            <button class="btn btn-dark mx-auto d-block">Resend email</button>
+            <button class="btn btn-dark mx-auto d-block" type="submit">Resend email</button>
             @csrf
         </form>
     </div>

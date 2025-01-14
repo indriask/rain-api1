@@ -14,4 +14,8 @@ class VerifyEmailController extends Controller
 
         return back()->with('message', 'Verification link sent!');
     }
+
+    public function test() {
+        dd('hello world');
+    }
 }

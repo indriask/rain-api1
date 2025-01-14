@@ -12,15 +12,12 @@ use App\Mail\Proposal\RejectedProposal;
 use App\Mail\Proposal\WaitingProposal;
 use App\Models\Proposal;
 use App\Models\Vacancy;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use PhpParser\Node\Stmt\Echo_;
 
 class DashboardCompanyController extends Controller
 {
@@ -41,7 +38,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', 'present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['string']
+            'description' => ['nullable', 'string', 'present']
         ]);
 
         if ($validated->fails()) {
@@ -85,8 +82,7 @@ class DashboardCompanyController extends Controller
                 icon: asset('storage/svg/failed-x.svg')
             );
 
-            // return response()->json($response, 500);
-            return response()->json($e->getMessage());
+            return response()->json($response, 500);
         }
     }
 
@@ -106,7 +102,7 @@ class DashboardCompanyController extends Controller
             'type' => ['required', ' present', 'string', 'max:10', Rule::in(['online', 'offline', 'hybrid'])],
             'duration' => ['required', ' present', 'integer', 'max:12'],
             'quota' => ['required', 'present', 'integer', 'min:1', 'max:50'],
-            'description' => ['present', 'string', 'nullable'],
+            'description' => ['nullable', 'present', 'string'],
             'id_vacancy' => ['required', 'present', 'integer'],
             'nib' => ['required', 'present', 'string'],
         ]);
@@ -120,22 +116,18 @@ class DashboardCompanyController extends Controller
                 ->where('nib', $validator->getValue('nib'))
                 ->update($request->except('id_vacancy', 'nib'));
 
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: true,
                 message: 'Lowongan anda berhasil di edit!',
                 icon: asset('storage/svg/success-checkmark.svg')
-            );
-
-            return response()->json($response);
+            ), 200);
         } catch (\Throwable $e) {
-            $response = $this->setResponse(
+            return response()->json($this->setResponse(
                 success: false,
                 title: 'Request dihentikan',
                 message: 'Terjadi kesalhaan saat melakukan request edit lowongan',
                 icon: asset('storage/svg/failed-x.svg')
-            );
-
-            return response()->json($response, 500);
+            ), 500);
         }
     }
 
@@ -212,7 +204,7 @@ class DashboardCompanyController extends Controller
                 message: 'Data berhasil di hapus!',
                 icon: asset('storage/svg/success-checkmark.svg')
             );
-            
+
             return response()->json($response);
         } catch (\Throwable $e) {
             $resposne = $this->setResponse(
@@ -617,7 +609,7 @@ class DashboardCompanyController extends Controller
             ]
         ];
 
-        if($additional !== []) {
+        if ($additional !== []) {
             $response['additional'] = $additional;
         }
 

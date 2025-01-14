@@ -22,7 +22,7 @@ return new class extends Migration
             $table->enum('type', ['online', 'offline', 'hybrid'])->default('offline');
             $table->string('duration');
             $table->string('location', 100);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('quota');
             $table->date('date_created');
             $table->date('date_ended');

@@ -186,7 +186,7 @@
 
             {{-- pop up notifikasi custom --}}
             <div id="custom-notification"
-                class="d-none position-absolute top-0 end-0 z-1 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                class="d-none position-absolute top-0 end-0 z-1 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="bg-white py-5 px-3 rounded">
                     <div class="position-relative d-flex flex-column align-items-center">

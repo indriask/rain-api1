@@ -229,7 +229,7 @@
 
             {{-- pop up notifikasi custom --}}
             <div id="custom-notification"
-                class="d-none position-absolute top-0 end-0 z-1 bottom-0 start-0 d-flex align-items-center justify-content-center"
+                class="d-none position-absolute top-0 end-0 z-1 bottom-0 start-0 d-flex align-items-center justify-content-center z-1"
                 style="background-color: rgba(0, 0, 0, .4)">
                 <div class="bg-white py-5 px-3 rounded">
                     <div class="position-relative d-flex flex-column align-items-center">
@@ -260,40 +260,6 @@
 
     {{-- script js buat logika fitur dashboard profile mahasiswa --}}
     <script src="{{ asset('js/student/profile.js') }}"></script>
-
-    {{-- <script>
-        function processDeleteAccountRequest() {
-            const confirmed = confirm("Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan.");
-            if (confirmed) {
-                $.ajax({
-                    url: '/delete-account', // Ganti dengan route yang sesuai
-                    type: 'POST',
-                    data: {
-                        _token: window.laravel.csrf_token // Ambil CSRF token dari meta/script di template
-                    },
-                    success: function(response) {
-                        alert("Akun berhasil dihapus.");
-                        window.location.href = '/'; // Redirect ke halaman utama setelah penghapusan
-                    },
-                    error: function(error) {
-                        alert("Gagal menghapus akun. Silakan coba lagi.");
-                        console.error(error);
-                    }
-                });
-            }
-        }
-
-        function showDeleteAccountCard() {
-            const deleteAccountNotification = document.getElementById('delete-account-notification');
-
-            // Toggle visibility
-            if (deleteAccountNotification.classList.contains('d-none')) {
-                deleteAccountNotification.classList.remove('d-none');
-            } else {
-                deleteAccountNotification.classList.add('d-none');
-            }
-        }
-    </script> --}}
 
     <script>
         // Event listener for the major dropdown

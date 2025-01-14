@@ -19,15 +19,13 @@ function showEditProfileNotification() {
 }
 
 // function untuk mengirim data profile baru ke server
-function setProfileData() {
-    let form = new FormData(editProfileForm[0]);
+// function setProfileData() {
+//     // the value of this variabel come from fetch result
+//     profileEditNotificationTitle.text("Profil berhasil diperbarui!");
+//     profileEditNotificationImg.attr("src", "http://localhost:8000/storage/svg/success-checkmark.svg");
 
-    // the value of this variabel come from fetch result
-    profileEditNotificationTitle.text("Profil berhasil diperbarui!");
-    profileEditNotificationImg.attr("src", "http://localhost:8000/storage/svg/success-checkmark.svg");
-
-    showEditProfileNotification();
-}
+//     showEditProfileNotification();
+// }
 
 // function untuk menampilkan notifikasi ingin menghapus akun RAIN
 function showDeleteAccountCard() {

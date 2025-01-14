@@ -116,12 +116,6 @@ Route::middleware(['auth', 'verified', 'web'])->group(function () {
 });
 
 
-Route::middleware('auth')->group(function () {
-    // Route untuk mengirim kembali verifikasi email
-    Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])
-        ->middleware('throttle:6,1')->name('verification.send');
-});
-
 
 
 

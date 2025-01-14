@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\ResetPasswordController;
+use App\Http\Controllers\api\VerifyEmailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IndexController;
 use App\Http\Middleware\isCompanyVerified;
@@ -10,8 +11,6 @@ use App\Http\Middleware\IsRoleCompany;
 use App\Http\Middleware\IsRoleStudent;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
-
-use function PHPUnit\Framework\isReadable;
 
 // Routing ke halaman branding RAIN
 Route::get('/', [IndexController::class, 'index'])->name('home');
@@ -140,6 +139,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify', [DashboardController::class, 'verifyRegisteredEmailPage'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [DashboardController::class, 'verifyRegisteredEmail'])->name('verification.verify')
         ->middleware('signed');
+});
+
+Route::middleware('auth')->group(function () {
+    // Route untuk mengirim kembali verifikasi email
+    Route::post('/email/verification-notification', [VerifyEmailController::class, 'sendRegisteredEmailVerification'])
+        ->middleware('throttle:6,1')->name('verification.send');
 });
 
 // Route untuk testing

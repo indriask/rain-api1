@@ -138,7 +138,8 @@ function showDetailManageVacancy(id = 0) {
                      </div>
                      <div id="manage-vacancy-detail" class="w-50 d-block">
                          <label for="detail-lowongan" class="fw-600 d-block">Detail lowongan</label>
-                         <textarea name="description" id="" class="dashboard__manage-vacancy-textarea border border-0 p-3">${response.vacancy.description}</textarea>
+                         <textarea name="description" id="" class="dashboard__manage-vacancy-textarea border border-0 p-3">${response.vacancy.description ?? ''}</textarea>
+                         <div id="input-description"></div>
                      </div>
                      <div class="position-absolute bottom-0 start-0 end-0 py-3 px-4 d-flex justify-content-between">
                          <button id="manage-vacancy-back-form" class="border click-animation border-0 bni-blue text-white fw-700"
@@ -191,15 +192,18 @@ function showDetailManageVacancy(id = 0) {
             manageVacancyNotification = $("#manage-vacancy-notification");
         },
         error: function (jqXHR) {
+            // error untuk kesalahaan server
             if (jqXHR.status === 500) {
-                const response = jqXHR.responseJSON.notification;
-                showCustomNotification(response.message, response.icon);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
 
             // error kesalahan pada validasi token CSRF
             if (jqXHR.status === 419) {
-                showCustomNotification("Gagal melakukan request, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
                 return;
             }
 
@@ -212,12 +216,15 @@ function showDetailManageVacancy(id = 0) {
 
                 url = url.join('/');
                 window.location.replace(url);
-                return false;
+
+                return;
             }
 
             // check apakah response code nya 403 (akses tidak diizinkan)
             if (jqXHR.status === 403) {
-                showCustomNotification("Gagal menampilkan halaman website, harap coba lagi!", `${window.storage_path.path}svg/failed-x.svg`);
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
                 return;
             }
         }
@@ -246,6 +253,7 @@ function editManageVacancy(id = 0) {
                 (response.validation_error.type !== undefined) ? $("#input-type").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.type}</div>`) : "";
                 (response.validation_error.duration !== undefined) ? $("#input-duration").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.duration}</div>`) : "";
                 (response.validation_error.quota !== undefined) ? $("#input-quota").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.quota}</div>`) : "";
+                (response.validation_error.description !== undefined) ? $("#input-description").html(`<div class="text-danger m-0" style="font-size: .8rem;">${response.validation_error.description}</div>`) : "";
 
                 return false;
             }
@@ -254,6 +262,7 @@ function editManageVacancy(id = 0) {
             showManageVacancyCardNotification(notification.message, notification.icon);
         },
         error: function (jqXHR) {
+            console.log(jqXHR);
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;
                 showCustomNotification(response.title, response.message, response.icon);
