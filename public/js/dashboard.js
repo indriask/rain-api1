@@ -325,7 +325,7 @@ function showVacancyDetailCard(id = 0) {
             const currentDate = Date.now();
             let status = '';
 
-            if(currentDate > endedDateTime || currentDate < dateCreated) {
+            if (currentDate > endedDateTime || currentDate < dateCreated) {
                 status = 'Ditutup';
             } else {
                 status = 'Dibuka';
@@ -522,7 +522,7 @@ function showApplyVacancyFormContainer(id) {
 
                         <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
 
-                        <button type="button" onclick="applyTest()"
+                        <button type="button" onclick="applyVacancy()"
                             class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
                     </form>   
             `);
@@ -998,49 +998,64 @@ function showCustomNotification(title, message, icon) {
 
 function displayResumeFile() {
     const files = uploadResumeInput[0].files;
-    let fileType = '';
-    let fileIcon = '';
-
+    uploadedFiles = Array.from(files);
     let existingFiles = resumeDisplayWrapper[0].children.length;
 
-    if (existingFiles + files.length > 6) {
+    if (existingFiles + uploadedFiles.length > 6) {
         return;
     }
 
     resumeDisplayWrapper.removeClass("d-none");
     resumeDisplayWrapper.addClass("d-block");
+    uploadResumeBtn.hide();
 
+    iterateFiles(uploadedFiles);
+}
+
+function iterateFiles(files) {
+    let fileType = '';
+    let fileIcon = '';
+    let index = 0;
+
+    resumeDisplayWrapper.empty();
     for (file of files) {
         fileType = file.type;
         fileIcon = FILE_ICON[fileType] ?? null;
 
-        if(fileIcon === null) {
+        if (fileIcon === null) {
             continue;
         }
+
         resumeDisplayWrapper.append(`
             <div class="d-flex align-items-end gap-1">
                 <i class="bi ${fileIcon}" style="font-size: 1.3rem;"></i>
                 <div class="d-flex w-100">
                     <span style="font-size: .85rem;">${file.name}</span>
-                    <button onclick="deleteResumeFile(event)" type="button" class="d-block ms-auto cursor-pointer border border-0 bg-transparent">
+                    <button onclick="deleteResumeFile(${index++})" type="button" class="d-block ms-auto cursor-pointer border border-0 bg-transparent">
                         <i class="bi bi-trash" style="color: red;"></i>
                     </button>
                 </div>
             </div>    
-            `);
+        `);
     }
 }
 
-function deleteResumeFile(event) {
-    console.log(event);
+function deleteResumeFile(index) {
+    uploadedFiles.splice(index, 1);
+    iterateFiles(uploadedFiles);
+
+    if (uploadedFiles.length === 0) {
+        uploadResumeBtn.show();
+        resumeDisplayWrapper.removeClass("d-block");
+        resumeDisplayWrapper.addClass("d-none");
+    }
 }
 
-function applyTest() {
-    let resumes = [];
+function applyVacancy() {
     const newForm = new FormData($("#student-apply-vacancy")[0]);
 
-    for (let i = 0; i < uploadResumeInput[0].files.length; i++) {
-        newForm.append('resumes[]', uploadResumeInput[0].files[i]);
+    for (let i = 0; i < uploadedFiles.length; i++) {
+        newForm.append('resumes[]', uploadedFiles[i]);
     }
 
     $.ajax({
@@ -1051,10 +1066,14 @@ function applyTest() {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response);
+            let notification = response.notification;
+            showCustomNotification(notification.title, notification.message, notification.icon);
+            
+            vacancyApplyFormContainer.removeClass("d-block");
+            vacancyApplyFormContainer.addClass("d-none");
+            vacancyApplyForm.html('');
         },
         error: function (jqXHR) {
-            console.log(jqXHR);
             // error untuk kesalahaan server
             if (jqXHR.status === 500) {
                 let response = jqXHR.responseJSON.notification;

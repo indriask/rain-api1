@@ -317,7 +317,7 @@ class DashboardController extends Controller
                 success: true,
                 title: 'Lamaran diunggah',
                 message: 'Lamaran anda telah diunggah, silahkan menunggu konfirmasi selanjutnya',
-                icon: asset('storge/svg/success-checkmark.svg')
+                icon: asset('storage/svg/success-checkmark.svg')
             ), 200);
         } catch (\Throwable $e) {
             return response()->json($this->setResponse(
