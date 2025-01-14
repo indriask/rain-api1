@@ -17,6 +17,7 @@ use App\Models\Proposal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -219,7 +220,7 @@ class DashboardController extends Controller
             ), 500);
         }
 
-        if (count($request->file('resumes')) > 6) {
+        if (count($validator->getValue('resumes')) > 6) {
             return response()->json($this->setResponse(
                 success: false,
                 title: 'Request ditolak',
@@ -228,7 +229,7 @@ class DashboardController extends Controller
             ), 500);
         }
 
-        $isProposed = Proposal::where('id_vacancy', $request->id_vacancy)
+        $isProposed = Proposal::where('id_vacancy', $validator->getValue('id_vacancy'))
             ->where('nim', auth('web')->user()->student->nim)
             ->first();
 
@@ -243,8 +244,8 @@ class DashboardController extends Controller
 
         $vacancy = Vacancy::with('company.profile')
             ->with('company.account')
-            ->select('date_created', 'date_ended', 'quota', 'applied', 'nib', 'title')
-            ->where('id_vacancy', $request->id_vacancy)
+            ->select('date_created', 'date_ended', 'quota', 'applied', 'nib', 'title', 'id_vacancy')
+            ->where('id_vacancy', $validator->getValue('id_vacancy'))
             ->first();
 
         if (time() < strtotime($vacancy->date_created)) {
@@ -275,7 +276,7 @@ class DashboardController extends Controller
         }
 
         try {
-            $files = $request->file('resumes');
+            $files = $validator->getValue('resumes');
             $dirPath = 'resume/' . uniqid();
 
             foreach ($files as $file) {
@@ -288,9 +289,8 @@ class DashboardController extends Controller
                 $file->storeAs($dirPath, $fileName, 'local');
             }
 
-            // Store the application data in the database
             Proposal::create([
-                'id_vacancy' => $request->id_vacancy,
+                'id_vacancy' => $validator->getValue('id_vacancy'),
                 'nim' => auth('web')->user()->student->nim, // Assuming the user is authenticated
                 'resume' => $dirPath,
                 'applied_date' => now(),
@@ -302,6 +302,10 @@ class DashboardController extends Controller
             $company = $vacancy->company->profile;
             $companyFullName = ($company->first_name ?? 'Username') . ' ' . $company->last_name ?? '';
             $applicant = auth('web')->user()->load('student.profile');
+
+            $applied = Proposal::where('id_vacancy', $validator->getValue('id_vacancy'))->count();
+            $vacancy->applied = $applied;
+            $vacancy->save();
 
             $mail = (new ApplyVacancy($companyFullName, $applicant, $vacancy))
                 ->onConnection('database')
@@ -316,14 +320,12 @@ class DashboardController extends Controller
                 icon: asset('storge/svg/success-checkmark.svg')
             ), 200);
         } catch (\Throwable $e) {
-            // return response()->json($this->setResponse(
-            //     success: true,
-            //     title: 'Lamaran diunggah',
-            //     message: 'Lamaran anda telah diunggah, silahkan menunggu konfirmasi selanjutnya',
-            //     icon: asset('storge/svg/failed-x.svg')
-            // ), 500);
-
-            return response()->json($e->getMessage(), 500);
+            return response()->json($this->setResponse(
+                success: true,
+                title: 'Request error',
+                message: 'Terjadi kesalahaan saat melakukan request, silahkan coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
     }
 

@@ -1014,6 +1014,9 @@ function displayResumeFile() {
         fileType = file.type;
         fileIcon = FILE_ICON[fileType] ?? null;
 
+        if(fileIcon === null) {
+            continue;
+        }
         resumeDisplayWrapper.append(`
             <div class="d-flex align-items-end gap-1">
                 <i class="bi ${fileIcon}" style="font-size: 1.3rem;"></i>

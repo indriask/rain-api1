@@ -212,7 +212,7 @@ class DashboardCompanyController extends Controller
                 message: 'Data berhasil di hapus!',
                 icon: asset('storage/svg/success-checkmark.svg')
             );
-
+            
             return response()->json($response);
         } catch (\Throwable $e) {
             $resposne = $this->setResponse(
@@ -604,9 +604,10 @@ class DashboardCompanyController extends Controller
         string $title = '',
         string $message = '',
         string $type = '',
-        string $icon = ''
+        string $icon = '',
+        array $additional = []
     ): array {
-        return [
+        $response = [
             'success' => $success,
             'notification' => [
                 'title' => $title,
@@ -615,5 +616,11 @@ class DashboardCompanyController extends Controller
                 'icon' => $icon
             ]
         ];
+
+        if($additional !== []) {
+            $response['additional'] = $additional;
+        }
+
+        return $response;
     }
 }
