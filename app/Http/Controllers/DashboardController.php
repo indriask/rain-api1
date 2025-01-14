@@ -205,13 +205,27 @@ class DashboardController extends Controller
     // bagian method untuk logika dashboard mahasiswa
     public function apply(Request $request)
     {
-        $request->validate([
-            'resume' => 'required',
+        $validator = Validator::make($request->only('resumes', 'id_vacancy'), [
+            'resumes' => 'required',
             'id_vacancy' => 'required|exists:vacancy,id_vacancy',
         ]);
 
-        if (count($request->file('resume')) > 6) {
-            return back()->withErrors(['error' => 'Maksimum upload file adalah 6']);
+        if ($validator->fails()) {
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Data yang anda input tidak valid, harap coba lagi',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
+        }
+
+        if (count($request->file('resumes')) > 6) {
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Maksimum file upload adalah 6',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
 
         $isProposed = Proposal::where('id_vacancy', $request->id_vacancy)
@@ -219,7 +233,12 @@ class DashboardController extends Controller
             ->first();
 
         if ($isProposed == true) {
-            return back()->withErrors(['error' => 'Anda sudah melamar lowongan ini']);
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Anda sudah melamar lowongan ini',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
 
         $vacancy = Vacancy::with('company.profile')
@@ -229,20 +248,34 @@ class DashboardController extends Controller
             ->first();
 
         if (time() < strtotime($vacancy->date_created)) {
-            return back()->withErrors(['error' => 'Lowongan yang anda lamara belum dibuka']);
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Lowongan yang anda lamar belum dibuka',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
 
         if (time() > strtotime($vacancy->date_ended)) {
-            return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah tutup']);
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Lowongan yang anda lamar sudah di tutup',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
 
         if ($vacancy->applied >= $vacancy->quota) {
-            return back()->withErrors(['error' => 'Lowongan yang anda lamar sudah penuh']);
+            return response()->json($this->setResponse(
+                success: false,
+                title: 'Request ditolak',
+                message: 'Lowongan yang anda lamar sudah penuh',
+                icon: asset('storage/svg/failed-x.svg')
+            ), 500);
         }
 
         try {
-            // Save the resume file
-            $files = $request->file('resume');
+            $files = $request->file('resumes');
             $dirPath = 'resume/' . uniqid();
 
             foreach ($files as $file) {
@@ -266,10 +299,6 @@ class DashboardController extends Controller
                 'interview_status' => 'waiting',
             ]);
 
-            $vacancy = Vacancy::where('id_vacancy', $request->id_vacancy)->first();
-            $vacancy->applied += 1;
-            $vacancy->save();
-
             $company = $vacancy->company->profile;
             $companyFullName = ($company->first_name ?? 'Username') . ' ' . $company->last_name ?? '';
             $applicant = auth('web')->user()->load('student.profile');
@@ -280,9 +309,21 @@ class DashboardController extends Controller
 
             Mail::to($vacancy->company->account)->queue($mail);
 
-            return back()->with(['success' => 'Silahkan mengunggu konfirmasi dari lowongan']);
+            return response()->json($this->setResponse(
+                success: true,
+                title: 'Lamaran diunggah',
+                message: 'Lamaran anda telah diunggah, silahkan menunggu konfirmasi selanjutnya',
+                icon: asset('storge/svg/success-checkmark.svg')
+            ), 200);
         } catch (\Throwable $e) {
-            return back()->withErrors(['error' => 'Terjadi kesalahaan saat melakukan request']);
+            // return response()->json($this->setResponse(
+            //     success: true,
+            //     title: 'Lamaran diunggah',
+            //     message: 'Lamaran anda telah diunggah, silahkan menunggu konfirmasi selanjutnya',
+            //     icon: asset('storge/svg/failed-x.svg')
+            // ), 500);
+
+            return response()->json($e->getMessage(), 500);
         }
     }
 

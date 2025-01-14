@@ -35,7 +35,13 @@ function showAppliedVacancyDetail(id_proposal) {
             const formattedDateEnded = `${dateEnded.getDate()} ${dateEnded.toLocaleString('en-US', { month: 'short' })} ${dateEnded.getFullYear()}`;
             const endedDateTime = dateEnded.getTime();
             const currentDate = Date.now();
-            let status = currentDate > endedDateTime ? "Ditutup" : "Dibuka";
+            let status = '';
+
+            if(currentDate > endedDateTime || currentDate < dateCreated) {
+                status = 'Ditutup';
+            } else {
+                status = 'Dibuka';
+            }
 
             studentAppliedVacancyDetail.html(`
                 <div class="apply-form bg-white p-4 d-flex gap-4 mt-3">

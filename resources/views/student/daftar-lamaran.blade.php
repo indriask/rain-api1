@@ -170,7 +170,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- script js fitur dashboard mahasiswa, perusahaan dan admins --}}
-    {{-- <script src="{{ asset('js/dashboard.js') }}"></script> --}}
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 
     {{-- script js fitu daftar lamaran mahasiswa --}}
     <script src="{{ asset('js/student/daftar-lamaran.js') }}"></script>

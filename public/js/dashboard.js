@@ -265,6 +265,17 @@ const vacancyApplyForm = $("#vacancy-apply-form");
 const logoutCard = $("#logout-card");
 const dashboardCustomNotification = $("#custom-notification");
 let selectHide = false;
+let uploadedFiles = 0;
+let filesUploaded = null;
+
+const FILE_ICON = {
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'bi-file-earmark-word-fill',
+    'application/pdf': 'bi-file-earmark-pdf-fill'
+};
+
+let resumeDisplayWrapper = null;
+let uploadResumeBtn = null;
+let uploadResumeInput = null;
 
 function closeFilter() {
     $("div.select-container > div.select-container").toggle();
@@ -312,7 +323,13 @@ function showVacancyDetailCard(id = 0) {
             const formattedDateEnded = `${dateEnded.getDate()} ${dateEnded.toLocaleString('en-US', { month: 'short' })} ${dateEnded.getFullYear()}`;
             const endedDateTime = dateEnded.getTime();
             const currentDate = Date.now();
-            const status = currentDate > endedDateTime ? "Ditutup" : "Dibuka";
+            let status = '';
+
+            if(currentDate > endedDateTime || currentDate < dateCreated) {
+                status = 'Ditutup';
+            } else {
+                status = 'Dibuka';
+            }
 
             switch (response.additional.role) {
                 case "student":
@@ -462,12 +479,13 @@ function showApplyVacancyFormContainer(id) {
             let fullName = (response.student.profile.first_name ?? 'Username') + ' ' + response.student.profile.last_name;;
 
             vacancyApplyForm.html(`
-                <form action="/apply" method="POST" class="vacancy-apply-form-card bg-white p-4"
+                <form id="student-apply-vacancy" method="POST" class="vacancy-apply-form-card bg-white p-4"
                         enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="${window.laravel.csrf_token}">
                         <div class="d-flex justify-content-between">
                             <h1 class="vacancy-apply-form-card-title fw-700 mb-0">Formulir Lamaran</h1>
-                            <button type="button" class="border border-0 bg-transparent click-animation cursor-pointer"
+                            <button type="button"
+                                class="border border-0 bg-transparent click-animation cursor-pointer"
                                 onclick="showApplyVacancyFormContainer()"><i class="bi bi-x-circle"></i></button>
                         </div>
                         <span class="vacancy-apply-form-card-small-info">Silahkan mengisi formulir dibawah ini dengan
@@ -475,12 +493,18 @@ function showApplyVacancyFormContainer(id) {
 
                         <div class="apply-form-common-info mt-4">
                             <h5 class="apply-form-common-info-heading fw-700 mb-3">Informasi dasar</h5>
-                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Username" readonly value="${fullName}">
-                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" readonly value="${response.student.nim ?? ''}">
-                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Jurusan" readonly value="${response.student?.major?.name ?? ''}">
-                            <input type="text" class="w-100 border focus-ring mb-3"  placeholder="Program Studi" readonly value="${response.student?.study_program?.name ?? ''}">
-                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email" readonly value="${response.email}">
-                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon" readonly value="${response.student.profile.phone_number ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Username"
+                                readonly value="${fullName}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="NIM" readonly
+                                value="${response.student.nim ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Jurusan" readonly
+                                value="${response.student?.major?.name ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Program Studi"
+                                readonly value="${response.student?.study_program?.name ?? ''}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Email" readonly
+                                value="${response.email}">
+                            <input type="text" class="w-100 border focus-ring mb-3" placeholder="Nomor Telepon"
+                                readonly value="${response.student.profile.phone_number ?? ''}">
                         </div>
 
                         <h5 class="apply-form-common-info-heaing fw-700 mb-0">Informasi Tambahan</h5>
@@ -488,19 +512,25 @@ function showApplyVacancyFormContainer(id) {
                             <span>Dapat berupa CV atau dokumen lainnya</span>
                             <span>Maks. 6 Dokumen</span>
                         </div>
-                        <label for="upload-file"
-                            class="apply-form-upload-file text-white fw-700 text-center w-100 cursor-pointer">
-                            <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx</label>
-                        <input type="file" name="resume[]" multiple="true" id="upload-file" hidden>
+                        <div id="resume-display-wrapper" class="d-none rounded bg-body-secondary p-2 px-3 d-flex flex-column gap-2">
+                        </div>
+                        <label for="upload-resume-input" id="upload-resume-btn"
+                            class="apply-form-upload-file mt-1 text-white fw-700 text-center w-100 cursor-pointer">
+                            <i class="bi bi-plus-square me-1"></i>Tambahkan PDF atau docx
+                        </label>
+                        <input onchange="displayResumeFile()" type="file" id="upload-resume-input" name="" multiple="true" id="upload-file" hidden>
 
                         <input type="hidden" name="id_vacancy" value="" id="daftar-lowongan-id-vacancy">
 
-                        <button type="submit"
+                        <button type="button" onclick="applyTest()"
                             class="apply-form-common-info-btn border border-0 click-animation text-white fw-700 d-block mx-auto mt-2 text-center">Kirim</button>
-                    </form>    
+                    </form>   
             `);
 
             $("#daftar-lowongan-id-vacancy").val(id);
+            resumeDisplayWrapper = $("#resume-display-wrapper");
+            uploadResumeBtn = $("#upload-resume-btn");
+            uploadResumeInput = $("#upload-resume-input");
         },
         error: function (jqXHR) {
             // error untuk kesalahaan server
@@ -597,10 +627,6 @@ function processLogoutRequest() {
         headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
         success: function (response) {
             if (response.additional.code === 302) {
-                // $("#logout-card-message").text(response.message);
-                // $("#logout-card-close-btn").remove();
-                // $("#logout-card-btn").remove();
-
                 const notification = response.notification;
                 showCustomNotification(notification.title, notification.message, notification.icon);
                 setTimeout(() => window.location.replace('/index'), 500);
@@ -968,4 +994,99 @@ function showCustomNotification(title, message, icon) {
     $("#custom-notification-icon").attr('src', icon);
     $("#custom-notification-title").text(title);
     $("#custom-notification-message").text(message);
+}
+
+function displayResumeFile() {
+    const files = uploadResumeInput[0].files;
+    let fileType = '';
+    let fileIcon = '';
+
+    let existingFiles = resumeDisplayWrapper[0].children.length;
+
+    if (existingFiles + files.length > 6) {
+        return;
+    }
+
+    resumeDisplayWrapper.removeClass("d-none");
+    resumeDisplayWrapper.addClass("d-block");
+
+    for (file of files) {
+        fileType = file.type;
+        fileIcon = FILE_ICON[fileType] ?? null;
+
+        resumeDisplayWrapper.append(`
+            <div class="d-flex align-items-end gap-1">
+                <i class="bi ${fileIcon}" style="font-size: 1.3rem;"></i>
+                <div class="d-flex w-100">
+                    <span style="font-size: .85rem;">${file.name}</span>
+                    <button onclick="deleteResumeFile(event)" type="button" class="d-block ms-auto cursor-pointer border border-0 bg-transparent">
+                        <i class="bi bi-trash" style="color: red;"></i>
+                    </button>
+                </div>
+            </div>    
+            `);
+    }
+}
+
+function deleteResumeFile(event) {
+    console.log(event);
+}
+
+function applyTest() {
+    let resumes = [];
+    const newForm = new FormData($("#student-apply-vacancy")[0]);
+
+    for (let i = 0; i < uploadResumeInput[0].files.length; i++) {
+        newForm.append('resumes[]', uploadResumeInput[0].files[i]);
+    }
+
+    $.ajax({
+        url: '/apply',
+        method: "POST",
+        headers: { "X-CSRF-TOKEN": window.laravel.csrf_token },
+        data: newForm,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR);
+            // error untuk kesalahaan server
+            if (jqXHR.status === 500) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+
+            // error kesalahan pada validasi token CSRF
+            if (jqXHR.status === 419) {
+                showCustomNotification("Request ditolak", "Request yang dikirim telah kadaluarsa", window.storage_path.path + 'svg/failed-x.svg');
+
+                return;
+            }
+
+            // check apakah response code nya 401 (user tidak ter-autentikasi)
+            if (jqXHR.status === 401) {
+                let currentUrl = window.location.href;
+                let currentPath = window.location.pathname;
+                let url = currentUrl.split(currentPath);
+                url[1] = 'index';
+
+                url = url.join('/');
+                window.location.replace(url);
+
+                return;
+            }
+
+            // check apakah response code nya 403 (akses tidak diizinkan)
+            if (jqXHR.status === 403) {
+                let response = jqXHR.responseJSON.notification;
+                showCustomNotification(response.title, response.message, response.icon);
+
+                return;
+            }
+        }
+    })
 }

@@ -203,7 +203,7 @@
 
             {{-- form daftar lowongan mahasiswa --}}
             <div id="vacancy-apply-form-container"
-                class="d-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex justify-content-center align-items-center flex-column py-4">
+                class="d-none vacancy-apply-form-container position-absolute top-0 start-0 bottom-0 end-0 d-flex align-items-center flex-column py-4 overflow-auto">
 
                 {{-- form input isi data diri mahasiswa --}}
                 <div id="vacancy-apply-form">
