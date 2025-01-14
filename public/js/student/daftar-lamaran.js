@@ -111,7 +111,7 @@ function showAppliedVacancyDetail(id_proposal) {
                     <div class="w-50">
                         <h5 class="apply-vacancy-detail-lowongan">Detail Lowongan</h5>
                         <div class="apply-vacancy-detail overflow-auto">
-                            ${vacancy.description}
+                            ${vacancy.description ?? ''}
                         </div>
                     </div>
                 </div>

@@ -283,9 +283,9 @@
         <p class="mb-4">RAIN adalah aplikasi lowongan magang berbasis web yang dibuat khusus untuk Mahasiswa
             Polibatam.</p>
         <div>
-            <a href="" class="bi bi-instagram"></a>
-            <a href="" class="bi bi-telephone-fill"></a>
-            <a href="" class="bi bi-envelope"></a>
+            <a href="https://www.instagram.com/readyforinternaship_polibatam?igsh=MXhscWwwaDNzeXFyZg==" target="__blank" class="bi bi-instagram"></a>
+            <a href="+62 831-1439-8791" target="__blank" class="bi bi-telephone-fill"></a>
+            <a href="teamrainpolibatam@gmail.com" class="bi bi-envelope"></a>
         </div>
     </footer>
     {{-- footer section end --}}
